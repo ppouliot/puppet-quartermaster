@@ -14,7 +14,7 @@ Basic usage
 
 To install the pxe server
 
-class {'quartermaster': }
+    class {'quartermaster': }
 
 Adding a Linux distribution
 ---------------------------
@@ -33,33 +33,33 @@ For Ubuntu you must specifically define the version as show below, while with De
 "stable" or "unstable" in the version field.
 
 
-node foo { 
-  class {'quartermaster': } \n
-  ...
-  quartermaster::pxe{"ubuntu-12.04-amd64":}
-  quartermaster::pxe{"ubuntu-12.10-amd64":}
-  quartermaster::pxe{"debian-stable-amd64":}
-}
+    node foo { 
+      class {'quartermaster': } \n
+      ...
+      quartermaster::pxe{"ubuntu-12.04-amd64":}
+      quartermaster::pxe{"ubuntu-12.10-amd64":}
+      quartermaster::pxe{"debian-stable-amd64":}
+    }
 
 
 Add an EPL/Fedora distro
 ------------------------
 
-node foo {
-  class {'quartermaster': }
-  ...
-  quartermaster::pxe{'fedora-16-i386':}
-  quartermaster::pxe{'centos-6.3-x86_64':}
-  quartermaster::pxe{'scientificlinux-6.3-x86_64':}
-}
+    node foo {
+      class {'quartermaster': }
+      ...
+      quartermaster::pxe{'fedora-16-i386':}
+      quartermaster::pxe{'centos-6.3-x86_64':}
+      quartermaster::pxe{'scientificlinux-6.3-x86_64':}
+    }
 
 Add OpenSuse
 ------------
-node foo {
-  class{quartermaster: }
-  ...
-  quartermaster::pxe{"opensuse-12.2-x86_64":}
-}
+    node foo {
+      class{quartermaster: }
+      ...
+      quartermaster::pxe{"opensuse-12.2-x86_64":}
+    }
 
 
 Adding Windows Media
@@ -74,14 +74,14 @@ It will also autogenerate all the appropriate unattend.xml files for that ISO.
 Please note, this does not generate a suitable winpe image.  You must use 
 the petools module to provide that, as it must run on a windows host.
 
-node foo {
-  class quartermaster: }
-  ...
-  quartermaster::windowsmedia{"en_windows_server_2012_x64_dvd_915478.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" }
-  quartermaster::windowsmedia{"en_microsoft_hyper-v_server_2012_x64_dvd_915600.iso": activationkey => "" }
-  quartermaster::windowsmedia{"en_windows_8_enterprise_x64_dvd_917522.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
-  quartermaster::windowsmedia{"en_windows_8_enterprise_x86_dvd_917587.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
- }
+    node foo {
+      class quartermaster: }
+      ...
+      quartermaster::windowsmedia{"en_windows_server_2012_x64_dvd_915478.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" }
+      quartermaster::windowsmedia{"en_microsoft_hyper-v_server_2012_x64_dvd_915600.iso": activationkey => "" }
+      quartermaster::windowsmedia{"en_windows_8_enterprise_x64_dvd_917522.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
+      quartermaster::windowsmedia{"en_windows_8_enterprise_x86_dvd_917587.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
+    }
 
 Contributors
 ------------
