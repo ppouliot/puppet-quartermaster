@@ -1,0 +1,53 @@
+# Puppet l Managed smb.conf
+[global]
+        server string = \"Quartermaster Provisioning Server\"
+        workgroup = PXE
+        netbios name = <%= @hostname %> 
+        security = SHARE
+	guest account = nobody
+	wide links = yes
+	unix extensions = no
+	follow symlins = yes
+	kernel oplocks = no
+
+[installs]
+        path = <%= @wwwroot %>
+        read only = yes
+        guest ok = yes
+	fake oplocks = true
+[system]
+        path = <%= @wwwroot %>/microsoft/winpe/system
+        read only = No
+        guest ok = yes
+#[ms]
+[os]
+        path = <%= @wwwroot %>/microsoft
+        read only = yes
+        guest ok = yes
+	oplocks = no
+	fake oplocks = true
+
+[winpe]
+        path = <%= @wwwroot %>/microsoft/winpe
+        read only = No
+        guest ok = yes
+
+[ISO]
+        path = <%= @win_isos %>
+        read only = No
+        guest ok = yes
+
+[pxe-cfg]
+        path = <%= @tftpboot %>/pxelinux/pxelinux.cfg
+        read only = No
+        guest ok = yes
+
+[pe-pxeroot]
+        path = <%= @tftpboot %>/winpe
+        read only = No
+        guest ok = yes
+
+
+
+
+

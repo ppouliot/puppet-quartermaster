@@ -1,0 +1,23 @@
+#!/bin/sh
+
+PXESERVER=<%= @ipaddress %>
+
+# This script will run the second time the system boots. Even
+# though we've told it to run after networking is enabled,
+#
+# Introducing a brief sleep makes things work right all the
+# time. The time for DHCP to catch up.
+#sleep 120
+sleep 20 
+
+#puppet agent --verbose --no-daemonize --certname=`cat /etc/hostname` --onetime --server <%= @hostname %>
+#/usr/bin/puppet agent --certname APPEND_TIMESTAMP_TO_HOSTNAME 
+#/usr/bin/puppet agent --waitforcert --server <%= @hostname %> --test --debug --trace --verbose
+/usr/bin/puppet agent --test --debug --trace --verbose
+
+
+# Remove our secondboot service so that it won't run again
+update-rc.d secondboot remove
+rm /etc/init.d/secondboot /root/secondboot
+
+#/sbin/reboot

@@ -1,0 +1,34 @@
+### network destinations the proxy is allowed to reach
+### Debian
+cdimage.debian.org
+ftp.us.debian.org
+backports.debian.org
+security.debian.org
+volatile.debian.org
+
+### Other
+deb.tails.boum.org
+deb.torproject.org
+live.debian.net
+mozilla.debian.net
+
+### b43-fwcutter
+.openwrt.org
+www.lwfinger.com
+mirrors.mit.edu
+mirrors.med.harvard.edu
+
+# Scientific Linux
+.scientificlinux.org
+
+# fedora
+download.fedora.redhat.com
+download.fedoraproject.com
+
+# SuSE
+download.opensuse.org
+
+# puppet labs 
+.puppetlabs.com
+#yum.puppetlabs.com
+#apt.puppetlabs.com

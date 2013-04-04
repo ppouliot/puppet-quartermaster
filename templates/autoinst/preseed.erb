@@ -1,0 +1,94 @@
+# Preseed for Hyper-V VM
+# by Peter Pouliot <ppouliot@microsoft.com>
+d-i debian-installer/locale select en_US.UTF-8
+d-i localechooser/supported-locales multiselect en_US.UTF-8
+d-i localechooser/countrylist/North_America select US
+d-i debian-installer/splash boolean false
+d-i console-setup/ask_detect boolean false
+d-i keyboard-configuration/layout select English (US)
+d-i keyboard-configuration/variant select English (US)
+#network configuration
+d-i netcfg/choose_interface select auto
+#d-i netcfg/get_nameservers string 
+#d-i netcfg/get_ipaddress string 
+#d-i netcfg/get_netmask string 255.255.255.0
+#d-i netcfg/get_gateway string 
+#d-i netcfg/confirm_static boolean true
+# Setup Local Mirror
+#d-i mirror/protocol string ftp
+#d-i mirror/country string manual
+d-i mirror/http/hostname string mirrors.med.harvard.edu
+d-i mirror/http/directory string /<%= @distro %>
+d-i mirror/http/proxy string http://<%= @ipaddress %>:8000/
+# Partitioning
+d-i partman-auto/choose_recipe select atomic
+d-i partman-auto/purge_lvm_from_device boolean true
+d-i partman/default_filesystem string ext4
+d-i partman-auto/init_automatically_partition select biggest_free
+d-i partman-auto/method string lvm
+#d-i  partman-auto/method string regular
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/device_remove_md boolean true
+d-i partman-lvm/device_remove_lvm_span boolean true
+d-i partman-lvm/confirm boolean true
+# Partitioning Confirmation
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i partman-md/confirm boolean true
+
+
+# Time Setup
+d-i clock-setup/utc boolean true
+tzsetup-udeb tzsetup/country/US select US/Eastern
+#tzsetup-udeb time/zone string America/New_York
+d-i clock-setup/ntp boolean true
+d-i clock-setup/ntp-server string bonehed.lcs.mit.edu
+# Kernel
+d-i base-installer/kernel/image string linux-virtual
+# User Setup
+#d-i passwd/root-login boolean true
+d-i passwd/root-login boolean false
+#d-i passwd/root-password password r00tme
+#d-i passwd/root-password-again password r00tme
+d-i passwd/user-uid string 
+d-i passwd/make-user boolean true
+d-i passwd/user-fullname string <%= @distro %>
+d-i passwd/username string <%= @distro %>
+#d-i passwd/user-password-crypted password $6$.1eHH0iY$ArGzKX2YeQ3G6U.mlOO3A.NaL22Ewgz8Fi4qqz.Ns7EMKjEJRIW2Pm/TikDptZpuu7I92frytmk5YeL.9fRY4.
+d-i passwd/user-password password <%= @distro %>
+d-i passwd/user-password-again password <%= @distro %>
+#d-i user-setup/allow-password-weak boolean false
+d-i user-setup/allow-password-weak boolean true
+d-i user-setup/encrypt-home boolean false
+d-i passwd/user-default-groups string adm cdrom dialout lpadmin plugdev sambashare
+d-i apt-setup/services-select multiselect security
+#d-i apt-setup/security_host string security.<%= @distro %>.com
+#d-i apt-setup/security_path string /<%= @distro %>
+
+# PuppetLabs Repo
+d-i apt-setup/local0/repository string http://apt.puppetlabs.com/ <%= @rel_name %> main
+d-i apt-setup/local0/key string http://apt.puppetlabs.com/pubkey.gpg
+
+d-i debian-installer/allow_unauthenticated string false
+d-i tasksel/first multiselect
+d-i pkgsel/include string vim screen puppet git openssh-server squid-deb-proxy
+d-i pkgsel/upgrade select safe-upgrade
+d-i pkgsel/language-packs multiselect 
+d-i pkgsel/update-policy select unattend-upgrades
+#d-i pkgsel/update-policy select none
+d-i pkgsel/updatedb boolean true
+d-i grub-installer/skip boolean false
+d-i lilo-installer/skip boolean false
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+d-i finish-install/keep-consoles boolean false
+d-i finish-install/reboot_in_progress note 
+d-i cdrom-detect/eject boolean true
+d-i debian-installer/exit/halt boolean false
+d-i debian-installer/exit/poweroff boolean false
+byobu byobu/launch-by-default boolean true
+# Example 
+#d-i preseed/late_command string chroot /target sh -c "/usr/bin/curl -o /tmp/postinstall http://<%= @ipaddress %>/pxe-bin/postinstall && /bin/sh -x /tmp/postinstall"
+d-i preseed/late_command string chroot /target sh -c "wget http://<%= @ipaddress %>/pxe-bin/postinstall -O /tmp/postinstall && /bin/sh -x /tmp/postinstall"

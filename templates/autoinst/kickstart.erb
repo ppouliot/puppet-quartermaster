@@ -1,0 +1,76 @@
+# Minimal Kickstart
+# by Peter J. Pouliot ppouliot@microsoft.com
+#version=DEVEL
+install
+text
+url --url=<%= @inst_repo %> --proxy=http://<%= @ipaddress %>:8000
+# ssl proxy for install
+#url --url=<%= @inst_repo %> --proxy=https://<%= @ipaddress %>:8000 --noverifyssl
+lang en_US.UTF-8
+keyboard us
+network --onboot yes --bootproto dhcp --noipv6
+#network --onboot yes --device eth0 --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
+#network --onboot yes --device eth1 --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
+timezone --utc America/New_York
+#rootpw  --iscrypted $6$xZjQTi60/cVUkZzt$v8XcjyqcyCcsNlaadeBSZrP033MIkqINosu8m2s0he4mlzxb.GLGBFznwvKUXrNZfCkvv9l.pdEh/ZpE//fgA0
+rootpw <%= @distro %>
+#selinux --enforcing
+selinux --disabled
+authconfig --enableshadow --passalgo=sha512
+#firewall --service=ssh
+firewall --disabled
+# The following is the partition information you requested
+# Note that any partitions you deleted are not expressed
+# here so unless you clear all partitions first, this is
+# not guaranteed to work
+clearpart --all --drives=sda
+part pv.008002 --grow --size=500
+volgroup vg_system --pesize=32768 pv.008002
+logvol swap --name=lv_swap --vgname=vg_system --grow --size=496 --maxsize=992
+logvol / --fstype=ext4 --name=lv_root --vgname=vg_system --grow --size=1024 --maxsize=51200
+part /boot --fstype=ext4 --size=500
+bootloader --location=mbr --timeout=5 --append="rhgb quiet"
+repo --name="<%= @distro %>-<%= @release %>-<%= @p_arch %>"  --baseurl=<%= @inst_repo %> --cost=1000
+repo --name="<%= @distro %>-<%= @release %>-<%= @p_arch %>-Updates"  --baseurl=<%= @update_repo %> --cost=1000
+repo --name="puppetlabs"  --baseurl=<%= @puppetlabs_repo %> --cost=1000
+services --enabled puppet,network
+services --disabled cups,smartd,autofs,bluetooth,ip6tables,avahi-daemon,NetworkManager
+reboot
+%packages
+#@admin-tools
+#@fonts
+@core
+#@online-docs
+openssh-clients
+puppetlabs-release
+%end
+%post --log /tmp/<%= @distro %>.log
+yum install puppet -y
+
+NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
+
+# Setting Hostname
+cat << EOF > /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=$NEWHOSTNAME
+EOF
+
+
+if [ -f /etc/sysconfig/puppet ]
+   then
+   /bin/sed -i -e "s/^START=no/START=yes/" /etc/sysconfig/puppet
+fi
+
+if [ -f /etc/puppet/puppet.conf ]
+   then
+   cat << EOF > /etc/puppet/puppet.conf
+[agent]
+server=<%= @fqdn %>
+EOF
+
+fi
+
+chkconfig puppet on
+
+
+%end

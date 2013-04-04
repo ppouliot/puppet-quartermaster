@@ -1,0 +1,7 @@
+# /etc/squid-deb-proxy/allowed-networks-src.acl.d/10-default
+# 
+# additional network sources that you want to allow access to the cache
+
+# example net
+#136.199.8.0/24
+10.21.7.0/24

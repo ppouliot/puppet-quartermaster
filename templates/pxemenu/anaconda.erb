@@ -1,0 +1,19 @@
+label <%= @name %>
+        menu label (<%= @name %>): ^Manual installation
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> url=<%= @inst_repo %>
+
+label <%= @name %>-<%= @autofile %>
+        menu label (<%= @name %>): ^<%= @autofile %> Installation
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
+label <%= @name %>-VM-<%= @autofile %>
+        menu label (<%= @name %>): Virtual Machine <%= @autofile %> installation
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> ksdevice=eth1 ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
+
+label <%= @name %>-rescue
+        menu label (<%= @name %>): Rescue
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> url=<%= @inst_repo %>
+

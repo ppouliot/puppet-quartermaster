@@ -1,0 +1,83 @@
+#!/bin/sh
+
+PXESERVER=<%= @ipaddress %>
+
+sleep 20 
+
+# Test if a VM
+#dmidecode |grep -i "vm"
+
+#set hostname to mac address of eth0
+NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
+echo $NEWHOSTNAME > /etc/hostname
+
+# Set hostname of puppetmaster
+echo "<%= @ipaddress %> <%= @fqdn %> <%= @hostname %>" >> /etc/hosts
+echo "<%= @ipaddress %> puppet.openstack.tld puppet"  >> /etc/hosts
+
+
+#/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;" > /etc/hostname
+#
+#/bin/sed -i -e "s/^START=no/START=YES/" /etc/default/puppet
+
+if [ -f /etc/default/puppet ]
+then
+	/bin/sed -i -e "s/^START=no/START=yes/" /etc/default/puppet
+fi
+
+if [ -f /etc/puppet/puppet.conf ]
+then
+cat >> /etc/puppet/puppet.conf << EOF
+[agent]
+server=<%= @fqdn %>
+EOF
+
+fi
+
+if [ -f /etc/init.d/hostname.sh ]
+then
+	/bin/sed -i -e "s/debian/$NEWHOSTNAME/g" /etc/hostname
+	/bin/sed -i -e "s/debian/$NEWHOSTNAME/g" /etc/hosts
+        /etc/init.d/hostname.sh start
+else
+	/bin/sed -i -e "s/ubuntu/$NEWHOSTNAME/g" /etc/hostname
+	/bin/sed -i -e "s/ubuntu/$NEWHOSTNAME/g" /etc/hosts
+	/etc/init.d/hostname start
+fi
+
+
+#puppet agent --verbose --no-daemonize --certname=`cat /etc/hostname` --onetime --server <%= @hostname %>
+#/usr/bin/puppet agent --certname APPEND_TIMESTAMP_TO_HOSTNAME 
+
+#/usr/bin/puppet agent --waitforcert --server=<%= @fqdn %> --debug --trace --verbose
+
+# Remove our firstboot service so that it won"t run again
+update-rc.d firstboot remove
+rm /etc/init.d/firstboot /root/firstboot
+
+wget http://<%= @ipaddress %>/pxe-bin/secondboot -O /root/secondboot
+chmod +x /root/secondboot
+
+
+cat > /etc/init.d/secondboot << EOF
+### BEGIN INIT INFO
+# Provides:        secondboot
+# Required-Start:  $networking
+# Required-Stop:   $networking
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: A script that runs once
+# Description: A script that runs once
+### END INIT INFO
+
+cd /root ; /usr/bin/nohup sh -x /root/secondboot &
+
+
+EOF
+
+chmod +x /etc/init.d/secondboot
+update-rc.d secondboot defaults
+echo "Finished Firstboot Script"
+
+# Reboot into the new kernel
+/sbin/reboot

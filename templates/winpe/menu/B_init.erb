@@ -1,0 +1,7 @@
+<% counter = counter.to_i -%>
+<% counter +=1 -%>
+
+
+REM /I makes the IF comparison case-insensitive
+IF /I '%Choice%'=='<%= @w_menu_option %>' GOTO Item<%= @w_menu_option %>
+

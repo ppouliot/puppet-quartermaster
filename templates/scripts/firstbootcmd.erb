@@ -1,0 +1,9 @@
+@echo on 
+
+powershell.exe -executionpolicy remotesigned -Command Invoke-WebRequest -UseBasicParsing -uri  https://downloads.puppetlabs.com/windows/puppet-3.1.0.msi -OutFile c:\puppet-3.1.0.msi
+
+c:\puppet-3.1.0.msi /passive /log c:\wpepuppet.log PUPPET_MASTER_SERVER=<%= @fqdn %>
+
+c:\Program Files (x86)\Puppet Labs\puppet\puppet.bat agent --debug --trace --verbose --test --waitforcert 60 --server <%= @fqdn %> 
+
+

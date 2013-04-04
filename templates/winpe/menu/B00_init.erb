@@ -1,0 +1,14 @@
+ECHO ----------------------------------------------------------------
+REM This takes you to a normal command prompt while in WinPE
+ECHO Q. Quit
+:: SET /P prompts for input and sets the variable
+:: to whatever the user types
+SET Choice=
+SET /P Choice=Type the letter and press Enter: 
+:: The syntax in the next line extracts the substring
+:: starting at 0 (the beginning) and 1 character long
+IF NOT '%Choice%'=='' SET Choice=%Choice:~0,1%
+ECHO.
+:: /I makes the IF comparison case-insensitive
+REM IF /I '%Choice%'=='A' GOTO ItemA
+IF /I '%Choice%'=='Q' GOTO End 
