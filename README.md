@@ -33,13 +33,13 @@ For Ubuntu you must specifically define the version as show below, while with De
 "stable" or "unstable" in the version field.
 
 
-node foo {
-  class {'quartermaster': }
+node foo { \n
+  class {'quartermaster': } \n
   ...
-  quartermaster::pxe{"ubuntu-12.04-amd64":}
-  quartermaster::pxe{"ubuntu-12.10-amd64":}
-  quartermaster::pxe{"debian-stable-amd64":}
-}
+  quartermaster::pxe{"ubuntu-12.04-amd64":} \n
+  quartermaster::pxe{"ubuntu-12.10-amd64":} \n
+  quartermaster::pxe{"debian-stable-amd64":} \n
+} \n
 
 
 Add an EPL/Fedora distro
