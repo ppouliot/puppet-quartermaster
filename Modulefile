@@ -7,3 +7,4 @@ description 'puppet module for creating a basic pxe infrastructure to
     pxe infrastructure also includes a puppetmaster for configuration managmeent.'
 project page 'https://github.com/ppouliot/quartermaster'
 source 'https://github.com/ppouliot/quartermaster'
+dependency 'puppetlabs/apache', '>= 0.0.3'

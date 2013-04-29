@@ -5,7 +5,15 @@
 # automated installs
 #
 
+
 class quartermaster::scripts {
+
+  include 'apache'
+
+  file {'/var/log/quartermaster':
+    ensure => directory,
+  }
+
 
   file {'/etc/apache2/sites-available/default':
     ensure  => file,
