@@ -46,7 +46,7 @@ class quartermaster{
   #  docroot         => $wwwroot,
   #}
   class { 'quartermaster::www': }
-  class { 'quartermaster::puppetmaster': }
+#  class { 'quartermaster::puppetmaster': }
   class { 'quartermaster::squid_deb_proxy': }
   class { 'quartermaster::dnsmasq': }
 #  class { 'quartermaster::bind': }
