@@ -36,15 +36,16 @@ class quartermaster{
   $file_mode = '0644'
   $dir_mode  = '0755'
   $counter   = '0'
-  include 'apache' 
+#  include 'apache' 
 
-  class {'apache':}
-  apache::vhost { 'quartermaster':
-    priority        => '10',
-    vhost_name      => $ipaddress,
-    port            => '80',
-    docroot         => $wwwroot,
-  }
+  #class {'apache':}
+  #apache::vhost { 'quartermaster':
+  #  priority        => '10',
+  #  vhost_name      => $ipaddress,
+  #  port            => '80',
+  #  docroot         => $wwwroot,
+  #}
+  class { 'quartermaster::www': }
   class { 'quartermaster::puppetmaster': }
   class { 'quartermaster::squid_deb_proxy': }
   class { 'quartermaster::dnsmasq': }

@@ -38,7 +38,6 @@ class quartermaster::puppetmaster{
 
 
   $mod_passenger = [ 'puppetmaster-passenger',
-                    'apache2-mpm-worker',
                     'libapache2-mod-passenger',
                     'librack-ruby',
                     'libmysql-ruby']
@@ -61,12 +60,6 @@ class quartermaster::puppetmaster{
   }
 
 
-  service {'apache2':
-    ensure  => running,
-    enable  => true,
-    require => Package['apache2-mpm-worker']
-  }
-
   service {'puppetmaster':
     ensure  => stopped,
     enable  => false,
@@ -84,13 +77,13 @@ class quartermaster::puppetmaster{
     ensure  => file,
     source  => 'puppet:///modules/quartermaster/puppetmaster/puppet.conf',
     require => Package['puppetmaster-passenger'],
-    notify  => Service['apache2'],
+    notify  => Service['httpd'],
   }
   file {'/etc/puppet/auth.conf':
     ensure  => file,
     source  => 'puppet:///modules/quartermaster/puppetmaster/auth.conf',
     require => Package['puppetmaster-passenger'],
-    notify  => Service['apache2'],
+    notify  => Service['httpd'],
  }
 
  file {'/etc/puppet/puppetdb.conf':
@@ -107,14 +100,14 @@ class quartermaster::puppetmaster{
 *.ipmi.openstack.tld
 *.demo.openstack.tld',
     require => Package['puppetmaster-passenger'],
-    notify  => Service['apache2'],
+    notify  => Service['httpd'],
   }
 
   file {'/etc/puppet/routes.yaml':
     ensure  => file,
     source  => 'puppet:///modules/quartermaster/puppetmaster/routes.yaml',
     require => Package['puppetdb'],
-    notify  => Service['puppetdb','apache2'],
+    notify  => Service['puppetdb','httpd'],
   }
 
 #  file {'/etc/puppet/device.conf':
