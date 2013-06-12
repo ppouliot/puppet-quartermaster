@@ -1,4 +1,4 @@
-name 'quartermaster'
+name 'ppouliot-quartermaster'
 version '0.0.1'
 source 'https://github.com/ppouliot/ppouliot-quartermaster.git'
 author 'Peter Pouliot <peter@pouliot.net>'
