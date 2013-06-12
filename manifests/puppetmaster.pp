@@ -23,10 +23,12 @@ class quartermaster::puppetmaster{
     notify => Exec['update_and_upgrade'],
   }
 
-  exec {'update_and_upgrade':
-    command     => '/usr/bin/apt-get update -y && /usr/bin/apt-get upgrade -y',
-    refreshonly => true,
-  }
+# Moving to commands.pp
+#
+#  exec {'update_and_upgrade':
+#    command     => '/usr/bin/apt-get update -y && /usr/bin/apt-get upgrade -y',
+#    refreshonly => true,
+#  }
 
   $puppetmaster = [ 'puppetmaster',
                     'augeas-tools',

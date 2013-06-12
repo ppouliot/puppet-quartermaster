@@ -32,6 +32,7 @@ class quartermaster{
   $wwwroot   = '/srv/install'
   $nfsroot   = '/srv/nfs'
   $bin       = "${wwwroot}/bin"
+  $puppetmaster_fqdn = "${fqdn}"
   $exe_mode  = '0777'
   $file_mode = '0644'
   $dir_mode  = '0755'
@@ -45,6 +46,8 @@ class quartermaster{
   #  port            => '80',
   #  docroot         => $wwwroot,
   #}
+
+  class { 'quartermaster::commands': }
   class { 'quartermaster::www': }
 #  class { 'quartermaster::puppetmaster': }
   class { 'quartermaster::squid_deb_proxy': }
@@ -56,4 +59,5 @@ class quartermaster{
   class { 'quartermaster::nfs': }
   class { 'quartermaster::winpe': }
   class { 'quartermaster::scripts': }
+  class { 'quartermaster::wimlib': }
   }

@@ -4,6 +4,8 @@ PXESERVER=<%= @ipaddress %>
 
 sleep 20 
 
+apt-get update -y && apt-get upgrade -y
+
 # Test if a VM
 #dmidecode |grep -i "vm"
 
@@ -11,9 +13,11 @@ sleep 20
 NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
 echo $NEWHOSTNAME > /etc/hostname
 
+#wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+
 # Set hostname of puppetmaster
 echo "<%= @ipaddress %> <%= @fqdn %> <%= @hostname %>" >> /etc/hosts
-echo "<%= @ipaddress %> puppet.openstack.tld puppet"  >> /etc/hosts
+echo "<%= @puppetmaster_ip %> <%= @puppetmaster_fqdn %> puppet"  >> /etc/hosts
 
 
 #/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;" > /etc/hostname
@@ -29,7 +33,7 @@ if [ -f /etc/puppet/puppet.conf ]
 then
 cat >> /etc/puppet/puppet.conf << EOF
 [agent]
-server=<%= @fqdn %>
+server=<%= @puppetmaster_fqdn %>
 EOF
 
 fi
