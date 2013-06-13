@@ -59,5 +59,5 @@ class quartermaster{
   class { 'quartermaster::nfs': }
   class { 'quartermaster::winpe': }
   class { 'quartermaster::scripts': }
-  class { 'quartermaster::wimlib': }
+  #class { 'quartermaster::wimlib': }
   }
