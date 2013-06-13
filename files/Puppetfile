@@ -1,0 +1,19 @@
+# All modules defined here will be merged into the modules directory of
+# this git repo. Every public module that is added here should be pinned
+# to a specific ref, commit, branch, etc.
+forge "http://forge.puppetlabs.com"
+
+mod "ripienaar/concat"
+#mod "puppetlabs/java", "0.2.0"
+#mod "puppetlabs/mcollective"
+#mod "puppetlabs/postgresql", "1.0.0"
+
+#mod "puppetlabs/puppetdb", "1.1.2"
+#    :git => "https://github.com/hubspotdevops/puppetlabs-puppetdb.git"
+mod "puppetlabs/apache"
+mod "quartermaster",
+    :git => "git://github.com/ppouliot/ppouliot-quartermaster.git"
+mod "puppetlabs/puppet",
+    :git => "https://github.com/hubspotdevops/puppetlabs-puppet.git"
+mod "puppetlabs/passenger",
+    :git => "https://github.com/hubspotdevops/puppetlabs-passenger.git"
