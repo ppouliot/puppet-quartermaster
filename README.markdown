@@ -7,6 +7,10 @@ Services include samba, nfs, apache, tftpd-hpa, squid-deb-proxy, puppetmaster-pa
 
 It will allow for completely automated installs of most freely available linux distributions
 
+The module also autogenrate all the menus and sub menus for the differnet pxe boot options.
+
+
+
 This is still a work in progress.
 
 Basic usage
@@ -21,7 +25,7 @@ Adding a Linux distribution
 When defining linux distributions to add to the pxe system use the following format as the name of
 a defined quartermaster::pxe on your quartermaster node.
 
-The naming convention used is as follos ${distro}-${version}-${architecture}
+The naming convention used is as follows ${distro}-${version}-${architecture}
 Specific exampes are provided below.
 
 Naming conventions are based on each distributions release naming.
@@ -34,7 +38,7 @@ For Ubuntu you must specifically define the version as show below, while with De
 
 
     node foo { 
-      class {'quartermaster': } \n
+      class {'quartermaster':}
       ...
       quartermaster::pxe{"ubuntu-12.04-amd64":}
       quartermaster::pxe{"ubuntu-12.10-amd64":}
@@ -56,7 +60,7 @@ Add an EPL/Fedora distro
 Add OpenSuse
 ------------
     node foo {
-      class{quartermaster: }
+      class{'quartermaster': }
       ...
       quartermaster::pxe{"opensuse-12.2-x86_64":}
     }
@@ -75,7 +79,7 @@ Please note, this does not generate a suitable winpe image.  You must use
 the petools module to provide that, as it must run on a windows host.
 
     node foo {
-      class quartermaster: }
+      class {'quartermaster': }
       ...
       quartermaster::windowsmedia{"en_windows_server_2012_x64_dvd_915478.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" }
       quartermaster::windowsmedia{"en_microsoft_hyper-v_server_2012_x64_dvd_915600.iso": activationkey => "" }
