@@ -1,7 +1,12 @@
 class quartermaster::puppet {
-include 'puppet'
+#include 'puppet'
 
-class {'puppet::master':
-  puppet_server    => @fqdn,
-  puppet_passenger => "true",
-} 
+  class {'passenger':
+    passenger_version => '3.0.19',
+    passenger_provider => 'apt',
+  }
+
+  class {'puppet::master':
+    puppet_passenger => "true",
+  } 
+}

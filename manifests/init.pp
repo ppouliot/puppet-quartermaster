@@ -50,6 +50,7 @@ class quartermaster{
   class { 'quartermaster::commands': }
   class { 'quartermaster::www': }
 #  class { 'quartermaster::puppetmaster': }
+  class { 'quartermaster::puppet': }
   class { 'quartermaster::squid_deb_proxy': }
   class { 'quartermaster::dnsmasq': }
 #  class { 'quartermaster::bind': }

@@ -1,6 +1,6 @@
 # Class: quartermaster::commands
 #
-# build standard command reference 
+# build standard command reference
 #
 
 class quartermaster::commands {
