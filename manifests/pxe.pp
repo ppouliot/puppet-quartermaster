@@ -37,7 +37,8 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
 #   /(ubuntu|debian)/   => "http://mirrors.mit.edu/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/images/pxeboot",
+    /(centos)/          => "http://vault.centos.org/${release}/os/${p_arch}/images/pxeboot",
+#    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/images/pxeboot",
 #   /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
     /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #  /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
@@ -54,7 +55,8 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
 #   /(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}",
-    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}",
+    /(centos)/          => "http://vault.centos.org/${release}/os/${p_arch}/",
+#    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}",
 #   /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
     /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os",
 #   /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
@@ -71,7 +73,8 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
 #   /(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}",
-    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/updates/${p_arch}",
+    /(centos)/          => "http://vault.centos.org/${release}/updates/${p_arch}/",
+#    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/updates/${p_arch}",
     /(fedora)/          => "http://download.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
 #   /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/updates/${release}/${p_arch}",
 #   /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
@@ -90,14 +93,15 @@ define quartermaster::pxe {
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     #/(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
-    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/isolinux/splash.jpg",
+    /(centos)/          => "http://vault.centos.org/${release}/os/${p_arch}/isolinux/splash.jpg",
+#    /(centos)/         => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/isolinux/splash.jpg",
     /(fedora)/          => "http://download.fedoraproject.org/pub/fedora/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    # /(fedora)/        => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
-    # /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
+#   /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
+#   /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
     /(scientificlinux)/ => "http://mirrors.med.harvard.edu/${distro}/${release}/${p_arch}/os/isolinux/splash.jpg",
     /(sles)/            => 'Enterprise ISO Required',
     /(sled)/            => 'Enterprise ISO Required',
-    # /(opensuse)/      => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/boot.jpg"
+# /(opensuse)/      => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/boot.jpg"
     /(opensuse)/        => "http://mirrors.med.harvard.edu/${distro}/distribution/${release}/repo/oss/boot/${p_arch}/loader/welcome.jpg",
     default             => 'No URL Specified',
   }
@@ -105,7 +109,7 @@ define quartermaster::pxe {
     /(ubuntu|debian|fedora)/                             => '.png',
     /(redhat|centos|scientificlinux|opensuse|sles|sled)/ => '.jpg',
     /(windows)/                                          => 'No Bootsplash',
-    default                                              => 'No supported automated installation method',
+    default                                              => 'No Bootsplash',
   }
 
 
