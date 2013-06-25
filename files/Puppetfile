@@ -10,10 +10,11 @@ mod "ripienaar/concat"
 
 #mod "puppetlabs/puppetdb", "1.1.2"
 #    :git => "https://github.com/hubspotdevops/puppetlabs-puppetdb.git"
-mod "puppetlabs/apache"
+mod "puppetlabs/apache",
+    :git => "https://github.com/ppouliot/puppetlabs-apache.git"
 mod "quartermaster",
     :git => "git://github.com/ppouliot/ppouliot-quartermaster.git"
 mod "puppetlabs/puppet",
-    :git => "https://github.com/hubspotdevops/puppetlabs-puppet.git"
+    :git => "https://github.com/ppouliot/puppetlabs-puppet.git"
 mod "puppetlabs/passenger",
-    :git => "https://github.com/hubspotdevops/puppetlabs-passenger.git"
+    :git => "https://github.com/ppouliot/puppetlabs-passenger.git"
