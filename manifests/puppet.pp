@@ -8,5 +8,6 @@ class quartermaster::puppet {
 
   class {'puppet::master':
     puppet_passenger => "true",
+    require          => Class["passenger"],
   } 
 }
