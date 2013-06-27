@@ -152,8 +152,17 @@ LABEL localboot
         APPEND hd0
         TIMEOUT 80
         TOTALTIMEOUT 600
-
 ",
+  }
+
+  file {'ipappend3.menu':
+    ensure  => file,
+    path    => "${quartermaster::tftpboot}/menu/99_Zz_ipappend3.menu",
+    owner   => 'tftp',
+    group   => 'tftp',
+    mode    => $quartermaster::file_mode,
+    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
+    content => "IPAPPEND=3"
 
   }
 
