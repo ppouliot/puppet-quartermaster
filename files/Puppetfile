@@ -1,4 +1,4 @@
-
+# This Puppetfile generates a working Quartermaster for generating all necessary images.
 #
 # Git Settings
 git_protocol=ENV['git_protocol'] || 'git'
@@ -18,7 +18,7 @@ mod 'stephenjohrnson/puppet', :git => "#{base_url}/stephenrjohnson/puppetlabs-pu
 mod 'CiscoSystems/apt', :git => "#{base_url}/CiscoSystems/puppet-apt", :ref => branch_name
 mod 'CiscoSystems/stdlib', :git => "#{base_url}/CiscoSystems/puppet-stdlib", :ref => branch_name
 mod 'CiscoSystems/mysql', :git => "#{base_url}/CiscoSystems/puppet-mysql", :ref => branch_name
-mod 'CiscoSystems/apache', :git => "#{base_url}/CiscoSystems/puppet-apache", :ref => branch_name
+#mod 'CiscoSystems/apache', :git => "#{base_url}/CiscoSystems/puppet-apache", :ref => branch_name
 
 
 # upstream is ripienaar
@@ -26,10 +26,10 @@ mod 'CiscoSystems/apache', :git => "#{base_url}/CiscoSystems/puppet-apache", :re
 mod 'ripienaar/concat', :git => "#{base_url}/CiscoSystems/puppet-concat", :ref => 'origin/grizzly'
 
 # upstream is cprice-puppet/puppetlabs-inifile
-mod 'CiscoSystems/inifile', :git => "#{base_url}/CiscoSystems/puppet-inifile"
+#mod 'CiscoSystems/inifile', :git => "#{base_url}/CiscoSystems/puppet-inifile"
 mod 'cprice404/inifile', :git => "#{base_url}/cprice-puppet/puppetlabs-inifile"
 # Removed ref due to confilt
 #, :ref => branch_name
 
 mod 'ppouliot/quartermaster', :git => "#{base_url}/ppouliot/ppouliot-quartermaster"
-
+mod 'ppouliot/apache', :git => "#{base_url}/ppouliot/puppet-apache", :ref => branch_name
