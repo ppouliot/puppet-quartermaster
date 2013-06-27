@@ -27,6 +27,7 @@ define quartermaster::pxe {
     /(11.10)/    => 'oneric',
     /(12.04)/    => 'precise',
     /(12.10)/    => 'quantal',
+    /(13.04)/    => 'raring',
     /(stable)/   => 'squeeze',
     /(testing)/  => 'wheezy',
     /(unstable)/ => 'sid',
