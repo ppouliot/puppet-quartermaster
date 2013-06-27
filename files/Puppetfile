@@ -28,4 +28,8 @@ mod 'ripienaar/concat', :git => "#{base_url}/CiscoSystems/puppet-concat", :ref =
 # upstream is cprice-puppet/puppetlabs-inifile
 mod 'CiscoSystems/inifile', :git => "#{base_url}/CiscoSystems/puppet-inifile"
 mod 'cprice404/inifile', :git => "#{base_url}/cprice-puppet/puppetlabs-inifile"
+# Removed ref due to confilt
 #, :ref => branch_name
+
+mod 'ppouliot/quartermaster', :git => "#{base_url}/ppouliot/ppouliot-quartermaster"
+
