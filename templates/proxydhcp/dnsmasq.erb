@@ -54,3 +54,12 @@ dhcp-no-override
 # network. This search may be done by multicast or broadcast, or direct to a
 # server if its IP address is provided.
 #pxe-service=x86PC, "Install windows from RIS server", 1
+domain-needed
+bogus-priv
+no-hosts
+dns-forward-max=150
+cache-size=1000
+no-negcache
+neg-ttl=3600
+resolv-file=/etc/resolv.dnsmasq
+no-poll

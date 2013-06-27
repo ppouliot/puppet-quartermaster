@@ -19,6 +19,15 @@ class quartermaster::dnsmasq {
     require => Package['dnsmasq'],
     notify  => Service['dnsmasq'],
   }
+#  file {'resolv.dnsmasq':
+#    ensure  => file,
+#    path    => '/etc/resolv.dnsmasq',
+#    #content => template('quartermaster/proxydhcp/dnsmasq.erb'),
+#    source => "",
+#    require => Package['dnsmasq'],
+#    notify  => Service['dnsmasq'],
+#  }
+
 
   service {'dnsmasq':
     ensure  => running,
