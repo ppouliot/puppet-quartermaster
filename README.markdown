@@ -10,8 +10,11 @@ It will allow for completely automated installs of most freely available linux d
 The module also autogenrate all the menus and sub menus for the differnet pxe boot options.
 
 
-
 This is still a work in progress.
+Bootstrapping
+-------------
+
+Download files/librarian-puppet-bootstrap.sh directly and execute on an ubuntu system.
 
 Basic usage
 -----------
