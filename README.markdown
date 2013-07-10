@@ -1,4 +1,4 @@
-Quartermaster a Puppet Module for PXE Boot Installaltion Services
+Quartermaster a Puppet Module for PXE Boot Installation Services
 =================================================================
 
 This system uses standard packages to create a pxeboot infrastructure.
@@ -11,6 +11,7 @@ The module also autogenrate all the menus and sub menus for the differnet pxe bo
 
 
 This is still a work in progress.
+
 Bootstrapping
 -------------
 
