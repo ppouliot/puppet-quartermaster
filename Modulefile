@@ -7,6 +7,6 @@ summary 'Module for PXE Infrastructure'
 description 'puppet module for creating a basic pxe infrastructure to
     support booting installations of linux, and windows.
     pxe infrastructure also includes a puppetmaster for configuration managmeent.'
-project page 'https://github.com/ppouliot/ppouliot-quartermaster'
+#project page 'https://github.com/ppouliot/ppouliot-quartermaster'
 #dependency 'puppetlabs/apache'
 #dependency 'puppetlabs/puppet' 
