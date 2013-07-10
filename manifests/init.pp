@@ -49,12 +49,9 @@ class quartermaster{
 
   class { 'quartermaster::commands': }
   class { 'quartermaster::www': }
-#  class { 'quartermaster::puppetmaster': }
-  class { 'quartermaster::puppet': }
+  class { 'quartermaster::puppetmaster': }
   class { 'quartermaster::squid_deb_proxy': }
   class { 'quartermaster::dnsmasq': }
-#  class { 'quartermaster::bind': }
-#  class { 'quartermaster::cisco': }
   class { 'quartermaster::tftpd': }
   class { 'quartermaster::syslinux': }
   class { 'quartermaster::nfs': }
