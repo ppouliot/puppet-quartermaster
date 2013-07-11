@@ -1,6 +1,6 @@
 class quartermaster::puppetmaster {
 
-  include 'puppet'
+  include 'puppet::master'
   include 'puppetdb'
   include 'puppetdb::master::config'
 
