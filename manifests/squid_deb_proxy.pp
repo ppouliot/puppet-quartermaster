@@ -7,7 +7,8 @@
 
 class quartermaster::squid_deb_proxy {
 
-  $squid_deb_proxy = ['squid-deb-proxy','squid-deb-proxy-client',]
+  #  $squid_deb_proxy = ['squid-deb-proxy','squid-deb-proxy-client',]
+  $squid_deb_proxy = ['squid-deb-proxy',]
   $squid_services  = ['squid-deb-proxy','squid3',]
 
   package {$squid_deb_proxy: ensure => installed,}
