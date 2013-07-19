@@ -139,7 +139,7 @@ class quartermaster::syslinux {
     group   => 'tftp',
     mode    => $quartermaster::file_mode,
     require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-    content => "default menu.c32
+    content => 'default menu.c32
 prompt 0
 MENU TITLE Quartermaster PXE System
 MENU INCLUDE graphics.cfg
@@ -152,19 +152,9 @@ LABEL localboot
         APPEND hd0
         TIMEOUT 80
         TOTALTIMEOUT 600
-",
+',
   }
 
-  file {'ipappend3.menu':
-    ensure  => file,
-    path    => "${quartermaster::tftpboot}/menu/99_Zz_ipappend3.menu",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-    content => "IPAPPEND=3"
-
-  }
 
   file {'graphics_cfg':
     ensure  => file,

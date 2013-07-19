@@ -1,0 +1,12 @@
+
+:hierarchy:
+  - %{::environment}/%{::certname}
+  - %{::environment}/%{::location}
+  - %{::environment}/%{::role}
+  - %{::environment}
+  - %{::certname}
+  - %{::location}
+  - %{::role}
+  - %{::osfamily}
+  - %{::architecture}
+  - global
