@@ -37,3 +37,5 @@ download.opensuse.org
 mirror.xmission.com
 # Rabbitmq
 .rabbitmq.com
+# Sensu
+.sensuapp.org

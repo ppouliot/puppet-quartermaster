@@ -1,4 +1,6 @@
 class quartermaster::puppetmaster {
 
-  class {'puppet::master':} 
+  class {'puppet::master':
+    autosign => true;
+  } 
 }
