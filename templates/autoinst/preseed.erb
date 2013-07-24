@@ -90,5 +90,5 @@ d-i debian-installer/exit/halt boolean false
 d-i debian-installer/exit/poweroff boolean false
 byobu byobu/launch-by-default boolean true
 # Example 
-#d-i preseed/late_command string chroot /target sh -c "/usr/bin/curl -o /tmp/postinstall http://<%= @ipaddress %>/pxe-bin/postinstall && /bin/sh -x /tmp/postinstall"
-d-i preseed/late_command string chroot /target sh -c "wget http://<%= @ipaddress %>/pxe-bin/postinstall -O /tmp/postinstall && /bin/sh -x /tmp/postinstall"
+#d-i preseed/late_command string chroot /target sh -c "/usr/bin/curl -o /tmp/postinstall http://<%= @ipaddress %>/bin/postinstall && /bin/sh -x /tmp/postinstall"
+d-i preseed/late_command string chroot /target sh -c "wget http://<%= @ipaddress %>/bin/postinstall -O /tmp/postinstall && /bin/sh -x /tmp/postinstall"
