@@ -4,7 +4,7 @@
 wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
 
 # Install Fisrtboot script
-wget http://<%= @ipaddress %>/pxe-bin/firstboot -O /root/firstboot
+wget http://<%= @ipaddress %>/bin/firstboot -O /root/firstboot
 chmod +x /root/firstboot
 cat > /etc/init.d/firstboot << EOF
 ### BEGIN INIT INFO
