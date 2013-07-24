@@ -32,3 +32,5 @@ download.opensuse.org
 .puppetlabs.com
 #yum.puppetlabs.com
 #apt.puppetlabs.com
+# jenkins ci
+.jenkins-ci.org
