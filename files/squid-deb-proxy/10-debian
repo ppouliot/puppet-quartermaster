@@ -34,3 +34,6 @@ download.opensuse.org
 #apt.puppetlabs.com
 # jenkins ci
 .jenkins-ci.org
+mirror.xmission.com
+# Rabbitmq
+.rabbitmq.com
