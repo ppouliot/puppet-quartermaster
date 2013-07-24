@@ -32,5 +32,5 @@ mod 'cprice404/inifile', :git => "#{base_url}/cprice-puppet/puppetlabs-inifile"
 # Removed ref due to confilt
 #, :ref => branch_name
 
-mod 'ppouliot/quartermaster', :git => "#{base_url}/ppouliot/ppouliot-quartermaster"
+mod 'ppouliot/quartermaster', :git => "#{base_url}/ppouliot/puppet-quartermaster"
 mod 'ppouliot/apache', :git => "#{base_url}/ppouliot/puppet-apache", :ref => branch_name
