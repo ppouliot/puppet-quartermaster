@@ -68,12 +68,12 @@ d-i apt-setup/services-select multiselect security
 #d-i apt-setup/security_path string /<%= @distro %>
 
 # PuppetLabs Repo
-d-i apt-setup/local0/repository string http://apt.puppetlabs.com/ <%= @rel_name %> main
-d-i apt-setup/local0/key string http://apt.puppetlabs.com/pubkey.gpg
+#d-i apt-setup/local0/repository string http://apt.puppetlabs.com/ <%= @rel_name %> main
+#d-i apt-setup/local0/key string http://apt.puppetlabs.com/pubkey.gpg
 
 d-i debian-installer/allow_unauthenticated string false
 d-i tasksel/first multiselect
-d-i pkgsel/include string vim screen puppet git openssh-server squid-deb-proxy
+d-i pkgsel/include string vim screen git openssh-server squid-deb-proxy
 d-i pkgsel/upgrade select safe-upgrade
 d-i pkgsel/language-packs multiselect 
 d-i pkgsel/update-policy select unattend-upgrades
