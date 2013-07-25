@@ -7,11 +7,12 @@
 # Actions:
 #
 
+# Install DNSMasq
 class quartermaster::dnsmasq {
   package { 'dnsmasq':
     ensure => installed,
   }
-
+# Configure DNSMasq as ProxyDHCP
   file {'quartermaster.conf':
     ensure  => file,
     path    => '/etc/dnsmasq.d/quartermaster.conf',
@@ -19,15 +20,26 @@ class quartermaster::dnsmasq {
     require => Package['dnsmasq'],
     notify  => Service['dnsmasq'],
   }
-#  file {'resolv.dnsmasq':
-#    ensure  => file,
-#    path    => '/etc/resolv.dnsmasq',
-#    #content => template('quartermaster/proxydhcp/dnsmasq.erb'),
-#    source => "",
-#    require => Package['dnsmasq'],
-#    notify  => Service['dnsmasq'],
-#  }
 
+  file {'/etc/logrotate.d/dnsmasq':
+    ensure  => file,
+   # path    => '/etc/resolv.dnsmasq',
+    #content => template('quartermaster/proxydhcp/dnsmasq.erb'),
+#    source => "",
+    content => '/var/log/quartermaster/dnsmasq.log {
+    monthly
+    missingok
+    notifempty
+    delaycompress
+    sharedscripts
+    postrotate
+        [ ! -f /var/run/dnsmasq.pid ] || kill -USR2 `cat /var/run/dnsmasq.pid`
+    endscript
+    create 0640 dnsmasq dnsmasq
+}',
+    require => Package['dnsmasq'],
+    notify  => Service['dnsmasq'],
+  }
 
   service {'dnsmasq':
     ensure  => running,

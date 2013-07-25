@@ -6,16 +6,11 @@
 # the contents of this script are added to the main configuration.
 # You may modify the file to suit your needs.
 
-# Used to solve name resolution issues
-
+# Run Local DNS Cache
 listen-address=127.0.0.1
-resolv-file=/run/resolvconf/interface/eth0.dhclient
-
-# Don't function as a DNS server:
-#port=0
 
 # Log lots of extra information about DHCP transactions.
-log-facility=/var/log/dnsmasq.log
+log-facility=/var/log/quartermaster/dnsmasq.log
 log-queries
 log-dhcp
 
@@ -23,4 +18,4 @@ log-dhcp
 # as a proxy DHCP server providing boot information but no IP leases.
 # Any ip in the subnet will do, so you may just put your server NIC ip here.
 dhcp-range=<%= @ipaddress %>,proxy
-pxe-service=x86PC, "Boot from Quartermaster", pxelinux/pxelinux, <%= @ipaddress %>
+pxe-service=x86PC, "Quartermaster PXE Provisioning", pxelinux/pxelinux, <%= @ipaddress %>
