@@ -21,6 +21,23 @@ define quartermaster::pxe {
     $el_major = $1
     $el_minor = $2
   }
+  $is_centos = $distro ? {
+    /(centos)/   => 'true',
+    default      => 'This is not centos',  
+  }
+
+  $el_legacy = $el_minor ? {
+    /(0|1|2|3)/ => 'true',
+    /(4)/       => 'false',
+    default	=> 'This is not a EL Distro',
+  }
+
+  if $is_centos == 'true' {
+     $centos_url = $el_legacy ? {
+      /(true)/   => "http://vault.centos.org/${release}",
+      /(false)/  => "http://mirror.centos.org/centos/${el_major}",
+    }
+  }
 
   $rel_name = $release ? {
     /(11.04)/    => 'natty',
@@ -38,8 +55,9 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
 #   /(ubuntu|debian)/   => "http://mirrors.mit.edu/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(centos)/          => "http://vault.centos.org/${release}/os/${p_arch}/images/pxeboot",
-#    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/images/pxeboot",
+    /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
+#    /(centos)/         => "http://vault.centos.org/${release}/os/${p_arch}/images/pxeboot",
+#    /(centos)/         => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/images/pxeboot",
 #   /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
     /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #  /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
@@ -56,7 +74,7 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
 #   /(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}",
-    /(centos)/          => "http://vault.centos.org/${release}/os/${p_arch}/",
+    /(centos)/          => "${centos_url}/os/${p_arch}/",
 #    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}",
 #   /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
     /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os",
@@ -74,7 +92,7 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
 #   /(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}",
-    /(centos)/          => "http://vault.centos.org/${release}/updates/${p_arch}/",
+    /(centos)/          => "${centos_url}/updates/${p_arch}/",
 #    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/updates/${p_arch}",
     /(fedora)/          => "http://download.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
 #   /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/updates/${release}/${p_arch}",
@@ -94,7 +112,7 @@ define quartermaster::pxe {
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     #/(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
-    /(centos)/          => "http://vault.centos.org/${release}/os/${p_arch}/isolinux/splash.jpg",
+    /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
 #    /(centos)/         => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/isolinux/splash.jpg",
     /(fedora)/          => "http://download.fedoraproject.org/pub/fedora/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #   /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
@@ -162,6 +180,7 @@ define quartermaster::pxe {
   notify { "${name}: initrd is ${initrd}":}
   notify { "${name}: linux_installer is ${linux_installer}":}
   notify { "${name}: PuppetLabs Repo is ${puppetlabs_repo}":}
+  notify { "${name}: ${is_centos}":}
 
 
   exec {"get_net_kernel-${name}":

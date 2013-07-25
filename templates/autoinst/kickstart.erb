@@ -23,7 +23,8 @@ firewall --disabled
 # Note that any partitions you deleted are not expressed
 # here so unless you clear all partitions first, this is
 # not guaranteed to work
-clearpart --all --drives=sda
+#clearpart --all --drives=sda
+clearpart --all
 part pv.008002 --grow --size=500
 volgroup vg_system --pesize=32768 pv.008002
 logvol swap --name=lv_swap --vgname=vg_system --grow --size=496 --maxsize=992
