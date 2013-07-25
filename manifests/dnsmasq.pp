@@ -16,7 +16,7 @@ class quartermaster::dnsmasq {
   file {'quartermaster.conf':
     ensure  => file,
     path    => '/etc/dnsmasq.d/quartermaster.conf',
-    content => template('quartermaster/proxydhcp/dnsmasq.erb'),
+    content => template('quartermaster/dnsmasq.erb'),
     require => Package['dnsmasq'],
     notify  => Service['dnsmasq'],
   }
@@ -24,7 +24,7 @@ class quartermaster::dnsmasq {
   file {'/etc/logrotate.d/dnsmasq':
     ensure  => file,
    # path    => '/etc/resolv.dnsmasq',
-    #content => template('quartermaster/proxydhcp/dnsmasq.erb'),
+    #content => template('quartermaster/dnsmasq.erb'),
 #    source => "",
     content => '/var/log/quartermaster/dnsmasq.log {
     monthly
