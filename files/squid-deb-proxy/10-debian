@@ -25,6 +25,9 @@ mirrors.med.harvard.edu
 download.fedora.redhat.com
 download.fedoraproject.com
 
+#centos
+.centos.org
+
 # SuSE
 download.opensuse.org
 
