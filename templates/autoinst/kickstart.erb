@@ -52,7 +52,7 @@ puppetlabs-release
 #
 yum install puppet rubygems make gcc ruby-devel git -y
 
-if [ $HOSTNAME = "centos|fedora|scientificlinux" ]; then
+if [ $HOSTNAME = "centos|fedora|scientificlinux|oraclelinux" ]; then
 #set hostname to mac address of eth0
 NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
 # Setting Hostname
