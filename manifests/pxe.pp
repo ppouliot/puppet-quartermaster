@@ -21,6 +21,8 @@ define quartermaster::pxe {
     $el_major = $1
     $el_minor = $2
   }
+
+  # Begin Tests to deal with Centos Minor Point releases
   $is_centos = $distro ? {
     /(centos)/   => 'true',
     default      => 'This is not centos',  
@@ -37,6 +39,11 @@ define quartermaster::pxe {
       /(true)/   => "http://vault.centos.org/${release}",
       /(false)/  => "http://mirror.centos.org/centos/${el_major}",
     }
+  }
+  # Begin tests for dealing with OracleLinux Repos
+  $is_oracle = $distro ? {
+    /(oraclelinux)/ => 'true',
+    default         => 'This is not Oracle Linux',  
   }
 
   $rel_name = $release ? {
@@ -62,6 +69,7 @@ define quartermaster::pxe {
     /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #  /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
     /(scientificlinux)/ => "http://mirrors.med.harvard.edu/${distro}/${release}/${p_arch}/os/images/pxeboot",
+    /(oraclelinux)/     => "Enterprise ISO Required",
     /(redhat)/          => 'Enterprise ISO Required',
     /(sles)/            => 'Enterprise ISO Required',
     /(sled)/            => 'Enterprise ISO Required',
@@ -75,16 +83,13 @@ define quartermaster::pxe {
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
 #   /(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/os/${p_arch}/",
-#    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}",
-#   /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
-    /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os",
-#   /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
-    /(scientificlinux)/ => "http://mirrors.med.harvard.edu/${distro}/${release}/${p_arch}/os",
+    /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+    /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
+    /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${el_major}/${el_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
     /(sles)/            => 'Enterprise ISO Required',
     /(sled)/            => 'Enterprise ISO Required',
-#   /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
-    /(opensuse)/        => "http://mirrors.med.harvard.edu/${distro}/distribution/${release}/repo/oss/suse",
+    /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
     default             => 'No URL Specified',
   }
 
@@ -93,16 +98,13 @@ define quartermaster::pxe {
     /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
 #   /(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
-#    /(centos)/          => "http://mirrors.med.harvard.edu/${distro}/${release}/updates/${p_arch}",
     /(fedora)/          => "http://download.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
-#   /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/updates/${release}/${p_arch}",
-#   /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
-    /(scientificlinux)/ => "http://mirrors.med.harvard.edu/${distro}/${release}/${p_arch}/updates/security",
+    /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
+    /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${el_major}/${el_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
     /(sles)/            => 'Enterprise ISO Required',
     /(sled)/            => 'Enterprise ISO Required',
-#   /(opensuse)         => "http://download.opensuse.org/distribution/${release}/repo/non-oss/suse",
-    /(opensuse)/        => "http://mirrors.med.harvard.edu/${distro}/distribution/${release}/repo/non-oss/suse",
+    /(opensuse)         => "http://download.opensuse.org/distribution/${release}/repo/non-oss/suse",
     default             => 'No URL Specified',
   }
 
@@ -113,57 +115,55 @@ define quartermaster::pxe {
     #/(ubuntu|debian)/   => "http://mirrors.med.harvard.edu/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
-#    /(centos)/         => "http://mirrors.med.harvard.edu/${distro}/${release}/os/${p_arch}/isolinux/splash.jpg",
     /(fedora)/          => "http://download.fedoraproject.org/pub/fedora/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-#   /(fedora)/          => "http://mirrors.med.harvard.edu/${distro}/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
-#   /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
-    /(scientificlinux)/ => "http://mirrors.med.harvard.edu/${distro}/${release}/${p_arch}/os/isolinux/splash.jpg",
+    /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
+    /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${el_major}/${el_minor}/base/${p_arch}/",
     /(sles)/            => 'Enterprise ISO Required',
     /(sled)/            => 'Enterprise ISO Required',
-# /(opensuse)/      => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/boot.jpg"
-    /(opensuse)/        => "http://mirrors.med.harvard.edu/${distro}/distribution/${release}/repo/oss/boot/${p_arch}/loader/welcome.jpg",
+    /(opensuse)/      => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/boot.jpg"
     default             => 'No URL Specified',
   }
   $bootsplash = $distro ? {
     /(ubuntu|debian|fedora)/                             => '.png',
     /(redhat|centos|scientificlinux|opensuse|sles|sled)/ => '.jpg',
     /(windows)/                                          => 'No Bootsplash',
+    /(oraclelinux)/                                      => 'No Bootsplash ',
     default                                              => 'No Bootsplash',
   }
 
 
   $autofile = $distro ? {
-    /(ubuntu|debian)/                        => 'preseed',
-    /(redhat|centos|fedora|scientificlinux)/ => 'kickstart',
-    /(sles|sled|opensuse)/                   => 'autoyast',
-    /(windows)/                              => 'unattend.xml',
-    default                                  => 'No supported automated installation method',
+    /(ubuntu|debian)/                                    => 'preseed',
+    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
+    /(sles|sled|opensuse)/                               => 'autoyast',
+    /(windows)/                                          => 'unattend.xml',
+    default                                              => 'No supported automated installation method',
   }
 
   $pxekernel = $distro ? {
-    /(ubuntu|debian)/                        => 'linux',
-    /(redhat|centos|fedora|scientificlinux)/ => 'vmlinuz',
-    /(sles|sled|opensuse)/                   => 'linux',
-    default                                  => 'No supported Pxe Kernel',
+    /(ubuntu|debian)/                                    => 'linux',
+    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'vmlinuz',
+    /(sles|sled|opensuse)/                               => 'linux',
+    default                                              => 'No supported Pxe Kernel',
   }
 
   $initrd = $distro ? {
-    /(ubuntu|debian)/                        => '.gz',
-    /(redhat|centos|fedora|scientificlinux)/ => '.img',
-    /(sles|sled|opensuse)/                   => '',
-    default                                  => 'No supported Initrd Extension',
+    /(ubuntu|debian)/                                    => '.gz',
+    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
+    /(sles|sled|opensuse)/                               => '',
+    default                                              => 'No supported Initrd Extension',
   }
   $linux_installer = $distro ? {
-    /(ubuntu|debian)/                        => 'd-i',
-    /(redhat|centos|fedora|scientificlinux)/ => 'anaconda',
-    /(sles|sled|opensuse)/                   => 'yast',
-    default                                  => 'No Supported Installer',
+    /(ubuntu|debian)/                                    => 'd-i',
+    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
+    /(sles|sled|opensuse)/                               => 'yast',
+    default                                              => 'No Supported Installer',
   }
   $puppetlabs_repo = $distro ? {
-    /(ubuntu|debian)/                 => "http://apt.puppetlabs.com/dists/${rel_name}",
-    /(fedora)/                        => "http://yum.puppetlabs.com/fedora/f${rel_number}/products/${p_arch}",
-    /(redhat|centos|scientificlinux)/ => "http://yum.puppetlabs.com/el/${el_major}/products/${p_arch}",
-    default                           => 'No PuppetLabs Repo',
+    /(ubuntu|debian)/                                    => "http://apt.puppetlabs.com/dists/${rel_name}",
+    /(fedora)/                                           => "http://yum.puppetlabs.com/fedora/f${rel_number}/products/${p_arch}",
+    /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppetlabs.com/el/${el_major}/products/${p_arch}",
+    default                                              => 'No PuppetLabs Repo',
   }
 
 
