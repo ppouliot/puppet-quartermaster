@@ -44,7 +44,7 @@ reboot
 openssh-clients
 puppetlabs-release
 %end
-%post --log /tmp/<%= @distro %>.log
+%post --log /root/<%= @distro %>.log
 yum install puppet rubygems make gcc ruby-devel git -y
 
 gem install librarian-puppet-maestrodev
