@@ -141,6 +141,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"],
     }
   } 
+
   #if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"]) {
   #  file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe":
   #    ensure  => directory,
