@@ -1,5 +1,5 @@
-LABEL <%= scope.lookupvar('distro') %>.menu
-        MENU LABEL <%= scope.lookupvar('distro') %> Installation Menu
+LABEL <%= @distro %>.menu
+        MENU LABEL <%= @distro %> Installation Menu
         KERNEL menu.c32
-        APPEND ../<%= scope.lookupvar('distro') %>/graphics.cfg ../<%= scope.lookupvar('distro') %>/<%= scope.lookupvar('distro') %>.menu
+        APPEND ../<%= @distro %>/graphics.cfg ../<%= @distro %>/<%= @distro %>.menu
 

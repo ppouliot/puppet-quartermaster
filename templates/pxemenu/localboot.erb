@@ -1,0 +1,8 @@
+LABEL localboot
+        MENU LABEL ^Boot local system
+        MENU DEFAULT
+        COM32 chain.c32
+        APPEND hd0
+        TIMEOUT 80
+        TOTALTIMEOUT 600
+

@@ -327,6 +327,13 @@ define quartermaster::pxe {
       content => template('quartermaster/pxemenu/default.erb'),
     }
   }
+  if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
+    concat::fragment { "${distro}.default_menu_entry":
+      target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default.new",
+      content => template("quartermaster/pxemenu/default.erb"),
+    }
+  }
+
   file { "${name}.menu":
     ensure  => file,
     path    => "${quartermaster::tftpboot}/${distro}/menu/${name}.menu",

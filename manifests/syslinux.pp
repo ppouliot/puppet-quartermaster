@@ -8,10 +8,13 @@ class quartermaster::syslinux {
   $pxeroot       = "${quartermaster::tftpboot}/pxelinux"
   $pxecfg        = "${pxeroot}/pxelinux.cfg"
   $pxe_menu      = "${quartermaster::tftpboot}/menu"
-  $syslinux_url  = 'http://mirrors.med.harvard.edu/linux/utils/boot/syslinux'
-  #$syslinux_url = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
+  #$syslinux_url  = 'http://mirrors.med.harvard.edu/linux/utils/boot/syslinux'
+  $syslinux_url = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
   #$syslinux_ver = '4.05'
-  $syslinux_ver  = '5.01'
+  #$syslinux_ver  = '5.01'
+  $syslinux_ver  = '5.10'
+# Broken 
+#  $syslinux_ver  = '6.01'
   $syslinux      = "syslinux-${syslinux_ver}"
   $syslinuxroot  = "${quartermaster::tmp}/${syslinux}"
 
@@ -154,6 +157,17 @@ LABEL localboot
         TOTALTIMEOUT 600
 ',
   }
+concat {"${pxecfg}/default.new":
+    owner   => 'tftp',
+    group   => 'tftp',
+    mode    => $quartermaster::file_mode,
+}
+
+concat::fragment{"default_header":
+    target  => "${pxecfg}/default.new",
+    content => template("quartermaster/pxemenu/header.erb"),
+    order   => 01,
+}
 
 
   file {'graphics_cfg':

@@ -150,6 +150,10 @@ kernel menu.c32
 append ../winpe/winpe.menu
 ',
   }
+  concat::fragment{"winpe_pxe_default_menu":
+    target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default.new",
+    content => template("quartermaster/pxemenu/winpe.erb"),
+  }
 
   file { 'init.cmd':
     ensure  => file,
