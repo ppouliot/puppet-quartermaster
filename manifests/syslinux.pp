@@ -11,8 +11,8 @@ class quartermaster::syslinux {
   #$syslinux_url  = 'http://mirrors.med.harvard.edu/linux/utils/boot/syslinux'
   $syslinux_url = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
   #$syslinux_ver = '4.05'
-  #$syslinux_ver  = '5.01'
-  $syslinux_ver  = '5.10'
+  $syslinux_ver  = '5.01'
+#  $syslinux_ver  = '5.10'
 # Broken 
 #  $syslinux_ver  = '6.01'
   $syslinux      = "syslinux-${syslinux_ver}"
@@ -139,6 +139,7 @@ concat {"${pxecfg}/default":
     owner   => 'tftp',
     group   => 'tftp',
     mode    => $quartermaster::file_mode,
+    notify  => Service['tftpd-hpa'],
 }
 
 concat::fragment{"default_header":

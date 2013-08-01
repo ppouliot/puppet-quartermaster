@@ -61,7 +61,7 @@ define quartermaster::pxe {
 
   $url = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
+    /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
     /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
     /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
@@ -88,7 +88,7 @@ define quartermaster::pxe {
 
   $inst_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
-    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
+    /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/os/${p_arch}/",
     /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
@@ -103,7 +103,7 @@ define quartermaster::pxe {
 
   $update_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
-    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
+    /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
     /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
@@ -119,7 +119,7 @@ define quartermaster::pxe {
 
   $splashurl = $distro ? {
     /(ubuntu)/         => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
-    /(debian)/         => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
+    /(debian)/         => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
@@ -132,8 +132,8 @@ define quartermaster::pxe {
     default             => 'No URL Specified',
   }
   $bootsplash = $distro ? {
-    /(ubuntu|debian|fedora)/                             => '.png',
-    /(redhat|centos|scientificlinux|opensuse|sles|sled)/ => '.jpg',
+    /(ubuntu|debian|fedora|scientificlinux)/             => '.png',
+    /(redhat|centos|opensuse|sles|sled)/                 => '.jpg',
     /(windows)/                                          => 'No Bootsplash',
     /(oraclelinux)/                                      => 'No Bootsplash ',
     default                                              => 'No Bootsplash',
@@ -196,30 +196,30 @@ define quartermaster::pxe {
     command => "/usr/bin/wget -c ${url}/${pxekernel} -O ${rel_number}",
     cwd     => "${quartermaster::tftpboot}/${distro}/${p_arch}",
     creates => "${quartermaster::tftpboot}/${distro}/${p_arch}/${rel_number}",
-    require =>  File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ],
+    require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ]],
   }
 
   exec {"get_net_initrd-${name}":
     command => "/usr/bin/wget -c ${url}/initrd${initrd} -O ${rel_number}${initrd}",
     cwd     => "${quartermaster::tftpboot}/${distro}/${p_arch}",
     creates => "${quartermaster::tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
-    require =>  File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ],
+    require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ]],
   }
 
   exec {"get_bootsplash-${name}":
     command => "/usr/bin/wget -c ${splashurl}  -O ${name}${bootsplash}",
-    cwd     => "${quartermaster::tftpboot}/${distro}/images",
-    creates => "${quartermaster::tftpboot}/${distro}/images/${name}${bootsplash}",
-    require =>  File[ "${quartermaster::tftpboot}/${distro}/images" ],
+    cwd     => "${quartermaster::tftpboot}/${distro}/graphics",
+    creates => "${quartermaster::tftpboot}/${distro}/graphics/${name}${bootsplash}",
+    require =>  [ Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/graphics" ]],
   }
 
-  exec {"create_submenu-${name}":
-    command     => "${quartermaster::wwwroot}/bin/concatenate_files.sh ${quartermaster::tftpboot}/${distro}/menu ${quartermaster::tftpboot}/${distro}/${distro}.menu",
-    cwd         => "${quartermaster::tftpboot}/${distro}/",
-    creates     => "${quartermaster::tftpboot}/${distro}/${distro}.menu",
-    notify      => Service[ 'tftpd-hpa' ],
-    require     => File["${quartermaster::wwwroot}/bin/concatenate_files.sh"],
-  }
+#  exec {"create_submenu-${name}":
+#    command     => "${quartermaster::wwwroot}/bin/concatenate_files.sh ${quartermaster::tftpboot}/${distro}/menu ${quartermaster::tftpboot}/${distro}/${distro}.menu",
+#    cwd         => "${quartermaster::tftpboot}/${distro}/",
+#    creates     => "${quartermaster::tftpboot}/${distro}/${distro}.menu",
+#    notify      => Service[ 'tftpd-hpa' ],
+#    require     => File["${quartermaster::wwwroot}/bin/concatenate_files.sh"],
+#  }
 
 
   if ! defined (File["${quartermaster::tftpboot}/${distro}"]){
@@ -243,8 +243,8 @@ define quartermaster::pxe {
     }
   }
 
-  if ! defined (File["${quartermaster::tftpboot}/${distro}/images"]){
-    file { "${quartermaster::tftpboot}/${distro}/images":
+  if ! defined (File["${quartermaster::tftpboot}/${distro}/graphics"]){
+    file { "${quartermaster::tftpboot}/${distro}/graphics":
       ensure  => directory,
       owner   => 'tftp',
       group   => 'tftp',
@@ -252,6 +252,16 @@ define quartermaster::pxe {
       require => File[ "${quartermaster::tftpboot}/${distro}" ],
     }
   }
+    file { "${name}.graphics.conf":
+      ensure  => file,
+      path    => "${quartermaster::tftpboot}/${distro}/menu/${name}.graphics.conf",
+      owner   => 'tftp',
+      group   => 'tftp',
+      mode    => '0644',
+      require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
+      content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
+   }
+
 
   if ! defined (File["${quartermaster::tftpboot}/${distro}/${p_arch}"]){
     file { "${quartermaster::tftpboot}/${distro}/${p_arch}":
@@ -327,6 +337,7 @@ define quartermaster::pxe {
       owner   => 'tftp',
       group   => 'tftp',
       mode    => $quartermaster::file_mode,
+      notify => Service['tftpd-hpa'],
     }
   }
   if ! defined (Concat::Fragment["${distro}.submenu_header"]) {
@@ -352,17 +363,6 @@ define quartermaster::pxe {
     group   => 'tftp',
     mode    => '0644',
     require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
-#    notify  => Exec["create_submenu-${name}"],
     content => template("quartermaster/pxemenu/${linux_installer}.erb"),
-  }
-  file { "${name}.graphics.conf":
-    ensure  => file,
-    path    => "${quartermaster::tftpboot}/${distro}/menu/${name}.graphics.conf",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => '0644',
-    require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
-#    notify  => Exec["create_submenu-${name}"],
-    content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
   }
 }
