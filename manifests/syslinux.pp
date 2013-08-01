@@ -135,28 +135,6 @@ class quartermaster::syslinux {
     require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
   }
 
-#  file {'localboot.menu':
-#    ensure  => file,
-#    path    => "${quartermaster::tftpboot}/menu/00_localboot.menu",
-#    owner   => 'tftp',
-#    group   => 'tftp',
-#    mode    => $quartermaster::file_mode,
-#    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-#    content => 'default menu.c32
-#prompt 0
-#MENU TITLE Quartermaster PXE System
-#MENU INCLUDE graphics.cfg
-#MENU AUTOBOOT Starting Local System in # seconds
-#
-#LABEL localboot
-#        MENU LABEL ^Boot local system
-#        MENU DEFAULT
-#        COM32 chain.c32
-#        APPEND hd0
-#        TIMEOUT 80
-#        TOTALTIMEOUT 600
-#',
-#  }
 concat {"${pxecfg}/default":
     owner   => 'tftp',
     group   => 'tftp',

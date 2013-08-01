@@ -316,17 +316,6 @@ define quartermaster::pxe {
   }
 
 
-#  if ! defined (File["${quartermaster::tftpboot}/menu/${distro}.menu"]) {
-#    file { "${quartermaster::tftpboot}/menu/${distro}.menu":
-#      ensure  => file,
-#      owner   => 'tftp',
-#      group   => 'tftp',
-#      mode    => '0644',
-#      require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
-#      notify  => Exec['create_default_pxe_menu'],
-#      content => template('quartermaster/pxemenu/default.erb'),
-#    }
-#  }
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
       target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default",
@@ -365,5 +354,15 @@ define quartermaster::pxe {
     require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
 #    notify  => Exec["create_submenu-${name}"],
     content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+  }
+  file { "${name}.graphics.conf":
+    ensure  => file,
+    path    => "${quartermaster::tftpboot}/${distro}/menu/${name}.graphics.conf",
+    owner   => 'tftp',
+    group   => 'tftp',
+    mode    => '0644',
+    require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
+#    notify  => Exec["create_submenu-${name}"],
+    content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
   }
 }
