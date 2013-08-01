@@ -4,16 +4,16 @@ label <%= @name %>
         append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> url=<%= @inst_repo %>
 
 label <%= @name %>-<%= @autofile %>
-        menu label (<%= @name %>): ^<%= @autofile %> Installation
+        menu label (<%= @name %>): ^BareMetal/KVM <%= @autofile %> Installation
         kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
 	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
 label <%= @name %>-VM-<%= @autofile %>
-        menu label (<%= @name %>): Virtual Machine <%= @autofile %> installation
+        menu label (<%= @name %>): ^Hyper-V VM (LIS Enabled) <%= @autofile %> Installation
         kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
 	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> ksdevice=eth1 ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
 
 label <%= @name %>-rescue
-        menu label (<%= @name %>): Rescue
+        menu label (<%= @name %>): ^Rescue
         kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> url=<%= @inst_repo %>
 
