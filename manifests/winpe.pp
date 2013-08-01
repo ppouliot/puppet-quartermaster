@@ -10,6 +10,15 @@ class quartermaster::winpe {
 $os           = "${quartermaster::wwwroot}/microsoft/mount"
 $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
 
+# Install WimLib
+  apt::ppa {'ppa:nilarimogard/webupd8':}
+
+  package { 'wimtools':
+    ensure => installed,
+    require => Apt::Ppa['ppa:nilarimogard/webupd8'],
+  }
+
+
 # Samba Services for Hosing Windows Shares
   $samba = ['samba',
             'samba-client',

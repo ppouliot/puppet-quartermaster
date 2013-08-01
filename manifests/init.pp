@@ -38,7 +38,7 @@ class quartermaster{
   $dir_mode          = '0755'
   $counter           = '0'
   $nameserver        = '4.2.2.2'
-
+  class{'apt':}
   #class {'apache':}
   #apache::vhost { 'quartermaster':
   #  priority        => '10',
@@ -57,5 +57,5 @@ class quartermaster{
   class { 'quartermaster::nfs': }
   class { 'quartermaster::winpe': }
   class { 'quartermaster::scripts': }
-  #class { 'quartermaster::wimlib': }
+  class { 'quartermaster::wimlib': }
   }
