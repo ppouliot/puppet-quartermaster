@@ -76,7 +76,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       group   => 'www-data',
       mode    => '0644',
       require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
-  }
+    }
   }
   if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}"]) {
     file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}":
@@ -98,6 +98,16 @@ define quartermaster::windowsmedia( $activationkey ) {
       require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
     }
   }
+  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"]) {
+    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe":
+      ensure  => directory,
+      recurse => true,
+      owner   => 'www-data',
+      group   => 'www-data',
+      mode    => '0644',
+      require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
+    }
+  } 
   if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"]) {
     file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}":
       ensure  => link,
@@ -108,6 +118,40 @@ define quartermaster::windowsmedia( $activationkey ) {
       require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
     }
   }
+
+  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim"]) {
+    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winipe.wim":
+      ensure  => directory,
+      recurse => true,
+      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/sources/boot.wim" ,
+      owner   => 'www-data',
+      group   => 'www-data',
+      mode    => '0644',
+      require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"],
+    }
+  } 
+  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com"]) {
+    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com":
+      ensure  => directory,
+      recurse => true,
+      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/boot/etfsboot.com",
+      owner   => 'www-data',
+      group   => 'www-data',
+      mode    => '0644',
+      require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"],
+    }
+  } 
+  #if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"]) {
+  #  file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe":
+  #    ensure  => directory,
+  #    recurse => true,
+  #    source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/boot/oscdimg.exe",
+  #    owner   => 'www-data',
+  #    group   => 'www-data',
+  #    mode    => '0644',
+  #    require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"],
+  #  }
+  #} 
 
 
   file { "${name}-setup.cmd":
@@ -158,7 +202,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       content => template('quartermaster/autoinst/unattend/domain.erb'),
     }
   }
-
+# This needs to be removed and moved to concat.
   exec {"create_initcmd-${name}":
     command => "${quartermaster::wwwroot}/bin/concatenate_files.sh ${quartermaster::wwwroot}/microsoft/winpe/system/menu ${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
     cwd     => "${quartermaster::wwwroot}/microsoft/winpe/system",
