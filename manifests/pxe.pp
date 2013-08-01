@@ -60,9 +60,9 @@ define quartermaster::pxe {
   }
 
   $url = $distro ? {
-#    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-#    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
+    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
+    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
+#    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
     /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
     /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
@@ -87,9 +87,9 @@ define quartermaster::pxe {
 
 
   $inst_repo = $distro ? {
-#    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
-#    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
-    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
+    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
+    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
+#    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/os/${p_arch}/",
     /(fedora)/          => "http://download.fedora.redhat.com/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
@@ -102,9 +102,9 @@ define quartermaster::pxe {
   }
 
   $update_repo = $distro ? {
-#    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
-#    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
-    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
+    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
+    /(debian)/          => "http://ftp.us.debian.org/${distro}/dists/${rel_name}",
+#    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
     /(fedora)/          => "http://download.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
@@ -118,9 +118,9 @@ define quartermaster::pxe {
 
 
   $splashurl = $distro ? {
-#    /(ubuntu)/         => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
-#    /(debian)/         => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
-    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
+    /(ubuntu)/         => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
+    /(debian)/         => "http://ftp.us.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
+#    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
     /(fedora)/          => "http://download.fedoraproject.org/pub/fedora/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
@@ -128,7 +128,7 @@ define quartermaster::pxe {
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(sles)/            => 'Enterprise ISO Required',
     /(sled)/            => 'Enterprise ISO Required',
-    /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/boot.jpg",
+    /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/back.jpg",
     default             => 'No URL Specified',
   }
   $bootsplash = $distro ? {
