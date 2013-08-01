@@ -123,7 +123,7 @@ define quartermaster::pxe {
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
-    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.jpg",
+    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(sles)/            => 'Enterprise ISO Required',
@@ -316,23 +316,45 @@ define quartermaster::pxe {
   }
 
 
-  if ! defined (File["${quartermaster::tftpboot}/menu/${distro}.menu"]) {
-    file { "${quartermaster::tftpboot}/menu/${distro}.menu":
-      ensure  => file,
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => '0644',
-      require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
-      notify  => Exec['create_default_pxe_menu'],
-      content => template('quartermaster/pxemenu/default.erb'),
-    }
-  }
+#  if ! defined (File["${quartermaster::tftpboot}/menu/${distro}.menu"]) {
+#    file { "${quartermaster::tftpboot}/menu/${distro}.menu":
+#      ensure  => file,
+#      owner   => 'tftp',
+#      group   => 'tftp',
+#      mode    => '0644',
+#      require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
+#      notify  => Exec['create_default_pxe_menu'],
+#      content => template('quartermaster/pxemenu/default.erb'),
+#    }
+#  }
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
-      target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default.new",
+      target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default",
       content => template("quartermaster/pxemenu/default.erb"),
     }
   }
+  if ! defined (Concat["${quartermaster::tftpboot}/menu/${distro}.menu"]) {
+    concat { "${quartermaster::tftpboot}/menu/${distro}.menu":
+      owner   => 'tftp',
+      group   => 'tftp',
+      mode    => $quartermaster::file_mode,
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}.submenu_header"]) {
+    concat::fragment {"${distro}.submenu_header":
+      target  => "${quartermaster::tftpboot}/menu/${distro}.menu",
+      content => template("quartermaster/pxemenu/header2.erb"),
+      order   => 01,
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}${name}.menu_item"]) {
+    concat::fragment {"${distro}.${name}.menu_item":
+      target  => "${quartermaster::tftpboot}/menu/${distro}.menu",
+      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+    }
+  }
+
+
 
   file { "${name}.menu":
     ensure  => file,
@@ -341,7 +363,7 @@ define quartermaster::pxe {
     group   => 'tftp',
     mode    => '0644',
     require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
-    notify  => Exec["create_submenu-${name}"],
+#    notify  => Exec["create_submenu-${name}"],
     content => template("quartermaster/pxemenu/${linux_installer}.erb"),
   }
 }

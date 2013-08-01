@@ -140,18 +140,18 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     require => [File[ $quartermaster::tftpboot ], Package[ $samba ],File['samba.conf']],
   }
 
-  file {'winpe_menu_default':
-    ensure  => file,
-    path    => "${quartermaster::tftpboot}/menu/winpe.menu",
-    require => File["${quartermaster::tftpboot}/menu"],
-    content => 'label winpe.menu
-menu label Microsoft Installation Menu
-kernel menu.c32
-append ../winpe/winpe.menu
-',
-  }
+#  file {'winpe_menu_default':
+#    ensure  => file,
+#    path    => "${quartermaster::tftpboot}/menu/winpe.menu",
+#    require => File["${quartermaster::tftpboot}/menu"],
+#    content => 'label winpe.menu
+#menu label Microsoft Installation Menu
+#kernel menu.c32
+#append ../winpe/winpe.menu
+#',
+#  }
   concat::fragment{"winpe_pxe_default_menu":
-    target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default.new",
+    target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default",
     content => template("quartermaster/pxemenu/winpe.erb"),
   }
 
