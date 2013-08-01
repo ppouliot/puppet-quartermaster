@@ -163,7 +163,7 @@ define quartermaster::windowsmedia( $activationkey ) {
   } 
   exec {"wimlib-imagex-mount-${name}":
       command => "/usr/bin/wimlib-imagex mount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",  
-      require => [ File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt],
+      require => [ File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt"]],
   } 
 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"]) {
@@ -186,7 +186,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       group   => 'www-data',
       mode    => '0644',
 #      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"],
-      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"],
+      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"]],
     }
   }
   if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0"]) {
@@ -197,7 +197,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com"],
+      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com"]],
     }
   }
   if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe"]) {
@@ -208,7 +208,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0"],
+      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0"]],
     }
   }
   if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi"]) {
@@ -219,12 +219,12 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe"],
+      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe"]],
     }
   }
   exec {"wimlib-imagex-unmount-${name}":
       command => "/usr/bin/wimlib-imagex unmount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",  
-      require => Exec["wimlib-imagex-mount-${name}"] 
+      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi"]],
   } 
 
 
