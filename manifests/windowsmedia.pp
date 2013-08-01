@@ -140,7 +140,7 @@ define quartermaster::windowsmedia( $activationkey ) {
   }
 
   if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winipe.wim":
+    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim":
       ensure  => directory,
       recurse => true,
       source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/sources/boot.wim" ,
