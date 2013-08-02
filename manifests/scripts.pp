@@ -15,11 +15,11 @@ class quartermaster::scripts {
   }
 
 
-  file {'/etc/apache2/sites-available/default':
-    ensure  => file,
-    content => template('quartermaster/apache2.erb'),
-    notify  => Service['apache2'],
-  }
+#  file {'/etc/apache2/sites-available/default':
+#    ensure  => file,
+#    content => template('quartermaster/apache2.erb'),
+#    notify  => Service['apache2'],
+#  }
 
 
   file {"${quartermaster::wwwroot}/bin":
