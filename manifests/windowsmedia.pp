@@ -141,16 +141,18 @@ define quartermaster::windowsmedia( $activationkey ) {
   }
 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim"]) {
-#    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim":
-#      ensure  => directory,
-#      recurse => true,
+    exec { "${name}-winpe.wim":
+      command  => "/usr/bin/wget -cv http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim -o winpe.wim",
+      creates  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim",
+      cwd      => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/",
 #      source  => "${iso_path}/sources/boot.wim" ,
 #      owner   => 'www-data',
 #      group   => 'www-data',
 #      mode    => '0644',
 #      notify  => Exec["wimlib-imagex-mount-${name}"],
 #      require =>  File[ "${iso_path}/sources"],
-#    }
+      require      => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
+    }
 #  } 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com"]) {
 #    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com":
@@ -164,11 +166,11 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    }
 #  } 
 #  exec {"wimlib-imagex-mount-${name}":
-#      command => "/usr/bin/wimlib-imagex mount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",  
+#      command => "/usr/bin/wimlib-imagex mount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",
 #      refreshonly => true,
 #  } 
 #  exec {"wimlib-imagex-unmount-${name}":
-#      command => "/usr/bin/wimlib-imagex unmount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",  
+#      command => "/usr/bin/wimlib-imagex unmount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",
 #      refreshonly => true,
 #  } 
 
