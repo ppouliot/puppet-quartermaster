@@ -140,22 +140,17 @@ define quartermaster::windowsmedia( $activationkey ) {
     }
   }
 
-#  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim"]) {
     exec { "${name}-winpe.wim":
-      command  => "/usr/bin/wget -cv http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim -o winpe.wim",
+      command  => "/usr/bin/wget -cv http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim -O winpe.wim",
       creates  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/winpe.wim",
       cwd      => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/",
-#      source  => "${iso_path}/sources/boot.wim" ,
-#      owner   => 'www-data',
-#      group   => 'www-data',
-#      mode    => '0644',
-#      notify  => Exec["wimlib-imagex-mount-${name}"],
-#      require =>  File[ "${iso_path}/sources"],
+      notify  => Exec["wimlib-imagex-mount-${name}"],
       require      => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
     }
 #  } 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com"]) {
-#    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com":
+#    exec { ${name}-etfsboot.com
+#       command => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com":
 #      ensure  => directory,
 #      recurse => true,
 #      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/boot/etfsboot.com",
@@ -165,14 +160,19 @@ define quartermaster::windowsmedia( $activationkey ) {
 #      require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"],
 #    }
 #  } 
-#  exec {"wimlib-imagex-mount-${name}":
-#      command => "/usr/bin/wimlib-imagex mount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",
-#      refreshonly => true,
-#  } 
-#  exec {"wimlib-imagex-unmount-${name}":
-#      command => "/usr/bin/wimlib-imagex unmount ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/winpe.wim 1 ${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt",
-#      refreshonly => true,
-#  } 
+  exec {"wimlib-imagex-mount-${name}":
+    command     => '/usr/bin/wimlib-imagex mount winpe.wim 1 mnt',
+    cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
+    refreshonly => true,
+    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"],
+    notify      => Exec["wimlib-imagex-unmount-${name}"],
+  } 
+  exec {"wimlib-imagex-unmount-${name}":
+    command     => '/usr/bin/wimlib-imagex unmount mnt',
+    cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
+    refreshonly => true,
+    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"],
+  } 
 
 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"]) {
@@ -183,18 +183,17 @@ define quartermaster::windowsmedia( $activationkey ) {
 #      owner   => 'www-data',
 #      group   => 'www-data',
 #      mode    => '0644',
-#      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"],
+#      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"],
 #    }
 #  } 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com"]) {
 #    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com":
-#      ensure  => directory,
-#      recurse => true,
+#      ensure  => file,
 #      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt/Windows/Boot/PXE/pxeboot.com",
 #      owner   => 'www-data',
 #      group   => 'www-data',
 #      mode    => '0644',
-#      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"],
+#      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"]],
 #      require => File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt/Windows/Boot/PXE/pxeboot.com"],
 #    }
 #  }
