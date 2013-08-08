@@ -57,7 +57,8 @@ gem install librarian-puppet-maestrodev
 
 HOSTNAME=`hostname -s`
 
-if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "fedora" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
+if [ "$HOSTNAME" = "localhost" -o "$HOSTNAME" = "centos" -o "$HOSTNAME" = "fedora" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
+#if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "fedora" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
 #if [ "$HOSTNAME" = "localhost" ]; then
 #set hostname to mac address of eth0
 NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
