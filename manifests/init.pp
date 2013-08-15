@@ -28,6 +28,7 @@
 #
 class quartermaster{
   $tmp               = '/tmp'
+  $logroot           = '/var/log/quartermaster'
   $tftpboot          = '/srv/tftpboot'
   $wwwroot           = '/srv/install'
   $nfsroot           = '/srv/nfs'

@@ -46,40 +46,55 @@ reboot
 openssh-clients
 puppetlabs-release
 %end
-%post --log /root/<%= @distro %>.log
 
-#
-#
-#
-yum install puppet rubygems make gcc ruby-devel git -y
+%post --nochroot --log /mnt/sysimage/root/<%= @distro %>-sethostname.log
+echo "Copy Current Lease Information to New Installation"
+cp /var/lib/dhclient/* /mnt/sysimage/var/lib/dhclient/
+%end
 
-gem install librarian-puppet-maestrodev
+%post --log /root/<%= @distro %>-post.log
+# SET HOSTNAME
 
-HOSTNAME=`hostname -s`
+DNSNAME=`cat /var/lib/dhclient/dhclient*.lease |grep -m 1 "option host-name" |tr -s " " | cut -d " " -f4| perl -pi -e "s/\"//g;" | perl -pi -e "s/\;//g;"`
+echo $DNSNAME
 
-if [ "$HOSTNAME" = "localhost" -o "$HOSTNAME" = "centos" -o "$HOSTNAME" = "fedora" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
-#if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "fedora" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
-#if [ "$HOSTNAME" = "localhost" ]; then
-#set hostname to mac address of eth0
-NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
+if [ $DNSNAME ]
+then
+  # SET HOSTNAME TO DHCP CLIENT VALUE
+  NEWHOSTNAME=$DNSNAME
+  echo "### DNSNAME: "$DNSNAME "HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+else
+  # Basic Hostname Check
+  NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
+  echo "### DNSNAME: "$DNSNAME "HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+fi
+
 # Setting Hostname
 cat << EOF > /etc/sysconfig/network
 NETWORKING=yes
 HOSTNAME=$NEWHOSTNAME
 EOF
-  echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
-else
-  echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+
+#%post --log /root/<%= @distro %>-post.log
+
+# Install Fedor EPL Repos if we are not Fedora
+echo "Checking hostname -s and installing EPL Package if Necessary"
+
+HOSTNAME=`hostname -s`
+
+if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
+  echo -n "Install Fedora EPL Repos"
+  rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 fi
 
-# legacy way of doing it
-#NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
-## Setting Hostname
-#cat << EOF > /etc/sysconfig/network
-#NETWORKING=yes
-#HOSTNAME=$NEWHOSTNAME
-#EOF
 
+# 
+
+# Puppet
+yum install puppet rubygems make gcc ruby-devel git -y
+
+# librarian-puppet"
+gem install librarian-puppet-maestrodev
 
 if [ -f /etc/sysconfig/puppet ]
    then
@@ -95,4 +110,7 @@ EOF
 
 fi
 chkconfig puppet on
+
+echo "Removing Old DHCP Lease Files"
+rm -rf /var/lib/dhclient/dhclient*.lease
 %end
