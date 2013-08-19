@@ -4,4 +4,8 @@ class quartermaster::puppetmaster {
     autosign     => true,
     storeconfigs => true,
   } 
+  file  {'/etc/puppet/files':
+    ensure => directory,
+    require => Class['puppet::master'],
+  }
 }
