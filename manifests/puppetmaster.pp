@@ -1,8 +1,8 @@
 class quartermaster::puppetmaster {
-  class {'puppetdb':}
+#  class {'puppetdb':}
   class {'puppet::master':
     autosign     => true,
-    storeconfigs => true,
+#    storeconfigs => true,
   } 
   file  {'/etc/puppet/files':
     ensure => directory,
