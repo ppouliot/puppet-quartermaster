@@ -8,4 +8,13 @@ class quartermaster::puppetmaster {
     ensure => directory,
     require => Class['puppet::master'],
   }
+
+  file {'/etc/puppet/fileserver.conf':
+    ensure  => file,
+    require => Class['puppet::master'],
+    source  => "puppet:///modules/quartermaster/puppetmaster/fileserver.conf",
+    notify  => Service['apache2'],
+  }
+
+
 }
