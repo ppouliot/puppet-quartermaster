@@ -24,6 +24,11 @@ class quartermaster::tftpd {
     require  => Package [ 'tftpd-hpa' ],
   }
 
+  group { 'tftp':
+    ensure  => present,
+    before  => File['tftpd_config'],
+  }
+
   file { 'tftpd_config':
     path    => '/etc/default/tftpd-hpa',
     notify  => Service[ 'tftpd-hpa' ],
