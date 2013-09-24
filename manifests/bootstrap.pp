@@ -9,6 +9,7 @@ class quartermaster::bootstrap {
     command => '/usr/bin/puppet apply --debug --trace --verbose /etc/puppet/manifests/site.pp',
     require => File['/etc/puppet/manifests/site.pp'],
     timeout => 0,
+    logoutput => true,
   }
 
 }
