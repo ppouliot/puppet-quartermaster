@@ -95,6 +95,7 @@ the petools module to provide that, as it must run on a windows host.
 Using with Hiera 
 ----------------
 You may also use hiera to provide the linux distributions and windowsmedia data.
+
     linux:
         - fedora-18-x86_64
         - fedora-17-x86_64
