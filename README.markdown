@@ -95,6 +95,7 @@ the petools module to provide that, as it must run on a windows host.
 Using with Hiera 
 ----------------
 You may also use hiera to provide the linux distributions and windowsmedia data.
+The following is the sample hieradata file for a quartermaster module building pxe infrastructure for both windows and linux distributions. 
 
     linux:
         - fedora-18-x86_64
@@ -119,6 +120,15 @@ You may also use hiera to provide the linux distributions and windowsmedia data.
         activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
       en_windows_8_enterprise_x86_dvd_917587.iso:
         activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+
+Additionionally here is the node definition used.
+
+    node /quartermaster.*/ {
+      class {'quartermaster':}
+    }
+
+
+
 
 
 
