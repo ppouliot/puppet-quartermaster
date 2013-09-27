@@ -73,6 +73,7 @@ define quartermaster::pxe {
     /(12.04)/    => 'precise',
     /(12.10)/    => 'quantal',
     /(13.04)/    => 'raring',
+    /(13.10)/    => 'saucy',
     /(stable)/   => 'squeeze',
     /(testing)/  => 'wheezy',
     /(unstable)/ => 'sid',
