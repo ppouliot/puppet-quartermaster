@@ -121,7 +121,7 @@ The following is the sample hieradata file for a quartermaster module building p
       en_windows_8_enterprise_x86_dvd_917587.iso:
         activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 
-Additionionally here is the node definition used.
+Additionionally here is the node definition used with the previous yaml file.
 
     node /quartermaster.*/ {
       class {'quartermaster':}
