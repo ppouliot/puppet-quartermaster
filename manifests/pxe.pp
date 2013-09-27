@@ -27,6 +27,7 @@ define quartermaster::pxe {
     /(centos)/   => 'true',
     default      => 'This is not centos',  
   }
+
   if $is_centos == 'true' {
    $centos_legacy = $rel_minor ? {
       /(0|1|2|3)/ => 'true',
@@ -41,6 +42,28 @@ define quartermaster::pxe {
       /(false)/  => "http://mirror.centos.org/centos/${rel_major}",
     }
   }
+  $is_fedora = $distro ? {
+    /(fedora)/   => 'true',
+    default      => 'This is not fedora',  
+  }
+  if ( $is_fedora == 'true') and ($release < 18) {
+      $fedora_legacy = 'true'
+  }
+#   $fedora_legacy = $release ? {
+#      /(0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17)/ => 'true',
+#      /(18|19)/       => 'false',
+  if ( $is_fedora == 'true') and ($release >= 18) {
+      $fedora_legacy = 'false'
+  }
+#    default	=> 'This is not a Fedora Distro',
+#  }
+  if $is_fedora == 'true' {
+     $fedora_url = $fedora_legacy ? {
+      /(true)/   => "http://archives.fedoraproject.org/pub/archive",
+      /(false)/  => "http://dl.fedoraproject.org/pub",
+    }
+  }
+
   # Begin tests for dealing with OracleLinux Repos
   $is_oracle = $distro ? {
     /(oraclelinux)/ => 'true',
@@ -64,7 +87,9 @@ define quartermaster::pxe {
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
     /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
-    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
+#    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
+#    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
     /(oraclelinux)/     => "Enterprise ISO Required",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -91,7 +116,9 @@ define quartermaster::pxe {
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/os/${p_arch}/",
-    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+#    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+#    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -106,7 +133,9 @@ define quartermaster::pxe {
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
-    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+#    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+#    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -123,7 +152,9 @@ define quartermaster::pxe {
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
-    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
+#    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
+#    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(sles)/            => 'Enterprise ISO Required',
