@@ -211,7 +211,7 @@ define quartermaster::pxe {
   notify { "${name}: Centos Legacy = ${centos_legacy}":}
   notify { "${name}: Centos URL = ${centos_url}":}
   notify { "${name}: Fedora Distro = ${is_fedora}":}
-  notify { "${name}: Fedora Distro = ${fedora_legacy}":}
+  notify { "${name}: Fedora Legacy = ${fedora_legacy}":}
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
 
