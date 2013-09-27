@@ -92,6 +92,37 @@ the petools module to provide that, as it must run on a windows host.
       quartermaster::windowsmedia{"en_windows_8_enterprise_x86_dvd_917587.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
     }
 
+Using with Hiera 
+----------------
+You may also use hiera to provide the linux distributions and windowsmedia data.
+    linux:
+        - fedora-18-x86_64
+        - fedora-17-x86_64
+        - fedora-16-i386
+        - ubuntu-12.04-amd64
+        - ubuntu-12.10-amd64
+        - ubuntu-13.04-amd64
+        - centos-6.3-x86_64
+        - centos-6.4-x86_64
+        - scientificlinux-6.3-x86_64
+        - scientificlinux-6.4-x86_64
+        - opensuse-12.2-x86_64
+        - opensuse-12.3-x86_64
+        - debian-stable-amd64
+    windows:
+      en_windows_server_2012_x64_dvd_915478.iso:
+        activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+      en_microsoft_hyper-v_server_2012_x64_dvd_915600.iso:
+        activationkey: undef
+      en_windows_8_enterprise_x64_dvd_917522.iso:
+        activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+      en_windows_8_enterprise_x86_dvd_917587.iso:
+        activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+
+
+
+
+
 Contributors
 ------------
 
