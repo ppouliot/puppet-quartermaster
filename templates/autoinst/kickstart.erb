@@ -12,7 +12,8 @@ keyboard us
 network --onboot yes --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
 #network --onboot yes --device eth0 --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
 #network --onboot yes --device eth1 --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
-timezone --utc America/New_York
+#timezone --utc America/New_York
+timezone America/New_York
 #rootpw  --iscrypted $6$xZjQTi60/cVUkZzt$v8XcjyqcyCcsNlaadeBSZrP033MIkqINosu8m2s0he4mlzxb.GLGBFznwvKUXrNZfCkvv9l.pdEh/ZpE//fgA0
 rootpw <%= @distro %>
 #selinux --enforcing
