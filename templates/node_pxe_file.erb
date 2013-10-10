@@ -1,8 +1,4 @@
-DEFAULT localboot
-lsbdistcodelsbdistcodename => precise
-lsbdistdescription => Ubuntu 12.04.3 LTS
-lsbdistid => Ubuntu
-lsbdistrelease => 12.04
+DEFAULT centos
 
 LABEL localboot
         MENU LABEL ^Boot local system
@@ -12,12 +8,7 @@ LABEL localboot
         TIMEOUT 80
         TOTALTIMEOUT 600
 
-label <%= @lsbdistcodename %>-<%= @autofile %>
-        menu label <%= @release %> <%= @p_arch %>: ^BareMetal/KVM <%= @autofile %> 
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @lsbdistrelease %>
-	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @lsbdistrelease %><%= @initrd %> ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @lsbdistcodename %>.<%= @autofile %> url=<%= @inst_repo %>
-
-label <%= @lsbdistcodename %>-VM-<%= @autofile %>
-        menu label (<%= @lsbdistdescription %>): ^Hyper-V VM (LIS Enabled) <%= @autofile %>  
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @lsbdistrelease %>
-        append priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netcfg/choose_interface=eth1 netconfig/get_hostlsbdistcodename= auto preseed/url=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @lsbdistcodename %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @lsbdistrelease %><%= @initrd %>
+label centos
+        menu label 6.4 x86_64: ^BareMetal/KVM kickstart
+        kernel ../centos/x86_64/64
+        append initrd=../centos/x86_64/64.img ks=http://10.21.7.22/centos/kickstart/centos-6.4-x86_64.kickstart url=http://mirror.centos.org/centos/6/os/x86_64/
