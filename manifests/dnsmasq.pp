@@ -10,7 +10,7 @@
 # Install DNSMasq
 class quartermaster::dnsmasq {
   package { 'dnsmasq':
-    ensure => installed,
+    ensure => latest,
   }
 # Configure DNSMasq as ProxyDHCP
   file {'quartermaster.conf':

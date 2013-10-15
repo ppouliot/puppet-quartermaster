@@ -16,7 +16,7 @@ class quartermaster::tftpd {
 
   $tftp_pkgs = [ 'tftp-hpa', 'tftpd-hpa' ]
   package { $tftp_pkgs:
-    ensure   => installed,
+    ensure   => latest,
   }
 
   service { 'tftpd-hpa':

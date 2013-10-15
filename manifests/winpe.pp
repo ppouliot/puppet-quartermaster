@@ -14,7 +14,7 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
   apt::ppa {'ppa:nilarimogard/webupd8':}
 
   package { 'wimtools':
-    ensure => installed,
+    ensure => latest,
     require => Apt::Ppa['ppa:nilarimogard/webupd8'],
   }
 
@@ -29,7 +29,7 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
             'git-review']
 
   package { $samba:
-    ensure => installed,
+    ensure => latest,
   }
 
   service { 'smbd':
@@ -46,7 +46,7 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
   }
 # Autofs For Automouting Windows iso's
   package { 'autofs5':
-    ensure => installed,
+    ensure => latest,
   }
 
 
