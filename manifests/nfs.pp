@@ -36,4 +36,19 @@ class quartermaster::nfs {
     mode    => '0755',
     require => [ Package[ $nfs ], File[ $quartermaster::wwwroot ]],
   }
+
+  file {"${quartermaster::nfsroot}/hosts":
+    ensure  => 'directory',
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => '0755',
+    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
+  }
+  file {"${quartermaster::nfsroot}/hardware":
+    ensure  => 'directory',
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => '0755',
+    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
+  }
 }
