@@ -42,3 +42,5 @@ mirror.xmission.com
 .rabbitmq.com
 # Sensu
 .sensuapp.org
+#docker
+.docker.io
