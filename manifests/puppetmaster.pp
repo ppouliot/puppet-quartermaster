@@ -3,6 +3,7 @@ class quartermaster::puppetmaster {
   class {'puppet::master':
     autosign     => true,
 #    storeconfigs => true,
+    parser       => 'future',
   } 
   file  {'/etc/puppet/files':
     ensure => directory,
