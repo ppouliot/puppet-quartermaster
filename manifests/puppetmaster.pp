@@ -16,5 +16,4 @@ class quartermaster::puppetmaster {
     notify  => Service['apache2'],
   }
 
-
 }
