@@ -18,6 +18,7 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    $iso_path = "${quartermaster::wwwroot}/WinPE/ISO/${name}"
   $iso_path = "${quartermaster::winpe::windows_isos}/${name}"
 
+# Windows Server 2012
   if $name =~ /([a-z]+)_([a-zA-Z_\-]+)_([0-9]+)_([x0-9]+)_dvd_([0-9]+).iso/ {
     $w_lang          = $1
     $w_dist          = $2
@@ -25,15 +26,24 @@ define quartermaster::windowsmedia( $activationkey ) {
     $w_media_arch    = $4
     $w_build         = $5
   }
+  if $name =~ /([a-z]+)_([a-zA-Z_\-]+)_([0-9]+)_(r2)_([x0-9]+)_dvd_([0-9]+).iso/ {
+    $w_lang          = $1
+    $w_dist          = $2
+    $w_release       = "${3}${4}"
+    $w_media_arch    = $5
+    $w_build         = $6
+  }
 
+# Windows 8
 #if $name =~ /([a-z]+)_([a-zA-Z]+)_([0-9]+)_([a-zA-Z]+)_([x0-9]+)_dvd_([0-9]+).iso/ {
   if $name =~ /([a-z]+)_([a-zA-Z]+)_([0-9]_[a-zA-Z]+)_([x0-9]+)_dvd_([0-9]+).iso/ {
     $w_lang          = $1
     $w_dist          = $2
-    $w_release       = $3
+    $w_release      = $3
     $w_media_arch    = $4
     $w_build         = $5
   }
+
 
   $w_arch = $w_media_arch ?{
     /(x64)/ => 'amd64',
@@ -47,8 +57,8 @@ define quartermaster::windowsmedia( $activationkey ) {
   }
 
   $w_distro = $w_dist ?{
-    /(microsoft_hyper-v_server)/ => 'hyper-v_server',
-    default                      => $w_dist,
+    /(microsoft_hyper-v_server)/    => 'hyper-v_server',
+    default                         => $w_dist,
   }
 
   $w_flavor = $w_dist ?{
