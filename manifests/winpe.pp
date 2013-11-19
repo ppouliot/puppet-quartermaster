@@ -182,40 +182,68 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     content => template('quartermaster/scripts/firstbootcmd.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
-  file { 'A00_init.cmd':
-    ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/A00_init.cmd",
+#  file { 'A00_init.cmd':
+#    ensure  => file,
+#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/A00_init.cmd",
+#    owner   => 'nobody',
+#    group   => 'nogroup',
+#    mode    => $quartermaster::exe_mode,
+#    content => template('quartermaster/winpe/menu/A00_init.erb'),
+#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+#  }
+#  file { 'B00_init.cmd':
+#    ensure  => file,
+#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/B00_init.cmd",
+#    owner   => 'nobody',
+#    group   => 'nogroup',
+#    mode    => $quartermaster::exe_mode,
+#    content => template('quartermaster/winpe/menu/B00_init.erb'),
+#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+#  }
+#  file { 'C00_init.cmd':
+#    ensure  => file,
+#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/C00_init.cmd",
+#    owner   => 'nobody',
+#    group   => 'nogroup',
+#    mode    => $quartermaster::exe_mode,
+#    content => template('quartermaster/winpe/menu/C00_init.erb'),
+#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+#  }
+#  file { 'D00_init.cmd':
+##    ensure  => file,
+#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/D00_init.cmd",
+#    owner   => 'nobody',
+#    group   => 'nogroup',
+#    mode    => $quartermaster::exe_mode,
+#    content => template('quartermaster/winpe/menu/D00_init.erb'),
+#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+#  }
+
+#Begin Winpe menu
+  concat { "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd":
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
+  }
+  concat::fragment{"winpe_system_cmd_a00_header":
+    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/A00_init.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+    order   => 01,
   }
-  file { 'B00_init.cmd':
-    ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/B00_init.cmd",
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+  concat::fragment{"winpe_system_cmd_b00_init":
+    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/B00_init.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+    order   => 10,
   }
-  file { 'C00_init.cmd':
-    ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/C00_init.cmd",
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+  concat::fragment{"winpe_system_cmd_c00_init":
+    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/C00_init.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+    order   => 20,
   }
-  file { 'D00_init.cmd':
-    ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/D00_init.cmd",
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+  concat::fragment{"winpe_menu_footer":
+    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/D00_init.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
+    order   => 99,
   }
+
 }
