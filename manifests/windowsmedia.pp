@@ -66,23 +66,34 @@ define quartermaster::windowsmedia( $activationkey ) {
   }
   $w_flavor = "${w_distro}-${w_release}-${w_arch}"
 
-  $w_menu_option = $w_dist ?{
-    /(windows_server)/           =>'S',
-    /(microsoft_hyper-v_server)/ =>'V',
-    /(windows)/                  =>'W',
-  }
-#  $w_menu_option = $w_flavor ?{
-#    /(server-2012-amd64)/        =>'A',
-#    /(server-2012r2-amd64)/      =>'B',
-#    /(server-2012-i386)/         =>'C',
-#    /(server-2012r2-i386)/       =>'D',
-#    /(hyper-v-2012-amd64)/       =>'E',
-#    /(hyper-v-2012r2-amd64)/     =>'F',
-#    /(windows-8-i386)/           =>'G',
-#    /(windows-8-amd64)/          =>'H',
-#    /(windows-8.1-i386)/         =>'I',
-#    /(windows-8.1-amd64)/        =>'J',
+#  $w_menu_option = $w_dist ?{
+#    /(windows_server)/           =>'S',
+#    /(microsoft_hyper-v_server)/ =>'V',
+#    /(windows)/                  =>'W',
 #  }
+  $w_menu_option = $w_flavor ?{
+    /(server-2012-amd64)/            =>'A',
+    /(server-2012r2-amd64)/          =>'B',
+    /(server-2012-i386)/             =>'C',
+    /(server-2012r2-i386)/           =>'D',
+    /(hyper-v-2012-amd64)/           =>'E',
+    /(hyper-v-2012r2-amd64)/         =>'F',
+    /(windows-8_enterprise-i386)/    =>'G',
+    /(windows-8_enterprise-amd64)/   =>'H',
+    /(windows-8_1_enterprise-i386)/  =>'I',
+    /(windows-8_1_enterprise-amd64)/ =>'J',
+  }
+  $w_media_image_name = "${w_distro}-${w_release}" ?{
+    /(windows-8_enterprise)/      =>'Windows 8 ENTERPRISE',
+    /(windows-8_professional)/    =>'Windows 8 PROFESSIONAL',
+    /(windows-8_1_enterprise)/    =>'Windows 8.1 ENTERPRISE',
+    /(windows-8_1_professional)/  =>'Windows 8.1 PROFESSIONAL',
+    /(hyper-v-2012)/              =>'Hyper-V Server 2012 SERVERHYPERCORE',
+    /(hyper-v-2012r2)/            =>'Hyper-V Server 2012 R2 SERVERHYPERCORE',
+    /(server-2012)/               =>'Windows Server 2012 SERVERDATACENTER',
+    /(server-2012r2)/             =>'Windows Server 2012 R2 SERVERDATACENTER',
+# If you want to use Standard Licensing "Windows Server 2012 SERVERSTANDARD"
+  }
 
 #  $w_flavor = $w_dist ?{
 #    /(windows_server)/           =>'server',
@@ -97,6 +108,7 @@ define quartermaster::windowsmedia( $activationkey ) {
   notify {"${name}: WINDOWS BUILD NUMBER: ${w_build}": }
   notify {"${name}: WINDOWS ARCH: ${w_arch}": }
   notify {"${name}: WINDOWS FLAVOR: ${w_flavor}":}
+  notify {"${name}: WINDOWS MEDIA IMAGE NAME: ${w_media_image_name}":}
 
 #  file {"w_iso_file_${name}":
 #    path => "${iso_path}/${name}",
@@ -143,8 +155,8 @@ define quartermaster::windowsmedia( $activationkey ) {
       require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
     }
   } 
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt":
+  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"]) {
+    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}":
       ensure  => directory,
       recurse => true,
       owner   => 'www-data',
@@ -198,14 +210,14 @@ define quartermaster::windowsmedia( $activationkey ) {
     command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt",
     cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
-    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"],
+    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
     notify      => Exec["wimlib-imagex-unmount-${name}"],
   } 
   exec {"wimlib-imagex-unmount-${name}":
-    command     => '/usr/bin/wimlib-imagex unmount mnt',
+    command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
     cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
-    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"],
+    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
   } 
 
 
@@ -290,7 +302,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'nobody',
       group   => 'nogroup',
       mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/core-${w_arch}.xml",
+      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/core-${w_flavor}.xml",
       content => template('quartermaster/autoinst/unattend/core.erb'),
     }
 
@@ -299,7 +311,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'nobody',
       group   => 'nogroup',
       mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/server-${w_arch}.xml",
+      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/server-${w_flavor}.xml",
       content => template('quartermaster/autoinst/unattend/server.erb'),
     }
 
@@ -308,7 +320,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'nobody',
       group   => 'nogroup',
       mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/hyperv-${w_arch}.xml",
+      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/hyperv-${flavor}.xml",
       content => template('quartermaster/autoinst/unattend/server.erb'),
     }
   }
@@ -318,7 +330,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'nobody',
       group   => 'nogroup',
       mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/core-${w_arch}.xml",
+      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
       content => template('quartermaster/autoinst/unattend/core.erb'),
     }
 
@@ -327,10 +339,21 @@ define quartermaster::windowsmedia( $activationkey ) {
       owner   => 'nobody',
       group   => 'nogroup',
       mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/domain-${w_arch}.xml",
+      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/domain-${w_flavor}.xml",
       content => template('quartermaster/autoinst/unattend/domain.erb'),
     }
   }
+  if $w_distro == 'windows'{
+    file { "${name}-core-unattend.xml":
+      ensure  => file,
+      owner   => 'nobody',
+      group   => 'nogroup',
+      mode    => $quartermaster::exe_mode,
+      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
+      content => template('quartermaster/autoinst/unattend/core.erb'),
+    }
+  }
+  
 # This needs to be removed and moved to concat.
 # PP -Moving to Concat Module
   
