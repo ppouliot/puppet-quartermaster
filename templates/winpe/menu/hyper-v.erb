@@ -5,9 +5,9 @@ REM This is the menu that appears after WinPE is done loading
 REM A B and C deploy an image to the computers hard drive using different rdeploy tags
 ECHO Please select one of the following installation options:
 ECHO ----------------------------------------------------------------
-ECHO A. <%= @w_distro %> <%= @w_release %> <%= @w_arch %> Unattend w/ Puppet
-ECHO B. <%= @w_distro %> <%= @w_release %> <%= @w_arch %> Unattend Domain Join
-ECHO C. <%= @w_distro %> <%= @w_release %> <%= @w_arch %> Manual Install
+ECHO A. <%= @w_flavor %> Unattend w/ Puppet
+ECHO B. <%= @w_flavor %> Unattend Domain Join
+ECHO C. <%= @w_flavor %> Manual Install
 ECHO D. Start Powershell
 ECHO ----------------------------------------------------------------
 REM This takes you to a normal command prompt while in WinPE
@@ -31,10 +31,10 @@ ECHO.
 GOTO Loop
 REM Each letter will run a separate bat file - you don't have to do that you can add the code directly into this file
 :ItemA
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\core-<%= @w_arch %>.xml
+o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_flavor %>.xml
 GOTO End
 :ItemB
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\domain-<%= @w_arch %>.xml
+o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\domain-<%= @w_flavor %>.xml
 GOTO End
 :ItemC
 o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe

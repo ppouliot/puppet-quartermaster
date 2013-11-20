@@ -32,10 +32,10 @@ ECHO.
 GOTO Loop
 REM Each letter will run a separate bat file - you don't have to do that you can add the code directly into this file
 :ItemA
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_release %><%= @w_distro %>-<%= @w_arch %>.xml
+o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_flavor %>.xml
 GOTO End
 :ItemB
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\hyperv-<%= @w_release %><%= @w_distro %>-<%= @w_arch %>.xml
+o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\hyperv-<%= @w_flavor %>.xml
 GOTO End
 :ItemC
 o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe

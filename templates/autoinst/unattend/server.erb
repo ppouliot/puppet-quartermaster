@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
-    <servicing>
-        <package action="configure">
-            <assemblyIdentity name="Microsoft-Windows-ServerCore-Package" version="6.2.9200.16384" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="" />
-            <selection name="Microsoft-Hyper-V" state="true" />
-<!--
-            <selection name="Server-Gui-Shell" state="false" />
--->
-        </package>
+    <serviceing>
     </servicing>
     <settings pass="windowsPE">
         <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -59,7 +52,7 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows Server 2012 SERVERDATACENTER</Value>
+                            <Value><%=@w_media_image_name%></Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -104,7 +97,7 @@
                     <PlainText>false</PlainText>
                 </AdministratorPassword>
             </UserAccounts>
-            <TimeZone>UTC</TimeZone>
+            <TimeZone><%=@timezone%></TimeZone>
             <RegisteredOwner>User</RegisteredOwner>
             <RegisteredOrganization>Company</RegisteredOrganization>
             <AutoLogon>
@@ -138,5 +131,4 @@
            </OOBE>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:c:/winpe/2012serverdatacenter.wim#Windows Server 2012 SERVERDATACENTER" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>

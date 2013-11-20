@@ -52,7 +52,7 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows Server 2012 SERVERDATACENTERCORE</Value>
+                            <Value><%=@w_media_image_name%></Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -97,7 +97,7 @@
                     <PlainText>false</PlainText>
                 </AdministratorPassword>
             </UserAccounts>
-            <TimeZone>UTC</TimeZone>
+            <TimeZone><%=@timezone%></TimeZone>
             <RegisteredOwner>User</RegisteredOwner>
             <RegisteredOrganization>Company</RegisteredOrganization>
             <AutoLogon>

@@ -1,5 +1,8 @@
 LABEL winpe.menu
 	MENU LABEL Microsoft Installation Menu
-	KERNEL menu.c32
-	APPEND ../winpe/winpe.menu
-
+#	KERNEL menu.c32
+#	APPEND ../winpe/winpe.menu
+#MENU TITLE WinPE PXE Menu
+#label WinPE
+#  menu label WinPE amd64 PXE
+        kernel ../winpe/Boot/pxeboot.0

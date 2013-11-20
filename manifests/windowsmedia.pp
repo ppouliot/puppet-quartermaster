@@ -72,26 +72,32 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    /(windows)/                  =>'W',
 #  }
   $w_menu_option = $w_flavor ?{
-    /(server-2012-amd64)/            =>'A',
-    /(server-2012r2-amd64)/          =>'B',
-    /(server-2012-i386)/             =>'C',
-    /(server-2012r2-i386)/           =>'D',
+    /(windows-8_enterprise-i386)/    =>'A',
+    /(windows-8_enterprise-amd64)/   =>'B',
+    /(windows-8_1_enterprise-i386)/  =>'C',
+    /(windows-8_1_enterprise-amd64)/ =>'D',
     /(hyper-v-2012-amd64)/           =>'E',
     /(hyper-v-2012r2-amd64)/         =>'F',
-    /(windows-8_enterprise-i386)/    =>'G',
-    /(windows-8_enterprise-amd64)/   =>'H',
-    /(windows-8_1_enterprise-i386)/  =>'I',
-    /(windows-8_1_enterprise-amd64)/ =>'J',
+    /(server-2012-amd64)/            =>'G',
+    /(server-2012r2-amd64)/          =>'H',
+    /(server-2012-i386)/             =>'I',
+    /(server-2012r2-i386)/           =>'J',
   }
-  $w_media_image_name = "${w_distro}-${w_release}" ?{
-    /(windows-8_enterprise)/      =>'Windows 8 ENTERPRISE',
-    /(windows-8_professional)/    =>'Windows 8 PROFESSIONAL',
-    /(windows-8_1_enterprise)/    =>'Windows 8.1 ENTERPRISE',
-    /(windows-8_1_professional)/  =>'Windows 8.1 PROFESSIONAL',
-    /(hyper-v-2012)/              =>'Hyper-V Server 2012 SERVERHYPERCORE',
-    /(hyper-v-2012r2)/            =>'Hyper-V Server 2012 R2 SERVERHYPERCORE',
-    /(server-2012)/               =>'Windows Server 2012 SERVERDATACENTER',
-    /(server-2012r2)/             =>'Windows Server 2012 R2 SERVERDATACENTER',
+  $w_media_image_name = $w_flavor ?{
+    /(windows-8_enterprise-i386)/       =>'Windows 8 ENTERPRISE',
+    /(windows-8_enterprise-amd64)/      =>'Windows 8 ENTERPRISE',
+    /(windows-8_professional-i386)/     =>'Windows 8 PROFESSIONAL',
+    /(windows-8_professional-amd64)/    =>'Windows 8 PROFESSIONAL',
+    /(windows-8_1_enterprise-i386)/     =>'Windows 8.1 ENTERPRISE',
+    /(windows-8_1_enterprise-amd64)/    =>'Windows 8.1 ENTERPRISE',
+    /(windows-8_1_professional-i386)/   =>'Windows 8.1 PROFESSIONAL',
+    /(windows-8_1_professional-amd64)/  =>'Windows 8.1 PROFESSIONAL',
+    /(hyper-v-2012-amd64)/              =>'Hyper-V Server 2012 SERVERHYPERCORE',
+    /(hyper-v-2012r2-amd64)/            =>'Hyper-V Server 2012 R2 SERVERHYPERCORE',
+    /(server-2012-i386)/                =>'Windows Server 2012 SERVERDATACENTER',
+    /(server-2012-amd64)/               =>'Windows Server 2012 SERVERDATACENTER',
+    /(server-2012r2-i386)/              =>'Windows Server 2012 R2 SERVERDATACENTER',
+    /(server-2012r2-amd64)/             =>'Windows Server 2012 R2 SERVERDATACENTER',
 # If you want to use Standard Licensing "Windows Server 2012 SERVERSTANDARD"
   }
 
@@ -186,13 +192,20 @@ define quartermaster::windowsmedia( $activationkey ) {
     }
   }
 
-    exec { "${name}-winpe.wim":
-      command  => "/usr/bin/wget -cv http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim -O ${w_arch}.wim",
-      creates  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
-      cwd      => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/",
-      notify  => Exec["wimlib-imagex-mount-${name}"],
-      require      => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
+    exec { "copy-${w_flavor}-winpe.wim":
+      command   => "/usr/bin/wget -cv http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim -O ${w_arch}.wim",
+      creates   => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
+      cwd       => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/",
+      notify    => Exec["wimlib-imagex-mount-${name}"],
+      require   => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
+      logoutput => true,
     }
+   file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim":
+     ensure => present, 
+     require => Exec["copy-${w_flavor}-winpe.wim"]
+
+   }
+   
 #  } 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com"]) {
 #    exec { ${name}-etfsboot.com
@@ -207,17 +220,20 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    }
 #  } 
   exec {"wimlib-imagex-mount-${name}":
-    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt",
+    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt.${w_arch}",
     cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
-    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
+    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
+                        "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
     notify      => Exec["wimlib-imagex-unmount-${name}"],
+    logoutput   => true,
   } 
   exec {"wimlib-imagex-unmount-${name}":
     command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
     cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
     require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
+    logoutput   => true,
   } 
 
 
@@ -287,109 +303,44 @@ define quartermaster::windowsmedia( $activationkey ) {
     content => template("quartermaster/winpe/menu/${w_distro}.erb"),
   }
 
-  #file { "${name}-core-unattend.xml":
-  #  ensure  => file,
-  #  owner   => 'nobody',
-  #  group   => 'nogroup',
-  #  mode    => $quartermaster::exe_mode,
-  #  path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/core-${w_arch}.xml",
-  #  content => template('quartermaster/autoinst/unattend/core.erb'),
-  #}
+  file { "unattend-core-${w_flavor}.xml":
+    ensure  => file,
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
+    content => template('quartermaster/autoinst/unattend/core.erb'),
+  }
+  file { "unattend-domain-${w_flavor}.xml":
+    ensure  => file,
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/domain-${w_flavor}.xml",
+    content => template('quartermaster/autoinst/unattend/domain.erb'),
+  }
 
   if $w_distro == 'server'{
-    file { "${name}-core-unattend.xml":
-      ensure  => file,
-      owner   => 'nobody',
-      group   => 'nogroup',
-      mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/core-${w_flavor}.xml",
-      content => template('quartermaster/autoinst/unattend/core.erb'),
-    }
-
     file { "${name}-server-unattend.xml":
       ensure  => file,
       owner   => 'nobody',
       group   => 'nogroup',
       mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/server-${w_flavor}.xml",
-      content => template('quartermaster/autoinst/unattend/server.erb'),
-    }
-
-    file { "${name}-hyperv-unattend.xml":
-      ensure  => file,
-      owner   => 'nobody',
-      group   => 'nogroup',
-      mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/hyperv-${flavor}.xml",
+      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/s-${w_flavor}.xml",
       content => template('quartermaster/autoinst/unattend/server.erb'),
     }
   }
-  if $w_distro == 'hyper-v'{
-    file { "${name}-core-unattend.xml":
-      ensure  => file,
-      owner   => 'nobody',
-      group   => 'nogroup',
-      mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
-      content => template('quartermaster/autoinst/unattend/core.erb'),
-    }
-
-    file { "${name}-domain-hyper-v-unattend.xml":
-      ensure  => file,
-      owner   => 'nobody',
-      group   => 'nogroup',
-      mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/domain-${w_flavor}.xml",
-      content => template('quartermaster/autoinst/unattend/domain.erb'),
-    }
-  }
-  if $w_distro == 'windows'{
-    file { "${name}-core-unattend.xml":
-      ensure  => file,
-      owner   => 'nobody',
-      group   => 'nogroup',
-      mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
-      content => template('quartermaster/autoinst/unattend/core.erb'),
-    }
-  }
+#  if $w_distro == 'windows'{
+#    file { "${name}-core-unattend.xml":
+#      ensure  => file,
+#      owner   => 'nobody',
+#      group   => 'nogroup',
+#      mode    => $quartermaster::exe_mode,
+#      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
+#      content => template('quartermaster/autoinst/unattend/core.erb'),
+#    }
+#  }
   
-# This needs to be removed and moved to concat.
-# PP -Moving to Concat Module
-  
-#  exec {"create_initcmd-${name}":
-#    command => "${quartermaster::wwwroot}/bin/concatenate_files.sh ${quartermaster::wwwroot}/microsoft/winpe/system/menu ${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
-#    cwd     => "${quartermaster::wwwroot}/microsoft/winpe/system",
-#    creates => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
-#    notify  => Service[ 'tftpd-hpa' ],
-#    require => File["${quartermaster::wwwroot}/bin/concatenate_files.sh"],
-#  }
-
-#  file { "A_init.cmd-${name}":
-#    ensure  => file,
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::exe_mode,
-#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/A${name}",
-#    content => template('quartermaster/winpe/menu/A_init.erb'),
-#  }
-#  file { "B_init.cmd-${name}":
-#    ensure  => file,
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::exe_mode,
-#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/B${name}",
-#    content => template('quartermaster/winpe/menu/B_init.erb'),
-#  }
-#  file { "C_init.cmd-${name}":
-#    ensure  => file,
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::exe_mode,
-#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/C${name}",
-#    content => template('quartermaster/winpe/menu/C_init.erb'),
-#  }
-
   concat::fragment{"winpe_system_cmd_a_init_${name}":
     target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/A_init.erb'),

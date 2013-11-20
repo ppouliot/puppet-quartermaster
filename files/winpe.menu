@@ -1,0 +1,4 @@
+MENU TITLE WinPE PXE Menu
+label WinPE
+  menu label WinPE amd64 PXE
+  kernel ../winpe/Boot/pxeboot.0

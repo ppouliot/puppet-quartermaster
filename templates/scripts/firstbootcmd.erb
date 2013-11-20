@@ -1,11 +1,5 @@
 @echo on 
 
-powershell.exe -executionpolicy remotesigned -Command Invoke-WebRequest -UseBasicParsing -uri  https://downloads.puppetlabs.com/windows/puppet-3.2.4.msi -OutFile c:\puppet-3.3.1.msi
-
 @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%systemdrive%\chocolatey\bin
-
-c:\puppet-3.3.1.msi /passive /log c:\wpepuppet.log PUPPET_MASTER_SERVER=<%= @fqdn %>
-
+c:\Chocolatey\bin\cinst -force puppet
 c:\Program Files (x86)\Puppet Labs\puppet\puppet.bat agent --debug --trace --verbose --test --waitforcert 60 --server <%= @fqdn %> 
-
-
