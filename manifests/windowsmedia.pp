@@ -300,35 +300,24 @@ define quartermaster::windowsmedia( $activationkey ) {
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
     path    => "${quartermaster::wwwroot}/microsoft/winpe/system/${name}.cmd",
-    content => template("quartermaster/winpe/menu/${w_distro}.erb"),
+    content => template("quartermaster/winpe/menu/default.erb"),
   }
 
-  file { "unattend-core-${w_flavor}.xml":
+  file { "unattend-${w_flavor}.xml":
     ensure  => file,
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
     path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
-    content => template('quartermaster/autoinst/unattend/core.erb'),
+    content => template('quartermaster/autoinst/unattend.erb'),
   }
-  file { "unattend-domain-${w_flavor}.xml":
+  file { "unattend-${w_flavor}-cloudbase.xml":
     ensure  => file,
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
-    path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/domain-${w_flavor}.xml",
-    content => template('quartermaster/autoinst/unattend/domain.erb'),
-  }
-
-  if $w_distro == 'server'{
-    file { "${name}-server-unattend.xml":
-      ensure  => file,
-      owner   => 'nobody',
-      group   => 'nogroup',
-      mode    => $quartermaster::exe_mode,
-      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/s-${w_flavor}.xml",
-      content => template('quartermaster/autoinst/unattend/server.erb'),
-    }
+    path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-cloudbase.xml",
+    content => template('quartermaster/autoinst/Cloudbase.erb'),
   }
 #  if $w_distro == 'windows'{
 #    file { "${name}-core-unattend.xml":

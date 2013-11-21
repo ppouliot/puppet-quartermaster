@@ -5,11 +5,10 @@ REM This is the menu that appears after WinPE is done loading
 REM A B and C deploy an image to the computers hard drive using different rdeploy tags
 ECHO Please select one of the following installation options:
 ECHO ----------------------------------------------------------------
-ECHO A. <%= @w_distro %> <%= @w_release %> <%= @w_arch %> Server Install
-ECHO B. <%= @w_distro %> <%= @w_release %> <%= @w_arch %> Core Server Install
-ECHO C. <%= @w_distro %> <%= @w_release %> <%= @w_arch %> Hyper-V Core Install
-ECHO D. <%= @w_distro %> <%= @w_release %> <%= @w_arch %> Manual Install
-ECHO E. Start Powershell
+ECHO A. <%= @w_flavor %> Unattend w/ Puppet and Chocolatey
+ECHO B. <%= @w_flavor %> CloudBase (Windows OpenStack Imaging)
+ECHO C. <%= @w_flavor %> Manual Install
+ECHO D. Start Powershell
 ECHO ----------------------------------------------------------------
 REM This takes you to a normal command prompt while in WinPE
 ECHO Q. Quit
@@ -26,7 +25,6 @@ IF /I '%Choice%'=='A' GOTO ItemA
 IF /I '%Choice%'=='B' GOTO ItemB
 IF /I '%Choice%'=='C' GOTO ItemC
 IF /I '%Choice%'=='D' GOTO ItemD
-IF /I '%Choice%'=='E' GOTO ItemE
 IF /I '%Choice%'=='Q' GOTO End
 ECHO "%Choice%" is not valid. Please try again.
 ECHO.
@@ -36,15 +34,12 @@ REM Each letter will run a separate bat file - you don't have to do that you can
 o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_flavor %>.xml
 GOTO End
 :ItemB
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\core-<%= @w_flavor %>.xml
+o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_flavor %>-cloudbase.xml
 GOTO End
 :ItemC
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\hyperv-<%= @w_flavor %>.xml
-GOTO End
-:ItemD
 o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe
 GOTO End
-:ItemE
+:ItemD
 start powershell
 
 :Quit

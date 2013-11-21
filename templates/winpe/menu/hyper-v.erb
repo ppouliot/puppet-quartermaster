@@ -34,9 +34,6 @@ REM Each letter will run a separate bat file - you don't have to do that you can
 o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_flavor %>.xml
 GOTO End
 :ItemB
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\domain-<%= @w_flavor %>.xml
-GOTO End
-:ItemC
 o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe
 GOTO End
 :ItemD
