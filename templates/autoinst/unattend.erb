@@ -3,7 +3,6 @@
     <servicing>
     </servicing>
     <settings pass="windowsPE">
-
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <DiskConfiguration>
                 <Disk wcm:action="add">
@@ -65,7 +64,7 @@
             <EnableNetwork>true</EnableNetwork>
 	    <LogPath>C:\Logs</LogPath>
         </component>
-		<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <SetupUILanguage>
                 <UILanguage>en-US</UILanguage>
             </SetupUILanguage>
@@ -96,7 +95,7 @@
             <VisualEffects>
                 <FontSmoothing>ClearType</FontSmoothing>
             </VisualEffects>
-			<OOBE>
+	    <OOBE>
                 <HideEULAPage>true</HideEULAPage>
                 <ProtectYourPC>3</ProtectYourPC>
                 <NetworkLocation>Work</NetworkLocation>
@@ -104,15 +103,7 @@
                 <HideLocalAccountScreen>true</HideLocalAccountScreen>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
             </OOBE>
-			<!--
-			<LogonCommands>
-                <AsynchronousCommand wcm:action="add">
-                    <CommandLine>powershell -NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -File C:\Windows\Temp\Logon.ps1</CommandLine>
-                    <Order>1</Order>
-                </AsynchronousCommand>
-            </LogonCommands>
-			-->
-			<FirstLogonCommands>
+            <FirstLogonCommands>
               <SynchronousCommand wcm:action="add">
                 <CommandLine>@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%systemdrive%\chocolatey\bin</CommandLine>
                 <Description>Install Chocolatey</Description>
@@ -134,7 +125,7 @@
                    <Order>4</Order>
               </SynchronousCommand>
             </FirstLogonCommands>
-			            <UserAccounts>
+	    <UserAccounts>
                 <!--
                     Password to be used only during initial provisioning.
                     Must be rest with final Sysprep.
@@ -155,7 +146,6 @@
                 </LocalAccounts>
                 -->
             </UserAccounts>
-            <TimeZone><%=@timezone%></TimeZone>
             <RegisteredOwner>User</RegisteredOwner>
             <RegisteredOrganization>Company</RegisteredOrganization>
             <AutoLogon>
@@ -167,7 +157,6 @@
                     <PlainText>false</PlainText>
                 </Password>
             </AutoLogon>
-            <TimeZone><%=@timezone%></TimeZone>
             <ComputerName>*</ComputerName>
             </component>
 	    </settings>
