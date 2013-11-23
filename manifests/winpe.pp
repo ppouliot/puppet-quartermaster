@@ -134,13 +134,13 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     mode    => $quartermaster::dir_mode,
     require => [ Package[ $samba ],File['samba.conf']],
   }
-  file { "${quartermaster::wwwroot}/microsoft/winpe/unattend":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File[ 'samba.conf' ]],
-  }
+#  file { "${quartermaster::wwwroot}/microsoft/winpe/unattend":
+#    ensure  => directory,
+#    owner   => 'nobody',
+#    group   => 'nogroup',
+#    mode    => $quartermaster::dir_mode,
+#    require => [ Package[ $samba ],File[ 'samba.conf' ]],
+#  }
   file {"${quartermaster::tftpboot}/winpe":
     ensure  => directory,
     owner   => 'tftp',
@@ -180,6 +180,15 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
     content => template('quartermaster/scripts/firstbootcmd.erb'),
+    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+  }
+  file { 'compute.cmd':
+    ensure  => file,
+    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/compute.cmd",
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    content => template('quartermaster/scripts/computecmd.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
 #  file { 'A00_init.cmd':

@@ -6,7 +6,7 @@ class quartermaster::bootstrap {
   }
 
   exec {'default_site_init':
-    command => '/usr/bin/puppet apply --debug --trace --verbose /etc/puppet/manifests/site.pp',
+    command => '/usr/bin/puppet agent --debug --trace --verbose --test --server ${fqdn} --waitforcert=60',
     require => File['/etc/puppet/manifests/site.pp'],
     timeout => 0,
     logoutput => true,

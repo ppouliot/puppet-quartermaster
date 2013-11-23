@@ -319,6 +319,14 @@ define quartermaster::windowsmedia( $activationkey ) {
     path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-cloudbase.xml",
     content => template('quartermaster/autoinst/Cloudbase.erb'),
   }
+  file { "unattend-${w_flavor}-compute.xml":
+    ensure  => file,
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-compute.xml",
+    content => template('quartermaster/autoinst/compute.erb'),
+  }
 #  if $w_distro == 'windows'{
 #    file { "${name}-core-unattend.xml":
 #      ensure  => file,
