@@ -3,6 +3,9 @@ class quartermaster::bootstrap {
   file { '/etc/puppet/manifests/site.pp':
     ensure => present,
     content => template('quartermaster/site.erb'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
   }
 
   exec {'default_site_init':
