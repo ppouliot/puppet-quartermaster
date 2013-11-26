@@ -1,0 +1,15 @@
+@echo on 
+
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%systemdrive%\chocolatey\bin
+c:\Chocolatey\bin\cinst -force ChocolateyPackageUpdater
+c:\Chocolatey\bin\cinst -force puppet
+c:\Chocolatey\bin\cinst -force tightvnc
+c:\Chocolatey\bin\cinst -force git
+c:\Chocolatey\bin\cinst -force 7zip.commandline
+c:\Chocolatey\bin\cinst -force python.x86
+c:\Chocolatey\bin\cinst -force easy.install
+c:\Chocolatey\bin\cinst -force pip
+c:\Chocolatey\bin\cinst -force mingw
+c:\Chocolatey\bin\cinst -force notepadplusplus
+c:\Chocolatey\bin\cinst -force chromium
+REM c:\Program Files (x86)\Puppet Labs\puppet\puppet.bat agent --debug --trace --verbose --test --waitforcert 60 --server <%= @fqdn %> 

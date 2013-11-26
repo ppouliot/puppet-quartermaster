@@ -37,9 +37,12 @@ GOTO End
 o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_flavor %>-cloudbase.xml
 GOTO End
 :ItemC
-o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe
+o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe /unattend:\\<%= @ipaddress %>\os\<%= @w_distro %>\<%= @w_release %>\unattend\<%= @w_flavor %>-compute.xml
 GOTO End
 :ItemD
+o:\<%= @w_distro %>\<%= @w_release %>\<%= @w_arch %>\setup.exe
+GOTO End
+:ItemE
 start powershell
 
 :Quit

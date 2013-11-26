@@ -116,13 +116,24 @@
                     <Order>1</Order>
               </SynchronousCommand>
 	      <SynchronousCommand wcm:action="add">
-                <CommandLine>s:\firstboot.cmd</CommandLine>
+                <CommandLine>s:\compute.cmd</CommandLine>
 		<Description>Running Firstboot Script on <%= @fqdn %></Description>
                    <Order>2</Order>
 	      </SynchronousCommand>
             </FirstLogonCommands>
            <OOBE>
-                <ProtectYourPC>1</ProtectYourPC>
+                <HideEULAPage>true</HideEULAPage>
+                <!--
+                    ProtectYourPC:
+                    1 Specifies the recommended level of protection for your computer.
+                    2 Specifies that only updates are installed.
+                    3 Specifies that automatic protection is disabled.
+                -->
+                <ProtectYourPC>3</ProtectYourPC>
+                <NetworkLocation>Work</NetworkLocation>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <HideLocalAccountScreen>true</HideLocalAccountScreen>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
            </OOBE>
         </component>
     </settings>
