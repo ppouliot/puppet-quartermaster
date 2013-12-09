@@ -1,6 +1,5 @@
 @echo on 
 
-@powershell -NoProfile -Command "$newnameset = $false; ( gwmi Win32_NetworkAdapterConfiguration | where { $_.IPAddress -ne $null } ).ipaddress | where { $_ -match '([\d]+\.){3}([\d]+)' } | foreach {if ( -not $newnameset -and ( $lu = ( nslookup $_ 2>null | findstr /i 'name:' ) ) -ne $null ) { if ( $lu.SubString(5) -match '([^\s.]+)(\.[^\s.]*)*' ) { $newnameset = $true; (Get-WmiObject Win32_ComputerSystem).Rename($matches[1]); } } }"
 @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%systemdrive%\chocolatey\bin || pause
 c:\Chocolatey\bin\cinst -force puppet
 c:\Chocolatey\bin\cinst -force git
