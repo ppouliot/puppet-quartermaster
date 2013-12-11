@@ -51,4 +51,18 @@ class quartermaster::nfs {
     mode    => '0755',
     require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
   }
+  file {"${quartermaster::nfsroot}/hosts/pxefiles":
+    ensure  => 'directory',
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => '0755',
+    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
+  }
+  file {"${quartermaster::nfsroot}/hosts/hiera":
+    ensure  => 'directory',
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => '0755',
+    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
+  }
 }
