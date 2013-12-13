@@ -120,17 +120,17 @@
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
                     <Order>2</Order>
-                    <CommandLine>powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\rename.ps1'){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/rename.ps1', 'c:\rename.ps1')}"</CommandLine>
+                    <CommandLine>powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\rename.ps1')){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/rename.ps1', 'c:\rename.ps1')}"</CommandLine>
                     <Description>Download renaming script</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <Order>4</Order>
-                    <CommandLine>powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\firstboot.cmd'){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/firstboot.cmd', 'c:\firstboot.cmd')}"</CommandLine>
+                    <CommandLine>powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\firstboot.cmd')){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/firstboot.cmd', 'c:\firstboot.cmd')}"</CommandLine>
                     <Description>Download post-setup script</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <Order>5</Order>
-                    <CommandLine>powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\secondboot.cmd'){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/secondboot.cmd', 'c:\secondboot.cmd')}"</CommandLine>
+                    <CommandLine>powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\secondboot.cmd')){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/secondboot.cmd', 'c:\secondboot.cmd')}"</CommandLine>
                     <Description>Download post-reboot script</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
