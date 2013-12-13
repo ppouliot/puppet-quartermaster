@@ -182,6 +182,15 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     content => template('quartermaster/scripts/firstbootcmd.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
+  file { 'secondboot.cmd':
+    ensure  => file,
+    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/secondboot.cmd",
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    content => template('quartermaster/scripts/secondbootcmd.erb'),
+    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+  }
   file { 'compute.cmd':
     ensure  => file,
     path    => "${quartermaster::wwwroot}/microsoft/winpe/system/compute.cmd",
@@ -191,13 +200,13 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     content => template('quartermaster/scripts/computecmd.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
-  file { 'waitforconn.ps1':
+  file { 'puppetinit.cmd':
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/waitforconn.ps1",
+    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/puppetinitcmd.ps1",
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
-    content => template('quartermaster/scripts/waitforconn.ps1.erb'),
+    content => template('quartermaster/scripts/puppetinitcmd.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
   file { 'rename.ps1':

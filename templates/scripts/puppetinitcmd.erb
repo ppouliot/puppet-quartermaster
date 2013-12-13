@@ -1,0 +1,6 @@
+@echo on
+
+REM Short ping check.  Because 5 seconds is a small price to pay for an easy debugging aide.
+@ping <%= @fqdn %>
+
+call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --debug --trace --verbose --test --waitforcert 60 --server <%= @fqdn %> 
