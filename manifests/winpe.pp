@@ -202,7 +202,7 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
   }
   file { 'puppetinit.cmd':
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/puppetinitcmd.ps1",
+    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/puppetinit.cmd",
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
