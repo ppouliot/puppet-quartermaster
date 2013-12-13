@@ -103,27 +103,27 @@
             <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>1</Order>
-                    <Path>powershell -NoLogo -Command "$conn = @(); while ($conn.Count -lt 1) {Write-Output 'Waiting for connection...'; Start-Sleep -Seconds 1; $conn = @(Get-WmiObject Win32_NetworkAdapter | Where-Object {$_.NetConnectionStatus -eq 2} | ForEach-Object {$_.GetRelated(&apos;Win32_NetworkAdapterConfiguration&apos;)} | Where-Object {$_.IPAddress -ne $null -and $_.DefaultIPGateway -ne $null -and $_.DNSServerSearchOrder -ne $null});}; Write-Output $conn; Start-Sleep -Seconds 3;"</Path>
+                    <Path>powershell -NoLogo -Command &quot;$conn = @(); while ($conn.Count -lt 1) {Write-Output &apos;Waiting for connection...&apos;; Start-Sleep -Seconds 1; $conn = @(Get-WmiObject Win32_NetworkAdapter | Where-Object {$_.NetConnectionStatus -eq 2} | ForEach-Object {$_.GetRelated(&apos;Win32_NetworkAdapterConfiguration&apos;)} | Where-Object {$_.IPAddress -ne $null -and $_.DefaultIPGateway -ne $null -and $_.DNSServerSearchOrder -ne $null}); }; Write-Output $conn; Start-Sleep -Seconds 3;&quot;</Path>
                     <Description>Wait for a real network connection to exist.</Description>
                 </RunSynchronousCommand>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>2</Order>
-                    <Path>powershell -NoLogo -Command "(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/rename.ps1', 'c:\rename.ps1')"</Path>
+                    <Path>powershell -NoLogo -Command &quot;(new-object System.Net.WebClient).DownloadFile(&apos;http://<%= @ipaddress %>/microsoft/winpe/system/rename.ps1&apos;, &apos;c:\rename.ps1&apos;)&quot;</Path>
                     <Description>Download renaming script</Description>
                 </RunSynchronousCommand>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>3</Order>
-                    <Path>powershell -NoLogo -Command "$conn = @(); while ($conn.Count -lt 1) {Write-Output 'Waiting for connection...'; Start-Sleep -Seconds 1; $conn = @(Get-WmiObject Win32_NetworkAdapter | Where-Object {$_.NetConnectionStatus -eq 2} | ForEach-Object {$_.GetRelated(&apos;Win32_NetworkAdapterConfiguration&apos;)} | Where-Object {$_.IPAddress -ne $null -and $_.DefaultIPGateway -ne $null -and $_.DNSServerSearchOrder -ne $null});}; Write-Output $conn; Start-Sleep -Seconds 3;"</Path>
+                    <Path>powershell -NoLogo -Command &quot;$conn = @(); while ($conn.Count -lt 1) {Write-Output &apos;Waiting for connection...&apos;; Start-Sleep -Seconds 1; $conn = @(Get-WmiObject Win32_NetworkAdapter | Where-Object {$_.NetConnectionStatus -eq 2} | ForEach-Object {$_.GetRelated(&apos;Win32_NetworkAdapterConfiguration&apos;)} | Where-Object {$_.IPAddress -ne $null -and $_.DefaultIPGateway -ne $null -and $_.DNSServerSearchOrder -ne $null}); }; Write-Output $conn; Start-Sleep -Seconds 3;&quot;</Path>
                     <Description>Really just doing this again to be paranoid.</Description>
                 </RunSynchronousCommand>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>4</Order>
-                    <Path>powershell -NoLogo -Command "(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/firstboot.cmd', 'c:\firstboot.cmd')"</Path>
+                    <Path>powershell -NoLogo -Command &quot;(new-object System.Net.WebClient).DownloadFile(&apos;http://<%= @ipaddress %>/microsoft/winpe/system/firstboot.cmd&apos;, &apos;c:\firstboot.cmd&apos;)&quot;</Path>
                     <Description>Download post-setup script</Description>
                 </RunSynchronousCommand>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>5</Order>
-                    <Path>powershell -NoLogo -Command "(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/waitforconn.ps1', 'c:\waitforconn.ps1')"</Path>
+                    <Path>powershell -NoLogo -Command &quot;(new-object System.Net.WebClient).DownloadFile(&apos;http://<%= @ipaddress %>/microsoft/winpe/system/waitforconn.ps1&apos;, &apos;c:\waitforconn.ps1&apos;)&quot;</Path>
                     <Description>Download post-setup script</Description>
                 </RunSynchronousCommand>
             </RunSynchronous>
@@ -153,12 +153,12 @@
                     <Order>1</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v "!post-boot" /t REG_SZ /d "cmd /c powershell -NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -File c:\waitforconn.ps1; c:\firstboot.cmd"</CommandLine>
+                    <CommandLine>reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v &quot;!post-boot&quot; /t REG_SZ /d &quot;cmd /c powershell -NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -File c:\waitforconn.ps1; c:\firstboot.cmd&quot;</CommandLine>
                     <Description>Prep for the post-reboot script.</Description>
                     <Order>2</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c shutdown -r -t 0"</CommandLine>
+                    <CommandLine>cmd.exe /c shutdown -r -t 0</CommandLine>
                     <Description>Reboot immediately.</Description>
                     <Order>3</Order>
                 </SynchronousCommand>
