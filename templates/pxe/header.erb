@@ -1,0 +1,14 @@
+default <%=@default_pxe_option%>
+
+LABEL localboot
+        MENU LABEL ^Boot local system
+        MENU DEFAULT
+        COM32 chain.c32
+        APPEND hd0
+        TIMEOUT 80
+        TOTALTIMEOUT 600
+
+label <%= @operatingsystem %>
+        menu label <%= @operatingsystemrelease %> <%= @architecture %>: ^BareMetal/KVM kickstart
+        kernel ../<%= @operatingsystem.downcase %>/<%= @architecture %>/64
+        append initrd=../<%= @operatingsystem.downcase %>/<%= @architecture %>/64.img ks=http://10.21.7.22/<%= @operatingsystem.downcase %>/kickstart/<%= @operatingsystem.downcase %>-<%= @operatingsystemrelease %>-<%= @architecture %>.kickstart url=http://mirror.centos.org/<%= @operatingsystem.downcase %>/<%= @operatingsystemmajrelease %>/os/<%= @architecture %>/

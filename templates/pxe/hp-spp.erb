@@ -1,0 +1,10 @@
+label sos
+  MENU LABEL Automatic Firmware Update Version 2013.09.0
+  kernel ../spp2013090/vmlinuz
+  append initrd=../spp2013090/initrd.img media=network rw root=/dev/ram0 ramdisk_size=808296 init=/bin/init loglevel=3 ide=nodma ide=noraid nopat pnpbios=off vga=791 splash=silent hp_fibre showopts noexec32=off numa=off nox2apic TYPE=AUTOMATIC AUTOPOWEROFFONSUCCESS=no AUTOREBOOTONSUCCESS=no iso1=nfs://10.21.7.22/srv/nfs/hp-spp iso1mnt=/mnt/bootdevice
+  #append initrd=../spp2013090/initrd.img PROTOCOL=DHCP ip=dhcp media=cdrom rw root=/dev/ram0 ramdisk_size=808296 init=/bin/init loglevel=3 ide=nodma ide=noraid nopat pnpbios=off vga=791 splash=silent hp_fibre showopts noexec32=off numa=off nox2apic TYPE=AUTOMATIC AUTOPOWEROFFONSUCCESS=no AUTOREBOOTONSUCCESS=yes iso1=nfs://10.21.7.22:/srv/nfs/spp.iso iso1mnt=/mnt/bootdevice
+
+label vsos
+  MENU LABEL Interactive Firmware Update Version 2013.09.0
+  kernel ../spp2013090/vmlinuz
+  append initrd=../spp2013090/initrd.img media=network rw root=/dev/ram0 ramdisk_size=808296 init=/bin/init loglevel=3 ide=nodma ide=noraid nopat pnpbios=off vga=791 splash=silent hp_fibre showopts noexec32=off numa=off nox2apic TYPE=MANUAL AUTOPOWEROFFONSUCCESS=no iso1=nfs://10.21.7.22/srv/nfs/hp-spp iso1mnt=/mnt/bootdevice
