@@ -1,4 +1,3 @@
-@powershell -NoProfile -Command "$NewNameSet = $false; $nets = ( Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -ne $null } ); $nets.IPAddress | Where-Object { $_ -match '([\d]+\.){3}([\d]+)' } | ForEach-Object {if ( -not $NewNameSet -and ( $lu = ( nslookup $_ 2>null | findstr /i 'name:' ) ) -ne $null ) { if ( $lu.SubString(5) -match '([^\s.]+)(\.[^\s.]*)*' ) { $NewNameSet = $true; (Get-WmiObject Win32_ComputerSystem).Rename($matches[1]); } } }; if (-not $NewNameSet -and $nets.Count -gt 0) {(Get-WmiObject Win32_ComputerSystem).Rename($nets[0].MACAddress.Replace(':',''));};"
 REM o:\hyper-v\2012r2\amd64\setup.exe /unattend:\\10.21.7.22\os\hyper-v\2012r2\unattend\hyper-v-2012r2-amd64-compute.xml
 REM o:\hyper-v\2012r2\amd64\setup.exe /unattend:\\10.21.7.22\os\hyper-v\2012r2\unattend\hyper-v-2012r2-amd64.xml
 s:\setup.cmd

@@ -191,6 +191,24 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     content => template('quartermaster/scripts/computecmd.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
+  file { 'waitforconn.ps1':
+    ensure  => file,
+    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/waitforconn.ps1",
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    content => template('quartermaster/scripts/waitforconn.ps1.erb'),
+    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+  }
+  file { 'rename.ps1':
+    ensure  => file,
+    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/rename.ps1",
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    content => template('quartermaster/scripts/rename.ps1.erb'),
+    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+  }
 #  file { 'A00_init.cmd':
 #    ensure  => file,
 #    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/A00_init.cmd",
