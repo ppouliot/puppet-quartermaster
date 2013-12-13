@@ -99,6 +99,7 @@
         <component name="Microsoft-Windows-TerminalServices-RDP-WinStationExtensions" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <UserAuthentication>0</UserAuthentication>
         </component>
+<!--
         <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
@@ -128,6 +129,7 @@
                 </RunSynchronousCommand>
             </RunSynchronous>
         </component>
+-->
     </settings>
     <settings pass="oobeSystem">
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -148,19 +150,44 @@
             </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>powershell -NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -File c:\rename.ps1</CommandLine>
-                    <Description>Rename from nslookup.</Description>
                     <Order>1</Order>
+                    <CommandLine>powershell -NoLogo -Command "$conn = @(); while ($conn.Count -lt 1) {Write-Output 'Waiting for connection...'; Start-Sleep -Seconds 1; $conn = @(Get-WmiObject Win32_NetworkAdapter | Where-Object {$_.NetConnectionStatus -eq 2} | ForEach-Object {$_.GetRelated('Win32_NetworkAdapterConfiguration')} | Where-Object {$_.IPAddress -ne $null -and $_.DefaultIPGateway -ne $null -and $_.DNSServerSearchOrder -ne $null}); }; Write-Output $conn; Start-Sleep -Seconds 3;"</CommandLine>
+                    <Description>Wait for a real network connection to exist.</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v &quot;!post-boot&quot; /t REG_SZ /d &quot;cmd /c powershell -NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -File c:\waitforconn.ps1; c:\firstboot.cmd&quot;</CommandLine>
-                    <Description>Prep for the post-reboot script.</Description>
                     <Order>2</Order>
+                    <CommandLine>powershell -NoLogo -Command "(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/rename.ps1', 'c:\rename.ps1')"</CommandLine>
+                    <Description>Download renaming script</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>3</Order>
+                    <CommandLine>powershell -NoLogo -Command "$conn = @(); while ($conn.Count -lt 1) {Write-Output 'Waiting for connection...'; Start-Sleep -Seconds 1; $conn = @(Get-WmiObject Win32_NetworkAdapter | Where-Object {$_.NetConnectionStatus -eq 2} | ForEach-Object {$_.GetRelated('Win32_NetworkAdapterConfiguration')} | Where-Object {$_.IPAddress -ne $null -and $_.DefaultIPGateway -ne $null -and $_.DNSServerSearchOrder -ne $null}); }; Write-Output $conn; Start-Sleep -Seconds 3;"</CommandLine>
+                    <Description>Really just doing this again to be paranoid.</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>4</Order>
+                    <CommandLine>powershell -NoLogo -Command "(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/firstboot.cmd', 'c:\firstboot.cmd')"</CommandLine>
+                    <Description>Download post-setup script</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>5</Order>
+                    <CommandLine>powershell -NoLogo -Command "(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/waitforconn.ps1', 'c:\waitforconn.ps1')"</CommandLine>
+                    <Description>Download post-setup script</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>powershell -NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -File c:\rename.ps1</CommandLine>
+                    <Description>Rename from nslookup.</Description>
+                    <Order>6</Order>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v "!post-boot" /t REG_SZ /d "cmd /c powershell -NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -File c:\waitforconn.ps1; c:\firstboot.cmd"</CommandLine>
+                    <Description>Prep for the post-reboot script.</Description>
+                    <Order>7</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c shutdown -r -t 0</CommandLine>
                     <Description>Reboot immediately.</Description>
-                    <Order>3</Order>
+                    <Order>8</Order>
                 </SynchronousCommand>
             </FirstLogonCommands>
             <OOBE>
