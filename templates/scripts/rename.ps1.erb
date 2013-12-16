@@ -19,7 +19,7 @@ $conn.IPAddress |
                 $NewNameSet = $true; (Get-WmiObject Win32_ComputerSystem).Rename($matches[1]); 
             } 
         } };
-if (-not $NewNameSet -and $nets.Count -gt 0) {
-    (Get-WmiObject Win32_ComputerSystem).Rename($nets[0].MACAddress.Replace(':',''));
+if (-not $NewNameSet -and $conn.Count -gt 0) {
+    (Get-WmiObject Win32_ComputerSystem).Rename($conn[0].MACAddress.Replace(':',''));
 };
 

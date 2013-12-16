@@ -173,6 +173,15 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     content => template('quartermaster/winpe/menu/init.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
+  file { 'menucheck.ps1':
+    ensure  => file,
+    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menucheck.ps1",
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $quartermaster::exe_mode,
+    content => template('quartermaster/winpe/menu/menucheckps1.erb'),
+    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+  }
   file { 'firstboot.cmd':
     ensure  => file,
     path    => "${quartermaster::wwwroot}/microsoft/winpe/system/firstboot.cmd",
