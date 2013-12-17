@@ -10,14 +10,15 @@ while ($conn.Count -lt 1) {
 Write-Output $conn; 
 
 $foundmenu = $false;
-$conn..MACAddress.Replace(':','-') | 
+$conn.MACAddress.Replace(':','-') | 
     ForEach-Object {
+        Write-Output "Checking for $_.cmd ..."
         if ( -not $foundmenu -and [IO.File]::Exists("S:\menu\$_.cmd") ) { 
             $foundmenu = $true;
             cmd /c S:\menu\$_.cmd;
         } 
     };
 if (-not $foundmenu) {
-    cmd /c S:\setup.cmd;
+    cmd /c start S:\setup.cmd;
 };
 
