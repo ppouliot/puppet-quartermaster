@@ -2,4 +2,5 @@ REM o:\hyper-v\2012r2\amd64\setup.exe /unattend:\\10.21.7.22\os\hyper-v\2012r2\u
 REM o:\hyper-v\2012r2\amd64\setup.exe /unattend:\\10.21.7.22\os\hyper-v\2012r2\unattend\hyper-v-2012r2-amd64.xml
 REM s:\setup.cmd
 REM #x:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat agent --debug --trace --verbose --test
-powershell -NoLogo -ExecutionPolicy RemoteSigned -File s:\menucheck.ps1
+REM powershell -NoLogo -ExecutionPolicy RemoteSigned -File s:\menucheck.ps1
+powershell -NoLogo -ExecutionPolicy Unrestricted -File s:\menucheck.ps1
