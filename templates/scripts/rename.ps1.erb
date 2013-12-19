@@ -33,4 +33,4 @@ $dataconn = $allconn | Where-Object {-not $_.IPAddress.contains($ipfilter)};
 $octet = @($conn.IPAddress | Where-Object { $_ -match '([\d]+\.){3}([\d]+)' })[0].Split('.')[-1];
 $counter = 1;
 
-$dataconn | ForEach-Object {$_.EnableStatic("192.168.$octet.$counter","255.255.255.0"); $counter++;};
+$dataconn | ForEach-Object {$_.EnableStatic("192.168.55.55","255.255.255.0"); $counter++;};
