@@ -1,2 +1,3 @@
+call c:\Chocolatey\bin\cinst -force puppet
 @powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\puppetinit.cmd')){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/puppetinit.cmd', 'c:\puppetinit.cmd')}"
 call C:\puppetinit.cmd
