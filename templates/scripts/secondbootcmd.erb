@@ -2,3 +2,6 @@ call c:\Chocolatey\bin\cinst -force puppet
 @powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\puppetinit.cmd')){(new-object System.Net.WebClient).DownloadFile('http://<%= @ipaddress %>/microsoft/winpe/system/puppetinit.cmd', 'c:\puppetinit.cmd')}"
 REM Removing currently due to issues with the registration of puppet.  Puppet should register with the puppetmaster on the first puppet run.
 REM call C:\puppetinit.cmd
+
+REM Need to reboot to kick off normal puppet service operation, including initial agent run.
+shutdown -r -t 5
