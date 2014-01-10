@@ -44,3 +44,5 @@ mirror.xmission.com
 .sensuapp.org
 #docker
 .docker.io
+#
+.nginx.org
