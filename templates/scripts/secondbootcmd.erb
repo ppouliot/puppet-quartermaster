@@ -4,4 +4,5 @@ REM Removing currently due to issues with the registration of puppet.  Puppet sh
 REM call C:\puppetinit.cmd
 
 REM Need to reboot to kick off normal puppet service operation, including initial agent run.
+reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v "!postboot2" /t REG_SZ /d "cmd /c c:\puppetinit.cmd"
 shutdown -r -t 5
