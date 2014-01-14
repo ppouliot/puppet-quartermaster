@@ -1,7 +1,6 @@
 @echo on 
 
 @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%systemdrive%\chocolatey\bin || pause
-setx PATH "%PATH%;C:\Python27;C:\Python27\Scripts;C:\mingw-get\bin;C:\mingw-get\msys\1.0\bin;C:\Chocolatey\bin;C:\OpenSSL-Win32\bin;C:\Program Files (x86)\Git\cmd;" /M
 REM call c:\Chocolatey\bin\cinst -force puppet
 call c:\Chocolatey\bin\cinst -force git
 call c:\Chocolatey\bin\cinst -force python.x86
