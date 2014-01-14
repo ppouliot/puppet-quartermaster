@@ -1,0 +1,3 @@
+echo "" | out-file \p.log
+start powershell "gc \p.log -wait"
+if ($t -eq $null) {$t = 0}; while ($true) {$log0 = (Get-EventLog Application | ? {$_.source -eq 'puppet' -and $_.Index -gt $t} | sort -Property Index); if ($log0.count -gt 0) {$t = $log0[-1].Index; $log0 | % {write-output ("{0} ::: {1}" -f $_.TimeGenerated,$_.Message)} | out-file \p.log -Append}}
