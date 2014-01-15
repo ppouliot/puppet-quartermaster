@@ -7,6 +7,6 @@ REM call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --debu
 REM call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --trace --test --waitforcert 60 --server <%= @fqdn %> 
 
 REM Reboot to apply paths and bits that need such.  This should let the puppet service run clean after the reboot.
-REM shutdown -r -t 5
+shutdown -r -t 420
 
 start Powershell -File C:\log.ps1
