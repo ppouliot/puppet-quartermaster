@@ -28,10 +28,11 @@ firewall --disabled
 #clearpart --all --drives=sda
 clearpart --all
 part pv.008002 --grow --size=500
-volgroup vg_system --pesize=32768 pv.008002
-logvol swap --name=lv_swap --vgname=vg_system --grow --size=496 --maxsize=992
-logvol / --fstype=ext4 --name=lv_root --vgname=vg_system --grow --size=1024 --maxsize=51200
 part /boot --fstype=ext4 --size=500
+volgroup vg_system --pesize=32768 pv.008002
+logvol swap --name=lv_swap --vgname=vg_system --grow --size=496 --maxsize=4096
+logvol / --fstype=ext4 --name=lv_root --vgname=vg_system --grow --size=1024
+
 bootloader --location=mbr --timeout=5 --append="rhgb quiet"
 repo --name="<%= @distro %>-<%= @release %>-<%= @p_arch %>"  --baseurl=<%= @inst_repo %> --cost=1000
 repo --name="<%= @distro %>-<%= @release %>-<%= @p_arch %>-Updates"  --baseurl=<%= @update_repo %> --cost=1000
