@@ -188,7 +188,7 @@ $windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
-    content => template('quartermaster/winpe/menu/puppet_log.ps1.erb'),
+    content => template('quartermaster/scripts/puppet_log.ps1.erb'),
     require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
   }
   file { 'firstboot.cmd':
