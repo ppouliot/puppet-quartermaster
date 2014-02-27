@@ -7,7 +7,7 @@ REM Removing currently due to issues with the registration of puppet.  Puppet sh
 REM call C:\puppetinit.cmd
 
 REM Need to reboot to kick off normal puppet service operation, including initial agent run.
-set "PATH=!PATH!;C:\Python27;C:\Python27\Scripts;C:\mingw-get\bin;C:\mingw-get\msys\1.0\bin;C:\OpenSSL-Win32\bin;C:\Program Files (x86)\Git\cmd;c:\Program Files (x86)\Puppet Labs\puppet\bin;"
+set "PATH=!PATH!;C:\Python27;C:\Python27\Scripts;C:\mingw-get\bin;C:\mingw-get\msys\1.0\bin;C:\OpenSSL-Win32\bin;C:\Program Files (x86)\Git\cmd;c:\Program Files (x86)\Puppet Labs\puppet\bin;C:\OpenStack\devstack\scripts;C:\OpenStack\bin;"
 setx PATH "!PATH!" /M
 
 endlocal
