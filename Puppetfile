@@ -13,17 +13,12 @@ mod 'puppetlabs/ntp', :git => "#{base_url}/puppetlabs/puppetlabs-ntp", :ref => '
 mod 'puppetlabs/apache', :git => "#{base_url}/puppetlabs/puppetlabs-apache", :ref => 'master'
 mod 'puppetlabs/stdlib', :git => "#{base_url}/puppetlabs/puppetlabs-stdlib", :ref => 'master'
 mod 'puppetlabs/apt', :git => "#{base_url}/puppetlabs/puppetlabs-apt", :ref => 'master'
+mod 'puppetlabs/inifile', :git => "#{base_url}/puppetlabs/puppetlabs-inifile", :ref => 'master'
+mod 'puppetlabs/concat', :git => "#{base_url}/puppetlabs/puppetlabs-concat", :ref => 'master'
 
 # stephenrjohnson
 # this what I am testing Puppet 3.2 deploys with
 # I am pointing it at me until my patch is accepted
-mod 'stephenjohrnson/puppet', :git => "#{base_url}/stephenrjohnson/puppetlabs-puppet", :ref => 'master'
+mod 'stephenjohrnson/puppet', :git => "#{base_url}/stephenrjohnson/puppetmodule", :ref => 'master'
 
-# upstream is ripienaar
-mod 'ripienaar/concat', :git => "#{base_url}/ripienaar/puppet-concat", :ref => 'master'
-
-# upstream is cprice-puppet/puppetlabs-inifile
-mod 'cprice404/inifile', :git => "#{base_url}/cprice-puppet/puppetlabs-inifile"
-
-
-mod 'ppouliot/quartermaster', :git => "#{base_url}/ppouliot/puppet-quartermaster"
+mod 'openstack-hyper-v/quartermaster', :git => "#{base_url}/openstack-hyper-v/puppet-quartermaster"

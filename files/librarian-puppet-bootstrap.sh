@@ -9,7 +9,7 @@ echo "### INSTALLING Q's PUPPETFILE INTO /etc/puppet ###"
 wget https://raw.github.com/ppouliot/ppouliot-quartermaster/master/Puppetfile -O /etc/puppet/Puppetfile
 
 echo "### INSTALLING  LIBRARIAN-PUPPET-MAESTRODEV DUE TO BUGFIXES IN LIBRARIAN-PUPPET ###"
-gem install librarian-puppet-maestrodev
+gem install librarian-puppet
 
 echo "### RUNNING LIBRARIAN_PUPPET ###"
 cd /etc/puppet && librarian-puppet install --verbose
