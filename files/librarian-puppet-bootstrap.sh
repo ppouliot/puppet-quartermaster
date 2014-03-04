@@ -8,7 +8,7 @@ apt-get update -y && apt-get install -y openssh-server git puppet ruby1.9.1 ruby
 echo "### INSTALLING Q's PUPPETFILE INTO /etc/puppet ###"
 wget https://raw.github.com/openstack-hyper-v/puppet-quartermaster/master/Puppetfile -O /etc/puppet/Puppetfile
 
-echo "### INSTALLING  LIBRARIAN-PUPPET-MAESTRODEV DUE TO BUGFIXES IN LIBRARIAN-PUPPET ###"
+echo "### INSTALLING  LIBRARIAN-PUPPET DUE TO BUGFIXES IN LIBRARIAN-PUPPET ###"
 gem install librarian-puppet
 
 echo "### RUNNING LIBRARIAN_PUPPET ###"
