@@ -7,7 +7,7 @@ base_url = "#{git_protocol}://github.com"
 # 
 branch_name = 'origin/grizzly'
 #mod 'puppetlabs/postgresql', :git => "#{base_url}/puppetlabs/puppetlabs-postgresql", :ref => 'master'
-#mod 'puppetlabs/puppetdb', :git => "#{base_url}/puppetlabs/puppetlabs-puppetdb", :ref => 'master'
+mod 'puppetlabs/puppetdb', :git => "#{base_url}/puppetlabs/puppetlabs-puppetdb", :ref => 'master'
 mod 'puppetlabs/firewall', :git => "#{base_url}/puppetlabs/puppetlabs-firewall", :ref => 'master'
 mod 'puppetlabs/ntp', :git => "#{base_url}/puppetlabs/puppetlabs-ntp", :ref => 'master'
 mod 'puppetlabs/apache', :git => "#{base_url}/puppetlabs/puppetlabs-apache", :ref => 'master'
@@ -20,5 +20,4 @@ mod 'puppetlabs/concat', :git => "#{base_url}/puppetlabs/puppetlabs-concat", :re
 # this what I am testing Puppet 3.2 deploys with
 # I am pointing it at me until my patch is accepted
 mod 'stephenjohrnson/puppet', :git => "#{base_url}/stephenrjohnson/puppetmodule", :ref => 'master'
-
-mod 'openstack-hyper-v/quartermaster', :git => "#{base_url}/openstack-hyper-v/puppet-quartermaster"
+mod 'openstack-hyper-v/quartermaster', :git => "#{base_url}/openstack-hyper-v/puppet-quartermaster", :ref => 'master'
