@@ -1,4 +1,4 @@
-name 'openstack-hyper-v-quartermaster'
+name 'puppet-quartermaster'
 version '0.0.1'
 source 'https://github.com/openstack-hyper-v/puppet-quartermaster.git'
 author 'Peter Pouliot <peter@pouliot.net>'
