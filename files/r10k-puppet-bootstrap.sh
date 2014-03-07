@@ -13,6 +13,11 @@ gem install r10k
 
 echo "### RUNNING LIBRARIAN_PUPPET ###"
 cd /etc/puppet && r10k --verbose DEBUG puppetfile install
- 
+
+#Setting Minimal hiera for QuarterMaster
+cp -R /etc/puppet/modules/quartermaster/files/hiera /etc/puppet/hiera
+echo "creating symlink for from ./hiera.yaml to /etc/puppet/hiera.yaml"
+ln -s /etc/puppet/hiera/hiera.yaml /etc/puppet/hiera.yaml
+
 echo "### BOOTSTRAPPING QUARTERMASTER ###"
 puppet apply --verbose --trace --debug --modulepath=/etc/puppet/modules /etc/puppet/modules/quartermaster/tests/init.pp
