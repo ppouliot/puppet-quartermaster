@@ -12,7 +12,7 @@ echo "### INSTALLING  LIBRARIAN-PUPPET DUE TO BUGFIXES IN LIBRARIAN-PUPPET ###"
 gem install r10k
 
 echo "### RUNNING LIBRARIAN_PUPPET ###"
-cd /etc/puppet && r10k puppetfile install
+cd /etc/puppet && r10k --verbose DEBUG puppetfile install
  
 echo "### BOOTSTRAPPING QUARTERMASTER ###"
 puppet apply --verbose --trace --debug --modulepath=/etc/puppet/modules /etc/puppet/modules/quartermaster/tests/init.pp
