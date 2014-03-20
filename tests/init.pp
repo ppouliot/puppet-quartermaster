@@ -1,2 +1,1 @@
-#class {'quartermaster':}
-class {'quartermaster::bootstrap':}
+class{'quartermaster':}
