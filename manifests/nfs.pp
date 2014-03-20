@@ -5,7 +5,7 @@
 
 
 class quartermaster::nfs {
-  $nfs = ['nfs-server',
+  $nfs = ['nfs-kernel-server',
         'nfs-client',
         'tree',]
 
