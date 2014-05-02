@@ -1,0 +1,54 @@
+# /etc/squid-deb-proxy/allowed-networks-src.acl.d/10-default
+# 
+# additional network sources that you want to allow access to the cache
+
+# example net
+#136.199.8.0/24
+
+<%
+outstr = ""
+
+net_size = 0
+@netmask.split('.').each { |num|
+  cur_val = num.to_i
+  mod = 128
+  while (mod > 0) and (cur_val > 0) and (cur_val/mod > 0)
+    net_size += 1
+    cur_val = cur_val % mod
+    mod = mod / 2
+  end
+}
+ip = @ipaddress.split('.')
+whole = net_size/8
+rem = net_size%8
+octs = 0
+while whole > 0
+  whole-=1
+  outstr += ip[octs].to_s
+  octs+=1
+  if octs < 4
+    outstr += '.'
+  end
+end
+while octs < 4
+  maskval = 0
+  mod = 128
+  ipval = ip[octs].to_i
+  octs+=1
+  while rem > 0
+    if ipval/mod > 0
+      maskval += mod
+      ipval -= mod
+    end
+    mod = mod/2
+    rem-=1
+  end
+  outstr += maskval.to_s
+  if octs < 4
+    outstr += '.'
+  end
+end
+
+outstr += '/'
+outstr += net_size.to_s
+%><%= outstr %>

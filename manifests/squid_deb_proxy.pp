@@ -19,19 +19,19 @@ class quartermaster::squid_deb_proxy {
   }
 
   file { '/etc/squid-deb-proxy/squid-deb-proxy.conf':
-    source  => 'puppet:///modules/quartermaster/squid-deb-proxy/squid-deb-proxy.conf',
+    content => template('quartermaster/squid-deb-proxy/squid-deb-proxy.conf.erb'),
     notify  => Service[ $squid_services ],
     require => Package[ $squid_deb_proxy ],
   }
 
   file {'/etc/squid-deb-proxy/mirror-dstdomain.acl.d/10-debian':
-    source  => 'puppet:///modules/quartermaster/squid-deb-proxy/10-debian',
+    content  => template('quartermaster/squid-deb-proxy/10-debian.erb'),
     notify  => Service[ $squid_services ],
     require => Package[ $squid_deb_proxy ],
   }
 
   file {'/etc/squid-deb-proxy/allowed-networks-src.acl.d/10-lab':
-    source  => 'puppet:///modules/quartermaster/squid-deb-proxy/10-lab',
+    content  => template('quartermaster/squid-deb-proxy/10-local-net.erb'),
     notify  => Service[ $squid_services ],
     require => Package[ $squid_deb_proxy ],
   }

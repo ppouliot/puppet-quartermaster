@@ -1,8 +1,12 @@
-class quartermaster::puppetmaster {
-#  class {'puppetdb':}
+class quartermaster::puppetmaster (
+  $use_puppetdb = false,
+){
+  if ($use_puppetdb) {
+    class {'puppetdb': before => Class['puppet::master'],}
+  }
   class {'puppet::master':
     autosign     => true,
-#    storeconfigs => true,
+    storeconfigs => $use_puppetdb,
     parser       => 'future',
   } 
   file  {'/etc/puppet/files':

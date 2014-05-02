@@ -26,7 +26,8 @@
 #    quartermaster::windowsmedia{"en_windows_8_enterprise_x86_dvd_917587.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
 # }
 #
-class quartermaster{
+class quartermaster(
+  $use_puppetdb      = false,
   $tmp               = '/tmp'
   $logroot           = '/var/log/quartermaster'
   $tftpboot          = '/srv/tftpboot'
@@ -39,22 +40,32 @@ class quartermaster{
   $dir_mode          = '0755'
   $counter           = '0'
   $nameserver        = '4.2.2.2'
-  $linux = hiera('linux',{})
-  $windows = hiera('windows',{})
+  $linux             = hiera('linux',{}),
+  $windows           = hiera('windows',{}),
+){
 
   class{'apt':}
   class { 'quartermaster::commands': }
   class { 'quartermaster::www': }
-  class { 'quartermaster::puppetmaster': }
+  class { 'quartermaster::puppetmaster': use_puppetdb => $use_puppetdb,}
   class { 'quartermaster::squid_deb_proxy': }
-  class { 'quartermaster::dnsmasq': }
+  if ! defined (Class['ipam']){
+    # This only applies if we aren't already the IPAM host.
+    class { 'quartermaster::dnsmasq': }
+  }
   class { 'quartermaster::tftpd': }
   class { 'quartermaster::syslinux': }
   class { 'quartermaster::nfs': }
   class { 'quartermaster::winpe': }
   class { 'quartermaster::scripts': }
 
-  quartermaster::pxe{$linux:}
+  if is_array($linux) {
+    quartermaster::pxe{$linux:}
+  } else if is_hash($linux) {
+    create_resources(quartermaster::pxe,$linux)
+  } else {
+    notify {'Variable $linux must be a hash or an array to be processed.  Skipping Linux distros.':}
+  }
   create_resources(quartermaster::windowsmedia,$windows)
 
 }
