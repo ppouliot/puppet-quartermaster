@@ -3,5 +3,5 @@
 :yaml:
   :datadir: /etc/puppet/hiera
 :hierarchy:
-  - %{hostname}
-  - %{calling_module}
+  - "%{hostname}"
+  - "%{calling_module}"
