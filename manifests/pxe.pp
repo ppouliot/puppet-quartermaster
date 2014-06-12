@@ -21,6 +21,12 @@ define quartermaster::pxe {
     $rel_major = $1
     $rel_minor = $2
   }
+  
+  # Test if this is the live puppet image
+  $is_puppet = $release ? {
+     /(puppet)/   => 'true'.
+     default      => 'This is not a live puppet image',
+  }
 
   # Begin Tests to deal with centos point release issues
   $is_centos = $distro ? {
@@ -78,6 +84,7 @@ define quartermaster::pxe {
     /(stable)/   => 'squeeze',
     /(testing)/  => 'wheezy',
     /(unstable)/ => 'sid',
+    /(puppet)/   => 'wheezy',
     default      => "Unsupported ${distro} Release",
   }
 
@@ -96,6 +103,10 @@ define quartermaster::pxe {
     /(sled)/            => 'Enterprise ISO Required',
     /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
     default             => 'No URL Specified',
+  }
+  
+  if $is_puppet == 'true' {
+      $url = "UNKNOWN" # TODO: Where will this image be stored?
   }
 
   $tld = $distro ?{
