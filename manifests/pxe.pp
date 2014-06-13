@@ -88,6 +88,9 @@ define quartermaster::pxe {
     default      => "Unsupported ${distro} Release",
   }
 
+  if $is_puppet == 'true' {
+     $url = "http://130.160.68.101/${distro}/${release}/${p_arch}" # TODO: this is a temporary location
+  } else {
   $url = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
@@ -104,7 +107,8 @@ define quartermaster::pxe {
     /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
     default             => 'No URL Specified',
   }
-
+  }
+  
   $tld = $distro ?{
     /(ubuntu)/ => 'com',
     /(debian)/ => 'org',
@@ -189,22 +193,22 @@ define quartermaster::pxe {
     /(sles|sled|opensuse)/                               => '',
     default                                              => 'No supported Initrd Extension',
   }
+  if $is_puppet == 'true' {
+    $linux_installer = 'custom'
+  } else {
   $linux_installer = $distro ? {
     /(ubuntu|debian)/                                    => 'd-i',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
     /(sles|sled|opensuse)/                               => 'yast',
     default                                              => 'No Supported Installer',
   }
+  }
+  
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppetlabs.com/dists/${rel_name}",
     /(fedora)/                                           => "http://yum.puppetlabs.com/fedora/f${rel_number}/products/${p_arch}",
     /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppetlabs.com/el/${rel_major}/products/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
-  }
-  
-  if $is_puppet == 'true' {
-    $url = "http://130.160.68.101/${distro}/${release}/${p_arch}" # TODO: this is a temporary location
-    $linux_installer = 'custom'
   }
 
   notify { "${name}: distro is ${distro}":}
