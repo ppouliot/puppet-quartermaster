@@ -253,7 +253,7 @@ define quartermaster::pxe {
         command => "/usr/bin/wget -c ${url}/filesystem.squashfs -O ${rel_number}.squashfs",                                                         
         cwd     => "${quartermaster::tftpboot}/${distro}/${p_arch}",
         creates => "${quartermaster::tftpboot}/${distro}/${p_arch}/${rel_number}.squashfs",
-        require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}//${p_arch}" ]],                                                                                                       
+        require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ]],                                                                                                       
       }
   }
 
