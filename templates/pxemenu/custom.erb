@@ -1,4 +1,4 @@
 label <%= @name %>
         menu label (<%= @release %>): ^Manual 
         kernel ../<%= @distro %>/<%= @p_arch %>/linux
-        append initrd=../<%= @distro %>/<%= @p_arch %>/initrf<%= @initrd %> boot=live config noswap noprompt fetch=tftp://<%= @ipaddress %>/<%= @distro %>/
+        append initrd=../<%= @distro %>/<%= @p_arch %>/initrd<%= @initrd %> boot=live config noswap noprompt fetch=tftp://<%= @ipaddress %>/<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>.squashfs
