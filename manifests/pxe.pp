@@ -204,10 +204,8 @@ define quartermaster::pxe {
   
   if $is_puppet == 'true' {
     $url = "http://130.160.68.101/${distro}/${release}/${p_arch}" # TODO: this is a temporary location
-    $initrd = ''
     $linux_installer = 'custom'
   }
-
 
   notify { "${name}: distro is ${distro}":}
   notify { "${name}: release is ${release}":}
@@ -252,10 +250,10 @@ define quartermaster::pxe {
   
   if $is_puppet == 'true' {
       exec { "download_puppet_filesystem":                                                                                                                     
-        command => "/usr/bin/wget -c ${url}/filesystem.squashfs -O filesystem.squashfs",                                                         
-        cwd     => "${quartermaster::tftpboot}/${distro}/${release}",
-        creates => "${quartermaster::tftpboot}/${distro}/${release}/filesystem.squashfs",
-        require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${release}" ]],                                                                                                       
+        command => "/usr/bin/wget -c ${url}/filesystem.squashfs -O ${rel_number}.squashfs",                                                         
+        cwd     => "${quartermaster::tftpboot}/${distro}/${p_arch}",
+        creates => "${quartermaster::tftpboot}/${distro}/${p_arch}/${rel_number}.squashfs",
+        require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}//${p_arch}" ]],                                                                                                       
       }
   }
 
