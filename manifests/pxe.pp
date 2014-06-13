@@ -24,7 +24,7 @@ define quartermaster::pxe {
   
   # Test if this is the live puppet image
   $is_puppet = $release ? {
-     /(puppet)/   => 'true'.
+     /(puppet)/   => 'true',
      default      => 'This is not a live puppet image',
   }
 
