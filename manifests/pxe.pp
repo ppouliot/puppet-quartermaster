@@ -104,10 +104,6 @@ define quartermaster::pxe {
     /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
     default             => 'No URL Specified',
   }
-  
-  if $is_puppet == 'true' {
-      $url = "UNKNOWN" # TODO: Where will this image be stored?
-  }
 
   $tld = $distro ?{
     /(ubuntu)/ => 'com',
@@ -205,8 +201,12 @@ define quartermaster::pxe {
     /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppetlabs.com/el/${rel_major}/products/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
-
-
+  
+  if $is_puppet == 'true' {
+    $url = "http://130.160.68.101/${distro}/${release}/${p_arch}" # TODO: this is a temporary location
+    $initrd = ''
+    $linux_installer = 'custom'
+  }
 
 
   notify { "${name}: distro is ${distro}":}
@@ -248,6 +248,15 @@ define quartermaster::pxe {
     cwd     => "${quartermaster::tftpboot}/${distro}/graphics",
     creates => "${quartermaster::tftpboot}/${distro}/graphics/${name}${bootsplash}",
     require =>  [ Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/graphics" ]],
+  }
+  
+  if $is_puppet == 'true' {
+      exec { "download_puppet_filesystem":                                                                                                                     
+        command => "/usr/bin/wget -c ${url}/filesystem.squashfs -O filesystem.squashfs",                                                         
+        cwd     => "${quartermaster::tftpboot}/${distro}/${release}",
+        creates => "${quartermaster::tftpboot}/${distro}/${release}/filesystem.squashfs",
+        require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${release}" ]],                                                                                                       
+      }
   }
 
 #  exec {"create_submenu-${name}":
@@ -390,7 +399,6 @@ define quartermaster::pxe {
       content => template("quartermaster/pxemenu/${linux_installer}.erb"),
     }
   }
-
 
 
   file { "${name}.menu":
