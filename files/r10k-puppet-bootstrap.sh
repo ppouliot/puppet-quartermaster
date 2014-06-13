@@ -3,10 +3,10 @@ wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlab
 
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
-apt-get update -y && apt-get install -y openssh-server git puppet ruby1.9.1 ruby1.9.1-dev rubygems
+apt-get update -y && apt-get install -y openssh-server git puppet ruby ruby-dev
 
 echo "### INSTALLING Q's PUPPETFILE INTO /etc/puppet ###"
-wget https://raw.github.com/openstack-hyper-v/puppet-quartermaster/master/Puppetfile -O /etc/puppet/Puppetfile
+wget https://raw.github.com/openstack-hyper-v-python/puppet-quartermaster/master/Puppetfile -O /etc/puppet/Puppetfile
 
 echo "### INSTALLING  R10K ###"
 gem install r10k
