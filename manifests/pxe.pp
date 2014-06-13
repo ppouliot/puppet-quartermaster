@@ -187,12 +187,17 @@ define quartermaster::pxe {
     default                                              => 'No supported Pxe Kernel',
   }
 
+  if $is_puppet == 'true' {
+    $initrd = '.bin'
+  } else {
   $initrd = $distro ? {
     /(ubuntu|debian)/                                    => '.gz',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
     /(sles|sled|opensuse)/                               => '',
     default                                              => 'No supported Initrd Extension',
   }
+  }
+  
   if $is_puppet == 'true' {
     $linux_installer = 'custom'
   } else {
