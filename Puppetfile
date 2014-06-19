@@ -20,4 +20,4 @@ mod 'concat', :git => "#{base_url}/puppetlabs/puppetlabs-concat", :ref => 'maste
 # this what I am testing Puppet 3.2 deploys with
 # I am pointing it at me until my patch is accepted
 mod 'puppet', :git => "#{base_url}/stephenrjohnson/puppetmodule", :ref => 'master'
-mod 'quartermaster', :git => "#{base_url}/openstack-hyper-v/puppet-quartermaster", :ref => 'master'
+mod 'quartermaster', :git => "#{base_url}/openstack-hyper-v-python/puppet-quartermaster", :ref => 'master'

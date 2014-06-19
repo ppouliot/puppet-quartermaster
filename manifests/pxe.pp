@@ -21,6 +21,12 @@ define quartermaster::pxe {
     $rel_major = $1
     $rel_minor = $2
   }
+  
+  # Test if this is the live puppet image
+  $is_puppet = $release ? {
+     /(puppet)/   => 'true',
+     default      => 'This is not a live puppet image',
+  }
 
   # Begin Tests to deal with centos point release issues
   $is_centos = $distro ? {
@@ -78,9 +84,13 @@ define quartermaster::pxe {
     /(stable)/   => 'squeeze',
     /(testing)/  => 'wheezy',
     /(unstable)/ => 'sid',
+    /(puppet)/   => 'wheezy',
     default      => "Unsupported ${distro} Release",
   }
 
+  if $is_puppet == 'true' {
+     $url = "http://130.160.68.101/${distro}/${release}/${p_arch}" # TODO: this is a temporary location
+  } else {
   $url = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
@@ -97,7 +107,8 @@ define quartermaster::pxe {
     /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
     default             => 'No URL Specified',
   }
-
+  }
+  
   $tld = $distro ?{
     /(ubuntu)/ => 'com',
     /(debian)/ => 'org',
@@ -176,27 +187,34 @@ define quartermaster::pxe {
     default                                              => 'No supported Pxe Kernel',
   }
 
+  if $is_puppet == 'true' {
+    $initrd = '.bin'
+  } else {
   $initrd = $distro ? {
     /(ubuntu|debian)/                                    => '.gz',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
     /(sles|sled|opensuse)/                               => '',
     default                                              => 'No supported Initrd Extension',
   }
+  }
+  
+  if $is_puppet == 'true' {
+    $linux_installer = 'custom'
+  } else {
   $linux_installer = $distro ? {
     /(ubuntu|debian)/                                    => 'd-i',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
     /(sles|sled|opensuse)/                               => 'yast',
     default                                              => 'No Supported Installer',
   }
+  }
+  
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppetlabs.com/dists/${rel_name}",
     /(fedora)/                                           => "http://yum.puppetlabs.com/fedora/f${rel_number}/products/${p_arch}",
     /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppetlabs.com/el/${rel_major}/products/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
-
-
-
 
   notify { "${name}: distro is ${distro}":}
   notify { "${name}: release is ${release}":}
@@ -237,6 +255,15 @@ define quartermaster::pxe {
     cwd     => "${quartermaster::tftpboot}/${distro}/graphics",
     creates => "${quartermaster::tftpboot}/${distro}/graphics/${name}${bootsplash}",
     require =>  [ Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/graphics" ]],
+  }
+  
+  if $is_puppet == 'true' {
+      exec { "download_puppet_filesystem":                                                                                                                     
+        command => "/usr/bin/wget -c ${url}/filesystem.squashfs -O ${rel_number}.squashfs",                                                         
+        cwd     => "${quartermaster::tftpboot}/${distro}/${p_arch}",
+        creates => "${quartermaster::tftpboot}/${distro}/${p_arch}/${rel_number}.squashfs",
+        require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ]],                                                                                                       
+      }
   }
 
 #  exec {"create_submenu-${name}":
@@ -379,7 +406,6 @@ define quartermaster::pxe {
       content => template("quartermaster/pxemenu/${linux_installer}.erb"),
     }
   }
-
 
 
   file { "${name}.menu":

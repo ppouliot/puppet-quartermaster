@@ -1,0 +1,4 @@
+label <%= @name %>
+        menu label (<%= @release %>): ^Manual 
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> boot=live config noswap noprompt fetch=tftp://<%= @ipaddress %>/<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>.squashfs preseed/url=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>

@@ -12,6 +12,7 @@ linux:
     - opensuse-12.2-x86_64
     - opensuse-12.3-x86_64
     - debian-stable-amd64
+    - debian-puppet-amd64
 windows:
   en_windows_server_2012_x64_dvd_915478.iso:
     activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
