@@ -48,10 +48,10 @@ define quartermaster::pxe {
     /(fedora)/   => 'true',
     default      => 'This is not fedora',  
   }
-  if ( $is_fedora == 'true') and ($release < 18) {
+  if ( $is_fedora == 'true') and ($release < 20) {
       $fedora_legacy = 'true'
   }
-  if ( $is_fedora == 'true') and ($release >= 18) {
+  if ( $is_fedora == 'true') and ($release >= 20) {
       $fedora_legacy = 'false'
   }
   if $is_fedora == 'true' {
