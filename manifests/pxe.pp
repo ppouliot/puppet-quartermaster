@@ -30,8 +30,8 @@ define quartermaster::pxe {
 
   if $is_centos == 'true' {
    $centos_legacy = $rel_minor ? {
-      /(0|1|2|3)/ => 'true',
-      /(4)/       => 'false',
+      /(1|2|3|4|5)/ => 'true',
+      /(0)/       => 'false',
       default	=> 'This is not a EL Distro',
     }
   }
