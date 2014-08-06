@@ -1,9 +1,9 @@
 @echo on 
 
 :inst_chocolatey
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%systemdrive%\chocolatey\bin || goto :inst_chocolatey
-REM call c:\Chocolatey\bin\cinst -force puppet
-call c:\Chocolatey\bin\cinst -force git
-call c:\Chocolatey\bin\cinst -force python.x86 -version 2.7.4
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%systemdrive%\ProgramData\chocolatey\bin || goto :inst_chocolatey
+REM call C:\ProgramData\chocolatey\bin\cinst -force puppet
+call C:\ProgramData\chocolatey\bin\cinst -force git
+call C:\ProgramData\chocolatey\bin\cinst -force python.x86 -version 2.7.4
 REM Removing easy.install due to pip requiring different versions of setuptools on some python modules of openstack
-REM call c:\Chocolatey\bin\cinst -force easy.install
+REM call C:\ProgramData\chocolatey\bin\cinst -force easy.install
