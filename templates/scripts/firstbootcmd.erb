@@ -2,8 +2,8 @@
 
 :inst_chocolatey
 del c:\inst-chocolatey.ps1
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "while(-not [IO.File]::Exists('c:\inst-chocolatey.ps1')){((new-object net.webclient).DownloadFile('https://chocolatey.org/install.ps1','c:\inst-chocolatey.ps1'))}"
-@(powershell -NoProfile -ExecutionPolicy unrestricted -Command "c:\inst-chocolatey.ps1" & del c:\inst-chocolatey.ps1) || goto :inst_chocolatey
+powershell -NoProfile -ExecutionPolicy unrestricted -Command "while(-not [IO.File]::Exists('c:\inst-chocolatey.ps1')){((new-object net.webclient).DownloadFile('https://chocolatey.org/install.ps1','c:\inst-chocolatey.ps1'))}"
+powershell -NoProfile -ExecutionPolicy unrestricted -Command "c:\inst-chocolatey.ps1" || goto :inst_chocolatey
 REM call C:\ProgramData\chocolatey\bin\cinst -force puppet
 call C:\ProgramData\chocolatey\bin\cinst -force git
 REM call C:\ProgramData\chocolatey\bin\cinst -force python.x86 -version 2.7.6
