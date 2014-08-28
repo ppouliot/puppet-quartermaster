@@ -1,5 +1,5 @@
 echo '### INSTALLING PUPPETLABS APT REPO ###'
-wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+cd /tmp && wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
 
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'

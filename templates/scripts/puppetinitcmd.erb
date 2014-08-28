@@ -1,12 +1,14 @@
 @echo on
 
 REM Short ping check.  Because 5 seconds is a small price to pay for an easy debugging aide.
-@ping <%= @fqdn %>
+@ping quartermaster.openstack.tld
 
-REM call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --debug --trace --verbose --test --waitforcert 60 --server <%= @fqdn %> 
-REM call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --trace --test --waitforcert 60 --server <%= @fqdn %> 
+REM call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --debug --trace --verbose --test --waitforcert 60 --server quartermaster.openstack.tld
+REM call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --trace --test --waitforcert 60 --server quartermaster.openstack.tld
+REM call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent -t --server quartermaster.openstack.tld
+net start puppet
 
 REM Reboot to apply paths and bits that need such.  This should let the puppet service run clean after the reboot.
 shutdown -r -t 420
 
-start Powershell -File C:\log.ps1
+REM start Powershell -File C:\log.ps1
