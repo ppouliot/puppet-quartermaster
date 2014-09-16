@@ -41,6 +41,8 @@ define quartermaster::pxe {
       }
     }
     'fedora':{
+      $supported_endpoint = '18'
+      $archived_endpoint  = '17'
       if $release <= $archived_endpoint {
         $use_archive = 'true'
       }
@@ -48,30 +50,28 @@ define quartermaster::pxe {
         $use_archive = 'false'
       }
 
-      $supported_endpoint = '18'
-      $archived_endpoint  = '17'
       $fedora_url = $use_archive ? {
         /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
         /(false)/  => 'http://dl.fedoraproject.org/pub',
       }
     }
     'opensuse':{
+      $supported_endpoint = '12.3'
+      $archived_endpoint  = '12.2'
       if $release <= $archived_endpoint {
         $use_archive = 'true'
       }
       if $release >= $supported_endpoint {
         $use_archive = 'false'
       }
-
-      $supported_endpoint = '12.2'
-      $archived_endpoint  = '12.3'
       $opensuse_url = $use_archive ? {
         /(true)/   => "http://ftp.gwdg.de/pub/opensuse/discontinued/distribution",
         /(false)/  => "http://download.opensuse.org/distribution",
       }
     }
     default:{
-      $archived_endpoint = '0'
+      $use_archive        = undef
+      $archived_endpoint  = '0'
       $supported_endpoint = $release
     }
   }
@@ -90,7 +90,7 @@ define quartermaster::pxe {
     /(13.04)/     => 'raring',
     /(13.10)/     => 'saucy',
     /(14.04)/     => 'trusty',
-    /(oldstable)/ => 'squeeze',
+#    /(oldstable)/ => 'squeeze',
     /(stable)/    => 'wheezy',
     /(testing)/   => 'jessie',
     /(unstable)/  => 'sid',
