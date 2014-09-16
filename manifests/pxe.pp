@@ -90,7 +90,7 @@ define quartermaster::pxe {
     /(13.04)/     => 'raring',
     /(13.10)/     => 'saucy',
     /(14.04)/     => 'trusty',
-#    /(oldstable)/ => 'squeeze',
+    /(oldstable)/ => 'squeeze',
     /(stable)/    => 'wheezy',
     /(testing)/   => 'jessie',
     /(unstable)/  => 'sid',
