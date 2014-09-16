@@ -31,6 +31,11 @@ linux:
     - opensuse-12.3-x86_64
     - opensuse-13.1-x86_64
     - debian-stable-amd64
+    - debian-stable-i386
+    - debian-unstable-amd64
+    - debian-unstable-i386
+    - debian-testing-amd64
+    - debian-testing-i386
 #windows:
 #  en_windows_server_2012_x64_dvd_915478.iso:
 #    activationkey: 4NKQB-MB2PD-TPTM3-8MHJ2-GQ4G9
