@@ -30,6 +30,8 @@ linux:
     - opensuse-12.2-x86_64
     - opensuse-12.3-x86_64
     - opensuse-13.1-x86_64
+    - debian-oldstable-amd64
+    - debian-oldstable-i386
     - debian-stable-amd64
     - debian-stable-i386
     - debian-unstable-amd64
