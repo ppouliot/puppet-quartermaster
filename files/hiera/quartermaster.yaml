@@ -40,16 +40,16 @@ linux:
     - debian-testing-i386
 #windows:
 #  en_windows_server_2012_x64_dvd_915478.iso:
-#    activationkey: 4NKQB-MB2PD-TPTM3-8MHJ2-GQ4G9
+#    activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 #  en_microsoft_hyper-v_server_2012_x64_dvd_915600.iso:
 #    activationkey: undef
 #  en_windows_8_enterprise_x64_dvd_917522.iso:
-#    activationkey: 3NQRY-FXT64-8MJJP-MVKJQ-6273P
+#    activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 #  en_windows_8_enterprise_x86_dvd_917587.iso:
-#    activationkey: 3NQRY-FXT64-8MJJP-MVKJQ-6273P
+#    activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 #  en_microsoft_hyper-v_server_2012_r2_x64_dvd_2708236.iso:
 #    activationkey: undef
 #  en_windows_server_2012_r2_x64_dvd_2707946.iso:
-#    activationkey: MN2XX-JTMHX-9X2KR-8P3RR-R3JGB
+#    activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 #  en_windows_8_1_enterprise_x64_dvd_2971902.iso:
-#    activationkey: 37QPN-XW7RV-7CJXP-BQXM3-GF27D
+#    activationkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
