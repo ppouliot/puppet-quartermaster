@@ -1,9 +1,15 @@
-echo '### INSTALLING PUPPETLABS APT REPO ###'
-cd /tmp && wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+# this is a debian/ubuntu specific command
+release=`lsb_release -c | awk '{print $2}'`
 
+echo '### INSTALLING PUPPETLABS APT REPO ###'
+wget http://apt.puppetlabs.com/puppetlabs-release-$release.deb; dpkg -i puppetlabs-release-$release.deb
+if [ $? $test -eq 1 ]; then
+   echo "Could not find puppetlabs release for $release.  Trying alternative."
+   wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+fi
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
-apt-get update -y && apt-get install -y openssh-server git puppet ruby1.9.1 ruby1.9.1-dev rubygems
+apt-get update -y && apt-get install -y openssh-server git puppet ruby ruby-dev
 
 echo "### INSTALLING Q's PUPPETFILE INTO /etc/puppet ###"
 wget https://raw.github.com/openstack-hyper-v/puppet-quartermaster/master/Puppetfile -O /etc/puppet/Puppetfile

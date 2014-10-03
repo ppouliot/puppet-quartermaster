@@ -22,42 +22,57 @@ define quartermaster::pxe {
     $rel_minor = $2
   }
 
-  # Begin Tests to deal with centos point release issues
-  $is_centos = $distro ? {
-    /(centos)/   => 'true',
-    default      => 'This is not centos',  
-  }
 
-  if $is_centos == 'true' {
-   $centos_legacy = $rel_minor ? {
-      /(0|1|2|3)/ => 'true',
-      /(4)/       => 'false',
-      default	=> 'This is not a EL Distro',
+  case $distro {
+
+    'centos':{
+      $supported_endpoint = '6.5'
+      $archived_endpoint  = '6.4'
+      if $release <= $archived_endpoint {
+        $use_archive = 'true'
+      }
+      if $release >= $supported_endpoint {
+        $use_archive = 'false'
+      }
+
+      $centos_url = $use_archive ? {
+        /(true)/   => "http://vault.centos.org/${release}",
+        /(false)/  => "http://mirror.centos.org/centos/${rel_major}",
+      }
     }
-  }
+    'fedora':{
+      $supported_endpoint = '18'
+      $archived_endpoint  = '17'
+      if $release <= $archived_endpoint {
+        $use_archive = 'true'
+      }
+      if $release >= $supported_endpoint {
+        $use_archive = 'false'
+      }
 
-  if $is_centos == 'true' {
-     $centos_url = $centos_legacy ? {
-      /(true)/   => "http://vault.centos.org/${release}",
-      /(false)/  => "http://mirror.centos.org/centos/${rel_major}",
+      $fedora_url = $use_archive ? {
+        /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
+        /(false)/  => 'http://dl.fedoraproject.org/pub',
+      }
     }
-  }
-
-  # Tests to determine fedora versioning to enable proper download repos
-  $is_fedora = $distro ? {
-    /(fedora)/   => 'true',
-    default      => 'This is not fedora',  
-  }
-  if ( $is_fedora == 'true') and ($release < 18) {
-      $fedora_legacy = 'true'
-  }
-  if ( $is_fedora == 'true') and ($release >= 18) {
-      $fedora_legacy = 'false'
-  }
-  if $is_fedora == 'true' {
-     $fedora_url = $fedora_legacy ? {
-      /(true)/   => "http://archives.fedoraproject.org/pub/archive",
-      /(false)/  => "http://dl.fedoraproject.org/pub",
+    'opensuse':{
+      $supported_endpoint = '12.3'
+      $archived_endpoint  = '12.2'
+      if $release <= $archived_endpoint {
+        $use_archive = 'true'
+      }
+      if $release >= $supported_endpoint {
+        $use_archive = 'false'
+      }
+      $opensuse_url = $use_archive ? {
+        /(true)/   => "http://ftp.gwdg.de/pub/opensuse/discontinued/distribution",
+        /(false)/  => "http://download.opensuse.org/distribution",
+      }
+    }
+    default:{
+      $use_archive        = undef
+      $archived_endpoint  = '0'
+      $supported_endpoint = $release
     }
   }
 
@@ -68,16 +83,17 @@ define quartermaster::pxe {
   }
 
   $rel_name = $release ? {
-    /(11.04)/    => 'natty',
-    /(11.10)/    => 'oneric',
-    /(12.04)/    => 'precise',
-    /(12.10)/    => 'quantal',
-    /(13.04)/    => 'raring',
-    /(13.10)/    => 'saucy',
-    /(14.04)/    => 'trusty',
-    /(stable)/   => 'squeeze',
-    /(testing)/  => 'wheezy',
-    /(unstable)/ => 'sid',
+    /(11.04)/     => 'natty',
+    /(11.10)/     => 'oneric',
+    /(12.04)/     => 'precise',
+    /(12.10)/     => 'quantal',
+    /(13.04)/     => 'raring',
+    /(13.10)/     => 'saucy',
+    /(14.04)/     => 'trusty',
+    /(oldstable)/ => 'squeeze',
+    /(stable)/    => 'wheezy',
+    /(testing)/   => 'jessie',
+    /(unstable)/  => 'sid',
     default      => "Unsupported ${distro} Release",
   }
 
@@ -94,7 +110,7 @@ define quartermaster::pxe {
     /(redhat)/          => 'Enterprise ISO Required',
     /(sles)/            => 'Enterprise ISO Required',
     /(sled)/            => 'Enterprise ISO Required',
-    /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
+    /(opensuse)/        => "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader",
     default             => 'No URL Specified',
   }
 
