@@ -12,5 +12,5 @@ setx PATH "!PATH!" /M
 
 endlocal
 
-reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v "!postboot2" /t REG_SZ /d "cmd /c c:\puppetinit.cmd"
+reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /f /v "!postboot2" /t REG_SZ /d "cmd /c c:\puppetinit.cmd"
 shutdown -r -t 5

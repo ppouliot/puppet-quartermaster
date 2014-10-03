@@ -10,4 +10,4 @@ REM call C:\ProgramData\chocolatey\bin\cinst -force python.x86 -version 2.7.6
 REM Removing easy.install due to pip requiring different versions of setuptools on some python modules of openstack
 REM call c:\Chocolatey\bin\cinst -force easy.install
 
-reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v "!postboot1" /t REG_SZ /d "cmd /c c:\secondboot.cmd"
+reg.exe add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /f /v "!postboot1" /t REG_SZ /d "cmd /c c:\secondboot.cmd"
