@@ -26,35 +26,25 @@
 #    quartermaster::windowsmedia{"en_windows_8_enterprise_x86_dvd_917587.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
 # }
 #
-class quartermaster{
-  $tmp               = '/tmp'
-  $logroot           = '/var/log/quartermaster'
-  $tftpboot          = '/srv/tftpboot'
-  $wwwroot           = '/srv/install'
-  $nfsroot           = '/srv/nfs'
-  $bin               = "${wwwroot}/bin"
-  $puppetmaster_fqdn = "${fqdn}"
-  $exe_mode          = '0777'
-  $file_mode         = '0644'
-  $dir_mode          = '0755'
-  $counter           = '0'
-  $nameserver        = '4.2.2.2'
-  $linux = hiera('linux',{})
-  $windows = hiera('windows',{})
+class quartermaster (
+  $linux   = $quartermaster::params::linux,
+  $windows = $quartermaster::params::windows
+) inherits quartermasterf::params {
 
-  class{'apt':}
-  class { 'quartermaster::commands': }
-  class { 'quartermaster::www': }
-  class { 'quartermaster::puppetmaster': }
-  class { 'quartermaster::squid_deb_proxy': }
-  class { 'quartermaster::dnsmasq': }
+#  class{'apt':}
+#  class { 'quartermaster::commands': }
+
+#  class { 'quartermaster::www': }
+#  class { 'quartermaster::puppetmaster': }
+#  class { 'quartermaster::squid_deb_proxy': }
+#  class { 'quartermaster::dnsmasq': }
   class { 'quartermaster::tftpd': }
-  class { 'quartermaster::syslinux': }
-  class { 'quartermaster::nfs': }
-  class { 'quartermaster::winpe': }
-  class { 'quartermaster::scripts': }
+#  class { 'quartermaster::syslinux': }
+#  class { 'quartermaster::nfs': }
+#  class { 'quartermaster::winpe': }
+#  class { 'quartermaster::scripts': }
 
-  quartermaster::pxe{$linux:}
-  create_resources(quartermaster::windowsmedia,$windows)
+#  quartermaster::pxe{$linux:}
+#  create_resources(quartermaster::windowsmedia,$windows)
 
 }
