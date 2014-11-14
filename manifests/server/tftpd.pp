@@ -1,4 +1,4 @@
-# Class: quartermaster::tftpd
+#Class: quartermaster::server::tftpd
 #
 # Installs and configures tftpd-hpa for use by pxe
 # Also handles naming rules for winpe pxeboot environment
