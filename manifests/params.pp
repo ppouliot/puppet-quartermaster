@@ -6,7 +6,8 @@ class quartermaster::params {
 
   $tmp               = '/tmp'
   $logroot           = '/var/log/quartermaster'
-  $tftpboot          = '/srv/quartermaster/tftpboot'
+#  $tftpboot          = '/srv/quartermaster/tftpboot'
+  $tftpboot          = $::tftp::params::directory
   $wwwroot           = '/srv/quartermaster/install'
   $nfsroot           = '/srv/quartermaster/nfs'
   $bin               = "${wwwroot}/bin"
@@ -18,5 +19,14 @@ class quartermaster::params {
   $nameserver        = '4.2.2.2'
   $linux = hiera('linux',{})
   $windows = hiera('windows',{})
+
+
+  case $osfamily {
+    'Debian':{}
+    'RedHat':{}
+    default:{
+      warning("quartermaster: $osfamily is not currently supported")
+    }
+  }
 
 }
