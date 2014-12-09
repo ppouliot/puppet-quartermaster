@@ -29,22 +29,22 @@
 class quartermaster (
   $linux   = $quartermaster::params::linux,
   $windows = $quartermaster::params::windows
-) inherits quartermasterf::params {
+) inherits quartermaster::params {
 
-#  class{'apt':}
-#  class { 'quartermaster::commands': }
+  class{'apt':}
+  class { 'quartermaster::commands': }
 
-#  class { 'quartermaster::www': }
-#  class { 'quartermaster::puppetmaster': }
-#  class { 'quartermaster::squid_deb_proxy': }
-#  class { 'quartermaster::dnsmasq': }
+  class { 'quartermaster::www': }
+  class { 'quartermaster::puppetmaster': }
+  class { 'quartermaster::squid_deb_proxy': }
+  class { 'quartermaster::dnsmasq': }
   class { 'quartermaster::tftpd': }
-#  class { 'quartermaster::syslinux': }
-#  class { 'quartermaster::nfs': }
-#  class { 'quartermaster::winpe': }
-#  class { 'quartermaster::scripts': }
+  class { 'quartermaster::syslinux': }
+  class { 'quartermaster::nfs': }
+  class { 'quartermaster::winpe': }
+  class { 'quartermaster::scripts': }
 
-#  quartermaster::pxe{$linux:}
-#  create_resources(quartermaster::windowsmedia,$windows)
+  quartermaster::pxe{$linux:}
+  create_resources(quartermaster::windowsmedia,$windows)
 
 }
