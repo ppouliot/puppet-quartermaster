@@ -3,7 +3,7 @@
 # This Class and configures installs nfs on the quartermaster server
 #
 
-class quartermaster::nfs (
+class quartermaster::server::nfs (
   $nfsroot = $quartermaster::params::nfsroot,
 ) inherits quartermaster::params {
 
@@ -24,5 +24,4 @@ class quartermaster::nfs (
     group   => 'nogroup',
     mode    => '0755',
   }
-
 }
