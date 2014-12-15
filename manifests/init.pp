@@ -38,7 +38,7 @@ class quartermaster (
   class { 'quartermaster::puppetmaster': }
   class { 'quartermaster::squid_deb_proxy': }
   class { 'quartermaster::dnsmasq': }
-  class { 'quartermaster::tftpd': }
+  class { 'quartermaster::server::tftpd': }
   class { 'quartermaster::syslinux': }
   class { 'quartermaster::nfs': }
   class { 'quartermaster::winpe': }
