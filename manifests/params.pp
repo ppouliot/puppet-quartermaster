@@ -29,4 +29,5 @@ class quartermaster::params {
     }
   }
 
+  include tftp::params
 }

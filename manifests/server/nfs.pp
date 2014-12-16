@@ -15,10 +15,10 @@ class quartermaster::server::nfs (
   }
 
   file { ["${nfsroot}",
-         "${nfsroot}\hosts",
-         "${nfsroot}\hosts\hiera",
-         "${nfsroot}\hosts\pxefiles",
-         "${nfsroot}\hardware"]:
+         "${nfsroot}/hosts",
+         "${nfsroot}/hosts/hiera",
+         "${nfsroot}/hosts/pxefiles",
+         "${nfsroot}/hardware"]:
     ensure  => 'directory',
     owner   => 'nobody',
     group   => 'nogroup',
