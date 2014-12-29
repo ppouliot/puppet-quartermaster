@@ -32,6 +32,4 @@ class quartermaster::params {
       warning("quartermaster: $osfamily is not currently supported")
     }
   }
-
-  include tftp::params
 }
