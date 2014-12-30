@@ -5,15 +5,15 @@
 # on the quartermaster node
 #
 
-class quartermaster::www (
+class quartermaster::server::www (
 
-  $wwwroot = quartermaster::params::wwwroot,
-  $logroot = quartermaster::params::logroot,
+  $wwwroot = $quartermaster::params::wwwroot,
+  $logroot = $quartermaster::params::logroot,
 
 ) inherits quartermaster::params {
 
   include 'apache'
-  apache::vhost {$::module_name:
+  apache::vhost {'quartermaster':
     priority   => '10',
     vhost_name => $::ipaddress,
     port       => 80,

@@ -10,10 +10,9 @@ class quartermaster::params {
 
   $tmp               = '/tmp'
   $logroot           = '/var/log/quartermaster'
-#  $tftpboot          = '/srv/quartermaster/tftpboot'
   $tftpboot          = $tftp::params::directory
-  $wwwroot           = '/srv/quartermaster/install'
-  $nfsroot           = '/srv/quartermaster/nfs'
+  $wwwroot           = $apache::params::docroot
+  $nfsroot           = '/srv'
   $bin               = "${wwwroot}/bin"
   $puppetmaster_fqdn = "${fqdn}"
   $exe_mode          = '0777'
