@@ -2,6 +2,7 @@ class quartermaster::params {
 
   # Include Params from other modules so we can use them here
   include tftp::params
+  include apache::params
 
   $arp_type = '01'
   $host_macaddress = regsubst($macaddress, '(\:)','-','G')
