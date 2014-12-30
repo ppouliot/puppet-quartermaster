@@ -8,11 +8,15 @@ class quartermaster::server::nfs (
 ) inherits quartermaster::params {
 
   notify {'Exporting Installation Directories via NFS':}
-  include nfs::server
-  nfs::server::export{ $nfsroot:
-    ensure  => 'mounted',
-    clients => '*(rw,insecure,all_squash,no_subtree_check,nohide)',
+  class {'nfs::server':
+    nfs_v4             => false,
+    nfs_v4_export_root => $nfsroot,
   }
+#  include nfs::server
+#  nfs::server::export{ $nfsroot }
+#    ensure  => 'mounted',
+#    clients => '*(rw,insecure,all_squash,no_subtree_check,nohide)',
+#  }
 
   file { ["${nfsroot}",
          "${nfsroot}/hosts",

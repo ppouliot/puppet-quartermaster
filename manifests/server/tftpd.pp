@@ -14,6 +14,8 @@
 
 class quartermaster::server::tftpd () inherits quartermaster::params {
 
+
+
   notify {'Creating tftp.rules file to support booting WinPE':}
   file { 'tftpd_rules':
     path     => '/etc/tftpd.rules',
