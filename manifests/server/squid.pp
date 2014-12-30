@@ -31,7 +31,7 @@ class quartermaster::server::squid () inherits quartermaster::params {
 
     ],
     http_access => [
-      'allow manager localhost',
+#      'allow manager localhost',
       'deny manager',
       'deny !Safe_ports',
       'deny CONNECT !SSL_ports',
