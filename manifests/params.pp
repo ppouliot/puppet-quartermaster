@@ -21,6 +21,10 @@ class quartermaster::params {
   $dir_mode          = '0755'
   $counter           = '0'
   $nameserver        = '4.2.2.2'
+
+  $dhcp_proxy_subnets = []
+
+
   $linux = hiera('linux',{})
   $windows = hiera('windows',{})
 

@@ -9,6 +9,7 @@
 
 # Install DNSMasq
 class quartermaster::server::dnsmasq (
+  $dhcp_proxy_subnet = $quartermaster::params::dhcp_proxy_subnet
 ) inherits quartermaster::params {
 
   package { 'dnsmasq':
