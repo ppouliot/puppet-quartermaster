@@ -16,7 +16,7 @@ class quartermaster::server::syslinux (
 ) inherits quartermaster::params {
 
   # Syslinux Staging
-  staging::file{ $syslinux:
+  staging::file { "syslinux-${syslinux_ver}.tar.xz":
     source => "${syslinux_url}/syslinux-${syslinux_ver}.tar.gz"
   }
   # Syslinux Extraction
