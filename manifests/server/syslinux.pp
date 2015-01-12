@@ -6,19 +6,17 @@
 
 class quartermaster::server::www (
 
-  $pxeroot  = $quartermaster::params::pxeroot,
-  $pxecfg   = $quartermaster::params::pxecfg,
-  $pxe_menu = $quartermaster::params::pxe_menu,
+  $pxeroot      = $quartermaster::params::pxeroot,
+  $pxecfg       = $quartermaster::params::pxecfg,
+  $pxe_menu     = $quartermaster::params::pxe_menu,
+  $syslinux_url = $quartermaster::params::syslinux_url,
+  $syslinux_ver = $quartermaster::params::syslinux_ver,
 
 ) inherits quartermaster::params {
 
-  include 'apache'
-  apache::vhost {'quartermaster':
-    priority   => '10',
-    vhost_name => $::ipaddress,
-    port       => 80,
-    docroot    => $wwwroot,
-    logroot    => $logroot,
+  # Syslinux Staging
+  staging::file{ $syslinux:
+    source => "${syslinux_url}/syslinux-${syslinux_ver}.tar.xz"
   }
 
 }
