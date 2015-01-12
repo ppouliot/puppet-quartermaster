@@ -17,13 +17,13 @@ class quartermaster::server::syslinux (
 
   # Syslinux Staging
   staging::file{ $syslinux:
-    source => "${syslinux_url}/syslinux-${syslinux_ver}.tar.xz"
+    source => "${syslinux_url}/syslinux-${syslinux_ver}.tar.gz"
   }
   # Syslinux Extraction
   staging::extract { "syslinux-${syslinux_ver}.tar.xz":
     target  => "${tmp}/${syslinux}",
     creates => "${tmp}/${syslinux}",
-    require => Staging::File["syslinux-${syslinux_ver}.tar.xz"],
+    require => Staging::File["syslinux-${syslinux_ver}.tar.gz"],
   }
 
 }
