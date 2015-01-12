@@ -11,7 +11,12 @@
 # Sample Usage:
 # Example: Usage at Node.
 # node foo {
-#    class{quartermaster: }:
+#    class{quartermaster:
+#      dhcp_proxy_subnet => ['192.168.1.1',
+#         'fr myip 192.168.1.2',
+#         'office src 10.0.0.0/24',
+#       ],
+# }
 #    quartermaster::pxe{"fedora-17-x86_64":}
 #    quartermaster::pxe{"fedora-16-i386":}
 #    quartermaster::pxe{"ubuntu-12.04-amd64":}
@@ -29,6 +34,8 @@
 class quartermaster (
   $linux   = $quartermaster::params::linux,
   $windows = $quartermaster::params::windows
+  dhcp_proxy_subnet => [],
+
 ) inherits quartermaster::params {
 
   class{'apt':}

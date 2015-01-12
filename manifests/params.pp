@@ -12,7 +12,7 @@ class quartermaster::params {
   $tmp               = '/tmp'
   $logroot           = '/var/log/quartermaster'
   $tftpboot          = $tftp::params::directory
-  $wwwroot           = $apache::params::docroot
+  $wwwroot           = $::docroot
   $nfsroot           = '/srv'
   $bin               = "${wwwroot}/bin"
   $puppetmaster_fqdn = "${fqdn}"
