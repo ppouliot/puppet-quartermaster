@@ -4,8 +4,9 @@
 # require for pxebooting
 #
 
-class quartermaster::server::www (
+class quartermaster::server::syslinux (
 
+  $tmp          = $quartermaster::params::tmp,
   $pxeroot      = $quartermaster::params::pxeroot,
   $pxecfg       = $quartermaster::params::pxecfg,
   $pxe_menu     = $quartermaster::params::pxe_menu,
@@ -17,6 +18,12 @@ class quartermaster::server::www (
   # Syslinux Staging
   staging::file{ $syslinux:
     source => "${syslinux_url}/syslinux-${syslinux_ver}.tar.xz"
+  }
+  # Syslinux Extraction
+  staging::extract { "syslinux-${syslinux_ver}.tar.xz":
+    target  => "${tmp}/${syslinux}",
+    creates => "${tmp}/${syslinux}",
+    require => Staging::File["syslinux-${syslinux_ver}.tar.xz"],
   }
 
 }
