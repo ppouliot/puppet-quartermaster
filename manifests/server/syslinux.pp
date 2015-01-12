@@ -51,4 +51,37 @@ class quartermaster::server::syslinux (
     source  => "${tmp}/${syslinux}/com32/elflink/ldlinux/ldlinux.c32",
   }
 
+  concat {"${pxecfg}/default":
+    owner   => 'tftp',
+    group   => 'tftp',
+    mode    => $quartermaster::file_mode,
+  }
+
+  concat::fragment{"default_header":
+    target  => "${pxecfg}/default",
+    content => template("quartermaster/pxemenu/header.erb"),
+    order   => 01,
+  }
+
+  concat::fragment{"default_localboot":
+    target  => "${pxecfg}/default",
+    content => template("quartermaster/pxemenu/localboot.erb"),
+    order   => 01,
+  }
+
+
+  tftp::file {'pxelinux/pxelinux.cfg/graphics_cfg':
+    content =>"
+menu width 80
+menu margin 10
+menu passwordmargin 3
+menu rows 12
+menu tabmsgrow 18
+menu cmdlinerow 18
+menu endrow 24
+menu passwordrow 11
+",
+  }
+
+
 }
