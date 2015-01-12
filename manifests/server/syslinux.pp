@@ -16,14 +16,16 @@ class quartermaster::server::syslinux (
 ) inherits quartermaster::params {
 
   # Syslinux Staging
-  staging::file { "syslinux-${syslinux_ver}.tar.xz":
+ # staging::file { "syslinux-${syslinux_ver}.tar.xz":
+  staging::deploy { "syslinux-${syslinux_ver}.tar.xz":
     source => "${syslinux_url}/syslinux-${syslinux_ver}.tar.gz"
+    target  => $tmp,
   }
   # Syslinux Extraction
-  staging::extract { "syslinux-${syslinux_ver}.tar.xz":
-    target  => "${tmp}/${syslinux}",
-    creates => "${tmp}/${syslinux}",
-    require => Staging::File["syslinux-${syslinux_ver}.tar.gz"],
-  }
+#  staging::extract { "syslinux-${syslinux_ver}.tar.xz":
+#    target  => "${tmp}/${syslinux}",
+#    creates => "${tmp}/${syslinux}",
+#    require => Staging::File["syslinux-${syslinux_ver}.tar.gz"],
+#  }
 
 }
