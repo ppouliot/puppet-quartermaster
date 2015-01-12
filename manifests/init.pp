@@ -33,10 +33,8 @@
 #
 class quartermaster (
   $linux   = $quartermaster::params::linux,
-  $windows = $quartermaster::params::windows
+  $windows = $quartermaster::params::windows,
   $dhcp_proxy_subnet = $quartermaster::params::dhcp_proxy_subnet,
-
-
 ) inherits quartermaster::params {
 
   class{'apt':}
