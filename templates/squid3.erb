@@ -1,0 +1,74 @@
+acl manager proto cache_object
+acl localhost src 127.0.0.1/32 ::1
+acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
+acl SSL_ports port 443
+acl Safe_ports port 80      # http
+acl Safe_ports port 21      # ftp
+acl Safe_ports port 443     # https
+acl Safe_ports port 70      # gopher
+acl Safe_ports port 210     # wais
+acl Safe_ports port 1025-65535  # unregistered ports
+acl Safe_ports port 280     # http-mgmt
+acl Safe_ports port 488     # gss-http
+acl Safe_ports port 591     # filemaker
+acl Safe_ports port 777     # multiling http
+acl CONNECT method CONNECT
+acl internal_network src $INT_IFACE_NETWORK/$INT_IFACE_MASK_BITS
+
+acl windowsupdate dstdomain windowsupdate.microsoft.com
+acl windowsupdate dstdomain .update.microsoft.com
+acl windowsupdate dstdomain download.windowsupdate.com
+acl windowsupdate dstdomain redir.metaservices.microsoft.com
+acl windowsupdate dstdomain images.metaservices.microsoft.com
+acl windowsupdate dstdomain c.microsoft.com
+acl windowsupdate dstdomain www.download.windowsupdate.com
+acl windowsupdate dstdomain wustat.windows.com
+acl windowsupdate dstdomain crl.microsoft.com
+acl windowsupdate dstdomain sls.microsoft.com
+acl windowsupdate dstdomain productactivation.one.microsoft.com
+acl windowsupdate dstdomain ntservicepack.microsoft.com
+acl wuCONNECT dstdomain www.update.microsoft.com
+acl wuCONNECT dstdomain sls.microsoft.com
+
+# Make sure to have enough disk space for the cache (60GB)
+cache_dir ufs /var/spool/squid3 61440 16 256
+
+range_offset_limit 4000 MB windowsupdate
+maximum_object_size 4000 MB
+quick_abort_min -1
+
+cache_peer localhost parent $APT_CACHER_PORT 7 proxy-only no-query no-netdb-exchange connect-timeout=15
+acl aptget browser -i apt-get apt-http apt-cacher apt-proxy yum
+acl deburl urlpath_regex /(Packages|Sources|Release|Translations-.*)\(.(gpg|gz|bz2))?$ /pool/.*/.deb$ /(Sources|Packages).diff/ /dists/[^/]*/[^/]*/(binary-.*|source)/.
+cache_peer_access localhost allow aptget
+cache_peer_access localhost allow deburl
+cache_peer_access localhost deny all
+
+http_access allow manager localhost
+http_access deny manager
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+
+http_access allow localhost
+http_access allow internal_network
+
+http_access allow CONNECT wuCONNECT internal_network
+http_access allow CONNECT wuCONNECT localhost
+http_access allow windowsupdate internal_network
+http_access allow windowsupdate localhost
+
+http_access deny all
+
+http_port $PROXY_PORT transparent
+
+coredump_dir /var/spool/squid3
+
+refresh_pattern -i .*microsoft\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf) 129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private
+refresh_pattern -i .*windowsupdate\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf) 129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private
+refresh_pattern -i .*windows\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf) 129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private
+
+refresh_pattern ^ftp:       1440    20% 10080
+refresh_pattern ^gopher:    1440    0%  1440
+refresh_pattern -i (/cgi-bin/|\?) 0 0%  0
+refresh_pattern (Release|Packages(.gz)*)$      0       20%     2880
+refresh_pattern .       0   20% 4320
