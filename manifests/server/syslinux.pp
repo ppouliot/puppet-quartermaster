@@ -6,13 +6,20 @@
 
 class quartermaster::server::syslinux (
 
-  $tmp          = $quartermaster::params::tmp,
-  $pxeroot      = $quartermaster::params::pxeroot,
-  $pxecfg       = $quartermaster::params::pxecfg,
-  $pxe_menu     = $quartermaster::params::pxe_menu,
-  $syslinux     = $quartermaster::params::syslinux,
-  $syslinux_url = $quartermaster::params::syslinux_url,
-  $syslinux_ver = $quartermaster::params::syslinux_ver,
+  $tmp            = $quartermaster::params::tmp,
+  $pxeroot        = $quartermaster::params::pxeroot,
+  $pxecfg         = $quartermaster::params::pxecfg,
+  $pxe_menu       = $quartermaster::params::pxe_menu,
+  $syslinux       = $quartermaster::params::syslinux,
+  $syslinux_url   = $quartermaster::params::syslinux_url,
+  $syslinux_ver   = $quartermaster::params::syslinux_ver,
+  $tftp_username  = $quartermaster::params::tftp_username,
+  $tftp_group     = $quartermaster::params::tftp_group,
+  $tftp_filemode  = $quartermaster::params::tftp_filemode,
+  $www_username   = $quartermaster::params::www_username,
+  $www_group      = $quartermaster::params::www_group,
+  $file_mode      = $quartermaster::params::file_mode,
+
 
 ) inherits quartermaster::params {
 
@@ -23,8 +30,8 @@ class quartermaster::server::syslinux (
     creates => "${tmp}/${syslinux}",
   }
   Tftp::File{
-    owner   => 'tftp',
-    group   => 'tftp',
+    owner   => $tftp_username,
+    group   => $tftp_group,
     require => [
       Staging::Deploy["${syslinux}.tar.gz"],
       Tftp::File['pxelinux']
@@ -52,9 +59,9 @@ class quartermaster::server::syslinux (
   }
 
   concat {"${pxecfg}/default":
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
+    owner   => $tftp_username,
+    group   => $tftp_group,
+    mode    => $file_mode,
   }
 
   concat::fragment{"default_header":
