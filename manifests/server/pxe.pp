@@ -4,18 +4,18 @@
 #
 
 
-define quartermaster::server::pxe (
+define quartermaster::server::pxe {
 
-  $wwwroot        = $quartermaster::params::wwwroot,
-  $tftpboot       = $quartermaster::params::tftpboot,
-  $tftp_username  = $quartermaster::params::tftp_username,
-  $tftp_group     = $quartermaster::params::tftp_group,
-  $tftp_filemode  = $quartermaster::params::tftp_filemode,
-  $www_username   = $quartermaster::params::www_username,
-  $www_group      = $quartermaster::params::www_group,
+  $wwwroot        = $quartermaster::params::wwwroot
+  $tftpboot       = $quartermaster::params::tftpboot
+  $tftp_username  = $quartermaster::params::tftp_username
+  $tftp_group     = $quartermaster::params::tftp_group
+  $tftp_filemode  = $quartermaster::params::tftp_filemode
+  $www_username   = $quartermaster::params::www_username
+  $www_group      = $quartermaster::params::www_group
   $file_mode      = $quartermaster::params::file_mode
 
-) inherits quartermaster::params {
+
 
 # account for "."
   if $name =~ /([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)/ {
@@ -267,7 +267,7 @@ define quartermaster::server::pxe (
     command => "/usr/bin/wget -c ${splashurl}  -O ${name}${bootsplash}",
     cwd     => "${tftpboot}/${distro}/graphics",
     creates => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
-    require =>  Tftp::File["${distro}/graphics}"],
+    require =>  Tftp::File["${distro}/graphics"],
   }
 
 
@@ -300,19 +300,8 @@ define quartermaster::server::pxe (
     }
   }
 
-
-  if ! defined (File[
-    "${wwwroot}/${distro}",
-    "${wwwroot}/${distro}/${autofile}",
-    "${wwwroot}/${distro}/${p_arch}",
-    "${wwwroot}/${distro}/ISO",
-  ]) {
-    file { [
-    "${wwwroot}/${distro}",
-    "${wwwroot}/${distro}/${autofile}",
-    "${wwwroot}/${distro}/${p_arch}",
-    "${wwwroot}/${distro}/ISO",
-    ]:
+  if ! defined (File["${wwwroot}/${distro}"]) {
+    file { "${wwwroot}/${distro}":
       ensure  => directory,
       owner   => $www_username,
       group   => $www_group,
@@ -321,6 +310,35 @@ define quartermaster::server::pxe (
     }
   }
 
+  if ! defined (File["${wwwroot}/${distro}/${autofile}"]) {
+    file { "${wwwroot}/${distro}/${autofile}":
+      ensure  => directory,
+      owner   => $www_username,
+      group   => $www_group,
+      mode    => $tftp_mode,
+      require => File[ "${wwwroot}/${distro}" ],
+    }
+  }
+
+  if ! defined (File["${wwwroot}/${distro}/${p_arch}"]) {
+    file { "${wwwroot}/${distro}/${p_arch}":
+      ensure  => directory,
+      owner   => $www_username,
+      group   => $www_group,
+      mode    => $tftp_mode,
+      require => File[ "${wwwroot}/${distro}" ],
+    }
+  }
+
+  if ! defined (File["${wwwroot}/${distro}/ISO"]) {
+    file { "${wwwroot}/${distro}/ISO":
+      ensure  => directory,
+      owner   => $www_username,
+      group   => $www_group,
+      mode    => $tftp_mode,
+      require => File[ "${wwwroot}/${distro}" ],
+    }
+  }
 
   file { "${name}.${autofile}":
     ensure  => file,
@@ -344,7 +362,7 @@ define quartermaster::server::pxe (
       owner   => $tftp_username,
       group   => $tftp_group,
       mode    => $tftp_filemode,
-      notify => Service['tftpd-hpa'],
+      notify  => Service['tftpd-hpa'],
     }
   }
   if ! defined (Concat::Fragment["${distro}.submenu_header"]) {
