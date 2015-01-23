@@ -11,6 +11,7 @@ class quartermaster::server::squid () inherits quartermaster::params {
   class {'squid3':
     template   => ('quartermaster/squid.conf.erb'),
     acl        => [
+      'internal_network src ${network_em1}/${netmask}"
       'windowsupdate dstdomain windowsupdate.microsoft.com',
       'windowsupdate dstdomain .update.microsoft.com',
       'windowsupdate dstdomain download.windowsupdate.com',
