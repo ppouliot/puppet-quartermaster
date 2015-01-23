@@ -259,7 +259,7 @@ define quartermaster::server::pxe {
     require =>  Tftp::File["${distro}/${p_arch}"],
   }
   staging::file{"bootsplash-${name}":
-    source => $splashurl
+    source => $splashurl,
     target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
     require =>  Tftp::File["${distro}/graphics"],
   }
