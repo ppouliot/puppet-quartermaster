@@ -379,12 +379,14 @@ define quartermaster::server::pxe {
       content => template("quartermaster/pxemenu/default.erb"),
     }
   }
+
   if ! defined (Concat["${tftpboot}/menu/${distro}.menu"]) {
     concat { "${tftpboot}/menu/${distro}.menu":
       owner   => $tftp_username,
       group   => $tftp_group,
       mode    => $tftp_filemode,
-      notify  => Service['tftpd-hpa'],
+#      notify  => Service['tftpd-hpa'],
+#      require => Tftp::File['menu'],
     }
   }
   if ! defined (Concat::Fragment["${distro}.submenu_header"]) {
