@@ -248,28 +248,45 @@ define quartermaster::server::pxe {
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
 
-
-  exec {"get_net_kernel-${name}":
-    command => "/usr/bin/wget -c ${url}/${pxekernel} -O ${rel_number}",
-    cwd     => "${tftpboot}/${distro}/${p_arch}",
-    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
+  staging::file{"kernel-${name}":
+    source => "${url}/${pxekernel}", 
+    target => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
     require =>  Tftp::File["${distro}/${p_arch}"],
   }
-
-  exec {"get_net_initrd-${name}":
-    command => "/usr/bin/wget -c ${url}/initrd${initrd} -O ${rel_number}${initrd}",
-    cwd     => "${tftpboot}/${distro}/${p_arch}",
-    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
+  staging::file{"initrd-${name}":
+    source => "${url}/initrd${initrd}",
+    target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
     require =>  Tftp::File["${distro}/${p_arch}"],
   }
-
-  exec {"get_bootsplash-${name}":
-    command => "/usr/bin/wget -c ${splashurl}  -O ${name}${bootsplash}",
-    cwd     => "${tftpboot}/${distro}/graphics",
-    creates => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+  staging::file{"bootsplash-${name}":
+    source => $splashurl
+    target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
     require =>  Tftp::File["${distro}/graphics"],
   }
 
+# Old Style Replaced w/ staging module above
+#  exec {"get_net_kernel-${name}":
+#    command => "/usr/bin/wget -c ${url}/${pxekernel} -O ${rel_number}",
+#    cwd     => "${tftpboot}/${distro}/${p_arch}",
+#    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
+#    require =>  Tftp::File["${distro}/${p_arch}"],
+#  }
+
+#  exec {"get_net_initrd-${name}":
+#    command => "/usr/bin/wget -c ${url}/initrd${initrd} -O ${rel_number}${initrd}",
+#    cwd     => "${tftpboot}/${distro}/${p_arch}",
+#    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
+#    require =>  Tftp::File["${distro}/${p_arch}"],
+#  }
+
+#  exec {"get_bootsplash-${name}":
+#    command => "/usr/bin/wget -c ${splashurl}  -O ${name}${bootsplash}",
+#    cwd     => "${tftpboot}/${distro}/graphics",
+#    creates => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+#    require =>  Tftp::File["${distro}/graphics"],
+#  }
+
+# Distro Specific TFTP Folders
 
   if ! defined (Tftp::File[$distro]){
     tftp::file { $distro: 
@@ -290,15 +307,19 @@ define quartermaster::server::pxe {
     }
   }
 
-  tftp::file { "${distro}/menu/${name}.graphics.conf":
-    content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
-  }
-
   if ! defined (Tftp::File["${distro}/${p_arch}"]){
     tftp::file { "${distro}/${p_arch}":
       ensure  => directory,
     }
   }
+
+# Distro Specific TFTP Graphics.conf 
+
+  tftp::file { "${distro}/menu/${name}.graphics.conf":
+    content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
+  }
+
+# Begin Creating Distro Specific HTTP Folders
 
   if ! defined (File["${wwwroot}/${distro}"]) {
     file { "${wwwroot}/${distro}":
@@ -340,6 +361,7 @@ define quartermaster::server::pxe {
     }
   }
 
+# Kickstart/Preseed File
   file { "${name}.${autofile}":
     ensure  => file,
     path    => "${wwwroot}/${distro}/${autofile}/${name}.${autofile}",

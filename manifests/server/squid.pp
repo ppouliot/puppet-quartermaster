@@ -25,9 +25,9 @@ class quartermaster::server::squid () inherits quartermaster::params {
       'windowsupdate dstdomain ntservicepack.microsoft.com',
       'wuCONNECT dstdomain www.update.microsoft.com',
       'wuCONNECT dstdomain sls.microsoft.com',
-      'aptget browser -i apt-get apt-http apt-cacher apt-proxy yum',
-      'deburl urlpath_regex /(Packages|Sources|Release|Translations-.*)\(.(gpg|gz|bz2))?$ /pool/.*/.deb$ /(Sources|Packages).diff/ /dists/[^/]*/[^/]*/(binary-.*|source)/.',
-      'cache_peer_access localhost allow aptget',
+#      'aptget browser -i apt-get apt-http apt-cacher apt-proxy yum',
+#      'deburl urlpath_regex /(Packages|Sources|Release|Translations-.*)\(.(gpg|gz|bz2))?$ /pool/.*/.deb$ /(Sources|Packages).diff/ /dists/[^/]*/[^/]*/(binary-.*|source)/.',
+#      'cache_peer_access localhost allow aptget',
     ],
     http_access => [
       'allow CONNECT wuCONNECT internal_network',
