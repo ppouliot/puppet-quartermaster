@@ -11,7 +11,6 @@ class quartermaster::server::squid () inherits quartermaster::params {
   class {'squid3':
     template   => ('quartermaster/squid.conf.erb'),
     acl        => [
-      'internal_network src ${network_em1}/${netmask}",
       'windowsupdate dstdomain windowsupdate.microsoft.com',
       'windowsupdate dstdomain .update.microsoft.com',
       'windowsupdate dstdomain download.windowsupdate.com',
@@ -31,7 +30,6 @@ class quartermaster::server::squid () inherits quartermaster::params {
       'cache_peer_access localhost allow aptget',
     ],
     http_access => [
-      'allow internal_network',
       'allow CONNECT wuCONNECT internal_network',
       'allow CONNECT wuCONNECT localhost',
       'allow windowsupdate internal_network',
