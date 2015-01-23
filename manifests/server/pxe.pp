@@ -13,7 +13,7 @@ define quartermaster::server::pxe (
   $tftp_filemode  = $quartermaster::params::tftp_filemode,
   $www_username   = $quartermaster::params::www_username,
   $www_group      = $quartermaster::params::www_group,
-  $file_mode      = $quartermaster::params::file_mode,
+  $file_mode      = $quartermaster::params::file_mode
 
 ) inherits quartermaster::params {
 

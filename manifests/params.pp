@@ -2,7 +2,6 @@ class quartermaster::params {
 
   # Include Params from other modules so we can use them here
   include tftp::params
-  include tftp::file
   include apache::params
 
   $arp_type = '01'
@@ -15,7 +14,6 @@ class quartermaster::params {
   $tftpboot          = $tftp::params::directory
   $tftp_username     = $tftp::params::username
   $tftp_group        = $tftp::params::username
-  $tftp_filemode     = $tftp::file::mode
 
   $www_username      = $apache::params::user
   $www_group         = $apache::params::group
