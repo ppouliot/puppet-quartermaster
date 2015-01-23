@@ -6,14 +6,11 @@
 #
 #
 
-class quartermaster::server::squid (
-  $active_network = inline_template("<%= scope.lookupvar('::network_${interface}') -%>") ,
-) inherits quartermaster::params {
+class quartermaster::server::squid () inherits quartermaster::params {
 
   class {'squid3':
     template   => ('quartermaster/squid.conf.erb'),
     acl        => [
-      "internal_network src ${active_network}/${netmask}",
       'windowsupdate dstdomain windowsupdate.microsoft.com',
       'windowsupdate dstdomain .update.microsoft.com',
       'windowsupdate dstdomain download.windowsupdate.com',
