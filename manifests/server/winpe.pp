@@ -29,7 +29,10 @@ class quartermaster::server::winpe (
 
 # Samba Services for Hosing Windows Shares
 
-  tftp::file{'winpe':}
+  tftp::file{'winpe':
+    ensure => file,
+  }
+
   file{[
     "${wwwroot}/microsoft",
     "${wwwroot}/microsoft/iso",
