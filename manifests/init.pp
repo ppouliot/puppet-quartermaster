@@ -35,6 +35,8 @@ class quartermaster (
   $linux              = $quartermaster::params::linux,
   $windows            = $quartermaster::params::windows,
   $dhcp_proxy_subnets = $quartermaster::params::dhcp_proxy_subnets,
+  $linux              = hiera('linux',{}),
+  $windows            = hiera('windows',{})
 ) inherits quartermaster::params {
 
   validate_re($::osfamily, '^(Debian|RedHat|Archlinux)$', 'This module only works on Debian and Red Hat based systems.')
@@ -52,8 +54,8 @@ class quartermaster (
 #  class { 'quartermaster::scripts': }
 
   #quartermaster::pxe{$linux:}
-  create_resources(pxe,$linux)
-  create_resources(windowsmedia,$windows)
+  create_resources(quartermaster::pxe,$linux)
+  create_resources(quartermaster::windowsmedia,$windows)
 
 #  Class['quartermaster'] -> Quartermaster::Pxe <||>
 #  Class['quartermaster'] -> Quartermaster::Windowsmedia <||>
