@@ -145,6 +145,7 @@ class quartermaster::winpe (
   concat::fragment{"winpe_pxe_default_menu":
     target  => "${tftpboot}/pxelinux/pxelinux.cfg/default",
     content => template("quartermaster/pxemenu/winpe.erb"),
+    require => Tftp::File['pxelinux/pxelinux.cfg']
   }
 
   # Begin Windows provisioning Scripts
