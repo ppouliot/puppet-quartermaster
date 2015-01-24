@@ -55,9 +55,13 @@ class quartermaster (
 #  class { 'quartermaster::scripts': }
 
   #quartermaster::pxe{$linux:}
+if $linux {
   create_resources(quartermaster::pxe,$linux)
-  create_resources(quartermaster::windowsmedia,$windows)
+}
 
+if $windows {
+  create_resources(quartermaster::windowsmedia,$windows)
+}
 #  Class['quartermaster'] -> Quartermaster::Pxe <||>
 #  Class['quartermaster'] -> Quartermaster::Windowsmedia <||>
 
