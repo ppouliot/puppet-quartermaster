@@ -6,10 +6,10 @@
 
 define quartermaster::pxe {
 
-  $tmp            = $quartermaster::params::tmp,
-  $pxeroot        = $quartermaster::params::pxeroot,
-  $pxecfg         = $quartermaster::params::pxecfg,
-  $pxe_menu       = $quartermaster::params::pxe_menu,
+  $tmp            = $quartermaster::params::tmp
+  $pxeroot        = $quartermaster::params::pxeroot
+  $pxecfg         = $quartermaster::params::pxecfg
+  $pxe_menu       = $quartermaster::params::pxe_menu
   $tftpboot       = $quartermaster::params::tftpboot
   $tftp_username  = $quartermaster::params::tftp_username
   $tftp_group     = $quartermaster::params::tftp_group
