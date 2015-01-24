@@ -15,11 +15,21 @@
 
 define quartermaster::windowsmedia( $activationkey ) {
 
-  $wwwroot   = $quartermaster::params::wwwroot
-  $tftpboot  = $quartermaster::params::tftpboot
-  $dir_mode  = $quartermaster::params::dir_mode
-  $file_mode = $quartermaster::params::file_mode
-  $exe_mode  = $quartermaster::params::exe_mode
+  $tmp            = $quartermaster::params::tmp
+  $pxeroot        = $quartermaster::params::pxeboot
+  $pxecfg         = $quartermaster::params::pxecfg
+  $pxe_menu       = $quartermaster::params::pxe_menu
+  $tftpboot       = $quartermaster::params::tftpboot
+  $tftp_username  = $quartermaster::params::tftp_username
+  $tftp_group     = $quartermaster::params::tftp_group
+  $tftp_filemode  = $quartermaster::params::tftp_filemode
+  $wwwroot        = $quartermaster::params::wwwroot
+  $www_username   = $quartermaster::params::www_username
+  $www_group      = $quartermaster::params::www_group
+  $file_mode      = $quartermaster::params::file_mode
+  $dir_mode       = $quartermaster::params::dir_mode
+  $exe_mode       = $quartermaster::params::exe_mode
+
 
   $isofile  = $name
 #    $iso_path = "${quartermaster::wwwroot}/WinPE/ISO/${name}"

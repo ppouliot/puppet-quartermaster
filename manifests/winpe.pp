@@ -7,18 +7,22 @@
 # Samba and Apache
 #
 class quartermaster::winpe (
-  $wwwroot  = $quartermaster::params::wwwroot,
-  $tftpboot = $quartermaster::params::tftpboot,
-  $dir_mode = $quartermaster::params::dir_mode,
-  $exe_mode = $quartermaster::params::exe_mode,
+  $tmp            = $quartermaster::params::tmp,
+  $pxeroot        = $quartermaster::params::pxeroot,
+  $pxecfg         = $quartermaster::params::pxecfg,
+  $pxe_menu       = $quartermaster::params::pxe_menu,
+  $tftpboot       = $quartermaster::params::tftpboot,
   $tftp_username  = $quartermaster::params::tftp_username,
   $tftp_group     = $quartermaster::params::tftp_group,
-  $www_username  = $quartermaster::params::www_username,
-  $www_group     = $quartermaster::params::www_group,
-
-
-  $os           = "${wwwroot}/microsoft/mount",
-  $windows_isos = "${wwwroot}/microsoft/iso",
+  $tftp_filemode  = $quartermaster::params::tftp_filemode,
+  $wwwroot        = $quartermaster::params::wwwroot,
+  $www_username   = $quartermaster::params::www_username,
+  $www_group      = $quartermaster::params::www_group,
+  $file_mode      = $quartermaster::params::file_mode,
+  $dir_mode       = $quartermaster::params::dir_mode,
+  $exe_mode       = $quartermaster::params::exe_mode,
+  $os             = "${wwwroot}/microsoft/mount",
+  $windows_isos   = "${wwwroot}/microsoft/iso",
 
 ) inherits params {
 
