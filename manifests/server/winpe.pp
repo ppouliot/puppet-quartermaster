@@ -48,7 +48,7 @@ class quartermaster::server::winpe (
 
   class{'::samba::server':
     workgroup            => 'quartermaster',
-    netbios_name         => $::hostname,
+    netbios_name         => "${::hostname}",
     security             => 'SHARE',
     guest_account        => 'nobody',
     extra_global_options => [
@@ -59,14 +59,12 @@ class quartermaster::server::winpe (
     ],
     shares => {
       'installs' => [
-        'comment = Installs',
         "path = ${wwwroot}",
         'read only = yes',
         'guest ok = yes',
         'fake oplocks = true',
       ],
       'os' => [
-        'comment = MS Operating Systems',
         "path = ${wwwroot}/microsoft",
         'read only = yes',
         'guest ok = yes',
@@ -99,7 +97,6 @@ class quartermaster::server::winpe (
       ],
 
     },
-
 
   }
 
