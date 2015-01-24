@@ -37,8 +37,6 @@ class quartermaster (
   $dhcp_proxy_subnet = $quartermaster::params::dhcp_proxy_subnet,
 ) inherits quartermaster::params {
 
-  class{'apt':}
-  class { 'quartermaster::commands': }
 
   class { 'quartermaster::www': }
   class { 'quartermaster::puppetmaster': }
