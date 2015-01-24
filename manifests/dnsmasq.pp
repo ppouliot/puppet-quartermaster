@@ -8,7 +8,7 @@
 #
 
 # Install DNSMasq
-class quartermaster::dnsmasq ( $dhcp_proxy_subnet ) inherits quartermaster::params {
+class quartermaster::dnsmasq () inherits quartermaster::params {
 
   package { 'dnsmasq':
     ensure => latest,
