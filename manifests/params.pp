@@ -25,9 +25,9 @@ class quartermaster::params {
   $wwwroot           = $q_home
   $nfsroot           = $q_home
   $bin               = "${q_home}/bin"
-  $pxeroot           = "${tftpboot}/pxelinux"
-  $pxecfg            = "${pxeroot}/pxelinux.cfg"
-  $pxe_menu          = "${tftpboot}/menu"
+  $pxeroot           = "${tftp::params::directory}/pxelinux"
+  $pxecfg            = "${tftp::params::directory}/pxelinux/pxelinux.cfg"
+  $pxe_menu          = "${tftp::params::directory}/menu"
   $puppetmaster_fqdn = "${fqdn}"
   $exe_mode          = '0777'
   $file_mode         = '0644'

@@ -375,8 +375,9 @@ define quartermaster::pxe {
 
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
-      target  => "${tftpboot}/pxelinux/pxelinux.cfg/default",
+      target  => "${pxecfg}/default",
       content => template("quartermaster/pxemenu/default.erb"),
+      order   => 02,
     }
   }
 
@@ -385,7 +386,6 @@ define quartermaster::pxe {
       owner   => $tftp_username,
       group   => $tftp_group,
       mode    => $tftp_filemode,
-#      notify  => Service['tftpd-hpa'],
 #      require => Tftp::File['menu'],
     }
   }

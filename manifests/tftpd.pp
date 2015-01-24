@@ -16,12 +16,13 @@ class quartermaster::tftpd () inherits quartermaster::params {
 
 
 
-  notify {'Creating tftp.rules file to support booting WinPE':}
+# Create the tftp remap file
   file { 'tftpd_rules':
     path     => '/etc/tftpd.rules',
-    content  => template('quartermaster/winpe/tftp-remap.erb'),
+    content  => template('quartermaster/tftp-remap.erb'),
   }
 
+# Tftp Server Configuration
   class{ 'tftp':
      inetd     => false,
      directory => $quartermaster::params::tftpboot,
@@ -29,7 +30,9 @@ class quartermaster::tftpd () inherits quartermaster::params {
      require   => [ File[ 'tftpd_rules' ], ],
   }
   
+# additional tftp directories
   tftp::file {["menu",
+               "network_devices",
                "pxelinux",
                "pxelinux/pxelinux.cfg"]:
     ensure  => directory,
