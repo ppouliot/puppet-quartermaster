@@ -36,7 +36,7 @@ class quartermaster::params {
   $nameserver        = '4.2.2.2'
 
   # DNSMASQ Configuration
-  $dhcp_proxy_subnets = undef
+  $dhcp_proxy_subnets = [],
 
   # Syslinux 
   $syslinux_url = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
