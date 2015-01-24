@@ -8,14 +8,14 @@
 #
 
 # Install DNSMasq
-class quartermaster::dnsmasq (
-  $dhcp_proxy_subnet = $quartermaster::params::dhcp_proxy_subnet
-) inherits quartermaster::params {
+class quartermaster::dnsmasq ( $dhcp_proxy_subnet ) inherits quartermaster::params {
 
   package { 'dnsmasq':
     ensure => latest,
   }
+
 # Configure DNSMasq as ProxyDHCP
+
   file {'quartermaster.conf':
     ensure  => file,
     path    => '/etc/dnsmasq.d/quartermaster.conf',
@@ -26,7 +26,7 @@ class quartermaster::dnsmasq (
 
   file {'/etc/logrotate.d/dnsmasq':
     ensure  => file,
-    content => '/var/log/quartermaster/dnsmasq.log {
+    content => '/var/log/dnsmasq.log {
     monthly
     missingok
     notifempty
