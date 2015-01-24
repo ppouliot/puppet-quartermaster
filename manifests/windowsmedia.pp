@@ -13,7 +13,7 @@
 #    quartermaster::windowsmedia{"en_windows_8_enterprise_x86_dvd_917587.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
 #
 
-define quartermaster::server::windowsmedia( $activationkey ) {
+define quartermaster::windowsmedia( $activationkey ) {
 
   $wwwroot   = $quartermaster::params::wwwroot
   $tftpboot  = $quartermaster::params::tftpboot
