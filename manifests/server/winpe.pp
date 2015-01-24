@@ -11,6 +11,11 @@ class quartermaster::server::winpe (
   $tftpboot = $quartermaster::params::tftpboot,
   $dir_mode = $quartermaster::params::dir_mode,
   $exe_mode = $quartermaster::params::exe_mode,
+  $tftp_username  = $quartermaster::params::tftp_username,
+  $tftp_group     = $quartermaster::params::tftp_group,
+  $www_username  = $quartermaster::params::www_username,
+  $www_group     = $quartermaster::params::www_group,
+
 
   $os           = "${wwwroot}/microsoft/mount",
   $windows_isos = "${wwwroot}/microsoft/iso",
@@ -19,12 +24,31 @@ class quartermaster::server::winpe (
 
 
 # Install WimLib
-#  apt::ppa {'ppa:nilarimogard/webupd8':}
+  case $osfamily {
 
-#  package { 'wimtools':
-#    ensure => latest,
-#    require => Apt::Ppa['ppa:nilarimogard/webupd8'],
-#  }
+    'Debian':{
+      apt::ppa {'ppa:nilarimogard/webupd8':}
+      Package{ require => Apt::Ppa['ppa:nilarimogard/webupd8'],}
+    }
+
+    'RedHat':{
+      yumrepo{'nux-misc':
+        name     => 'Nux Misc',
+        baseurl  => 'http://li.nux.ro/download/nux/misc/el6/x86_64/',
+        enabled  => '0',
+        gpgcheck => '1',
+        gpgkey   => 'http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro',
+      }
+      Package{ require => Yumrepo['nux-misc'], }
+    }
+
+    default:{
+      warn('Currently Unsupported OSFamily for this feature')
+    }
+  }
+  package { 'wimtools':
+    ensure => latest,
+  }
 
 
 # Samba Services for Hosing Windows Shares
