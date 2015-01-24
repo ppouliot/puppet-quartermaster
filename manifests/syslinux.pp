@@ -4,7 +4,7 @@
 # require for pxebooting
 #
 
-class quartermaster::server::syslinux (
+class quartermaster::syslinux (
 
   $tmp            = $quartermaster::params::tmp,
   $pxeroot        = $quartermaster::params::pxeroot,
