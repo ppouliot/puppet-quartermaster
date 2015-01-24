@@ -41,11 +41,12 @@ class quartermaster (
 
   validate_re($::osfamily, '^(Debian|RedHat|Archlinux)$', 'This module only works on Debian and Red Hat based systems.')
 
-  class{'quartermaster::tftpd':}        ->
-  class{'quartermaster::puppetmaster':} ->
   class{'quartermaster::dnsmasq': }     ->
-  class{'quartermaster::www':}          ->
-  class{'quartermaster::syslinux':}     ->
+  class{'quartermaster::tftpd':}        ~>
+  class{'quartermaster::syslinux':} 
+
+  class{'quartermaster::puppetmaster':} ->
+  class{'quartermaster::www':}          ~>
   class{'quartermaster::winpe':}        
 
 # NFS needs to be modified and refactored if used
