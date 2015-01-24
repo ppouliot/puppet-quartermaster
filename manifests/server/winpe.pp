@@ -156,7 +156,7 @@ class quartermaster::server::winpe (
     group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/scripts/secondbootcmd.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/compute.cmd":
     ensure  => file,
