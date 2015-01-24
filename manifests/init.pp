@@ -45,7 +45,7 @@ class quartermaster (
   class{'quartermaster::puppetmaster':} -> 
   class{'quartermaster::www':}           ->
   class{'quartermaster::winpe':}          ->
-  Class{'quartermaster':}
+  Class['quartermaster']
 
 # NFS needs to be modified and refactored if used
 #  class { 'quartermaster::nfs': }
