@@ -48,8 +48,8 @@ class quartermaster::params {
 
 
   # Used to process distro's from hiera
-  $linux = hiera('linux',{})
-  $windows = hiera('windows',{})
+  #$linux   = hiera('linux',{})
+  #$windows = hiera('windows',{})
 
 
   case $osfamily {
