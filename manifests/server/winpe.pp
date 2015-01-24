@@ -27,7 +27,7 @@ class quartermaster::server::winpe (
   case $osfamily {
 
     'Debian':{
-      apt::ppa {'ppa:nilarimogard/webupd8':}
+      apt::ppa{'ppa:nilarimogard/webupd8':}
       Package{ require => Apt::Ppa['ppa:nilarimogard/webupd8'],}
     }
 
