@@ -6,296 +6,237 @@
 # ISO put in that directory will be automated and exported via
 # Samba and Apache
 #
-class quartermaster::winpe {
-$os           = "${quartermaster::wwwroot}/microsoft/mount"
-$windows_isos = "${quartermaster::wwwroot}/microsoft/iso"
+class quartermaster::winpe (
+  $wwwroot  = $quartermaster::params::wwwroot,
+  $tftpboot = $quartermaster::params::tftpboot,
+  $dir_mode = $quartermaster::params::dir_mode,
+  $exe_mode = $quartermaster::params::exe_mode,
+  $tftp_username  = $quartermaster::params::tftp_username,
+  $tftp_group     = $quartermaster::params::tftp_group,
+  $www_username  = $quartermaster::params::www_username,
+  $www_group     = $quartermaster::params::www_group,
+
+
+  $os           = "${wwwroot}/microsoft/mount",
+  $windows_isos = "${wwwroot}/microsoft/iso",
+
+) inherits params {
+
 
 # Install WimLib
-  apt::ppa {'ppa:nilarimogard/webupd8':}
+  case $osfamily {
+
+    'Debian':{
+      apt::ppa{'ppa:nilarimogard/webupd8':}
+      $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8'] 
+    }
+
+    'RedHat':{
+      yumrepo{'nux-misc':
+        name     => 'Nux Misc',
+        baseurl  => 'http://li.nux.ro/download/nux/misc/el6/x86_64/',
+        enabled  => '0',
+        gpgcheck => '1',
+        gpgkey   => 'http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro',
+      }
+      $wimtool_repo = Yumrepo['nux-misc']
+    }
+
+    default:{
+      warn('Currently Unsupported OSFamily for this feature')
+    }
+  }
 
   package { 'wimtools':
-    ensure => latest,
-    require => Apt::Ppa['ppa:nilarimogard/webupd8'],
+    ensure  => latest,
+    require => $wimtool_repo,
   }
 
 
 # Samba Services for Hosing Windows Shares
-  $samba = ['samba',
-            'samba-client',
-            'p7zip-full',
-            'p7zip-rar',
-            'dos2unix',
-            'git',
-            'git-review']
 
-  package { $samba:
-    ensure => latest,
+  tftp::file{'winpe':
+    ensure  => directory,
+    owner   => 'nobody',
+    group   => 'nogroup',
   }
 
-  service { 'smbd':
-    ensure  => running,
-    enable  => true,
-    require => Package [ $samba ],
+  file{[
+    "${wwwroot}/microsoft",
+    "${wwwroot}/microsoft/iso",
+    "${wwwroot}/microsoft/mount",
+    "${wwwroot}/microsoft/winpe",
+    "${wwwroot}/microsoft/winpe/bin",
+    "${wwwroot}/microsoft/winpe/system",
+    "${wwwroot}/microsoft/winpe/system/menu",
+    ]:
+    ensure => directory,
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => $dir_mode,
+
   }
 
-  file { 'samba.conf':
-    path     => '/etc/samba/smb.conf',
-    notify   => Service['smbd'],
-    require  => Package[ $samba ],
-    content  => template('quartermaster/winpe/samba.erb'),
+  class{'::samba::server':
+    workgroup            => 'quartermaster',
+    netbios_name         => "${::hostname}",
+    security             => 'SHARE',
+    guest_account        => 'nobody',
+    extra_global_options => [
+      'wide links    = yes',
+      'unix extensions = no',
+      'follow symlins = yes',
+      'kernel oplocks = no',
+    ],
+    shares => {
+      'installs' => [
+        "path = ${wwwroot}",
+        'read only = yes',
+        'guest ok = yes',
+        'fake oplocks = true',
+      ],
+      'os' => [
+        "path = ${wwwroot}/microsoft",
+        'read only = yes',
+        'guest ok = yes',
+        'fake oplocks = true',
+      ],
+      'ISO' => [
+        "path = ${wwwroot}/microsoft/iso",
+        'read only = no',
+        'guest ok = yes',
+      ],
+      'winpe' => [
+        "path = ${wwwroot}/microsoft/winpe",
+        'read only = no',
+        'guest ok = yes',
+      ],
+      'system' => [
+        "path = ${wwwroot}/microsoft/winpe/system",
+        'read only = no',
+        'guest ok = yes',
+      ],
+      'pxe-cfg' => [
+        "path = ${tftpboot}/pxelinux/pxelinux.cfg",
+        'read only = no',
+        'guest ok = yes',
+      ],
+     'pe-pxeroot' => [
+        "path = ${tftpboot}/winpe",
+        'read only = no',
+        'guest ok = yes',
+      ],
+
+    },
+
   }
+
 # Autofs For Automouting Windows iso's
-  package { 'autofs5':
-    ensure => latest,
+  autofs::mount{ "${wwwroot}/microsoft/iso":
+    map => '*',
+    options => [
+      '-fstype=udf,loop',
+      '-fstype=iso9660,loop', 
+    ],
   }
 
+  # Add Winpe to the PXE menu
 
-  service { 'autofs':
-    ensure  => running,
-    enable  => true,
-    require => Package['autofs5'],
-  }
-
-  file {'auto.master':
-    ensure  => file,
-    path    => '/etc/auto.master',
-    owner   => 'root',
-    group   => 'root',
-    mode    => $quartermaster::file_mode,
-    content => template('quartermaster/autofs/master.erb'),
-    require => Package['autofs5'],
-    notify  => Service['autofs'],
-  }
-  file {'auto.quartermaster':
-    ensure  => file,
-    path    => '/etc/auto.quartermaster',
-    owner   => 'root',
-    group   => 'root',
-    mode    => $quartermaster::file_mode,
-    content => template('quartermaster/autofs/quartermaster.erb'),
-    require => Package['autofs5'],
-    notify  => Service['autofs'],
-  }
-
-  file { $quartermaster::wwwroot:
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-  }
-  file { "${quartermaster::wwwroot}/microsoft":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-  }
-  file { "${quartermaster::wwwroot}/microsoft/winpe":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-  }
-  file { "${quartermaster::wwwroot}/microsoft/winpe/bin":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-  }
-  file { "${quartermaster::wwwroot}/microsoft/winpe/system":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-  }
-  file { "${quartermaster::wwwroot}/microsoft/winpe/system/menu":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-  }
-  file { "${quartermaster::wwwroot}/microsoft/iso":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-    notify  => Service['autofs'],
-  }
-  file { "${quartermaster::wwwroot}/microsoft/mount":
-    ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ $samba ],File['samba.conf']],
-  }
-#  file { "${quartermaster::wwwroot}/microsoft/winpe/unattend":
-#    ensure  => directory,
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::dir_mode,
-#    require => [ Package[ $samba ],File[ 'samba.conf' ]],
-#  }
-  file {"${quartermaster::tftpboot}/winpe":
-    ensure  => directory,
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::exe_mode,
-    require => [File[ $quartermaster::tftpboot ], Package[ $samba ],File['samba.conf']],
-  }
-
-#  file {'winpe_menu_default':
-#    ensure  => file,
-#    path    => "${quartermaster::tftpboot}/menu/winpe.menu",
-#    require => File["${quartermaster::tftpboot}/menu"],
-#    content => 'label winpe.menu
-#menu label Microsoft Installation Menu
-#kernel menu.c32
-#append ../winpe/winpe.menu
-#',
-#  }
   concat::fragment{"winpe_pxe_default_menu":
-    target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default",
+    target  => "${tftpboot}/pxelinux/pxelinux.cfg/default",
     content => template("quartermaster/pxemenu/winpe.erb"),
   }
 
-  file { 'init.cmd':
+  # Begin Windows provisioning Scripts
+
+  file { "${wwwroot}/microsoft/winpe/system/init.cmd":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/init.cmd",
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/winpe/menu/init.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-  file { 'menucheck.ps1':
+  file { "${wwwroot}/microsoft/winpe/system/menucheck.ps1":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menucheck.ps1",
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/winpe/menu/menucheckps1.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-  file { 'puppet_log.ps1':
+  file { "${wwwroot}/microsoft/winpe/system/puppet_log.ps1":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/puppet_log.ps1",
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/scripts/puppet_log.ps1.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-  file { 'firstboot.cmd':
+  file { "${wwwroot}/microsoft/winpe/system/firstboot.cmd":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/firstboot.cmd",
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/scripts/firstbootcmd.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-  file { 'secondboot.cmd':
+  file { "${wwwroot}/microsoft/winpe/system/secondboot.cmd":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/secondboot.cmd",
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/scripts/secondbootcmd.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-  file { 'compute.cmd':
+  file { "${wwwroot}/microsoft/winpe/system/compute.cmd":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/compute.cmd",
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/scripts/computecmd.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-  file { 'puppetinit.cmd':
+  file { "${wwwroot}/microsoft/winpe/system/puppetinit.cmd":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/puppetinit.cmd",
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/scripts/puppetinitcmd.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-  file { 'rename.ps1':
+  file { "${wwwroot}/microsoft/winpe/system/rename.ps1":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/rename.ps1",
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
     content => template('quartermaster/scripts/rename.ps1.erb'),
-    require => File["${quartermaster::wwwroot}/microsoft/winpe/system"],
+    require => File["${wwwroot}/microsoft/winpe/system"],
   }
-#  file { 'A00_init.cmd':
-#    ensure  => file,
-#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/A00_init.cmd",
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::exe_mode,
-#    content => template('quartermaster/winpe/menu/A00_init.erb'),
-#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
-#  }
-#  file { 'B00_init.cmd':
-#    ensure  => file,
-#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/B00_init.cmd",
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::exe_mode,
-#    content => template('quartermaster/winpe/menu/B00_init.erb'),
-#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
-#  }
-#  file { 'C00_init.cmd':
-#    ensure  => file,
-#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/C00_init.cmd",
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::exe_mode,
-#    content => template('quartermaster/winpe/menu/C00_init.erb'),
-#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
-#  }
-#  file { 'D00_init.cmd':
-##    ensure  => file,
-#    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/menu/D00_init.cmd",
-#    owner   => 'nobody',
-#    group   => 'nogroup',
-#    mode    => $quartermaster::exe_mode,
-#    content => template('quartermaster/winpe/menu/D00_init.erb'),
-#    require => File["${quartermaster::wwwroot}/microsoft/winpe/system/menu"],
-#  }
 
 #Begin Winpe menu
-  concat { "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd":
+  concat { "${wwwroot}/microsoft/winpe/system/setup.cmd":
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
   }
   concat::fragment{"winpe_system_cmd_a00_header":
-    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
+    target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/A00_init.erb'),
     order   => 01,
   }
   concat::fragment{"winpe_system_cmd_b00_init":
-    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
+    target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/B00_init.erb'),
     order   => 10,
   }
   concat::fragment{"winpe_system_cmd_c00_init":
-    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
+    target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/C00_init.erb'),
     order   => 20,
   }
   concat::fragment{"winpe_menu_footer":
-    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
+    target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/D00_init.erb'),
     order   => 99,
   }

@@ -1,9 +1,24 @@
-class quartermaster::puppetmaster {
-#  class {'puppetdb':}
+#Class: quartermaster::puppetmaster
+#
+# Installs and configures a puppetmaster and puppetdb on the quartermaster server
+#
+# Parameters: none
+#
+# Actions:
+#
+# Requires: see Modulefile
+#
+# }
+#
+
+class quartermaster::puppetmaster () inherits quartermaster::params {
+
+  class {'puppetdb':}
   class {'puppet::master':
     autosign     => true,
-#    storeconfigs => true,
+    storeconfigs => true,
     parser       => 'future',
+    environments => 'directory',
   } 
   file  {'/etc/puppet/files':
     ensure => directory,

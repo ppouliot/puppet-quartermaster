@@ -1,167 +1,85 @@
 # Class: quartermaster::syslinux
 #
-# This Class downloads syslinux and installs
-# the necessary files to support pxebooting
+# This Class retrieves and stages the Syslinux/Pxelinux files
+# require for pxebooting
 #
-#
-class quartermaster::syslinux {
-  $pxeroot       = "${quartermaster::tftpboot}/pxelinux"
-  $pxecfg        = "${pxeroot}/pxelinux.cfg"
-  $pxe_menu      = "${quartermaster::tftpboot}/menu"
-  #$syslinux_url  = 'http://mirrors.med.harvard.edu/linux/utils/boot/syslinux'
-  $syslinux_url = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
-  #$syslinux_ver = '4.05'
-  $syslinux_ver  = '5.01'
-#  $syslinux_ver  = '5.10'
-# Broken 
-#  $syslinux_ver  = '6.01'
-  $syslinux      = "syslinux-${syslinux_ver}"
-  $syslinuxroot  = "${quartermaster::tmp}/${syslinux}"
 
-  exec { 'get_syslinux':
-    command => "/usr/bin/wget -cv ${syslinux_url}/syslinux-${syslinux_ver}.tar.xz -O - | tar xJf -",
-    cwd     => $quartermaster::tmp,
-    creates => $syslinuxroot,
+class quartermaster::server::syslinux (
+
+  $tmp            = $quartermaster::params::tmp,
+  $pxeroot        = $quartermaster::params::pxeroot,
+  $pxecfg         = $quartermaster::params::pxecfg,
+  $pxe_menu       = $quartermaster::params::pxe_menu,
+  $syslinux       = $quartermaster::params::syslinux,
+  $syslinux_url   = $quartermaster::params::syslinux_url,
+  $syslinux_ver   = $quartermaster::params::syslinux_ver,
+  $tftp_username  = $quartermaster::params::tftp_username,
+  $tftp_group     = $quartermaster::params::tftp_group,
+  $tftp_filemode  = $quartermaster::params::tftp_filemode,
+  $www_username   = $quartermaster::params::www_username,
+  $www_group      = $quartermaster::params::www_group,
+  $file_mode      = $quartermaster::params::file_mode,
+
+
+) inherits quartermaster::params {
+
+  # Syslinux Staging and Extraction
+  staging::deploy { "${syslinux}.tar.gz":
+    source => "${syslinux_url}/${syslinux}.tar.gz",
+    target  => $tmp,
+    creates => "${tmp}/${syslinux}",
+  }
+  Tftp::File{
+    owner   => $tftp_username,
+    group   => $tftp_group,
+    require => [
+      Staging::Deploy["${syslinux}.tar.gz"],
+      Tftp::File['pxelinux']
+    ],
   }
 
-
-  file { 'pxelinux0':
-    ensure  => file,
-    path    => "${pxeroot}/pxelinux.0",
-    source  => "${syslinuxroot}/core/pxelinux.0",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
+  tftp::file {'pxelinux/pxelinux.0':
+    source  => "${tmp}/${syslinux}/core/pxelinux.0",
   }
 
-  file { 'gpxelinux0':
-    ensure  => file,
-    path    => "${pxeroot}/gpxelinux.0",
-    source  => "${syslinuxroot}/gpxe/gpxelinux.0",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
+  tftp::file { 'pxelinux/gpxelinux0':
+    source  => "${tmp}/${syslinux}/gpxe/gpxelinux.0",
   }
 
-  file { 'isolinux':
-    ensure  => file,
-    path    => "${pxeroot}/isolinux.bin",
-    source  => "${syslinuxroot}/core/isolinux.bin",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[$quartermaster::tftpboot], Exec['get_syslinux']],
+  tftp::file { 'pxelinux/isolinux.bin':
+    source  => "${tmp}/${syslinux}/core/isolinux.bin",
   }
 
-  file { 'menu_c32':
-    ensure  => file,
-    path    => "${pxeroot}/menu.c32",
-    source  => "${syslinuxroot}/com32/menu/menu.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
+  tftp::file { 'pxelinux/menu_c32':
+    source  => "${tmp}/${syslinux}/com32/menu/menu.c32",
   }
 
-  file { 'ldlinux_c32':
-    ensure  => file,
-    path    => "${pxeroot}/ldlinux.c32",
-    source  => "${syslinuxroot}/com32/elflink/ldlinux/ldlinux.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
+  tftp::file { 'pxelinux/ldlinux_c32':
+    source  => "${tmp}/${syslinux}/com32/elflink/ldlinux/ldlinux.c32",
   }
 
-  file { 'libutil_c32':
-    ensure  => file,
-    path    => "${pxeroot}/libutil.c32",
-    source  => "${syslinuxroot}/com32/libutil/libutil.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
+  concat {"${pxecfg}/default":
+    owner   => $tftp_username,
+    group   => $tftp_group,
+    mode    => $file_mode,
   }
 
-  file { 'vesamenu':
-    ensure  => file,
-    path    => "${pxeroot}/vesamenu.c32",
-    source  => "${syslinuxroot}/com32/menu/vesamenu.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-  }
-
-  file { 'gfxboot':
-    ensure  => file,
-    path    => "${pxeroot}/gfxboot.c32",
-    source  => "${syslinuxroot}/com32/gfxboot/gfxboot.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-  }
-
-  file { 'mboot_c32':
-    ensure  => file,
-    path    => "${pxeroot}/mboot.c32",
-    source  => "${syslinuxroot}/com32/mboot/mboot.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-  }
-
-  file { 'chain_c32':
-    ensure  => file,
-    path    => "${pxeroot}/chain.c32",
-    source  => "${syslinuxroot}/com32/chain/chain.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-  }
-
-  file { 'libcom32_c32':
-    ensure  => file,
-    path    => "${pxeroot}/libcom32.c32",
-    source  => "${syslinuxroot}/com32/lib/libcom32.c32",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-  }
-
-concat {"${pxecfg}/default":
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    notify  => Service['tftpd-hpa'],
-}
-
-concat::fragment{"default_header":
+  concat::fragment{"default_header":
     target  => "${pxecfg}/default",
     content => template("quartermaster/pxemenu/header.erb"),
     order   => 01,
-}
-concat::fragment{"default_localboot":
+  }
+
+  concat::fragment{"default_localboot":
     target  => "${pxecfg}/default",
     content => template("quartermaster/pxemenu/localboot.erb"),
     order   => 01,
-}
+  }
 
 
-  file {'graphics_cfg':
-    ensure  => file,
-    path    => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/graphics.cfg",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::file_mode,
-    require => [ File[ $quartermaster::tftpboot ], Exec['get_syslinux']],
-    content =>"menu width 80
+  tftp::file {'pxelinux/pxelinux.cfg/graphics_cfg':
+    content =>"
+menu width 80
 menu margin 10
 menu passwordmargin 3
 menu rows 12
@@ -171,4 +89,6 @@ menu endrow 24
 menu passwordrow 11
 ",
   }
+
+
 }

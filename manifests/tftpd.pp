@@ -1,4 +1,4 @@
-# Class: quartermaster::tftpd
+#Class: quartermaster::tftpd
 #
 # Installs and configures tftpd-hpa for use by pxe
 # Also handles naming rules for winpe pxeboot environment
@@ -12,72 +12,29 @@
 # }
 #
 
-class quartermaster::tftpd {
+class quartermaster::tftpd () inherits quartermaster::params {
 
-  $tftp_pkgs = [ 'tftp-hpa', 'tftpd-hpa' ]
-  package { $tftp_pkgs:
-    ensure   => latest,
-  }
 
-  service { 'tftpd-hpa':
-    ensure   => running,
-    require  => Package [ 'tftpd-hpa' ],
-  }
-
-  group { 'tftp':
-    ensure  => present,
-    before  => File['tftpd_config'],
-  }
-
-  file { 'tftpd_config':
-    path    => '/etc/default/tftpd-hpa',
-    notify  => Service[ 'tftpd-hpa' ],
-    require => Package[ 'tftpd-hpa' ],
-    content => "#/etc/default/tftpd-hpa
-TFTP_USERNAME=\"tftp\"
-TFTP_DIRECTORY=\"${quartermaster::tftpboot}\"
-TFTP_ADDRESS=\"0.0.0.0:69\"
-TFTP_OPTIONS=\"-vvvvs -c -m /etc/default/tftpd.rules\"
-#TFTP_OPTIONS=\"-vc -m /etc/default/tftpd.rules\"
-",
-  }
 
   notify {'Creating tftp.rules file to support booting WinPE':}
   file { 'tftpd_rules':
-    path     => '/etc/default/tftpd.rules',
-    #content => "rg \\ / # Convert backslashes to slashes",
+    path     => '/etc/tftpd.rules',
     content  => template('quartermaster/winpe/tftp-remap.erb'),
-    notify   => Service[ 'tftpd-hpa' ],
-    require  => Package[ 'tftpd-hpa' ],
   }
 
-  file { $quartermaster::tftpboot:
-    ensure  => directory,
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ 'tftpd-hpa' ],File[ tftpd_config ]],
+  class{ 'tftp':
+     inetd     => false,
+     directory => $quartermaster::params::tftpboot,
+     options   => '-vvvvs -c -m /etc/tftpd.rules',
+     require   => [ File[ 'tftpd_rules' ], ],
   }
-  file { "${quartermaster::tftpboot}/menu":
-    ensure  => directory,
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ 'tftpd-hpa' ],File[ tftpd_config ]],
-  }
-  file { "${quartermaster::tftpboot}/pxelinux":
-    ensure  => directory,
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ 'tftpd-hpa' ],File[ tftpd_config ]],
-  }
-  file { "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg":
+  
+  tftp::file {["menu",
+               "pxelinux",
+               "pxelinux/pxelinux.cfg"]:
     ensure  => directory,
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
-    require => [ Package[ 'tftpd-hpa' ],File[ tftpd_config ]],
   }
 
 }

@@ -37,18 +37,25 @@ class quartermaster (
   $dhcp_proxy_subnet = $quartermaster::params::dhcp_proxy_subnet,
 ) inherits quartermaster::params {
 
+  validate_re($::osfamily, '^(Debian|RedHat|Archlinux)$', 'This module only works on Debian and Red Hat based systems.')
 
-  class { 'quartermaster::www': }
-  class { 'quartermaster::puppetmaster': }
-  class { 'quartermaster::squid_deb_proxy': }
-  class { 'quartermaster::dnsmasq': }
-  class { 'quartermaster::server::tftpd': }
-  class { 'quartermaster::syslinux': }
-  class { 'quartermaster::nfs': }
-  class { 'quartermaster::winpe': }
-  class { 'quartermaster::scripts': }
+  class{'quartermaster::tftpd':}     -> 
+  class{'quartermaster::syslinux':}   ->
+  class{'quartermaster::dnsmasq': }    ->
+  class{'quartermaster::puppetmaster':} -> 
+  class{'quartermaster::www':}           ->
+  class{'quartermaster::winpe':}          ->
+  Class{'quartermaster':}
 
-  quartermaster::pxe{$linux:}
-  create_resources(quartermaster::windowsmedia,$windows)
+# NFS needs to be modified and refactored if used
+#  class { 'quartermaster::nfs': }
+# Scripts class is current unneeded as parts were redistributed
+#  class { 'quartermaster::scripts': }
+
+#  quartermaster::pxe{$linux:}
+#  create_resources(quartermaster::windowsmedia,$windows)
+
+  Class['quartermaster'] -> Quartermaster::Pxe <||>
+  Class['quartermaster'] -> Quartermaster::Windowsmedia <||>
 
 }

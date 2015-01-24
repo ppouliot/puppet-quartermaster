@@ -3,66 +3,29 @@
 # This Class and configures installs nfs on the quartermaster server
 #
 
-
-class quartermaster::nfs {
-  $nfs = ['nfs-kernel-server',
-        'nfs-client',
-        'tree',]
-
-  package { $nfs:
-    ensure => installed,
-  }
-
-  service { 'nfs-kernel-server':
-    ensure   => running,
-    require  => Package [ $nfs ],
-  }
-
-  file { '/etc/exports':
-    ensure  => file,
-    content => template('quartermaster/exports.erb'),
-    notify  => Service['nfs-kernel-server'],
-    require => [ Package[ $nfs ], File [$quartermaster::wwwroot]],
-  }
-
+class quartermaster::server::nfs (
+  $nfsroot = $quartermaster::params::nfsroot,
+) inherits quartermaster::params {
 
   notify {'Exporting Installation Directories via NFS':}
+  class {'nfs::server':
+    nfs_v4             => false,
+    nfs_v4_export_root => $nfsroot,
+  }
+#  include nfs::server
+#  nfs::server::export{ $nfsroot }
+#    ensure  => 'mounted',
+#    clients => '*(rw,insecure,all_squash,no_subtree_check,nohide)',
+#  }
 
-  file { 'nfsroot':
-    ensure  => 'directory',
-    path    => $quartermaster::nfsroot,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => '0755',
-    require => [ Package[ $nfs ], File[ $quartermaster::wwwroot ]],
-  }
-
-  file {"${quartermaster::nfsroot}/hosts":
+  file { ["${nfsroot}",
+         "${nfsroot}/hosts",
+         "${nfsroot}/hosts/hiera",
+         "${nfsroot}/hosts/pxefiles",
+         "${nfsroot}/hardware"]:
     ensure  => 'directory',
     owner   => 'nobody',
     group   => 'nogroup',
     mode    => '0755',
-    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
-  }
-  file {"${quartermaster::nfsroot}/hardware":
-    ensure  => 'directory',
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => '0755',
-    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
-  }
-  file {"${quartermaster::nfsroot}/hosts/pxefiles":
-    ensure  => 'directory',
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => '0755',
-    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
-  }
-  file {"${quartermaster::nfsroot}/hosts/hiera":
-    ensure  => 'directory',
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => '0755',
-    require => [ Package[ $nfs ], File[ $quartermaster::nfsroot ]],
   }
 }

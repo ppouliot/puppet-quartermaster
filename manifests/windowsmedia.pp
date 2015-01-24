@@ -13,7 +13,14 @@
 #    quartermaster::windowsmedia{"en_windows_8_enterprise_x86_dvd_917587.iso": activationkey => "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"}
 #
 
-define quartermaster::windowsmedia( $activationkey ) {
+define quartermaster::server::windowsmedia( $activationkey ) {
+
+  $wwwroot   = $quartermaster::params::wwwroot
+  $tftpboot  = $quartermaster::params::tftpboot
+  $dir_mode  = $quartermaster::params::dir_mode
+  $file_mode = $quartermaster::params::file_mode
+  $exe_mode  = $quartermaster::params::exe_mode
+
   $isofile  = $name
 #    $iso_path = "${quartermaster::wwwroot}/WinPE/ISO/${name}"
   $iso_path = "${quartermaster::winpe::windows_isos}/${name}"
@@ -116,95 +123,99 @@ define quartermaster::windowsmedia( $activationkey ) {
   notify {"${name}: WINDOWS FLAVOR: ${w_flavor}":}
   notify {"${name}: WINDOWS MEDIA IMAGE NAME: ${w_media_image_name}":}
 
-#  file {"w_iso_file_${name}":
-#    path => "${iso_path}/${name}",
-#  }
 
 
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}":
+  if ! defined (File["${wwwroot}/microsoft/${w_distro}"]) {
+    file { "${wwwroot}/microsoft/${w_distro}":
       ensure  => directory,
       recurse => true,
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
+      require =>  File[ "${wwwroot}/microsoft" ],
     }
   }
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}":
+  if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}"]) {
+    file { "${wwwroot}/microsoft/${w_distro}/${w_release}":
       ensure  => directory,
       recurse => true,
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
+      require =>  File[ "${wwwroot}/microsoft" ],
     }
   }
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend":
+  if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/unattend"]) {
+    file { "${wwwroot}/microsoft/${w_distro}/${w_release}/unattend":
       ensure  => directory,
       recurse => true,
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
+      require =>  File[ "${wwwroot}/microsoft" ],
     }
   }
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe":
+  if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"]) {
+    file { "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe":
       ensure  => directory,
       recurse => true,
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
+      require =>  File[ "${wwwroot}/microsoft" ],
     }
   } 
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}":
+  if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"]) {
+    file { "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}":
       ensure  => directory,
       recurse => true,
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
+      require =>  File[ "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
     }
   } 
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot":
+  if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot"]) {
+    file { "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot":
       ensure  => directory,
       recurse => true,
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
+      require =>  File[ "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
     }
   } 
-  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"]) {
-    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}":
+  if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"]) {
+    file { "${wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}":
       ensure  => link,
       owner   => 'www-data',
       group   => 'www-data',
       mode    => '0644',
-      target  => "${quartermaster::wwwroot}/microsoft/mount/${name}",
-      require =>  File[ "${quartermaster::wwwroot}/microsoft" ],
+      target  => "${wwwroot}/microsoft/mount/${name}",
+      require =>  File[ "${wwwroot}/microsoft" ],
     }
   }
 
-    exec { "copy-${w_flavor}-winpe.wim":
-      command   => "/usr/bin/wget -cv http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim -O ${w_arch}.wim",
-      creates   => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
-      cwd       => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/",
-      notify    => Exec["wimlib-imagex-mount-${name}"],
-      require   => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
-      logoutput => true,
-    }
-   file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim":
-     ensure => present, 
-     require => Exec["copy-${w_flavor}-winpe.wim"]
+  staging::file{"${w_flavor}-winpe.wim":
+    source  => "http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim",
+    target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
+    require => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
+    notify  => Exec["wimlib-imagex-mount-${name}"],
+  }
 
-   }
+
+  #  exec { "copy-${w_flavor}-winpe.wim":
+  #    command   => "/usr/bin/wget -cv http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim -O ${w_arch}.wim",
+  #    creates   => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
+  #    cwd       => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/",
+  #    notify    => Exec["wimlib-imagex-mount-${name}"],
+  #    require   => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
+  #    logoutput => true,
+  #  }
+  # file { "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim":
+  #   ensure => present, 
+  #   require => Exec["copy-${w_flavor}-winpe.wim"]
+  # }
    
 #  } 
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com"]) {
@@ -221,97 +232,40 @@ define quartermaster::windowsmedia( $activationkey ) {
 #  } 
   exec {"wimlib-imagex-mount-${name}":
     command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt.${w_arch}",
-    cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
+    cwd         => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
-    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
-                        "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
+    require     => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
+                        "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
     notify      => Exec["wimlib-imagex-unmount-${name}"],
     logoutput   => true,
   } 
+  concat{"winpe-${name}-update-startnet.cmd":
+
+  }
   exec {"wimlib-imagex-unmount-${name}":
     command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
-    cwd         => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
+    cwd         => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
-    require     => File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
+    require     => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
     logoutput   => true,
   } 
 
-
-#  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"]) {
-#    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe":
-#      ensure  => directory,
-#      recurse => true,
-#      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt/Windows/Boot/PXE/oscdimg.exe",
-#      owner   => 'www-data',
-#      group   => 'www-data',
-#      mode    => '0644',
-#      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/oscdimg.exe"],
-#    }
-#  } 
-#  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com"]) {
-#    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com":
-#      ensure  => file,
-#      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt/Windows/Boot/PXE/pxeboot.com",
-#      owner   => 'www-data',
-#      group   => 'www-data',
-#      mode    => '0644',
-#      require => [ Exec["wimlib-imagex-mount-${name}"], File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt"]],
-#      require => File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt/Windows/Boot/PXE/pxeboot.com"],
-#    }
-#  }
-#  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0"]) {
-#    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0":
-#      ensure  => directory,
-#      recurse => true,
-#      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt/Windows/Boot/PXE/pxeboot.0",
-#      owner   => 'www-data',
-#      group   => 'www-data',
-#      mode    => '0644',
-#      require => File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com"],
-#    }
-#  }
-#  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe"]) {
-#    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe":
-#      ensure  => directory,
-#      recurse => true,
-#      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt/Windows/Boot/PXE/bootmgr.exe",
-#      owner   => 'www-data',
-#      group   => 'www-data',
-#      mode    => '0644',
-#      require => File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0"],
-#    }
-#  }
-#  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi"]) {
-#    file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi":
-#      ensure  => directory,
-#      recurse => true,
-#      source  => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}/pxe/mnt/Windows/Boot/PXE/boot.sdi",
-#      owner   => 'www-data',
-#      group   => 'www-data',
-#      mode    => '0644',
-#      notify  => Exec["wimlib-imagex-umount-${name}"],
-#      require => File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe"],
-#    }
-#  }
-
-  file { "${name}-setup.cmd":
+  file { "${wwwroot}/microsoft/winpe/system/${name}.cmd":
     ensure  => file,
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
-    path    => "${quartermaster::wwwroot}/microsoft/winpe/system/${name}.cmd",
+    mode    => $exe_mode,
     content => template("quartermaster/winpe/menu/default.erb"),
   }
 
-  file { "unattend-${w_flavor}.xml":
+  file { "${wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml":
     ensure  => file,
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
-    path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
+    mode    => $exe_mode,
     content => template('quartermaster/autoinst/unattend.erb'),
   }
-  file { "unattend-${w_flavor}-cloudbase.xml":
+  file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-cloudbase.xml":
     ensure  => file,
     owner   => 'nobody',
     group   => 'nogroup',
@@ -319,37 +273,26 @@ define quartermaster::windowsmedia( $activationkey ) {
     path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-cloudbase.xml",
     content => template('quartermaster/autoinst/Cloudbase.erb'),
   }
-  file { "unattend-${w_flavor}-compute.xml":
+  file { "${wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-compute.xml":
     ensure  => file,
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
-    path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-compute.xml",
+    mode    => $exe_mode,
     content => template('quartermaster/autoinst/compute.erb'),
   }
-#  if $w_distro == 'windows'{
-#    file { "${name}-core-unattend.xml":
-#      ensure  => file,
-#      owner   => 'nobody',
-#      group   => 'nogroup',
-#      mode    => $quartermaster::exe_mode,
-#      path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml",
-#      content => template('quartermaster/autoinst/unattend/core.erb'),
-#    }
-#  }
   
   concat::fragment{"winpe_system_cmd_a_init_${name}":
-    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
+    target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/A_init.erb'),
     order   => 05,
   }
   concat::fragment{"winpe_system_cmd_b_init_${name}":
-    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
+    target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/B_init.erb'),
     order   => 15,
   }
   concat::fragment{"winpe_system_cmd_c_init_${name}":
-    target  => "${quartermaster::wwwroot}/microsoft/winpe/system/setup.cmd",
+    target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/C_init.erb'),
     order   => 25,
   }

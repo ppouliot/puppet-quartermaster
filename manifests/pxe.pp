@@ -5,6 +5,18 @@
 
 
 define quartermaster::pxe {
+
+  $wwwroot        = $quartermaster::params::wwwroot
+  $tftpboot       = $quartermaster::params::tftpboot
+  $tftp_username  = $quartermaster::params::tftp_username
+  $tftp_group     = $quartermaster::params::tftp_group
+  $tftp_filemode  = $quartermaster::params::tftp_filemode
+  $www_username   = $quartermaster::params::www_username
+  $www_group      = $quartermaster::params::www_group
+  $file_mode      = $quartermaster::params::file_mode
+
+
+
 # account for "."
   if $name =~ /([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)/ {
 # works w/ no .
@@ -168,6 +180,7 @@ define quartermaster::pxe {
     /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/back.jpg",
     default             => 'No URL Specified',
   }
+
   $bootsplash = $distro ? {
     /(ubuntu|debian|fedora|scientificlinux)/             => '.png',
     /(redhat|centos|opensuse|sles|sled)/                 => '.jpg',
@@ -198,12 +211,14 @@ define quartermaster::pxe {
     /(sles|sled|opensuse)/                               => '',
     default                                              => 'No supported Initrd Extension',
   }
+
   $linux_installer = $distro ? {
     /(ubuntu|debian)/                                    => 'd-i',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
     /(sles|sled|opensuse)/                               => 'yast',
     default                                              => 'No Supported Installer',
   }
+
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppetlabs.com/dists/${rel_name}",
     /(fedora)/                                           => "http://yum.puppetlabs.com/fedora/f${rel_number}/products/${p_arch}",
@@ -233,178 +248,165 @@ define quartermaster::pxe {
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
 
-
-  exec {"get_net_kernel-${name}":
-    command => "/usr/bin/wget -c ${url}/${pxekernel} -O ${rel_number}",
-    cwd     => "${quartermaster::tftpboot}/${distro}/${p_arch}",
-    creates => "${quartermaster::tftpboot}/${distro}/${p_arch}/${rel_number}",
-    require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ]],
+  staging::file{"kernel-${name}":
+    source => "${url}/${pxekernel}", 
+    target => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
+    require =>  Tftp::File["${distro}/${p_arch}"],
+  }
+  staging::file{"initrd-${name}":
+    source => "${url}/initrd${initrd}",
+    target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
+    require =>  Tftp::File["${distro}/${p_arch}"],
+  }
+  staging::file{"bootsplash-${name}":
+    source => $splashurl,
+    target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+    require =>  Tftp::File["${distro}/graphics"],
   }
 
-  exec {"get_net_initrd-${name}":
-    command => "/usr/bin/wget -c ${url}/initrd${initrd} -O ${rel_number}${initrd}",
-    cwd     => "${quartermaster::tftpboot}/${distro}/${p_arch}",
-    creates => "${quartermaster::tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
-    require =>  [Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/${p_arch}" ]],
-  }
-
-  exec {"get_bootsplash-${name}":
-    command => "/usr/bin/wget -c ${splashurl}  -O ${name}${bootsplash}",
-    cwd     => "${quartermaster::tftpboot}/${distro}/graphics",
-    creates => "${quartermaster::tftpboot}/${distro}/graphics/${name}${bootsplash}",
-    require =>  [ Class['quartermaster::squid_deb_proxy'], File[ "${quartermaster::tftpboot}/${distro}/graphics" ]],
-  }
-
-#  exec {"create_submenu-${name}":
-#    command     => "${quartermaster::wwwroot}/bin/concatenate_files.sh ${quartermaster::tftpboot}/${distro}/menu ${quartermaster::tftpboot}/${distro}/${distro}.menu",
-#    cwd         => "${quartermaster::tftpboot}/${distro}/",
-#    creates     => "${quartermaster::tftpboot}/${distro}/${distro}.menu",
-#    notify      => Service[ 'tftpd-hpa' ],
-#    require     => File["${quartermaster::wwwroot}/bin/concatenate_files.sh"],
+# Old Style Replaced w/ staging module above
+#  exec {"get_net_kernel-${name}":
+#    command => "/usr/bin/wget -c ${url}/${pxekernel} -O ${rel_number}",
+#    cwd     => "${tftpboot}/${distro}/${p_arch}",
+#    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
+#    require =>  Tftp::File["${distro}/${p_arch}"],
 #  }
 
+#  exec {"get_net_initrd-${name}":
+#    command => "/usr/bin/wget -c ${url}/initrd${initrd} -O ${rel_number}${initrd}",
+#    cwd     => "${tftpboot}/${distro}/${p_arch}",
+#    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
+#    require =>  Tftp::File["${distro}/${p_arch}"],
+#  }
 
-  if ! defined (File["${quartermaster::tftpboot}/${distro}"]){
-    file { "${quartermaster::tftpboot}/${distro}":
+#  exec {"get_bootsplash-${name}":
+#    command => "/usr/bin/wget -c ${splashurl}  -O ${name}${bootsplash}",
+#    cwd     => "${tftpboot}/${distro}/graphics",
+#    creates => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+#    require =>  Tftp::File["${distro}/graphics"],
+#  }
+
+# Distro Specific TFTP Folders
+
+  if ! defined (Tftp::File[$distro]){
+    tftp::file { $distro: 
       ensure  => directory,
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => '0644',
-      require =>  File[$quartermaster::tftpboot],
     }
   }
 
 
-  if ! defined (File["${quartermaster::tftpboot}/${distro}/menu"]){
-    file { "${quartermaster::tftpboot}/${distro}/menu":
+  if ! defined (Tftp::File["${distro}/menu"]){
+    tftp::file { "${distro}/menu":
       ensure  => directory,
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => '0644',
-      require => File[ "${quartermaster::tftpboot}/${distro}" ],
     }
   }
 
-  if ! defined (File["${quartermaster::tftpboot}/${distro}/graphics"]){
-    file { "${quartermaster::tftpboot}/${distro}/graphics":
+  if ! defined (Tftp::File["${distro}/graphics"]){
+    tftp::file { "${distro}/graphics":
       ensure  => directory,
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => '0644',
-      require => File[ "${quartermaster::tftpboot}/${distro}" ],
-    }
-  }
-    file { "${name}.graphics.conf":
-      ensure  => file,
-      path    => "${quartermaster::tftpboot}/${distro}/menu/${name}.graphics.conf",
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => '0644',
-      require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
-      content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
-   }
-
-
-  if ! defined (File["${quartermaster::tftpboot}/${distro}/${p_arch}"]){
-    file { "${quartermaster::tftpboot}/${distro}/${p_arch}":
-      ensure  => directory,
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => '0644',
-      require => File[ "${quartermaster::tftpboot}/${distro}" ],
     }
   }
 
-  if ! defined (File["${quartermaster::wwwroot}/${distro}"]) {
-    file { "${quartermaster::wwwroot}/${distro}":
+  if ! defined (Tftp::File["${distro}/${p_arch}"]){
+    tftp::file { "${distro}/${p_arch}":
       ensure  => directory,
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => '0644',
-      require => File[ $quartermaster::wwwroot ],
     }
   }
 
-  if ! defined (File["${quartermaster::wwwroot}/${distro}/${autofile}"]) {
-    file { "${quartermaster::wwwroot}/${distro}/${autofile}":
-      ensure  => directory,
-      recurse => true,
-      owner   => 'www-data',
-      group   => 'www-data',
-      mode    => '0644',
-      require => File[ $quartermaster::wwwroot ],
-    }
+# Distro Specific TFTP Graphics.conf 
+
+  tftp::file { "${distro}/menu/${name}.graphics.conf":
+    content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
   }
-  if ! defined (File["${quartermaster::wwwroot}/${distro}/${p_arch}"]) {
-    file { "${quartermaster::wwwroot}/${distro}/${p_arch}":
+
+# Begin Creating Distro Specific HTTP Folders
+
+  if ! defined (File["${wwwroot}/${distro}"]) {
+    file { "${wwwroot}/${distro}":
       ensure  => directory,
-      recurse => true,
-      owner   => 'www-data',
-      group   => 'www-data',
-      mode    => '0644',
-      require => File[ $quartermaster::wwwroot ],
-    }
-  }
-  if ! defined (File["${quartermaster::wwwroot}/${distro}/ISO"]) {
-    file { "${quartermaster::wwwroot}/${distro}/ISO":
-      ensure  => directory,
-      recurse => true,
-      owner   => 'www-data',
-      group   => 'www-data',
-      mode    => '0644',
-      require => File[$quartermaster::wwwroot],
+      owner   => $www_username,
+      group   => $www_group,
+      mode    => $tftp_mode,
+      require => File[ $wwwroot ],
     }
   }
 
+  if ! defined (File["${wwwroot}/${distro}/${autofile}"]) {
+    file { "${wwwroot}/${distro}/${autofile}":
+      ensure  => directory,
+      owner   => $www_username,
+      group   => $www_group,
+      mode    => $tftp_mode,
+      require => File[ "${wwwroot}/${distro}" ],
+    }
+  }
 
+  if ! defined (File["${wwwroot}/${distro}/${p_arch}"]) {
+    file { "${wwwroot}/${distro}/${p_arch}":
+      ensure  => directory,
+      owner   => $www_username,
+      group   => $www_group,
+      mode    => $tftp_mode,
+      require => File[ "${wwwroot}/${distro}" ],
+    }
+  }
+
+  if ! defined (File["${wwwroot}/${distro}/ISO"]) {
+    file { "${wwwroot}/${distro}/ISO":
+      ensure  => directory,
+      owner   => $www_username,
+      group   => $www_group,
+      mode    => $tftp_mode,
+      require => File[ "${wwwroot}/${distro}" ],
+    }
+  }
+
+# Kickstart/Preseed File
   file { "${name}.${autofile}":
     ensure  => file,
-    path    => "${quartermaster::wwwroot}/${distro}/${autofile}/${name}.${autofile}",
-    owner   => 'www-data',
-    group   => 'www-data',
-    mode    => '0644',
+    path    => "${wwwroot}/${distro}/${autofile}/${name}.${autofile}",
+    owner   => $www_username,
+    group   => $www_group,
+    mode    => $tftp_mode,
     content => template("quartermaster/autoinst/${autofile}.erb"),
-    require => File[ "${quartermaster::wwwroot}/${distro}/${autofile}" ],
+    require => File[ "${wwwroot}/${distro}/${autofile}" ],
   }
 
 
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
-      target  => "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/default",
+      target  => "${tftpboot}/pxelinux/pxelinux.cfg/default",
       content => template("quartermaster/pxemenu/default.erb"),
     }
   }
-  if ! defined (Concat["${quartermaster::tftpboot}/menu/${distro}.menu"]) {
-    concat { "${quartermaster::tftpboot}/menu/${distro}.menu":
-      owner   => 'tftp',
-      group   => 'tftp',
-      mode    => $quartermaster::file_mode,
-      notify => Service['tftpd-hpa'],
+
+  if ! defined (Concat["${tftpboot}/menu/${distro}.menu"]) {
+    concat { "${tftpboot}/menu/${distro}.menu":
+      owner   => $tftp_username,
+      group   => $tftp_group,
+      mode    => $tftp_filemode,
+#      notify  => Service['tftpd-hpa'],
+#      require => Tftp::File['menu'],
     }
   }
   if ! defined (Concat::Fragment["${distro}.submenu_header"]) {
     concat::fragment {"${distro}.submenu_header":
-      target  => "${quartermaster::tftpboot}/menu/${distro}.menu",
+      target  => "${tftpboot}/menu/${distro}.menu",
       content => template("quartermaster/pxemenu/header2.erb"),
       order   => 01,
     }
   }
   if ! defined (Concat::Fragment["${distro}${name}.menu_item"]) {
     concat::fragment {"${distro}.${name}.menu_item":
-      target  => "${quartermaster::tftpboot}/menu/${distro}.menu",
+      target  => "${tftpboot}/menu/${distro}.menu",
       content => template("quartermaster/pxemenu/${linux_installer}.erb"),
     }
   }
 
 
 
-  file { "${name}.menu":
-    ensure  => file,
-    path    => "${quartermaster::tftpboot}/${distro}/menu/${name}.menu",
-    owner   => 'tftp',
-    group   => 'tftp',
-    mode    => '0644',
-    require => File[ "${quartermaster::tftpboot}/${distro}/menu" ],
+  tftp::file { "${distro}/menu/${name}.menu":
     content => template("quartermaster/pxemenu/${linux_installer}.erb"),
   }
+
 }
