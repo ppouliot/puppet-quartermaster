@@ -52,7 +52,7 @@ class quartermaster::server::winpe (
     security             => 'SHARE',
     guest_account        => 'nobody',
     extra_global_options => [
-      'wide links    = yes,
+      'wide links    = yes',
       'unix extensions = no',
       'follow symlins = yes',
       'kernel oplocks = no',
