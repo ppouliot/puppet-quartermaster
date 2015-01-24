@@ -249,9 +249,6 @@ define quartermaster::windowsmedia( $activationkey ) {
     notify      => Exec["wimlib-imagex-unmount-${name}"],
     logoutput   => true,
   } 
-  concat{"winpe-${name}-update-startnet.cmd":
-
-  }
   exec {"wimlib-imagex-unmount-${name}":
     command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
     cwd         => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
