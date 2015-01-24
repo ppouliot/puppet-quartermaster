@@ -47,7 +47,7 @@ class quartermaster::server::winpe (
     ensure => directory,
     owner   => 'nobody',
     group   => 'nogroup',
-    mode    => $quartermaster::dir_mode,
+    mode    => $dir_mode,
 
   }
 
