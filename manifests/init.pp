@@ -52,7 +52,8 @@ class quartermaster (
 # Scripts class is current unneeded as parts were redistributed
 #  class { 'quartermaster::scripts': }
 
-  quartermaster::pxe{$linux:}
+  #quartermaster::pxe{$linux:}
+  create_resources(quartermaster::pxe,$linux)
   create_resources(quartermaster::windowsmedia,$windows)
 
   Class['quartermaster'] -> Quartermaster::Pxe <||>
