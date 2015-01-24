@@ -47,10 +47,10 @@ class quartermaster::server::winpe (
   }
 
   class{'::samba::server':
-    $workgroup     => 'quartermaster',
-    $netbios_name  => $::hostname,
-    $security      => 'SHARE',
-    $guest_account => 'nobody',
+    workgroup            => 'quartermaster',
+    netbios_name         => $::hostname,
+    security             => 'SHARE',
+    guest_account        => 'nobody',
     extra_global_options => [
       'wide links    = yes,
       'unix extensions = no',
