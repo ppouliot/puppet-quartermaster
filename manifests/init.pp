@@ -32,8 +32,9 @@
 # }
 #
 class quartermaster (
-  $linux   = $quartermaster::params::linux,
-  $windows = $quartermaster::params::windows,
+  $linux              = $quartermaster::params::linux,
+  $windows            = $quartermaster::params::windows,
+  $dhcp_proxy_subnets = $quartermaster::params::dhcp_proxy_subnets,
 ) inherits quartermaster::params {
 
   validate_re($::osfamily, '^(Debian|RedHat|Archlinux)$', 'This module only works on Debian and Red Hat based systems.')
