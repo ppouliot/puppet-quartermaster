@@ -147,7 +147,7 @@ class quartermaster::winpe (
   # Add Winpe to the PXE menu
 
   concat::fragment{"winpe_pxe_default_menu":
-    target  => "${tftpboot}/pxelinux/pxelinux.cfg/default",
+    target  => "${pxecfg}/default",
     content => template("quartermaster/pxemenu/winpe.erb"),
     require => Tftp::File['pxelinux/pxelinux.cfg']
   }
