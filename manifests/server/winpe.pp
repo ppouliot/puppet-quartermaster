@@ -30,7 +30,9 @@ class quartermaster::server::winpe (
 # Samba Services for Hosing Windows Shares
 
   tftp::file{'winpe':
-    ensure => file,
+    ensure  => directory,
+    owner   => 'nobody',
+    group   => 'nogroup',
   }
 
   file{[
