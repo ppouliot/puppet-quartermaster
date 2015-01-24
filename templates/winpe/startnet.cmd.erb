@@ -1,0 +1,13 @@
+wpeinit
+
+ping <%= @ipaddress %>
+
+net use i: \\<%= @ipddress %>\ISO /user:guest
+net use p: \\<%= @ipddress %>\pxe-cfg /user:guest
+net use t: \\<%= @ipddress %>\pe-pxeroot /user:guest
+net use o: \\<%= @ipddress %>\os /user:guest
+net use s: \\<%= @ipaddress %>\system /user:guest
+net use w: \\<%= @ipaddress %>\winpe /user:guest
+
+
+s:\init.cmd
