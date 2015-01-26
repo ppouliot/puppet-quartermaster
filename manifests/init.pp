@@ -54,9 +54,9 @@ class quartermaster (
 # Scripts class is current unneeded as parts were redistributed
 #  class { 'quartermaster::scripts': }
 
-  #quartermaster::pxe{$linux:}
 if $linux {
-  create_resources(quartermaster::pxe,$linux)
+  #create_resources(quartermaster::pxe,$linux)
+  quartermaster::pxe{$linux:}
 }
 
 if $windows {
