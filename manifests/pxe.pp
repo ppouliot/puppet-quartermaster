@@ -197,9 +197,7 @@ define quartermaster::pxe {
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
     /(sles|sled|opensuse)/                               => 'autoyast',
     /(windows)/                                          => 'unattend.xml',
-    default                                              => {
-      warn('This is not a valid unatted installation type')
-    },
+    default                                              => warn('This is not a valid unatted installation type'),
   }
 
   $pxekernel = $distro ? {
