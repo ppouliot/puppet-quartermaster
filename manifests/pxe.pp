@@ -414,9 +414,10 @@ define quartermaster::pxe {
   }
 
 
-
-  tftp::file { "${distro}/menu/${name}.menu":
-    content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+  if ! $linux_installer == undef {
+    tftp::file { "${distro}/menu/${name}.menu":
+      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+    }
   }
 
 }
