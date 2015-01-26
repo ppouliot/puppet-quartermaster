@@ -170,7 +170,6 @@ define quartermaster::pxe {
     default             => 'No URL Specified',
   }
 
-
   $splashurl = $distro ? {
     /(ubuntu)/         => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(debian)/         => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
@@ -193,13 +192,14 @@ define quartermaster::pxe {
     default                                              => 'No Bootsplash',
   }
 
-
   $autofile = $distro ? {
     /(ubuntu|debian)/                                    => 'preseed',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
     /(sles|sled|opensuse)/                               => 'autoyast',
     /(windows)/                                          => 'unattend.xml',
-    default                                              => undef,
+    default                                              => {
+      warn('This is not a valid unatted installation type')
+    },
   }
 
   $pxekernel = $distro ? {
@@ -229,9 +229,6 @@ define quartermaster::pxe {
     /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppetlabs.com/el/${rel_major}/products/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
-
-
-
 
   notify { "${name}: distro is ${distro}":}
   notify { "${name}: release is ${release}":}
