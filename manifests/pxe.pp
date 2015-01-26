@@ -252,21 +252,21 @@ define quartermaster::pxe {
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
 
-  in ! defined (Staging::File["kernel-${name}"]){
+  if ! defined (Staging::File["kernel-${name}"]){
     staging::file{"kernel-${name}":
       source => "${url}/${pxekernel}", 
       target => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
       require =>  Tftp::File["${distro}/${p_arch}"],
     }
   }
-  in ! defined (Staging::File["initrd-${name}"]){
+  if ! defined (Staging::File["initrd-${name}"]){
     staging::file{"initrd-${name}":
       source => "${url}/initrd${initrd}",
       target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
       require =>  Tftp::File["${distro}/${p_arch}"],
     }
   }
-  in ! defined (Staging::File["bootsplash-${name}"]){
+  if ! defined (Staging::File["bootsplash-${name}"]){
     staging::file{"bootsplash-${name}":
       source => $splashurl,
       target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
