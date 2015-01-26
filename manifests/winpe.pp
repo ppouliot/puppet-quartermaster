@@ -75,8 +75,8 @@ class quartermaster::winpe (
     "${wwwroot}/microsoft/winpe/system/menu",
     ]:
     ensure => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
+    owner   => 'www-data',
+    group   => 'www-data',
     mode    => $dir_mode,
 
   }
