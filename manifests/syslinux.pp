@@ -50,11 +50,11 @@ class quartermaster::syslinux (
     source  => "${tmp}/${syslinux}/core/isolinux.bin",
   }
 
-  tftp::file { 'pxelinux/menu_c32':
+  tftp::file { 'pxelinux/menu.c32':
     source  => "${tmp}/${syslinux}/com32/menu/menu.c32",
   }
 
-  tftp::file { 'pxelinux/ldlinux_c32':
+  tftp::file { 'pxelinux/ldlinux.c32':
     source  => "${tmp}/${syslinux}/com32/elflink/ldlinux/ldlinux.c32",
   }
 

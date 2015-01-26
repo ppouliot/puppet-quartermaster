@@ -199,7 +199,7 @@ define quartermaster::pxe {
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
     /(sles|sled|opensuse)/                               => 'autoyast',
     /(windows)/                                          => 'unattend.xml',
-    default                                              => 'No supported automated installation method',
+    default                                              => undef,
   }
 
   $pxekernel = $distro ? {
@@ -220,7 +220,7 @@ define quartermaster::pxe {
     /(ubuntu|debian)/                                    => 'd-i',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
     /(sles|sled|opensuse)/                               => 'yast',
-    default                                              => 'No Supported Installer',
+    default                                              => undef,
   }
 
   $puppetlabs_repo = $distro ? {
@@ -325,9 +325,9 @@ define quartermaster::pxe {
 
 # Distro Specific TFTP Graphics.conf 
 
-#  tftp::file { "${distro}/menu/${name}.graphics.conf":
-#    content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
-#  }
+  tftp::file { "${distro}/menu/${name}.graphics.conf":
+    content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
+  }
 
 # Begin Creating Distro Specific HTTP Folders
 
