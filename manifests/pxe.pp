@@ -197,7 +197,7 @@ define quartermaster::pxe {
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
     /(sles|sled|opensuse)/                               => 'autoyast',
     /(windows)/                                          => 'unattend.xml',
-    default                                              => warn('This is not a valid unatted installation type'),
+    default                                              => 'No Automation File',
   }
 
   $pxekernel = $distro ? {
@@ -218,7 +218,7 @@ define quartermaster::pxe {
     /(ubuntu|debian)/                                    => 'd-i',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
     /(sles|sled|opensuse)/                               => 'yast',
-    default                                              => undef,
+    default                                              => 'No Supported Linux Installer',
   }
 
   $puppetlabs_repo = $distro ? {
