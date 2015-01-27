@@ -411,9 +411,9 @@ if $autofile == !('No Automation File'){
     }
   }
 
-
-  tftp::file { "${distro}/menu/${name}.menu":
-    content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+  if $linux_installer == !('No Supported Linux Installer') {
+    tftp::file { "${distro}/menu/${name}.menu":
+      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+    }
   }
-
 }
