@@ -320,11 +320,12 @@ define quartermaster::pxe {
 
 # Distro Specific TFTP Graphics.conf 
 
-if ! defined (Tftp::File["${distro}/menu/${name}"]) {
+#if ! defined (Tftp::File["${distro}/menu/${name}"]) {
   tftp::file { "${distro}/menu/${name}.graphics.conf":
     content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
+    require => Tftp::File["${distro}/menu"],
   }
-}
+#}
 
 # Begin Creating Distro Specific HTTP Folders
 
