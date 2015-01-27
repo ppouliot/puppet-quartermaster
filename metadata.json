@@ -54,7 +54,6 @@
       "name": "puppet",
       "version_requirement": ">=2.7.0 <4.0.0"
     }
-  ],
   "name": "ppouliot-staging",
   "version": "1.0.0",
   "source": "git://github.com/ppouliot/puppet-quartermaster",
