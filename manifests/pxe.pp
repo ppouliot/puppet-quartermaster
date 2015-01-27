@@ -320,11 +320,12 @@ define quartermaster::pxe {
 
 # Distro Specific TFTP Graphics.conf 
 
+if $linux_installer == !('No Supported Linux Installer') {
   tftp::file { "${distro}/menu/${name}.graphics.conf":
     content => template("quartermaster/pxemenu/${linux_installer}.graphics.erb"),
     require => Tftp::File["${distro}/menu"],
   }
-
+}
 # Begin Creating Distro Specific HTTP Folders
 
   if ! defined (File["${wwwroot}/${distro}"]) {
@@ -368,6 +369,7 @@ define quartermaster::pxe {
   }
 
 # Kickstart/Preseed File
+if $autofile == !('No Automation File'){
   file { "${name}.${autofile}":
     ensure  => file,
     path    => "${wwwroot}/${distro}/${autofile}/${name}.${autofile}",
@@ -377,7 +379,7 @@ define quartermaster::pxe {
     content => template("quartermaster/autoinst/${autofile}.erb"),
     require => File[ "${wwwroot}/${distro}/${autofile}" ],
   }
-
+}
 
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
@@ -410,10 +412,8 @@ define quartermaster::pxe {
   }
 
 
-  if ! $linux_installer == undef {
-    tftp::file { "${distro}/menu/${name}.menu":
-      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
-    }
+  tftp::file { "${distro}/menu/${name}.menu":
+    content => template("quartermaster/pxemenu/${linux_installer}.erb"),
   }
 
 }
