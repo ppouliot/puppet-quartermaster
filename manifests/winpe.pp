@@ -57,17 +57,25 @@ class quartermaster::winpe (
   }
 
 
-# Samba Services for Hosing Windows Shares
 
+# Add Winpe directory to TFTPBOOT and entry to PXE menu
   tftp::file{'winpe':
     ensure  => directory,
     owner   => 'nobody',
     group   => 'nogroup',
   }
 
+  concat::fragment{"winpe_pxe_default_menu":
+    target  => "${pxecfg}/default",
+    content => template("quartermaster/pxemenu/winpe.erb"),
+    require => Tftp::File['pxelinux/pxelinux.cfg']
+  }
+
+# Samba Services for Hosing Windows Shares
+
+
   file{[
     "${wwwroot}/microsoft",
-    "${wwwroot}/microsoft/iso",
     "${wwwroot}/microsoft/mount",
     "${wwwroot}/microsoft/winpe",
     "${wwwroot}/microsoft/winpe/bin",
@@ -78,7 +86,7 @@ class quartermaster::winpe (
   }
 
   class{'::samba::server':
-    workgroup            => 'quartermaster',
+    workgroup            => 'PXE',
     netbios_name         => "${::hostname}",
     security             => 'user',
     map_to_guest         => 'Bad User',
@@ -88,6 +96,7 @@ class quartermaster::winpe (
       'unix extensions = no',
       'follow symlins = yes',
       'kernel oplocks = no',
+      'guest ok = yes',
     ],
     shares => {
       'installs' => [
@@ -95,6 +104,12 @@ class quartermaster::winpe (
         'read only = yes',
         'guest ok = yes',
         'fake oplocks = true',
+      ],
+      'IPC$' => [
+        "path = /etc/samba/fakeIPC",
+        'read only = yes',
+        'guest ok = yes',
+        'valid users = nobody',
       ],
       'os' => [
         "path = ${wwwroot}/microsoft",
@@ -133,21 +148,15 @@ class quartermaster::winpe (
   }
 
 # Autofs For Automouting Windows iso's
-  autofs::mount{ "${wwwroot}/microsoft/iso":
-    map => '*',
-    options => [
-      '-fstype=udf,loop',
-      '-fstype=iso9660,loop', 
-    ],
-  }
+#  autofs::mount{ "${wwwroot}/microsoft/iso":
+#    map => '*',
+#    options => [
+#      '-fstype=udf,loop',
+#      '-fstype=iso9660,loop', 
+#    ],
+#  }
 
   # Add Winpe to the PXE menu
-
-  concat::fragment{"winpe_pxe_default_menu":
-    target  => "${pxecfg}/default",
-    content => template("quartermaster/pxemenu/winpe.erb"),
-    require => Tftp::File['pxelinux/pxelinux.cfg']
-  }
 
   # Begin Windows provisioning Scripts
 
