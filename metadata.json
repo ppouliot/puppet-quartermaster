@@ -57,10 +57,10 @@
   "name": "puppet-quartermaster",
   "version": "1.0.0",
   "source": "git://github.com/ppouliot/puppet-quartermaster",
-  "author": "Nan Liu",
+  "author": "Peter J. Pouliot",
   "license": "Apache 2.0",
-  "summary": "Compressed file staging and deployment",
-  "description": "Manages compressed file staging and deployment.",
+  "summary": "Dynamic Pxe infrastructure",
+  "description": "Creates a dynamic pxe infrastructure for operating system deployments",
   "project_page": "https://github.com/ppouliot/puppet-quartermaster",
   "dependencies": [
     {
