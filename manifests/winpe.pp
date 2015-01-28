@@ -57,13 +57,22 @@ class quartermaster::winpe (
   }
 
 
-# Samba Services for Hosing Windows Shares
 
+# Add Winpe directory to TFTPBOOT and entry to PXE menu
   tftp::file{'winpe':
     ensure  => directory,
     owner   => 'nobody',
     group   => 'nogroup',
   }
+
+  concat::fragment{"winpe_pxe_default_menu":
+    target  => "${pxecfg}/default",
+    content => template("quartermaster/pxemenu/winpe.erb"),
+    require => Tftp::File['pxelinux/pxelinux.cfg']
+  }
+
+# Samba Services for Hosing Windows Shares
+
 
   file{[
     "${wwwroot}/microsoft",
@@ -79,13 +88,14 @@ class quartermaster::winpe (
   class{'::samba::server':
     workgroup            => 'quartermaster',
     netbios_name         => "${::hostname}",
-    security             => 'SHARE',
+#    security             => 'SHARE',
     guest_account        => 'nobody',
     extra_global_options => [
       'wide links    = yes',
       'unix extensions = no',
       'follow symlins = yes',
       'kernel oplocks = no',
+      'guest ok = yes',
     ],
     shares => {
       'installs' => [
@@ -131,21 +141,15 @@ class quartermaster::winpe (
   }
 
 # Autofs For Automouting Windows iso's
-  autofs::mount{ "${wwwroot}/microsoft/iso":
-    map => '*',
-    options => [
-      '-fstype=udf,loop',
-      '-fstype=iso9660,loop', 
-    ],
-  }
+#  autofs::mount{ "${wwwroot}/microsoft/iso":
+#    map => '*',
+#    options => [
+#      '-fstype=udf,loop',
+#      '-fstype=iso9660,loop', 
+#    ],
+#  }
 
   # Add Winpe to the PXE menu
-
-  concat::fragment{"winpe_pxe_default_menu":
-    target  => "${pxecfg}/default",
-    content => template("quartermaster/pxemenu/winpe.erb"),
-    require => Tftp::File['pxelinux/pxelinux.cfg']
-  }
 
   # Begin Windows provisioning Scripts
 
