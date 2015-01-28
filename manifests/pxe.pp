@@ -106,6 +106,8 @@ define quartermaster::pxe {
     /(13.04)/     => 'raring',
     /(13.10)/     => 'saucy',
     /(14.04)/     => 'trusty',
+    /(14.10)/     => 'utopic',
+    /(15.04)/     => 'vivid',
     /(oldstable)/ => 'squeeze',
     /(stable)/    => 'wheezy',
     /(testing)/   => 'jessie',
