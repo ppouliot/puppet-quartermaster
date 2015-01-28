@@ -160,8 +160,8 @@ class quartermaster::winpe (
     ],
     mapfile => '/etc/auto.quartermaster',
   }
-  autofs::directmount{ '*':
-    map     => ":${wwwroot}/microsoft/iso/&",
+  autofs::directmount{ ":${wwwroot}/microsoft/iso/&",
+    map     => '*',
     options => [
       "-fstype=udf,loop",
     ],
