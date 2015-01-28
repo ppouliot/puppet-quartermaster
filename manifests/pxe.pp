@@ -247,32 +247,36 @@ define quartermaster::pxe {
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
 
-  if ! defined (Staging::File["kernel-${name}"]){
-    staging::file{"kernel-${name}":
-      source => "${url}/${pxekernel}", 
-      target => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
-      require =>  Tftp::File["${distro}/${p_arch}"],
-    }
-  }
-  if ! defined (Staging::File["initrd-${name}"]){
-    staging::file{"initrd-${name}":
-      source => "${url}/initrd${initrd}",
-      target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
-      require =>  Tftp::File["${distro}/${p_arch}"],
-    }
-  }
-  case $distro {
-    'ubuntu','debian','fedora','scientificlinux','redhat','centos','opensuse','sles','sled':{ 
-      if ! defined (Staging::File["bootsplash-${name}"]){
-        staging::file{"bootsplash-${name}":
-          source => $splashurl,
-          target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
-          require =>  Tftp::File["${distro}/graphics"],
-        }
+# Retrieve installation kernel file if supported
+  if $pxekernel == !('No supported Pxe Kernel'){
+    if ! defined (Staging::File["kernel-${name}"]){
+      staging::file{"kernel-${name}":
+        source => "${url}/${pxekernel}", 
+        target => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
+        require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
-    default:{
-      warning("no bootsplash needed for ${distro}")
+  } 
+
+# Retrieve initrd file if supported
+  if $initrd == !('No supported Initrd Extension'){
+    if ! defined (Staging::File["initrd-${name}"]){
+      staging::file{"initrd-${name}":
+        source => "${url}/initrd${initrd}",
+        target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
+        require =>  Tftp::File["${distro}/${p_arch}"],
+      }
+    }
+  }
+
+# Retrieve Bootsplash file if present
+  if $bootsplash == !('No Bootsplash'){
+    if ! defined (Staging::File["bootsplash-${name}"]){
+      staging::file{"bootsplash-${name}":
+        source => $splashurl,
+        target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+        require =>  Tftp::File["${distro}/graphics"],
+      }
     }
   }
 
