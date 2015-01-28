@@ -104,6 +104,12 @@ class quartermaster::winpe (
         'guest ok = yes',
         'fake oplocks = true',
       ],
+      'IPC$' => [
+        "path = /etc/samba/fakeIPC",
+        'read only = yes',
+        'guest ok = yes',
+        'valid users = nobody',
+      ],
       'os' => [
         "path = ${wwwroot}/microsoft",
         'read only = yes',
