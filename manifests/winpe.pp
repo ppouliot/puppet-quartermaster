@@ -76,6 +76,7 @@ class quartermaster::winpe (
 
   file{[
     "${wwwroot}/microsoft",
+    "${wwwroot}/microsoft/iso",
     "${wwwroot}/microsoft/mount",
     "${wwwroot}/microsoft/winpe",
     "${wwwroot}/microsoft/winpe/bin",
@@ -148,11 +149,11 @@ class quartermaster::winpe (
   }
 
 #Autofs For Automouting Windows iso's
-  autofs::mount{ "${wwwroot}/microsoft/iso":
+  autofs::mount{ "${wwwroot}/microsoft/mount":
     map => '*',
     options => [
-      '-fstype=udf,loop',
-      '-fstype=iso9660,loop', 
+      "-fstype=udf,loop :${wwwroot}/microsoft/iso/&",
+      "-fstype=iso9660,loop :${wwwroot}/microsoft/iso/&",
     ],
   }
 
