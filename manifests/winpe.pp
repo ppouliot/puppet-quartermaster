@@ -150,9 +150,7 @@ class quartermaster::winpe (
 
 #Autofs For Automouting Windows iso's
   autofs::mount{ "${wwwroot}/microsoft/mount":
-    map => '/etc/auto.quartermaster',
-    options => [
-      "--timeout=10",
+    options => ['/etc/auto.quartermaster --timeout=10',
     ],
   }
   autofs::mount{ '*':
