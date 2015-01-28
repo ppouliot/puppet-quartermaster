@@ -155,7 +155,7 @@ class quartermaster::winpe (
       "--timeout=10",
     ],
   }
-  autofs::mount{ "${wwwroot}/microsoft/mount":
+  autofs::mount{ "${wwwroot}/microsoft/iso/":
     map => '*',
     options => [
       "-fstype=udf,loop :${wwwroot}/microsoft/iso/&",
