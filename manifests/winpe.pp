@@ -75,10 +75,6 @@ class quartermaster::winpe (
     "${wwwroot}/microsoft/winpe/system/menu",
     ]:
     ensure => directory,
-    owner   => 'www-data',
-    group   => 'www-data',
-    mode    => $dir_mode,
-
   }
 
   class{'::samba::server':
@@ -156,74 +152,56 @@ class quartermaster::winpe (
 
   file { "${wwwroot}/microsoft/winpe/system/init.cmd":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/winpe/menu/init.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/menucheck.ps1":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/winpe/menu/menucheckps1.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/puppet_log.ps1":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/scripts/puppet_log.ps1.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/firstboot.cmd":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/scripts/firstbootcmd.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/secondboot.cmd":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/scripts/secondbootcmd.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/compute.cmd":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/scripts/computecmd.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/puppetinit.cmd":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/scripts/puppetinitcmd.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
   file { "${wwwroot}/microsoft/winpe/system/rename.ps1":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
     content => template('quartermaster/scripts/rename.ps1.erb'),
     require => File["${wwwroot}/microsoft/winpe/system"],
   }
 
 #Begin Winpe menu
   concat { "${wwwroot}/microsoft/winpe/system/setup.cmd":
-    owner   => 'nobody',
-    group   => 'nogroup',
-    mode    => $quartermaster::exe_mode,
+    mode    => $exe_mode,
   }
   concat::fragment{"winpe_system_cmd_a00_header":
     target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
