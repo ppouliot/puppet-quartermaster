@@ -34,8 +34,6 @@ class quartermaster::www (
   file {'firstboot.sh':
     ensure   => present,
     path     => "${wwwroot}/bin/firstboot",
-    owner    => 'nobody',
-    group    => 'nogroup',
     mode     => $exe_mode,
     content  => template('quartermaster/scripts/firstboot.erb'),
   }
@@ -43,8 +41,6 @@ class quartermaster::www (
   file {'secondboot.sh':
     ensure   => present,
     path     => "${wwwroot}/bin/secondboot",
-    owner    => 'nobody',
-    group    => 'nogroup',
     mode     => $exe_mode,
     content  => template('quartermaster/scripts/secondboot.erb'),
   }
@@ -52,8 +48,6 @@ class quartermaster::www (
   file {'postinstall.sh':
     ensure   => present,
     path     => "${wwwroot}/bin/postinstall",
-    owner    => 'nobody',
-    group    => 'nogroup',
     mode     => $exe_mode,
     content  => template('quartermaster/scripts/postinstall.erb'),
   }

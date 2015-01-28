@@ -280,27 +280,6 @@ define quartermaster::pxe {
     }
   }
 
-# Old Style Replaced w/ staging module above
-#  exec {"get_net_kernel-${name}":
-#    command => "/usr/bin/wget -c ${url}/${pxekernel} -O ${rel_number}",
-#    cwd     => "${tftpboot}/${distro}/${p_arch}",
-#    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
-#    require =>  Tftp::File["${distro}/${p_arch}"],
-#  }
-
-#  exec {"get_net_initrd-${name}":
-#    command => "/usr/bin/wget -c ${url}/initrd${initrd} -O ${rel_number}${initrd}",
-#    cwd     => "${tftpboot}/${distro}/${p_arch}",
-#    creates => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
-#    require =>  Tftp::File["${distro}/${p_arch}"],
-#  }
-
-#  exec {"get_bootsplash-${name}":
-#    command => "/usr/bin/wget -c ${splashurl}  -O ${name}${bootsplash}",
-#    cwd     => "${tftpboot}/${distro}/graphics",
-#    creates => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
-#    require =>  Tftp::File["${distro}/graphics"],
-#  }
 
 # Distro Specific TFTP Folders
 
@@ -342,9 +321,6 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (File["${wwwroot}/${distro}"]) {
     file { "${wwwroot}/${distro}":
       ensure  => directory,
-      owner   => $www_username,
-      group   => $www_group,
-      mode    => $tftp_mode,
       require => File[ $wwwroot ],
     }
   }
@@ -352,9 +328,6 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (File["${wwwroot}/${distro}/${autofile}"]) {
     file { "${wwwroot}/${distro}/${autofile}":
       ensure  => directory,
-      owner   => $www_username,
-      group   => $www_group,
-      mode    => $tftp_mode,
       require => File[ "${wwwroot}/${distro}" ],
     }
   }
@@ -362,9 +335,6 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (File["${wwwroot}/${distro}/${p_arch}"]) {
     file { "${wwwroot}/${distro}/${p_arch}":
       ensure  => directory,
-      owner   => $www_username,
-      group   => $www_group,
-      mode    => $tftp_mode,
       require => File[ "${wwwroot}/${distro}" ],
     }
   }
@@ -372,9 +342,6 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (File["${wwwroot}/${distro}/ISO"]) {
     file { "${wwwroot}/${distro}/ISO":
       ensure  => directory,
-      owner   => $www_username,
-      group   => $www_group,
-      mode    => $tftp_mode,
       require => File[ "${wwwroot}/${distro}" ],
     }
   }
@@ -384,9 +351,6 @@ if $autofile == !('No Automation File'){
   file { "${name}.${autofile}":
     ensure  => file,
     path    => "${wwwroot}/${distro}/${autofile}/${name}.${autofile}",
-    owner   => $www_username,
-    group   => $www_group,
-    mode    => $tftp_mode,
     content => template("quartermaster/autoinst/${autofile}.erb"),
     require => File[ "${wwwroot}/${distro}/${autofile}" ],
   }
@@ -402,8 +366,6 @@ if $autofile == !('No Automation File'){
 
   if ! defined (Concat["${tftpboot}/menu/${distro}.menu"]) {
     concat { "${tftpboot}/menu/${distro}.menu":
-      owner   => $tftp_username,
-      group   => $tftp_group,
       mode    => $tftp_filemode,
 #      require => Tftp::File['menu'],
     }
