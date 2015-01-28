@@ -147,7 +147,7 @@ class quartermaster::winpe (
 
   }
 
- Autofs For Automouting Windows iso's
+#Autofs For Automouting Windows iso's
   autofs::mount{ "${wwwroot}/microsoft/iso":
     map => '*',
     options => [
