@@ -210,7 +210,7 @@ define quartermaster::windowsmedia( $activationkey ) {
     source  => "http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim",
     target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
     require => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
-    notify  => Exec["wimlib-imagex-mount-${name}"],
+  #  notify  => Exec["wimlib-imagex-mount-${name}"],
   }
 
 
