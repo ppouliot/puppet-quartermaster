@@ -246,7 +246,7 @@ define quartermaster::windowsmedia( $activationkey ) {
     refreshonly => true,
     require     => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
                         "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
-    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
     logoutput   => true,
   } 
   exec {"wimlib-imagex-unmount-${name}":
