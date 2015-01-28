@@ -1,4 +1,45 @@
-{
+{  
+  "name": "puppet-quartermaster",
+  "version": "1.0.0",
+  "source": "git://github.com/ppouliot/puppet-quartermaster",
+  "author": "Peter J. Pouliot",
+  "license": "Apache 2.0",
+  "summary": "Dynamic Pxe infrastructure",
+  "description": "Creates a dynamic pxe infrastructure for operating system deployments",
+  "project_page": "https://github.com/ppouliot/puppet-quartermaster",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.3.2"
+    },{
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.0.4"
+    },{
+      "name": "puppetlabs/apache",
+      "version_requirement": ">= 1.1.1"
+    },{
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 1.6.0"
+    },{
+      "name": "puppetlabs/tftp",
+      "version_requirement": ">= 0.2.2"
+    },{
+      "name": "puppetlabs/postgresql",
+      "version_requirement": ">= 3.4.2"
+    },{
+      "name": "stephenrjohnson/puppet",
+      "version_requirement": ">= 1.3.1"
+    },{
+      "name": "thais/samba",
+      "version_requirement": ">= 0.1.5"
+    },{
+      "name": "pdxcat/autofs",
+      "version_requirement": ">= 1.0.2"
+    },{
+      "name": "nanliu/staging",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -55,45 +96,4 @@
       "version_requirement": ">=2.7.0 <4.0.0"
     }
   ]
-  "name": "puppet-quartermaster",
-  "version": "1.0.0",
-  "source": "git://github.com/ppouliot/puppet-quartermaster",
-  "author": "Peter J. Pouliot",
-  "license": "Apache 2.0",
-  "summary": "Dynamic Pxe infrastructure",
-  "description": "Creates a dynamic pxe infrastructure for operating system deployments",
-  "project_page": "https://github.com/ppouliot/puppet-quartermaster",
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.3.2"
-    },{
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.0.4"
-    },{
-      "name": "puppetlabs/apache",
-      "version_requirement": ">= 1.1.1"
-    },{
-      "name": "puppetlabs/apt",
-      "version_requirement": ">= 1.6.0"
-    },{
-      "name": "puppetlabs/tftp",
-      "version_requirement": ">= 0.2.2"
-    },{
-      "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 3.4.2"
-    },{
-      "name": "stephenrjohnson/puppet",
-      "version_requirement": ">= 1.3.1"
-    },{
-      "name": "thais/samba",
-      "version_requirement": ">= 0.1.5"
-    },{
-      "name": "pdxcat/autofs",
-      "version_requirement": ">= 1.0.2"
-    },{
-      "name": "nanliu/staging",
-      "version_requirement": ">= 1.0.0"
-    }
-  ],
 }
