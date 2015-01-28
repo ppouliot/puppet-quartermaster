@@ -261,11 +261,18 @@ define quartermaster::pxe {
       require =>  Tftp::File["${distro}/${p_arch}"],
     }
   }
-  if ! defined (Staging::File["bootsplash-${name}"]){
-    staging::file{"bootsplash-${name}":
-      source => $splashurl,
-      target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
-      require =>  Tftp::File["${distro}/graphics"],
+  case $distro {
+    'ubuntu','debian','fedora','scientificlinux','redhat','centos','opensuse','sles','sled':{ 
+      if ! defined (Staging::File["bootsplash-${name}"]){
+        staging::file{"bootsplash-${name}":
+          source => $splashurl,
+          target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+          require =>  Tftp::File["${distro}/graphics"],
+        }
+      }
+    }
+    default:{
+      warn("no bootsplash needed for ${distro}")
     }
   }
 
