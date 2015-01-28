@@ -248,7 +248,7 @@ define quartermaster::pxe {
   notify { "${name}: Oracle Distro = ${is_oracle}":}
 
 # Retrieve installation kernel file if supported
-  if $pxekernel == !('No supported Pxe Kernel'){
+#  if $pxekernel == !('No supported Pxe Kernel'){
     if ! defined (Staging::File["kernel-${name}"]){
       staging::file{"kernel-${name}":
         source => "${url}/${pxekernel}", 
@@ -256,10 +256,10 @@ define quartermaster::pxe {
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
-  } 
+#  } 
 
 # Retrieve initrd file if supported
-  if $initrd == !('No supported Initrd Extension'){
+#  if $initrd == !('No supported Initrd Extension'){
     if ! defined (Staging::File["initrd-${name}"]){
       staging::file{"initrd-${name}":
         source => "${url}/initrd${initrd}",
@@ -267,7 +267,7 @@ define quartermaster::pxe {
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
-  }
+#  }
 
 # Retrieve Bootsplash file if present
   if $bootsplash == !('No Bootsplash'){
