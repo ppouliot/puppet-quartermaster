@@ -67,7 +67,6 @@ class quartermaster::winpe (
 
   file{[
     "${wwwroot}/microsoft",
-    "${wwwroot}/microsoft/iso",
     "${wwwroot}/microsoft/mount",
     "${wwwroot}/microsoft/winpe",
     "${wwwroot}/microsoft/winpe/bin",
