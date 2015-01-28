@@ -86,9 +86,9 @@ class quartermaster::winpe (
   }
 
   class{'::samba::server':
-    workgroup            => 'quartermaster',
+    workgroup            => 'PXE',
     netbios_name         => "${::hostname}",
-#    security             => 'SHARE',
+    security             => 'share',
     guest_account        => 'nobody',
     extra_global_options => [
       'wide links    = yes',
