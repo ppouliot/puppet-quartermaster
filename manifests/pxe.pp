@@ -272,7 +272,7 @@ define quartermaster::pxe {
       }
     }
     default:{
-      warn("no bootsplash needed for ${distro}")
+      warning("no bootsplash needed for ${distro}")
     }
   }
 
