@@ -153,14 +153,21 @@ class quartermaster::winpe (
     map     => '/etc/auto.quartermaster',
     options => ['--timeout=10', ],
   }
-  autofs::mount{ '*':
+  autofs::mount{ 'ISO_iso9660':
     map     => '*',
     options => [
-      "-fstype=udf,loop :${wwwroot}/microsoft/iso/&",
       "-fstype=iso9660,loop :${wwwroot}/microsoft/iso/&",
     ],
     mapfile => '/etc/auto.quartermaster',
   }
+  autofs::mount{ 'ISO_UDF':
+    map     => '*',
+    options => [
+      "-fstype=udf,loop :${wwwroot}/microsoft/iso/&",
+    ],
+    mapfile => '/etc/auto.quartermaster',
+  }
+
 
 
   # Add Winpe to the PXE menu
