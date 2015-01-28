@@ -153,8 +153,8 @@ class quartermaster::winpe (
     map     => '/etc/auto.quartermaster',
     options => ['--timeout=10', ],
   }
-  autofs::mount{ ":${wwwroot}/microsoft/iso/&":
-    map     => '*',
+  autofs::mount{ '*':
+    map     => ":${wwwroot}/microsoft/iso/&":
     options => [
       "-fstype=iso9660,loop",
       "-fstype=udf,loop",
