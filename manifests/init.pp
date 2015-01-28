@@ -59,9 +59,9 @@ if $linux {
   quartermaster::pxe{$linux:}
 }
 
-#if $windows {
-#  create_resources(quartermaster::windowsmedia,$windows)
-#}
+if $windows {
+  create_resources(quartermaster::windowsmedia,$windows)
+}
 
 #  Class['quartermaster'] -> Quartermaster::Pxe <||>
 #  Class['quartermaster'] -> Quartermaster::Windowsmedia <||>
