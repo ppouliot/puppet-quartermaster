@@ -244,8 +244,10 @@ define quartermaster::windowsmedia( $activationkey ) {
     command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt.${w_arch}",
     cwd         => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
-    require     => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
-                        "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
+    require     => [File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
+                    Staging::File["${w_flavor}-winpe.wim"]],
+#    require     => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
+#                        "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
     notify      => Exec["wimlib-imagex-unmount-${name}"],
     logoutput   => true,
   } 
