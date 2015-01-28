@@ -146,14 +146,14 @@ class quartermaster::winpe (
 
   }
 
-# Autofs For Automouting Windows iso's
-#  autofs::mount{ "${wwwroot}/microsoft/iso":
-#    map => '*',
-#    options => [
-#      '-fstype=udf,loop',
-#      '-fstype=iso9660,loop', 
-#    ],
-#  }
+ Autofs For Automouting Windows iso's
+  autofs::mount{ "${wwwroot}/microsoft/iso":
+    map => '*',
+    options => [
+      '-fstype=udf,loop',
+      '-fstype=iso9660,loop', 
+    ],
+  }
 
   # Add Winpe to the PXE menu
 
