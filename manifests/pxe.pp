@@ -236,7 +236,7 @@ define quartermaster::pxe {
   $initrd = $distro ? {
     /(ubuntu|debian)/                                    => '.gz',
     /(redhat|centos|scientificlinux|oraclelinux)/ => '.img',
-    /(fedora)/                                           => ".img${pxe_flavor}"
+    /(fedora)/                                           => ".img${pxe_flavor}",
     /(sles|sled|opensuse)/                               => undef,
     default                                              => 'No supported Initrd Extension',
   }
