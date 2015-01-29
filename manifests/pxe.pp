@@ -38,6 +38,18 @@ define quartermaster::pxe {
     $rel_minor = $2
   }
 
+
+  if ( $release >= '21' ) and ( $distro == 'fedora'){
+      $flavor = ['Workstation','Server']
+      $pxe_flavor = ['W','S']
+  }
+  if ( $release < '21' ) and ( $distro == 'fedora'){
+      $flavor = ['Fedora',]
+      $pxe_flavor = []
+    }
+  }
+
+
   case $distro {
 
     'centos':{
@@ -73,6 +85,17 @@ define quartermaster::pxe {
         /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
         /(false)/  => 'http://dl.fedoraproject.org/pub',
       }
+
+      if ( $release >= '21' ) {
+        $flavor = ['Workstation','Server']
+        $pxe_flavor = ['W','S']
+      }
+      if ( $release < '21' ) {
+        $flavor = ['Fedora',]
+        $pxe_flavor = []
+      }
+    }
+
     }
     'opensuse':{
       $supported_endpoint = '12.3'
@@ -125,7 +148,7 @@ define quartermaster::pxe {
     /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
 #    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os/images/pxeboot",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
     /(oraclelinux)/     => "Enterprise ISO Required",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -151,7 +174,7 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/os/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -165,7 +188,7 @@ define quartermaster::pxe {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -180,7 +203,7 @@ define quartermaster::pxe {
     /(debian)/         => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/isolinux/splash.png",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os/isolinux/splash.png",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(sles)/            => 'Enterprise ISO Required',
@@ -214,7 +237,8 @@ define quartermaster::pxe {
 
   $initrd = $distro ? {
     /(ubuntu|debian)/                                    => '.gz',
-    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
+    /(redhat|centos|scientificlinux|oraclelinux)/ => '.img',
+    /(fedora)/                                           => ".img${pxe_flavor}"
     /(sles|sled|opensuse)/                               => undef,
     default                                              => 'No supported Initrd Extension',
   }
