@@ -68,7 +68,7 @@ define quartermaster::pxe (
         $use_archive = 'false'
       }
       if $release >= '21' {
-        validate_re($flavor, '^(Workstation|Server)$',"Valid fedora ${release} flavors are Workstation or Server not ${flavor}")
+        validate_re($flavor, '^(Workstation|Server)$',"Valid ${distro} ${release} flavors are Workstation or Server not ${flavor}")
       }
 
 
