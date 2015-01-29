@@ -39,17 +39,6 @@ define quartermaster::pxe {
   }
 
 
-  if ( $release >= '21' ) and ( $distro == 'fedora'){
-      $flavor = ['Workstation','Server']
-      $pxe_flavor = ['W','S']
-  }
-  if ( $release < '21' ) and ( $distro == 'fedora'){
-      $flavor = ['Fedora',]
-      $pxe_flavor = []
-    }
-  }
-
-
   case $distro {
 
     'centos':{
@@ -229,13 +218,14 @@ define quartermaster::pxe {
   $pxekernel = $distro ? {
     /(ubuntu|debian)/                                    => 'linux',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'vmlinuz',
+    /(fedora)/                                           => "vmlinuz${pxe_flavor}",
     /(sles|sled|opensuse)/                               => 'linux',
     default                                              => 'No supported Pxe Kernel',
   }
 
   $initrd = $distro ? {
     /(ubuntu|debian)/                                    => '.gz',
-    /(redhat|centos|scientificlinux|oraclelinux)/ => '.img',
+    /(redhat|centos|scientificlinux|oraclelinux)/        => '.img',
     /(fedora)/                                           => ".img${pxe_flavor}",
     /(sles|sled|opensuse)/                               => undef,
     default                                              => 'No supported Initrd Extension',
