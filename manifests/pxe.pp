@@ -81,7 +81,7 @@ define quartermaster::pxe {
         $use_archive = 'false'
       }
       $opensuse_url = $use_archive ? {
-        /(true)/   => "http://ftp.gwdg.de/pub/opensuse/discontinued/distribution",
+        /(true)/   => "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution",
         /(false)/  => "http://download.opensuse.org/distribution",
       }
     }
