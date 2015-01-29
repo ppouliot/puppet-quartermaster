@@ -289,7 +289,7 @@ define quartermaster::pxe {
     if ! defined (Staging::File["initrd-${name}"]){
       staging::file{"initrd-${name}":
         source => "${url}/initrd${initrd}",
-        target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${target_initrd}",
+        target => "${tftpboot}/${distro}/${p_arch}/${target_initrd}",
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
