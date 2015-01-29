@@ -37,6 +37,11 @@ define quartermaster::pxe {
     $rel_major = $1
     $rel_minor = $2
   }
+  if $release =~/([0-9]+).([A-Za-z])/{
+    $rel_major = $1
+    $rel_minor = $2
+  }
+
 
 
   case $distro {
@@ -66,10 +71,6 @@ define quartermaster::pxe {
         $use_archive = 'false'
       }
 
-      if $rel_number < '21' {
-          $rel_minor = 'Fedora'
-          $rel_major = $release
-      }
       $fedora_url = $use_archive ? {
         /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
         /(false)/  => 'http://dl.fedoraproject.org/pub',
