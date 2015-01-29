@@ -76,8 +76,9 @@ define quartermaster::pxe {
       }
 
       if $release >= '21' {
-        $flavor = ['Workstation','Server']
-        $pxe_flavor = ['W','S']
+        $flavor_type = ['Workstation','Server']
+        $pxe_flavor_type = ['W','S']
+        $pxe_flavor = split($pxe_flavor_type)
       }
       if $release < '21' {
         $flavor = ['Fedora',]
@@ -230,7 +231,7 @@ define quartermaster::pxe {
   }
 
   $target_initrd = $distro ? {
-    /(sles|sled|opensuse)/                               => "${rel_number}.gz",
+    /(sles|sled|opensuse)/                               => "${rel_number}.gz",,
     /(fedora)/                                           => "${rel_number}${pxe_flavor}${initrd}",
     default                                              => "${rel_number}${initrd}",
   }
