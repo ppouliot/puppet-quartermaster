@@ -68,6 +68,7 @@ define quartermaster::pxe {
 
       if $rel_number < '21' {
           $rel_minor = 'Fedora'
+          $rel_major = $release
       }
       $fedora_url = $use_archive ? {
         /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
