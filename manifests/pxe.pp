@@ -82,8 +82,8 @@ define quartermaster::pxe {
         $flavor          = split($flavor_type)
       }
       if $release < '21' {
-        $flavor = ['Fedora',]
-        $pxe_flavor = []
+        $flavor = 'Fedora'
+        $pxe_flavor = undef
       }
     }
     'opensuse':{
@@ -277,8 +277,8 @@ define quartermaster::pxe {
 
 # Retrieve installation kernel file if supported
 #  if $pxekernel == !('No supported Pxe Kernel'){
-    if ! defined (Staging::File["kernel-${name}"]){
-      staging::file{"kernel-${name}":
+    if ! defined (Staging::File["${target_kernel}-${name}"]){
+      staging::file{"{target_kernel}-${name}":
         source => "${url}/${pxekernel}", 
         target => "${tftpboot}/${distro}/${p_arch}/${target_kernel}",
         require =>  Tftp::File["${distro}/${p_arch}"],
@@ -288,8 +288,8 @@ define quartermaster::pxe {
 
 # Retrieve initrd file if supported
 #  if $initrd == !('No supported Initrd Extension'){
-    if ! defined (Staging::File["initrd-${name}"]){
-      staging::file{"initrd-${name}":
+    if ! defined (Staging::File["${target_initrd}-${name}"]){
+      staging::file{"${target_initrd}-${name}":
         source => "${url}/initrd${initrd}",
         target => "${tftpboot}/${distro}/${p_arch}/${target_initrd}",
         require =>  Tftp::File["${distro}/${p_arch}"],
