@@ -95,8 +95,6 @@ define quartermaster::pxe {
         $pxe_flavor = []
       }
     }
-
-    }
     'opensuse':{
       $supported_endpoint = '12.3'
       $archived_endpoint  = '12.2'
