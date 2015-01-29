@@ -66,12 +66,12 @@ define quartermaster::pxe {
         $use_archive = 'false'
       }
 
-    case $release {
+      case $release {
         '21':{
           $rel_minor = ['WorkStation','Server']
           $rel_major = $release
         }
-       default:
+        default:{
           $rel_minor = 'Fedora'
           $rel_major = $release
         }
