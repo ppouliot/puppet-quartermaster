@@ -37,12 +37,6 @@ define quartermaster::pxe {
     $rel_major = $1
     $rel_minor = $2
   }
-  if $release =~/([0-9]+).([A-Za-z])/{
-    $rel_major = $1
-    $rel_minor = $2
-  }
-
-
 
   case $distro {
 
@@ -62,8 +56,8 @@ define quartermaster::pxe {
       }
     }
     'fedora':{
-      $supported_endpoint = '20'
-      $archived_endpoint  = '19'
+      $supported_endpoint = '21'
+      $archived_endpoint  = '20'
       if $release <= $archived_endpoint {
         $use_archive = 'true'
       }
@@ -127,7 +121,7 @@ define quartermaster::pxe {
     /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
 #    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${rel_major}/${rel_minor}/${p_arch}/os/images/pxeboot",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
     /(oraclelinux)/     => "Enterprise ISO Required",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -355,6 +349,13 @@ if $linux_installer == !('No Supported Linux Installer') {
     file { "${wwwroot}/${distro}/ISO":
       ensure  => directory,
       require => File[ "${wwwroot}/${distro}" ],
+    }
+  }
+  if ! defined (File["${wwwroot}/${distro}/.README.html"]) {
+    file { "${wwwroot}/${distro}/.README.html":
+      ensure  => file,
+      require => File[ "${wwwroot}/${distro}" ],
+      content => template("quartermaster/README.html.erb"),
     }
   }
 
