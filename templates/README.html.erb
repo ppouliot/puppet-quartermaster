@@ -1,4 +1,8 @@
-<html><title><%= @name %></title><body>
+<html>
+<body>
+<title>
+<%= @name %>
+</title>
 Operating System: <%= @distro %>
 Release Number: <%= @release %>
 Major Release <%= Number: @rel_major %>
@@ -27,4 +31,5 @@ Fedora URL = <%= @fedora_url %>
 <% if @is_oracle %>
 Oracle Distro = <% = @is_oracle %>
 <% end %>
-</body></html>
+</body>
+</html>
