@@ -42,8 +42,8 @@ define quartermaster::pxe {
   case $distro {
 
     'centos':{
-      $supported_endpoint = '6.5'
-      $archived_endpoint  = '6.4'
+      $supported_endpoint = '7'
+      $archived_endpoint  = '6.6'
       if $release <= $archived_endpoint {
         $use_archive = 'true'
       }
