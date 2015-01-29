@@ -78,11 +78,11 @@ define quartermaster::pxe {
       if $release >= '21' {
         $flavor_type     = ['Workstation','Server']
         $pxe_flavor_type = ['W','S']
-        each($flavor_type) |$value_flavor_type| {
-          $flavor = $value_flavor_type
+        each($flavor_type) |$value| {
+          $flavor = $value
         }
-        each($pxe_flavor_type) |$value_pxe_flavor_type|{
-          $pxe_flavor = $value_pxe_flavor_type
+        each($pxe_flavor_type) |$value|{
+          $pxe_flavor = $value
         }
       if $release < '21' {
         $flavor = 'Fedora'
