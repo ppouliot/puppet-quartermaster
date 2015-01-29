@@ -66,6 +66,17 @@ define quartermaster::pxe {
         $use_archive = 'false'
       }
 
+    case $release {
+        '21':{
+          $rel_minor = ['WorkStation','Server']
+          $rel_major = $release
+        }
+       default:
+          $rel_minor = 'Fedora'
+          $rel_major = $release
+        }
+      }
+
       $fedora_url = $use_archive ? {
         /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
         /(false)/  => 'http://dl.fedoraproject.org/pub',
@@ -122,7 +133,7 @@ define quartermaster::pxe {
     /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
 #    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${rel_major}/${rel_minor}/${p_arch}/os/images/pxeboot",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
     /(oraclelinux)/     => "Enterprise ISO Required",
     /(redhat)/          => 'Enterprise ISO Required',
