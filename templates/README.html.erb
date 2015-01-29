@@ -1,0 +1,30 @@
+<html><title><%= @name %></title><body>
+Operating System: <%= @distro %>
+Release Number: <%= @release %>
+Major Release <%= Number: @rel_major %>
+Minor Release <%= Number: @rel_minor %>
+Processor Architecture: <%= @p_arch %>
+Pxe Kernel and Initrd url: <%= @url %>
+inst_repo: <%= @inst_repo %>
+kernel name: <%= @pxekernel %>
+Initrd file extension: <%= @initrd %>
+Linux Installer: <%= @linux_installer %>
+PuppetLabs Repo: <%= @puppetlabs_repo %>
+
+
+<% if  @is_fedora %>
+Centos Distro = <%= @is_centos %>
+Centos Legacy = <%= @centos_legacy %>
+Centos URL = <%= @centos_url %>
+<% end %>
+
+<% if @is_fedora%>
+Fedora Distro = <%= @is_fedora %>
+Fedora Legacy = <%= @fedora_legacy %>
+Fedora URL = <%= @fedora_url %>
+<% end %>
+
+<% if @is_oracle %>
+Oracle Distro = <% = @is_oracle %>
+<% end %>
+</body></html>
