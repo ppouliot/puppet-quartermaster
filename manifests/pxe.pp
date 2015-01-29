@@ -278,7 +278,7 @@ define quartermaster::pxe {
 # Retrieve installation kernel file if supported
 #  if $pxekernel == !('No supported Pxe Kernel'){
     if ! defined (Staging::File["${target_kernel}-${name}"]){
-      staging::file{"{target_kernel}-${name}":
+      staging::file{"${target_kernel}-${name}":
         source => "${url}/${pxekernel}", 
         target => "${tftpboot}/${distro}/${p_arch}/${target_kernel}",
         require =>  Tftp::File["${distro}/${p_arch}"],
