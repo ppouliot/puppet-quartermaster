@@ -60,8 +60,8 @@ define quartermaster::pxe {
       }
     }
     'fedora':{
-      $supported_endpoint = '21'
-      $archived_endpoint  = '20'
+      $supported_endpoint = '20'
+      $archived_endpoint  = '19'
       if $release <= $archived_endpoint {
         $use_archive = 'true'
       }
@@ -355,8 +355,8 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "${wwwroot}/${distro}" ],
     }
   }
-  if ! defined (File["${wwwroot}/${distro}/.README.html"]) {
-    file { "${wwwroot}/${distro}/.README.html":
+  if ! defined (File["${wwwroot}/${distro}/${p_arch}/.README.html"]) {
+    file { "${wwwroot}/${distro}/${p_arch}.README.html":
       ensure  => file,
       require => File[ "${wwwroot}/${distro}" ],
       content => template("quartermaster/README.html.erb"),
