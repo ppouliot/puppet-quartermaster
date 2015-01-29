@@ -356,7 +356,7 @@ if $linux_installer == !('No Supported Linux Installer') {
     }
   }
   if ! defined (File["${wwwroot}/${distro}/${p_arch}/.README.html"]) {
-    file { "${wwwroot}/${distro}/${p_arch}.README.html":
+    file { "${wwwroot}/${distro}/${p_arch}/.README.html":
       ensure  => file,
       require => File[ "${wwwroot}/${distro}" ],
       content => template("quartermaster/README.html.erb"),
