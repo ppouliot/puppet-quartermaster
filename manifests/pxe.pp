@@ -80,8 +80,8 @@ define quartermaster::pxe {
         $pxe_flavor => ['W','S'],
       }
       if $release < '21' {
-        $flavor => 'Fedora',
-        $pxe_flavor => undef,
+        $flavor = 'Fedora'
+        $pxe_flavor = undef
       }
     }
     'opensuse':{
