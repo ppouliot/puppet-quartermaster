@@ -231,11 +231,11 @@ define quartermaster::pxe {
 
   $target_initrd = $distro ? {
     /(sles|sled|opensuse)/                               => '.gz',
-    /(fedora)/                                           => "${rel_number}${pxe_flavor}${initrd}"
+    /(fedora)/                                           => "${rel_number}${pxe_flavor}${initrd}",
     default                                              => "${rel_number}${initrd}",
   }
   $target_kernel = $distro ? {
-    /(fedora)/                                           => "${rel_number}${pxe_flavor}"
+    /(fedora)/                                           => "${rel_number}${pxe_flavor}",
     default                                              => $rel_number,
   }
 
