@@ -1,21 +1,21 @@
 label <%= @name %>
 	menu label <%= @release %> <%= @p_arch %>: ^Manual
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> install=http://<%= @inst_repo %>
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=http://<%= @inst_repo %>
 
 label <%= @name %>-<%= @autofile %>
 	menu label <%= @release %> <%= @p_arch %>: ^BareMetal/KVM <%= @autofile %> 
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        append autoyast=http://<%= @ipaddress %>/install/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> install=<%= @inst_repo %>
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append autoyast=http://<%= @ipaddress %>/install/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
 label <%= @name %>-VM-<%= @autofile %>
 	menu label <%= @release %> <%= @p_arch %>: Hyper-V VM (LIS Enabled) <%= @autofile %> 
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        append autoyast=http://<%= @ipaddress %>/install/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> install=<%= @inst_repo %>
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append autoyast=http://<%= @ipaddress %>/install/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
 
 label <%= @name %>-rescue
 	menu label <%= @release %> <%= @p_arch %>: ^Rescue 
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        append rescue=1 initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> install=<%= @inst_repo %>
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append rescue=1 initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
