@@ -212,8 +212,13 @@ define quartermaster::pxe {
   $initrd = $distro ? {
     /(ubuntu|debian)/                                    => '.gz',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
-    /(sles|sled|opensuse)/                               => '',
+    /(sles|sled|opensuse)/                               => undef,
     default                                              => 'No supported Initrd Extension',
+  }
+
+  $target_initrd = $distro ? {
+    /(sles|sled|opensuse)/                               => '.gz',
+    default                                              => $initrd,
   }
 
   $linux_installer = $distro ? {
@@ -265,7 +270,7 @@ define quartermaster::pxe {
     if ! defined (Staging::File["initrd-${name}"]){
       staging::file{"initrd-${name}":
         source => "${url}/initrd${initrd}",
-        target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${initrd}",
+        target => "${tftpboot}/${distro}/${p_arch}/${rel_number}${target_initrd}",
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
