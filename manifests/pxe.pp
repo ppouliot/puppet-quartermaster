@@ -76,12 +76,17 @@ define quartermaster::pxe {
       }
 
       if $release >= '21' {
-        flavor     => ['Workstation','Server'],
-        pxe_flavor => ['W','S'],
-      }
+        flavor_type     = ['Workstation','Server']
+        pxe_flavor_type = ['W','S']
+        each($flavor_type) |$value_flavor_type| {
+          $flavor = $value_flavor_type
+        }
+        each($pxe_flavor_type) |$value_pxe_flavor_type|{
+          $pxe_flavor = $value_pxe_flavor_type
+        }
       if $release < '21' {
-        flavor => 'Fedora',
-        pxe_flavor => undef,
+        flavor = 'Fedora'
+        pxe_flavor = undef
       }
     }
     'opensuse':{
