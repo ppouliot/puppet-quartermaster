@@ -75,9 +75,9 @@ define quartermaster::pxe {
         /(false)/  => 'http://dl.fedoraproject.org/pub',
       }
 
+      $flavor_type     = ['Workstation','Server',]
+      $pxe_flavor_type = ['W','S',]
       if $release >= '21' {
-        $flavor_type     = ['Workstation','Server']
-        $pxe_flavor_type = ['W','S']
         each($flavor_type) |$value| {
           $flavor = $value
         }
