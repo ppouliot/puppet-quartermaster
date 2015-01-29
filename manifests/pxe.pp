@@ -4,7 +4,7 @@
 #
 
 
-define quartermaster::pxe {
+define quartermaster::pxe ($flavor){
 
   $tmp            = $quartermaster::params::tmp
   $pxeroot        = $quartermaster::params::pxeroot
