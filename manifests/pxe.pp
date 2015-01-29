@@ -382,14 +382,12 @@ if $linux_installer == !('No Supported Linux Installer') {
   }
 
 # Kickstart/Preseed File
-#if $autofile == !('No Automation File'){
   file { "${name}.${autofile}":
     ensure  => file,
     path    => "${wwwroot}/${distro}/${autofile}/${name}.${autofile}",
     content => template("quartermaster/autoinst/${autofile}.erb"),
     require => File[ "${wwwroot}/${distro}/${autofile}" ],
   }
-#}
 
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
