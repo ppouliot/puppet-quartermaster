@@ -65,6 +65,10 @@ define quartermaster::pxe {
       if $release >= $supported_endpoint {
         $use_archive = 'false'
       }
+      if $release >= '21' {
+        validate_re($flavor, '^(Workstation/|Server/)$','Valid fedora flavors are Workstation/ or Server/')
+      }
+
 
       $fedora_url = $use_archive ? {
         /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
