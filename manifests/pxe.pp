@@ -4,7 +4,7 @@
 #
 
 
-define quartermaster::pxe ( $flavor ){
+define quartermaster::pxe {
 
   $tmp            = $quartermaster::params::tmp
   $pxeroot        = $quartermaster::params::pxeroot
@@ -65,10 +65,6 @@ define quartermaster::pxe ( $flavor ){
       if $release >= $supported_endpoint {
         $use_archive = 'false'
       }
-#      if $release >= '21' {
-#        validate_re($flavor, '^(Workstation|Server)$',"Valid ${distro} ${release} flavors are Workstation or Server not ${flavor}")
-#      }
-
 
       $fedora_url = $use_archive ? {
         /(true)/   => 'http://archives.fedoraproject.org/pub/archive',

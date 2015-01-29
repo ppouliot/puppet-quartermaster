@@ -55,8 +55,8 @@ class quartermaster (
 #  class { 'quartermaster::scripts': }
 
 if $linux {
-  create_resources(quartermaster::pxe,$linux)
-#  quartermaster::pxe{$linux:}
+#  create_resources(quartermaster::pxe,$linux)
+  quartermaster::pxe{$linux:}
 }
 
 if $windows {
