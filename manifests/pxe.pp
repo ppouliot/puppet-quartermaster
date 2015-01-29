@@ -55,7 +55,7 @@ define quartermaster::pxe {
         /(false)/  => "http://mirror.centos.org/centos/${rel_major}",
       }
 
-      if ( $release < '7.0' ) and ( $p_arch == 'i386'){
+      if ( $release >= '7.0' ) and ( $p_arch == 'i386'){
         fail("Centos ${release} does not provide support for processor architecture i386")
       }
     }
