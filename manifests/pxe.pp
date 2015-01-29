@@ -218,22 +218,25 @@ define quartermaster::pxe {
   $pxekernel = $distro ? {
     /(ubuntu|debian)/                                    => 'linux',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'vmlinuz',
-    /(fedora)/                                           => "vmlinuz${pxe_flavor}",
     /(sles|sled|opensuse)/                               => 'linux',
     default                                              => 'No supported Pxe Kernel',
   }
 
   $initrd = $distro ? {
     /(ubuntu|debian)/                                    => '.gz',
-    /(redhat|centos|scientificlinux|oraclelinux)/        => '.img',
-    /(fedora)/                                           => ".img${pxe_flavor}",
+    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
     /(sles|sled|opensuse)/                               => undef,
     default                                              => 'No supported Initrd Extension',
   }
 
   $target_initrd = $distro ? {
     /(sles|sled|opensuse)/                               => '.gz',
-    default                                              => $initrd,
+    /(fedora)/                                           => "${rel_number}${pxe_flavor}${initrd}"
+    default                                              => "${rel_number}${initrd},
+  }
+  $target_kernel = $distro ? {
+    /(fedora)/                                           => "${rel_number}${pxe_flavor}"
+    default                                              => $rel_number,
   }
 
   $linux_installer = $distro ? {
@@ -268,13 +271,14 @@ define quartermaster::pxe {
   notify { "${name}: Fedora Legacy = ${fedora_legacy}":}
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
+  notify { "${name}: Target Initrd = ${target_initrd}":}
 
 # Retrieve installation kernel file if supported
 #  if $pxekernel == !('No supported Pxe Kernel'){
     if ! defined (Staging::File["kernel-${name}"]){
       staging::file{"kernel-${name}":
         source => "${url}/${pxekernel}", 
-        target => "${tftpboot}/${distro}/${p_arch}/${rel_number}",
+        target => "${tftpboot}/${distro}/${p_arch}/${target_kernel}",
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
