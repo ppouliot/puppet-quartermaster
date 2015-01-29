@@ -57,8 +57,8 @@ define quartermaster::pxe {
       }
     }
     'fedora':{
-      $supported_endpoint = '18'
-      $archived_endpoint  = '17'
+      $supported_endpoint = '20'
+      $archived_endpoint  = '19'
       if $release <= $archived_endpoint {
         $use_archive = 'true'
       }
