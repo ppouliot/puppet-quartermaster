@@ -57,6 +57,10 @@ class quartermaster::syslinux (
   tftp::file { 'pxelinux/ldlinux.c32':
     source  => "${tmp}/${syslinux}/com32/elflink/ldlinux/ldlinux.c32",
   }
+  tftp::file { 'pxelinux/libutil.c32':
+    source  => "${tmp}/${syslinux}/com32/libutil/libutil.c32",
+  }
+
 
   concat {"${pxecfg}/default":
     owner   => $tftp_username,
@@ -90,5 +94,22 @@ menu passwordrow 11
 ",
   }
 
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
 
 }
