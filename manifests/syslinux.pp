@@ -93,23 +93,4 @@ menu endrow 24
 menu passwordrow 11
 ",
   }
-
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-
 }
