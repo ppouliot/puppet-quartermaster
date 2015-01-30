@@ -24,6 +24,9 @@
       "name": "puppetlabs/tftp",
       "version_requirement": ">= 0.2.2"
     },{
+      "name": "puppetlabs/puppetdb",
+      "version_requirement": ">= 4.1.0"
+    },{
       "name": "puppetlabs/postgresql",
       "version_requirement": ">= 3.4.2"
     },{

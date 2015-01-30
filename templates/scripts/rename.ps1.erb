@@ -1,31 +1,31 @@
-$conn = @(); 
+$conn = @();
 while ($conn.Count -lt 1) {
-    Write-Output 'Waiting for connection...'; 
-    Start-Sleep -Seconds 1; 
-    $conn = @(Get-WmiObject Win32_NetworkAdapter | 
-        Where-Object {$_.NetConnectionStatus -eq 2} | 
-        ForEach-Object {$_.GetRelated('Win32_NetworkAdapterConfiguration')} | 
+    Write-Output 'Waiting for connection...';
+    Start-Sleep -Seconds 1;
+    $conn = @(Get-WmiObject Win32_NetworkAdapter |
+        Where-Object {$_.NetConnectionStatus -eq 2} |
+        ForEach-Object {$_.GetRelated('Win32_NetworkAdapterConfiguration')} |
         Where-Object {$_.IPAddress -ne $null -and $_.DefaultIPGateway -ne $null -and $_.DNSServerSearchOrder -ne $null});
-    }; 
-Write-Output $conn; 
+    };
+Write-Output $conn;
 Start-Sleep -Seconds 3;
 
 $NewNameSet = $false;
-$conn.IPAddress | 
-    Where-Object { $_ -match '([\d]+\.){3}([\d]+)' } | 
+$conn.IPAddress |
+    Where-Object { $_ -match '([\d]+\.){3}([\d]+)' } |
     ForEach-Object {
-        if ( -not $NewNameSet -and ( $lu = ( nslookup $_ 2>null | findstr /i 'name:' ) ) -ne $null ) { 
-            if ( $lu.SubString(5) -match '([^\s.]+)(\.[^\s.]*)*' ) { 
-                $NewNameSet = $true; (Get-WmiObject Win32_ComputerSystem).Rename($matches[1]); 
-            } 
+        if ( -not $NewNameSet -and ( $lu = ( nslookup $_ 2>null | findstr /i 'name:' ) ) -ne $null ) {
+            if ( $lu.SubString(5) -match '([^\s.]+)(\.[^\s.]*)*' ) {
+                $NewNameSet = $true; (Get-WmiObject Win32_ComputerSystem).Rename($matches[1]);
+            }
         } };
 if (-not $NewNameSet -and $conn.Count -gt 0) {
     (Get-WmiObject Win32_ComputerSystem).Rename($conn[0].MACAddress.Replace(':',''));
 };
 
-$allconn = @(Get-WmiObject Win32_NetworkAdapter | 
-            Where-Object {$_.NetConnectionStatus -eq 2} | 
-            ForEach-Object {$_.GetRelated('Win32_NetworkAdapterConfiguration')} | 
+$allconn = @(Get-WmiObject Win32_NetworkAdapter |
+            Where-Object {$_.NetConnectionStatus -eq 2} |
+            ForEach-Object {$_.GetRelated('Win32_NetworkAdapterConfiguration')} |
             Where-Object {$_.IPAddress -ne $null});
 $ipfilter = $allconn | ForEach-Object {$_.IPAddress} | Where-Object {$_.StartsWith("10.21.")};
 $dataconn = $allconn | Where-Object {-not $_.IPAddress.contains($ipfilter)};
