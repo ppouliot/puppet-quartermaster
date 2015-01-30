@@ -60,6 +60,10 @@ class quartermaster::syslinux (
   tftp::file { 'pxelinux/libutil.c32':
     source  => "${tmp}/${syslinux}/com32/libutil/libutil.c32",
   }
+  tftp::file { 'pxelinux/chain.c32':
+    source  => "${tmp}/${syslinux}/com32/chain.c32",
+  }
+
 
 
   concat {"${pxecfg}/default":
