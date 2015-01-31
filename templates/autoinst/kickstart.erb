@@ -27,7 +27,8 @@ firewall --disabled
 # here so unless you clear all partitions first, this is
 # not guaranteed to work
 #clearpart --all --drives=sda
-zerombr yes
+#zerombr yes
+zerombr
 clearpart --all --initlabel
 part pv.008002 --grow --size=500
 part /boot --fstype=ext4 --size=500
