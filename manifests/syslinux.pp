@@ -63,6 +63,10 @@ class quartermaster::syslinux (
   tftp::file { 'pxelinux/chain.c32':
     source  => "${tmp}/${syslinux}/com32/chain/chain.c32",
   }
+  tftp::file { 'pxelinux/libcom32.c32':
+    source  => "${tmp}/${syslinux}/com32/lib/libcom32.c32",
+  }
+
 
 
 
