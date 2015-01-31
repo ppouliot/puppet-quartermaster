@@ -3,7 +3,8 @@
 #version=DEVEL
 install
 text
-url --url=<%= @inst_repo %> --proxy=http://<%= @ipaddress %>:8000
+url --url=<%= @inst_repo %> 
+#--proxy=http://<%= @ipaddress %>:8000
 # ssl proxy for install
 #url --url=<%= @inst_repo %> --proxy=https://<%= @ipaddress %>:8000 --noverifyssl
 lang en_US.UTF-8
