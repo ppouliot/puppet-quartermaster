@@ -410,14 +410,14 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 01,
     }
   }
-  if $linux_installer == !('No Supported Linux Installer') {
+#  if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}${name}.menu_item"]) {
     concat::fragment {"${distro}.${name}.menu_item":
       target  => "${tftpboot}/menu/${distro}.menu",
       content => template("quartermaster/pxemenu/${linux_installer}.erb"),
     }
   }
-}
+#}
 
   if $linux_installer == !('No Supported Linux Installer') {
     tftp::file { "${distro}/menu/${name}.menu":
