@@ -61,7 +61,7 @@ class quartermaster::syslinux (
     source  => "${tmp}/${syslinux}/com32/libutil/libutil.c32",
   }
   tftp::file { 'pxelinux/chain.c32':
-    source  => "${tmp}/${syslinux}/com32/chain.c32",
+    source  => "${tmp}/${syslinux}/com32/chain/chain.c32",
   }
 
 
