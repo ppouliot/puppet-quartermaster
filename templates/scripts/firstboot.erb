@@ -27,7 +27,7 @@ wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlab
 
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
-apt-get update -y && apt-get install -y openssh-server git puppet ruby1.9.1 ruby1.9.1-dev rubygems
+apt-get update -y && apt-get install -y openssh-server git puppet ruby1.9.1 ruby1.9.1-dev
 
 echo "### INSTALLING  LIBRARIAN-PUPPET-MAESTRODEV DUE TO BUGFIXES IN LIBRARIAN-PUPPET ###"
 gem install librarian-puppet-maestrodev
