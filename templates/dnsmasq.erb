@@ -20,7 +20,4 @@ log-dhcp
 dhcp-range=<%= @ipaddress %>,proxy
 
 # Define Additional Subnets
-<% @dhcp_proxy_subnets.each do |line| -%>
-dhcp-range=<%= line %>,proxy
-<% end -%>
 pxe-service=x86PC, "Quartermaster PXE Provisioning", pxelinux/pxelinux, <%= @ipaddress %>
