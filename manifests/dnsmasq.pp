@@ -48,4 +48,9 @@ class quartermaster::dnsmasq (
     enable  => true,
     require => [Package['dnsmasq'],File['quartermaster.conf']],
   }
+
+  ($dhcp_proxy_subnets) |line| {
+    $proxy_subnet_range = "dhcp-range={$line},proxy"
+  }
+
 }
