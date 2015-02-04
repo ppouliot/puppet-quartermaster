@@ -70,7 +70,7 @@ then
   echo "### DNSNAME: "$DNSNAME "HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
 else
   # Basic Hostname Check
-  NEWHOSTNAME=`/sbin/ifconfig | grep "eth\|em" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
+  NEWHOSTNAME=`/sbin/ip a | grep "ether" | tr -s " " | cut -d " " -f3 | /usr/bin/perl -pi -e "s/://g;"`
   echo "### DNSNAME: "$DNSNAME "HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
 fi
 

@@ -39,7 +39,7 @@ class quartermaster (
   $windows            = hiera('windows',{}),
 ) inherits quartermaster::params {
 
-  validate_re($::osfamily, '^(Debian|RedHat|Archlinux)$', 'This module only works on Debian and Red Hat based systems.')
+  validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
 
   class{'quartermaster::dnsmasq': }     ->
   class{'quartermaster::tftpd':}        ~>
@@ -56,7 +56,7 @@ class quartermaster (
 #  class { 'quartermaster::scripts': }
 
 if $linux {
-#  create_resources(quartermaster::pxe,$linux)
+##  create_resources(quartermaster::pxe,$linux)
   quartermaster::pxe{$linux:}
 }
 
