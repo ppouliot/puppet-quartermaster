@@ -15,10 +15,12 @@ class quartermaster::puppetmaster () inherits quartermaster::params {
 
   class {'puppetdb':}
   class {'puppet::master':
-    autosign     => true,
-    storeconfigs => true,
-    parser       => 'current',
-    environments => 'directory',
+    autosign         => true,
+    storeconfigs     => true,
+    parser           => 'current',
+    hiera_config     => '/etc/puppet/hiera/%{environment}',
+    environments     => 'directory',
+    environment_path => '/etc/puppet/environments',
   } 
   file  {'/etc/puppet/files':
     ensure => directory,
