@@ -6,7 +6,7 @@
 #
 #
 #
-class quartermaster::server::squid () inherits quartermaster::params {
+class quartermaster::squid () inherits quartermaster::params {
   class {'squid3':
 #    template   => ('quartermaster/squid.conf.erb'),
 #    acl        => [
