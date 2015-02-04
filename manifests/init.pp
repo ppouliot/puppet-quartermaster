@@ -34,7 +34,7 @@
 class quartermaster (
   $linux              = $quartermaster::params::linux,
   $windows            = $quartermaster::params::windows,
-  $dhcp_proxy_subnets = $quartermaster::params::dhcp_proxy_subnets,
+  $dhcp_proxy_subnets = [],
   $linux              = hiera('linux',{}),
   $windows            = hiera('windows',{}),
 ) inherits quartermaster::params {
@@ -47,6 +47,7 @@ class quartermaster (
 
   class{'quartermaster::puppetmaster':} ->
   class{'quartermaster::www':}          ~>
+  class{'quartermaster::squid':}          ~>
   class{'quartermaster::winpe':}        
 
 # NFS needs to be modified and refactored if used

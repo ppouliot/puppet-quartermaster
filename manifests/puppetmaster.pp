@@ -17,7 +17,7 @@ class quartermaster::puppetmaster () inherits quartermaster::params {
   class {'puppet::master':
     autosign     => true,
     storeconfigs => true,
-    parser       => 'future',
+    parser       => 'current',
     environments => 'directory',
   } 
   file  {'/etc/puppet/files':
