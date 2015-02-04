@@ -1,8 +1,3 @@
-## THIS FILE IS MANAGED BY PUPPET.
-## DO NOT EDIT.
-
-# predefined ACLs
-
 acl SSL_ports port 443
 acl Safe_ports port 80		# http
 acl Safe_ports port 21		# ftp
@@ -15,77 +10,21 @@ acl Safe_ports port 488		# gss-http
 acl Safe_ports port 591		# filemaker
 acl Safe_ports port 777		# multiling http
 acl CONNECT method CONNECT
-
-# predefined http_accesses
 http_access deny !Safe_ports
 http_access deny CONNECT !SSL_ports
-
-# user-defined ACLs
-<% @acl.each do |line| -%>
-acl <%= line %>
-<% end -%>
-
-# user-defined http_accesses
-<% @http_access.each do |line| -%>
-http_access <%= line %>
-<% end -%>
-http_access allow localnet
+http_access allow localhost manager
+http_access deny manager
 http_access allow localhost
 http_access deny all
+http_port 3128
+coredump_dir /var/spool/squid3
 
-# user-defined icp_access
-<% @icp_access.each do |line| -%>
-icp_access <%= line %>
-<% end -%>
+refresh_pattern -i .*microsoft\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf) 129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private
+refresh_pattern -i .*windowsupdate\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf) 129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private
+refresh_pattern -i .*windows\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf) 129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private
 
-# user-defined http_port
-<% @http_port.each do |line| -%>
-http_port <%= line %>
-<% end -%>
-
-# user-defined tcp_outgoing_addresses
-<% @tcp_outgoing_address.each do |line| -%>
-tcp_outgoing_address <%= line %>
-<% end -%>
-
-# user-defined cache-dirs
-<% @cache_dir.each do |line| -%>
-cache_dir <%= line %>
-<% end -%>
-
-
-# general settings
-hierarchy_stoplist             cgi-bin ?
-coredump_dir                   /var/spool/squid
-maximum_object_size_in_memory  <%= @maximum_object_size_in_memory  %>
-maximum_object_size            <%= @maximum_object_size            %>
-ignore_expect_100              <%= @ignore_expect_100              %>
-cache_mgr                      <%= @cache_mgr                      %>
-client_persistent_connections  <%= @client_persistent_connections  %>
-server_persistent_connections  <%= @server_persistent_connections  %>
-forwarded_for                  <%= @forwarded_for                  %>
-via                            <%= @via %>
-<% @access_log.each do |line|  -%>
-access_log                     <%= line                            %>
-<% end -%>
-
-cache_mem                      <%= @cache_mem                      %>
-cache_store_log                <%= @cache_store_log                %>
-cache_log                      <%= @cache_log                      %>
-<% @cache.each do |line| -%>
-cache                          <%= line                            %>
-<% end -%>
-
-<% @refresh_patterns.each do |line| -%>
-refresh_pattern                <%= line                            %>
-<% end -%>
-refresh_pattern                ^ftp:              1440    20%    10080
-refresh_pattern                ^gopher:           1440     0%     1440
-refresh_pattern                -i (/cgi-bin/|\?)     0     0%        0
-refresh_pattern                .                     0    20%     4320
-
-
-# user-defined configuration settings from config_hash
-<% @config_hash.each do |k,v| -%>
-<%= "%*s"%[-30,k] %> <%= v %>
-<% end -%>
+refresh_pattern ^ftp:		1440	20%	10080
+refresh_pattern ^gopher:	1440	0%	1440
+refresh_pattern -i (/cgi-bin/|\?) 0	0%	0
+refresh_pattern (Release|Packages(.gz)*)$      0       20%     2880
+refresh_pattern .		0	20%	4320

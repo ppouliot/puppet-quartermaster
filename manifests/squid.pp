@@ -8,7 +8,7 @@
 #
 class quartermaster::squid () inherits quartermaster::params {
   class {'squid3':
-#    template   => ('quartermaster/squid.conf.erb'),
+    template   => ('quartermaster/squid.conf.erb'),
 #    acl        => [
 #      'windowsupdate dstdomain windowsupdate.microsoft.com',
 #      'windowsupdate dstdomain .update.microsoft.com',
