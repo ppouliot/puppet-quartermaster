@@ -12,8 +12,6 @@ class quartermaster::dnsmasq (
   $dhcp_proxy_subnets = $quartermaster::params::dhcp_proxy_subnets,
 ) inherits quartermaster::params {
 
-  validate_array($dhcp_proxy_subnets)
-
   package { 'dnsmasq':
     ensure => latest,
   }

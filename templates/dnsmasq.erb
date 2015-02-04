@@ -18,9 +18,6 @@ log-dhcp
 # as a proxy DHCP server providing boot information but no IP leases.
 # Any ip in the subnet will do, so you may just put your server NIC ip here.
 dhcp-range=<%= @ipaddress %>,proxy
-<% @dhcp_proxy_subnets.each do |line| -%>
-dhcp-range=<%= line %>,proxy
-<% end -%>
 
 
 # Define Additional Subnets

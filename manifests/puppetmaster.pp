@@ -18,7 +18,7 @@ class quartermaster::puppetmaster () inherits quartermaster::params {
     autosign         => true,
     storeconfigs     => true,
     parser           => 'current',
-    hiera_config     => '/etc/puppet/hiera/$environment',
+    hiera_config     => '/etc/puppet/hiera.yaml',
     environments     => 'directory',
     environmentpath => '/etc/puppet/environments',
   } 
