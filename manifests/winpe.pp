@@ -42,7 +42,7 @@ class quartermaster::winpe (
         gpgcheck => '1',
         gpgkey   => 'http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro',
       }
-      $wimtool_repo = Yumrepo['nux-misc']
+      $wimtool_repo = Yumrepo['Nux Misc']
     }
 
     default:{
