@@ -60,8 +60,6 @@ class quartermaster::winpe (
 # Add Winpe directory to TFTPBOOT and entry to PXE menu
   tftp::file{'winpe':
     ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
   }
 
   concat::fragment{"winpe_pxe_default_menu":
