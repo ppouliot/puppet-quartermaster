@@ -5,7 +5,7 @@ class quartermaster::params {
   include apache::params
   case $osfamily {
     'Debian':{ include apt }
-    default:{ warn("${osfamily} doesn't require the Apt Class") }
+    default:{ warning("${osfamily} doesn't require the Apt Class") }
   }
 
   $arp_type = '01'
