@@ -261,31 +261,23 @@ define quartermaster::windowsmedia( $activationkey ) {
 
   file { "${wwwroot}/microsoft/winpe/system/${name}.cmd":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template("quartermaster/winpe/menu/default.erb"),
   }
 
   file { "${wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/autoinst/unattend.erb'),
   }
   file { "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-cloudbase.xml":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $quartermaster::exe_mode,
     path    => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-cloudbase.xml",
     content => template('quartermaster/autoinst/Cloudbase.erb'),
   }
   file { "${wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}-compute.xml":
     ensure  => file,
-    owner   => 'nobody',
-    group   => 'nogroup',
     mode    => $exe_mode,
     content => template('quartermaster/autoinst/compute.erb'),
   }
