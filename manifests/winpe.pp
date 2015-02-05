@@ -29,15 +29,14 @@ class quartermaster::winpe (
 
 # Install WimLib
   case $osfamily {
-
     'Debian':{
       apt::ppa{'ppa:nilarimogard/webupd8':}
       $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8'] 
     }
 
     'RedHat':{
-      yumrepo{'nux-misc':
-        name     => 'Nux Misc',
+      yumrepo{'Nux Misc':
+        name     => 'nux-misc',
         baseurl  => 'http://li.nux.ro/download/nux/misc/el6/x86_64/',
         enabled  => '0',
         gpgcheck => '1',

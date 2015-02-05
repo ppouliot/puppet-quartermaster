@@ -46,8 +46,8 @@ class quartermaster (
   class{'quartermaster::syslinux':} 
 
   class{'quartermaster::puppetmaster':} ->
-  class{'quartermaster::www':}          ~>
-  class{'quartermaster::squid':}          ~>
+    class{'quartermaster::www':}          ->
+    class{'quartermaster::squid':}          ~>
   class{'quartermaster::winpe':}        
 
 # NFS needs to be modified and refactored if used
