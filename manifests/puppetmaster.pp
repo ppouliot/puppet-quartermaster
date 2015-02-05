@@ -31,7 +31,6 @@ class quartermaster::puppetmaster () inherits quartermaster::params {
     ensure  => file,
     require => Class['puppet::master'],
     source  => "puppet:///modules/quartermaster/puppetmaster/fileserver.conf",
-    notify  => Service['apache2'],
   }
 
 }
