@@ -60,7 +60,7 @@ cp /var/lib/dhclient/* /mnt/sysimage/var/lib/dhclient/
 %post --log /root/<%= @distro %>-post.log
 # SET HOSTNAME
 
-DNSNAME=`cat /var/lib/dhclient/dhclient*.lease |grep -m 1 "option host-name" |tr -s " " | cut -d " " -f4| perl -pi -e "s/\"//g;" | perl -pi -e "s/\;//g;"`
+DNSNAME=`cat /var/lib/dhclient/dhclient*.lease |grep -m 1 "option host-name" |tr -s " " | cut -d " " -f4| /bin/sed -e "s/\"//g;" | /bin/sed -e "s/\;//g;"`
 echo $DNSNAME
 
 if [ $DNSNAME ]
