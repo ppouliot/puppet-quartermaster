@@ -36,8 +36,6 @@ class quartermaster::tftpd () inherits quartermaster::params {
                "pxelinux",
                "pxelinux/pxelinux.cfg"]:
     ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
   }
 
 }
