@@ -50,7 +50,9 @@ class quartermaster::params {
 
 
   case $osfamily {
-    'Debian':{}
+    'Debian':{
+    include apt
+    }
     'RedHat':{}
     default:{
       warning("quartermaster: $osfamily is not currently supported")
