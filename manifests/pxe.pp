@@ -420,9 +420,9 @@ if $linux_installer == !('No Supported Linux Installer') {
   }
 #}
 
-  if $linux_installer == !('No Supported Linux Installer') {
+#  if $linux_installer == !('No Supported Linux Installer') {
     tftp::file { "${distro}/menu/${name}.menu":
       content => template("quartermaster/pxemenu/${linux_installer}.erb"),
     }
-  }
+#  }
 }
