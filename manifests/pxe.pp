@@ -214,8 +214,8 @@ define quartermaster::pxe {
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
     /(sles|sled|opensuse)/                               => 'autoyast',
     /(windows)/                                          => 'unattend.xml',
-#    default                                              => 'No Automation File',
-    default                                              => undef,
+    default                                              => 'No Automation File',
+#    default                                              => undef,
   }
 
   $pxekernel = $distro ? {
