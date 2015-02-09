@@ -29,21 +29,20 @@ class quartermaster::winpe (
 
 # Install WimLib
   case $osfamily {
-
     'Debian':{
       apt::ppa{'ppa:nilarimogard/webupd8':}
       $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8'] 
     }
 
     'RedHat':{
-      yumrepo{'nux-misc':
-        name     => 'Nux Misc',
+      yumrepo{'Nux Misc':
+        name     => 'nux-misc',
         baseurl  => 'http://li.nux.ro/download/nux/misc/el6/x86_64/',
         enabled  => '0',
         gpgcheck => '1',
         gpgkey   => 'http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro',
       }
-      $wimtool_repo = Yumrepo['nux-misc']
+      $wimtool_repo = Yumrepo['Nux Misc']
     }
 
     default:{
@@ -61,8 +60,6 @@ class quartermaster::winpe (
 # Add Winpe directory to TFTPBOOT and entry to PXE menu
   tftp::file{'winpe':
     ensure  => directory,
-    owner   => 'nobody',
-    group   => 'nogroup',
   }
 
   concat::fragment{"winpe_pxe_default_menu":
