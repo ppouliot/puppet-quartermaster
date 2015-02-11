@@ -43,6 +43,10 @@ class quartermaster::params {
   $syslinux      = "syslinux-${syslinux_ver}"
   $syslinuxroot  = "${tmp}/${syslinux}"
 
+  #
+  $os             = "${wwwroot}/microsoft/mount"
+  $windows_isos   = "${wwwroot}/microsoft/iso"
+
 
   # Used to process distro's from hiera
   #$linux   = hiera('linux',{})

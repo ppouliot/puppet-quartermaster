@@ -21,8 +21,8 @@ class quartermaster::winpe (
   $file_mode      = $quartermaster::params::file_mode,
   $dir_mode       = $quartermaster::params::dir_mode,
   $exe_mode       = $quartermaster::params::exe_mode,
-  $os             = "${wwwroot}/microsoft/mount",
-  $windows_isos   = "${wwwroot}/microsoft/iso",
+  $os             = $quartermaster::params::os,
+  $windows_isos   = $quartermaster::params::windows_isos,
 
 ) inherits params {
 

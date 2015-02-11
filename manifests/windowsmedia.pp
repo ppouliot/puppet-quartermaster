@@ -29,11 +29,13 @@ define quartermaster::windowsmedia( $activationkey ) {
   $file_mode      = $quartermaster::params::file_mode
   $dir_mode       = $quartermaster::params::dir_mode
   $exe_mode       = $quartermaster::params::exe_mode
+  $windows_isos   = $quartermaster::params::windows_isos
+  $os             = $quartermaster::params::os
 
 
   $isofile  = $name
 #    $iso_path = "${quartermaster::wwwroot}/WinPE/ISO/${name}"
-  $iso_path = "${quartermaster::winpe::windows_isos}/${name}"
+  $iso_path = "${windows_isos}/${name}"
 
 # Windows Server 2012
   if $name =~ /([a-z]+)_([a-zA-Z_\-]+)_([0-9]+)_([x0-9]+)_dvd_([0-9]+).iso/ {
