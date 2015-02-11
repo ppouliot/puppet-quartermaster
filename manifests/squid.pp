@@ -9,14 +9,6 @@
 class quartermaster::squid () inherits quartermaster::params {
 
 
- if $::operatingsystem == 'Ubuntu' and $::operatingsystemrelease >= '14.04' {
-    service{$::squid3::params::squid3_service:
-      provider => 'upstart',
-    }
- }
-
-
-
   class {'squid3':
     template   => ('quartermaster/squid.conf.erb'),
 #    acl        => [
