@@ -4,7 +4,7 @@ label <%= @name %>
         append priority=low video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 label <%= @name %>-<%= @autofile %>
-        menu label (<%= @rel_name %>:<%= @<p_arch>): ^BareMetal/KVM <%= @autofile %> 
+        menu label (<%= @rel_name %>:<%= @p_arch>): ^BareMetal/KVM <%= @autofile %> 
         kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         append priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netconfig/get_hostname= auto preseed/url=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
