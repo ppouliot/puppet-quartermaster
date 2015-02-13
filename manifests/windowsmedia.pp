@@ -253,6 +253,38 @@ define quartermaster::windowsmedia( $activationkey ) {
     notify      => Exec["wimlib-imagex-unmount-${name}"],
     logoutput   => true,
   } 
+
+#  staging::file{"${name}-winpe-pxeboot.com":
+#    source  => "http://${ipaddress}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.com",
+#    target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com",
+#    require => Exec["wimlib-imagex-mount-${name}"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
+#  staging::file{"${name}-winpe-pxeboot.0":
+#    source  => "http://${ipaddress}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.n12",
+#    target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0",
+#    require => Staging::File["${name}-winpe-pxeboot.com"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
+#  staging::file{"${name}-winpe-bootmgr.exe":
+#    source  => "http://${ipaddress}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/bootmgr.exe",
+#    target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe",
+#    require => Staging::File["${name}-winpe-pxeboot.0"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
+#  staging::file{"${name}-winpe-abortpxe.com":
+#    source  => "http://${ipaddress}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/abortpxe.com",
+#    target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/abortpxe.com",
+#    require => Staging::File["${name}-winpe-bootmgr.exe"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
+#  staging::file{"${name}-winpe-boot.sdi":
+#    source  => "http://${ipaddress}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/abortpxe.com",
+#    target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/abortpxe.com",
+#    require => Staging::File["${name}-winpe-abortpxe.com"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
+
   exec {"wimlib-imagex-unmount-${name}":
     command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
     cwd         => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
