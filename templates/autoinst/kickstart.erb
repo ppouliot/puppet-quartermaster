@@ -9,8 +9,8 @@ url --url=<%= @inst_repo %>
 #url --url=<%= @inst_repo %> --proxy=https://<%= @ipaddress %>:8000 --noverifyssl
 lang en_US.UTF-8
 keyboard us
-#network --onboot yes --bootproto dhcp --noipv6
-network --onboot yes --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
+network --onboot yes --bootproto dhcp --noipv6
+#network --onboot yes --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
 #network --onboot yes --device eth0 --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
 #network --onboot yes --device eth1 --bootproto dhcp --noipv6 --hostname <%= @distro %>.local
 #timezone --utc America/New_York
