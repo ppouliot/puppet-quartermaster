@@ -81,11 +81,11 @@ NETWORKING=yes
 HOSTNAME=$NEWHOSTNAME
 EOF
 
-<% if @rel_major  == 7 -%> 
+if [-f /etc/hostname]; then
 cat <<EOF > /etc/hostname
 $NEWHOSTNAME
 EOF
-<% end -%>
+fi
 
 %end
 
@@ -95,15 +95,17 @@ EOF
 echo "Checking hostname -s and installing EPL Package if Necessary"
 
 HOSTNAME=`hostname -s`
+EPLRELEASE=`cat /etc/redhat-release |awk '{print $3}'`
+EPL7RELEASE=`cat /etc/redhat-release |awk '{print $4}'| sed -e "s/\./\ /g"|awk '{print $1"."$2}'`
 
 if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
   echo -n "Install Fedora EPL Repos"
-<% if @rel_major  == 7 -%> 
-  rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-6.8.noarch.rpm
-<% end -%>
-<% if @rel_major  == 7 -%> 
-  rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-7.5.noarch.rpm
-<% end -%>
+  if [$EPL7RELEASE -ge "7.0" ]; then
+    rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-7.5.noarch.rpm
+  fi
+  if [$EPLRELEASE -ge "6.0" ]; then
+    rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-6.8.noarch.rpm
+  fi
 fi
 %end
 %post --log /root/<%=@distro%>-puppet_installation.log
