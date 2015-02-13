@@ -87,13 +87,15 @@ echo "Checking hostname -s and installing EPL Package if Necessary"
 
 HOSTNAME=`hostname -s`
 
-#if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
-#  echo -n "Install Fedora EPL Repos"
-#  rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-#fi
-
-
-# 
+if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
+  echo -n "Install Fedora EPL Repos"
+<% @rel_major  < 7 -%> 
+  rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-6.8.noarch.rpm
+<% end -%>
+<% @rel_major  >= 7 -%> 
+  rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-7.5.noarch.rpm
+<% end -%>
+fi
 
 # Puppet
 yum install puppet rubygems make gcc ruby-devel git -y
