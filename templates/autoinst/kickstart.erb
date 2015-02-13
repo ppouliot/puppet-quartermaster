@@ -52,12 +52,13 @@ openssh-clients
 puppetlabs-release
 %end
 
-%post --nochroot --log /mnt/sysimage/root/<%= @distro %>-sethostname.log
+%post --nochroot --log /mnt/sysimage/root/<%= @distro %>-copy-dhcp-lease.log
+@echo on
 echo "Copy Current Lease Information to New Installation"
 cp /var/lib/dhclient/* /mnt/sysimage/var/lib/dhclient/
 %end
 
-%post --log /root/<%= @distro %>-post.log
+%post --log /root/<%= @distro %>-rename-host.log
 # SET HOSTNAME
 
 DNSNAME=`cat /var/lib/dhclient/dhclient*.lease |grep -m 1 "option host-name" |tr -s " " | cut -d " " -f4| /bin/sed -e "s/\"//g;" | /bin/sed -e "s/\;//g;"`
@@ -80,7 +81,15 @@ NETWORKING=yes
 HOSTNAME=$NEWHOSTNAME
 EOF
 
-#%post --log /root/<%= @distro %>-post.log
+<% if @rel_major  >= 7 -%> 
+cat <<EOF > /etc/hostname
+$NEWHOSTNAME
+EOF
+<% end -%>
+
+%end
+
+%post --log /root/<%= @distro %>-install-epel-repo.log
 
 # Install Fedor EPL Repos if we are not Fedora
 echo "Checking hostname -s and installing EPL Package if Necessary"
@@ -89,13 +98,15 @@ HOSTNAME=`hostname -s`
 
 if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
   echo -n "Install Fedora EPL Repos"
-<% @rel_major  < 7 -%> 
+<% if @rel_major  < 7 -%> 
   rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-6.8.noarch.rpm
 <% end -%>
-<% @rel_major  >= 7 -%> 
+<% if @rel_major  >= 7 -%> 
   rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-7.5.noarch.rpm
 <% end -%>
 fi
+%end
+%post --log /root/<%=@distro%>-puppet_installation.log
 
 # Puppet
 yum install puppet rubygems make gcc ruby-devel git -y
