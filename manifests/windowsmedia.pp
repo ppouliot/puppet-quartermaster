@@ -257,7 +257,7 @@ define quartermaster::windowsmedia( $activationkey ) {
   staging::file{"${name}-winpe-pxeboot.com":
     source  => "http://${ipaddress}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.com",
     target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com",
-    require => [Exec["wimlib-imagex-mount-${name}"],File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot"]],
+    require => Exec["wimlib-imagex-mount-${name}"],
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
   }
   staging::file{"${name}-winpe-pxeboot.0":
