@@ -40,7 +40,7 @@ class quartermaster::dban(
     ensure => directory,
   }
 
-  autofs::mount{ '*':
+  autofs::mount{ "dban-${dban_version}_i586.iso":
     map     => ":${wwwroot}/dban/iso/&",
     options => [
       '-fstype=iso9660,loop',
