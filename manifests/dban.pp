@@ -39,12 +39,11 @@ class quartermaster::dban(
     ensure => directory,
   }
 
-  autofs::mount{ "dban-${dban_version}_i586.iso":
-    map     => ":${wwwroot}/dban/iso/&",
+  autofs::mount{ "${wwwroot}/dban/mnt":
+    map     => ":${wwwroot}/dban/iso/dban-${dban_version}_i586.iso",
     options => [
       '-fstype=iso9660,loop',
     ],
-    mapfile => '/etc/auto.dban',
   }
 
   staging::file{'DBAN_ISO':
