@@ -50,7 +50,7 @@ class quartermaster::dban(
 
   staging::file{'DBAN_ISO':
     source => $dban_url,
-    target => "${wwwroot}/dban/iso/dban-${dban_version}/dban-${dban_version}_i586.iso",
+    target => "${wwwroot}/dban/iso/dban-${dban_version}_i586.iso",
     require =>  File["${wwwroot}/dban/iso"],
   }
 
