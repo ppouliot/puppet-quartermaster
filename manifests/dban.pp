@@ -48,7 +48,7 @@ class quartermaster::dban(
   }
 
   staging::file{'DBAN_ISO':
-    source => ""http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
+    source => "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
     target => "${wwwroot}/dban/iso/dban-${dban_version}_i586.iso",
     require =>  File["${wwwroot}/dban/iso"],
   }
