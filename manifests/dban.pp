@@ -12,20 +12,20 @@
 #
 class quartermaster::dban(
 
-  $dban_version   = '2.2.8'
-  $dban_url       = "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download"
-  $tmp            = $quartermaster::params::tmp
-  $pxeroot        = $quartermaster::params::pxeroot
-  $pxecfg         = $quartermaster::params::pxecfg
-  $pxe_menu       = $quartermaster::params::pxe_menu
-  $tftpboot       = $quartermaster::params::tftpboot
-  $tftp_username  = $quartermaster::params::tftp_username
-  $tftp_group     = $quartermaster::params::tftp_group
-  $tftp_filemode  = $quartermaster::params::tftp_filemode
-  $wwwroot        = $quartermaster::params::wwwroot
-  $www_username   = $quartermaster::params::www_username
-  $www_group      = $quartermaster::params::www_group
-  $file_mode      = $quartermaster::params::file_mode
+  $dban_version   = '2.2.8',
+  $dban_url       = "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
+  $tmp            = $quartermaster::params::tmp,
+  $pxeroot        = $quartermaster::params::pxeroot,
+  $pxecfg         = $quartermaster::params::pxecfg,
+  $pxe_menu       = $quartermaster::params::pxe_menu,
+  $tftpboot       = $quartermaster::params::tftpboot,
+  $tftp_username  = $quartermaster::params::tftp_username,
+  $tftp_group     = $quartermaster::params::tftp_group,
+  $tftp_filemode  = $quartermaster::params::tftp_filemode,
+  $wwwroot        = $quartermaster::params::wwwroot,
+  $www_username   = $quartermaster::params::www_username,
+  $www_group      = $quartermaster::params::www_group,
+  $file_mode      = $quartermaster::params::file_mode,
 
 
 )inherits quartermaster::params {
