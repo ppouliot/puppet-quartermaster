@@ -12,8 +12,8 @@
 #
 class quartermaster::dban(
 
-  $dban_version = '2.2.8',
-  $dban_url     = "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
+  $dban_version   = '2.2.8'
+  $dban_url       = "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download"
   $tmp            = $quartermaster::params::tmp
   $pxeroot        = $quartermaster::params::pxeroot
   $pxecfg         = $quartermaster::params::pxecfg
