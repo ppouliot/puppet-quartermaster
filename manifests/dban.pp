@@ -13,7 +13,6 @@
 class quartermaster::dban(
 
   $dban_version   = '2.2.8',
-  $dban_url       = "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
   $tmp            = $quartermaster::params::tmp,
   $pxeroot        = $quartermaster::params::pxeroot,
   $pxecfg         = $quartermaster::params::pxecfg,
@@ -49,7 +48,7 @@ class quartermaster::dban(
   }
 
   staging::file{'DBAN_ISO':
-    source => $dban_url,
+    source => ""http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
     target => "${wwwroot}/dban/iso/dban-${dban_version}_i586.iso",
     require =>  File["${wwwroot}/dban/iso"],
   }
