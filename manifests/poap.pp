@@ -13,7 +13,7 @@ class quartermaster::poap (
     notice('installing support for nexus power on provisioning')
 
     file{["${wwwroot}/nexus",
-          "${wwwroot}/nexus/poap",]:
+          "${wwwroot}/nexus/poap",
           "${wwwroot}/nexus/scripts",]:
       ensure => directory,
     }
