@@ -19,6 +19,11 @@ class quartermaster::poap (
       ensure => directory,
     }
 
+    file{"${wwwroot}/nexus/poap/config.py":
+      ensure => file,
+      content => template("quartermaster/poap.config.py.erb"),
+    }
+
   } else {
 
    warn("this is used if ensure_poap = true")
