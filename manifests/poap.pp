@@ -10,6 +10,7 @@ class quartermaster::poap (
 
 ) inherits quartermaster::params {
   if $ensure_poap == 'true' {
+    notice('installing support for nexus power on provisioning')
 
     file{["${wwwroot}/nexus",
           "${wwwroot}/nexus/poap",]:
@@ -26,7 +27,7 @@ class quartermaster::poap (
 
   } else {
 
-   warn("this is used if ensure_poap = true")
+   warning("this is used if ensure_poap = true")
 
   }
 }
