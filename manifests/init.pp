@@ -37,6 +37,7 @@ class quartermaster (
   $dhcp_proxy_subnets = [],
   $linux              = hiera('linux',{}),
   $windows            = hiera('windows',{}),
+  $enable_poap        = $quartermaster::params::enable_poap
 ) inherits quartermaster::params {
 
   validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')

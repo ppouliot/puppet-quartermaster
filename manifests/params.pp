@@ -18,6 +18,7 @@ class quartermaster::params {
   $tftpboot          = $tftp::params::directory
   $tftp_username     = $tftp::params::username
   $tftp_group        = $tftp::params::username
+  $enable_poap       = 'true'
 
   $www_username      = $apache::params::user
   $www_group         = $apache::params::group

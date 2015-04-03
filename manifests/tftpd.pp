@@ -3,7 +3,9 @@
 # Installs and configures tftpd-hpa for use by pxe
 # Also handles naming rules for winpe pxeboot environment
 #
-# Parameters: none
+# Parameters:
+# //** enable_netmgmt **// 
+#  creates a cisco Power On Auto Provisioning Ifrastructure.
 #
 # Actions:
 #
@@ -37,5 +39,4 @@ class quartermaster::tftpd () inherits quartermaster::params {
                "pxelinux/pxelinux.cfg"]:
     ensure  => directory,
   }
-
 }

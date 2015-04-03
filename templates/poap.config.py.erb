@@ -1,0 +1,55 @@
+# Script generated  by puppetmaster host  <%= @fqdn %>
+#config.py
+import logging
+import os
+import json
+import readline
+from cisco import *
+
+def getHostname():
+     hostname = "switch"
+
+     if os.path.exists("/bootflash/pyconfigs/hostname"):
+          namefile = open('/bootflash/pyconfigs/hostname', 'r+')
+          for line in namefile:
+               if (line.split("=")[0].strip() == "HOSTNAME"):
+                    hostname = line.split("=")[1]
+     else:
+           print "Hostname file does not exist or cannot be opened"
+     namefile.close()
+     return hostname
+
+def configVLANS():
+     if os.path.exists("/bootflash/pyconfigs/vlans"):
+          namefile = open("/bootflash/pyconfigs/vlans", 'r+')
+          for line in namefile:
+               if line.strip().startswith("#") == False:
+                    if (line.split("=")[0].strip() == "VLAN"):
+                         temp1 = line.split("=")
+                         temp2 = temp1[1]
+                         temp_line = temp2.split(".")
+                         vlanID = temp_line[0]
+                         vlanName = temp_line[1]
+                         print vlanID + "**" + vlanName 
+                         c1 = CLI ('config t')
+                         c2 = CLI ('vlan ' + vlanID)
+                         c3 = CLI ('name ' + vlanName)
+                         c4 = CLI ('exit')
+     else:
+         "VLAN file does not exist or cannot be opened"
+
+# MAIN
+newHostname = getHostname()
+if newHostname != "switch":
+     c1 = CLI ('config t')
+     c2 = CLI ('hostname ' + newHostname)
+     c3 = CLI ('exit')
+else:
+     print "No new hostname applied"
+configVLANS()
+
+"""
+if os.path.exists("/bootflash/pyconfigs/hostname"):
+namefile = open('/bootflash/pyconfigs/hostname', 'r+')
+print "File is Open for Reading"
+"""

@@ -138,6 +138,7 @@ define quartermaster::pxe {
 #    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
     /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os/images/pxeboot",
+    /(kali)/            => "http://repo.kali.org/kali/dists/kali/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
     /(oraclelinux)/     => "Enterprise ISO Required",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -162,6 +163,7 @@ define quartermaster::pxe {
   $inst_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
+    /(kali)/            => "http://repo.kali.org/kali/dists/kali",
     /(centos)/          => "${centos_url}/os/${p_arch}/",
     /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
@@ -176,6 +178,7 @@ define quartermaster::pxe {
   $update_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
+    /(kali)/            => "http://repo.kali.org/kali/dists/kali",
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
     /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
@@ -190,6 +193,7 @@ define quartermaster::pxe {
   $splashurl = $distro ? {
     /(ubuntu)/         => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(debian)/         => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
+    /(kali)/           => "http://repo.kali.org/kali//dists/kali/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
     /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os/isolinux/splash.png",
@@ -202,7 +206,7 @@ define quartermaster::pxe {
   }
 
   $bootsplash = $distro ? {
-    /(ubuntu|debian|fedora|scientificlinux)/             => '.png',
+    /(ubuntu|debian|kali|fedora|scientificlinux)/             => '.png',
     /(redhat|centos|opensuse|sles|sled)/                 => '.jpg',
     /(windows)/                                          => 'No Bootsplash',
     /(oraclelinux)/                                      => 'No Bootsplash ',
@@ -210,7 +214,7 @@ define quartermaster::pxe {
   }
 
   $autofile = $distro ? {
-    /(ubuntu|debian)/                                    => 'preseed',
+    /(ubuntu|debian|kali)/                               => 'preseed',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
     /(sles|sled|opensuse)/                               => 'autoyast',
     /(windows)/                                          => 'unattend.xml',
@@ -219,14 +223,14 @@ define quartermaster::pxe {
   }
 
   $pxekernel = $distro ? {
-    /(ubuntu|debian)/                                    => 'linux',
+    /(ubuntu|debian|kali)/                               => 'linux',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'vmlinuz',
     /(sles|sled|opensuse)/                               => 'linux',
     default                                              => 'No supported Pxe Kernel',
   }
 
   $initrd = $distro ? {
-    /(ubuntu|debian)/                                    => '.gz',
+    /(ubuntu|debian|kali)/                               => '.gz',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
     /(sles|sled|opensuse)/                               => undef,
     default                                              => 'No supported Initrd Extension',
@@ -243,7 +247,7 @@ define quartermaster::pxe {
   }
 
   $linux_installer = $distro ? {
-    /(ubuntu|debian)/                                    => 'd-i',
+    /(ubuntu|debian|kali)/                               => 'd-i',
     /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
     /(sles|sled|opensuse)/                               => 'yast',
     default                                              => 'No Supported Linux Installer',
