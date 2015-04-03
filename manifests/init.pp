@@ -66,6 +66,6 @@ if $windows {
 }
 
 #  Class['quartermaster'] -> Quartermaster::Pxe <||>
-  Class['quartermaster'] -> Quartermaster::Windowsmedia <||>
+#  Class['quartermaster'] -> Quartermaster::Windowsmedia <||>
 
 }
