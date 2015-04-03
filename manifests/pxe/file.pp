@@ -1,12 +1,21 @@
-define quartermaster::pxe::file (
+# == Define: quartermaster::pxebootfile
+# The file created for control of individual
+# host pxe menus.
+# found ususially in tftpboot/pxelinux/pxelinux.cfg/
+#
+#
+define quartermaster::pxe::bootfile (
+
   $arp_type               = $quartermaster::params::arp_type,
   $host_macaddress        = $quartermaster::params::host_macaddress,
   $default_pxeboot_option = $quartermaster::params::default_pxe_option
-#) inherits quartermaster::params {
 ) {
-#define quartermaster::pxe::file ( $arp_type,$host_macaddress,$default_pxeboot_option ) inherits quartermaster::params {
   #$host_macaddress = regsubst($macaddress, '(\:)','(\-)','G')
   #$host_macaddress = regsubst($macaddress, '(\:)','-','G')
+
+  concat{
+
+  } 
   file { "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/${arp_type}-${host_macaddress}":
     ensure  => directory,
     owner   => 'nobody',

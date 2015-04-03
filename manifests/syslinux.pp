@@ -29,6 +29,7 @@ class quartermaster::syslinux (
     target  => $tmp,
     creates => "${tmp}/${syslinux}",
   }
+
   Tftp::File{
     owner   => $tftp_username,
     group   => $tftp_group,
@@ -67,9 +68,6 @@ class quartermaster::syslinux (
     source  => "${tmp}/${syslinux}/com32/lib/libcom32.c32",
   }
 
-
-
-
   concat {"${pxecfg}/default":
     owner   => $tftp_username,
     group   => $tftp_group,
@@ -89,9 +87,8 @@ class quartermaster::syslinux (
   }
 
 
-  tftp::file {'pxelinux/pxelinux.cfg/graphics_cfg':
-    content =>"
-menu width 80
+  tftp::file {'pxelinux/pxelinux.cfg/graphics.cfg':
+    content =>"menu width 80
 menu margin 10
 menu passwordmargin 3
 menu rows 12

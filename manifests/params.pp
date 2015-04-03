@@ -8,10 +8,6 @@ class quartermaster::params {
     default:{ warning("${osfamily} doesn't require the Apt Class") }
   }
 
-  $arp_type = '01'
-  $host_macaddress = regsubst($macaddress, '(\:)','-','G')
-  $default_pxeboot_option = 'menu.c32'
-
   $q_home            = '/srv/quartermaster'
   $tmp               = '/tmp'
   $logroot           = '/var/log/quartermaster'
@@ -36,13 +32,18 @@ class quartermaster::params {
   $counter           = '0'
   $nameserver        = '4.2.2.2'
 
-  # Syslinux 
-  $syslinux_url = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
-  $syslinux_ver  = '5.01'
-  # Broken
-  #  $syslinux_ver  = '6.01'
-  $syslinux      = "syslinux-${syslinux_ver}"
-  $syslinuxroot  = "${tmp}/${syslinux}"
+  # Syslinux/Pxelinux 
+  $syslinux_url             = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
+  $syslinux_ver             = '5.01'
+  $syslinux                 = "syslinux-${syslinux_ver}"
+  $syslinuxroot             = "${tmp}/${syslinux}"
+  $arp_type                 = '01'
+  $host_macaddress          = regsubst($macaddress, '(\:)','-','G')
+  $default_pxeboot_option   = 'menu.c32'
+  $pxe_menu_timeout         = '10'
+  $pxemenu_total_timeout    = '120'
+  $pxe_allow_user_arguments = '0'
+  $pxemenu_default_graphics = 'graphics.cfg'
 
   #
   $os             = "${wwwroot}/microsoft/mount"
