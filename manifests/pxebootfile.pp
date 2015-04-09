@@ -18,7 +18,7 @@ define quartermaster::pxebootfile (
 
   case $interface_name != 'lo' {
     @file{"${tftpboot}/pxelinux/pxelinux.cfg/${arptype}-${interface_macaddr}":
-      ensure = file,
+      ensure => file,
     }
   }
 }

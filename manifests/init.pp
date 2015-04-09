@@ -64,7 +64,7 @@ if $linux {
 if $windows {
   create_resources(quartermaster::windowsmedia,$windows)
 }
-Quartermaster::Pxebootfile <<| |>>
+#Quartermaster::Pxebootfile <<| |>>
 
 #  Class['quartermaster'] -> Quartermaster::Pxe <||>
 #  Class['quartermaster'] -> Quartermaster::Windowsmedia <||>
