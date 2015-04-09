@@ -17,7 +17,7 @@ define quartermaster::pxebootfile (
   #$host_macaddress = regsubst($macaddress, '(\:)','-','G')
 
   case $interface_name != 'lo' {
-    @@file{"${tftpboot}/pxelinux/pxelinux.cfg/${arptype}-${interface_macaddr}":
+    @file{"${tftpboot}/pxelinux/pxelinux.cfg/${arptype}-${interface_macaddr}":
       ensure = file,
     }
   }
