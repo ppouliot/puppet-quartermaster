@@ -32,30 +32,30 @@ define quartermaster::pxebootfile (
 
 
   ## creates files tftpboot/pxelinux/pxelinux.cfg/
-  concat { "${tftpboot}/pxelinux/pxelinux.cfg/${bootfile}":
+  @@concat { "${tftpboot}/pxelinux/pxelinux.cfg/${bootfile}":
     mode    => $tftp_filemode,
   }
     
   ## Set a Default target for concat 
-  Concat:Fragment{
+  @@Concat:Fragment{
     target  => "${tftpboot}/pxelinux/pxelinux.cfg/boot",
   }
 
   ## Bootfile Header 
-  concat::fragment{"$bootfile.header":
+  @@concat::fragment{"$bootfile.header":
     content => template("quartermaster/pxemenu/header.erb"),
     order   => 01,
   }
 
   ## Localboot - Boot from the local disk
-  concat::fragment{"$bootfile.localboot":
+  @@concat::fragment{"$bootfile.localboot":
     content => template("quartermaster/pxemenu/localboot.erb"),
     order   => 02,
   }
   ## Puppet Fact Detected Menu Option
-  concat::fragment{"$bootfile.operatingsystem":
-    content => template("quartermaster/pxemenu/localboot.erb"),
-    order   => 02,
-  }
+#  @@concat::fragment{"$bootfile.operatingsystem":
+#    content => template("quartermaster/pxemenu/localboot.erb"),
+#    order   => 02,
+#  }
 
 }

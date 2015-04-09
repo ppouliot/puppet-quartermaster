@@ -3,6 +3,6 @@ prompt <%= @pxemenu_timeout %>
 TIMEOUT <%= @pxemenu_timeout %>
 TOTALTIMEOUT <%=@pxemenu_total_timeout %>
 ALLOWOPTIONS <%= @pxe_allow_user_arguments %>
-MENU TITLE Node:<%= @::fqdn %>
+MENU TITLE Node:<%= @fqdn %>
 MENU INCLUDE <%= @pxemenu_default_graphics %>
 MENU AUTOBOOT Starting Local System in # seconds
