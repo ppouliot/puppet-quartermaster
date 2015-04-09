@@ -8,7 +8,6 @@ define quartermaster::pxebootfile (
   $interface_name         = split($interfaces,",")
   $interface_macaddr      = inline_template("\$macaddress_${interface_name})
   $arp_type               = $quartermaster::params::arp_type,
-  $host_macaddress        = inline_template(macaddress_$fs{}),
   $default_pxeboot_option = $quartermaster::params::default_pxe_option,
   $pxe_menu_timeout       = $quartermaster::params::pxe_menu_timeout,
 ){
