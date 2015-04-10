@@ -38,5 +38,6 @@ class quartermaster::tftpd () inherits quartermaster::params {
                "pxelinux",
                "pxelinux/pxelinux.cfg"]:
     ensure  => directory,
+    mode    => '0777',
   }
 }
