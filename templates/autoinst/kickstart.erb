@@ -112,10 +112,26 @@ fi
 %post --log /root/<%=@distro%>-puppet_installation.log
 
 # Puppet
-/bin/yum install puppet rubygems make gcc ruby-devel git -y
+# Test if yum is in /bin
+if [ -f /bin/yum ]
+  then
+  /bin/yum install puppet rubygems make gcc ruby-devel git -y
+fi
+# Test if yum is in /usr/bin
+if [ -f /usr/bin/yum ]
+  then
+  /usr/bin/yum install puppet rubygems make gcc ruby-devel git -y
+fi
 
-# librarian-puppet"
-/bin/gem install r10k 
+# R10K"
+if [ -f /bin/gem ]
+  then
+  /bin/gem install r10k 
+fi
+if [ -f /usr/bin/gem ]
+  then
+  /usr/bin/gem install r10k 
+fi
 
 if [ -f /etc/sysconfig/puppet ]
    then
