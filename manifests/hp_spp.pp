@@ -35,4 +35,9 @@ class quartermaster::hp_spp (
     require =>  File["${wwwroot}/HP_SPP/iso"],
   }
 
+  concat::fragment{"pxeboot_hp_spp":
+    target  => "${pxecfg}/default",
+    content => template("quartermaster/pxemenu/hp_spp.erb"),
+    order   => 02,
+  }
 }
