@@ -19,6 +19,8 @@ class quartermaster::hp_spp (
 
 ) inherits quartermaster::params {
 
+  Exec{ timeout => 0, }
+
   tftp::file{'hp_spp':
     ensure => directory,
   } ->
@@ -28,9 +30,6 @@ class quartermaster::hp_spp (
   } ->
   file{"${wwwroot}/HP_SPP/iso":
     ensure => directory,
-  } ->
-  Exec{
-    timeout => 0,
   } ->
   staging::file{'HP_SPP_ISO':
     source => $hp_spp_iso_complete_url_location,
