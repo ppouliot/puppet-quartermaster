@@ -29,6 +29,9 @@ class quartermaster::hp_spp (
   file{"${wwwroot}/HP_SPP/iso":
     ensure => directory,
   } ->
+  Exec{
+    timeout => 0,
+  } ->
   staging::file{'HP_SPP_ISO':
     source => $hp_spp_iso_complete_url_location,
     target => "${wwwroot}/HP_SPP/iso/${hp_spp_iso_name}",
