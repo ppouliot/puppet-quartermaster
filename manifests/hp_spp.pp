@@ -41,7 +41,9 @@ class quartermaster::hp_spp (
     content => 'LABEL hp_spp.menu
         MENU LABEL HP Service Pack for Proliant Menu
         KERNEL menu.c32
-        APPEND graphics.cfg ../menu/hp_spp.menu',
+        APPEND graphics.cfg ../menu/hp_spp.menu
+
+',
     order   => 02,
   } ->
   file{"${tftpboot}/menu/hp_spp.menu":
