@@ -33,8 +33,7 @@ class quartermaster::hp_spp (
     source => $hp_spp_iso_complete_url_location,
     target => "${wwwroot}/HP_SPP/iso/${hp_spp_iso_name}",
     require =>  File["${wwwroot}/HP_SPP/iso"],
-  }
-
+  } ->
   concat::fragment{"pxeboot_hp_spp":
     target  => "${pxecfg}/default",
     content => template("quartermaster/pxemenu/hp_spp.erb"),
