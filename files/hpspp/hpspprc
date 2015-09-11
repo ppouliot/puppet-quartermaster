@@ -1,10 +1,13 @@
 shell -${SHELL}
 caption always "%n(%t) : %C"
-defscrollback 1024
+defscrollback 4096
 startup_message off
 hardstatus on
 hardstatus alwayslastline
-screen wget --wait
-title "HP-SPP ISO Retrevial"
-screen bash
-title "HP-SPP ISO Retrevial"
+screen -S hpspp_iso -t hpspp-iso-wget -d -m cd /srv/HP-SPP/iso && wget -cv -i .hpsppiso.wget
+screen -S hpspp_zip -t hpspp-zip-wget -d -m cd /srv/HP-SPP/zip && wget -cv -i .hpsppzip.wget
+select hpspp-iso-wget
+split
+focus down
+select hpspp-zip-wget
+focus up
