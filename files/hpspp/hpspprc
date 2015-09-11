@@ -1,0 +1,10 @@
+shell -${SHELL}
+caption always "%n(%t) : %C"
+defscrollback 1024
+startup_message off
+hardstatus on
+hardstatus alwayslastline
+screen wget --wait
+title "HP-SPP ISO Retrevial"
+screen bash
+title "HP-SPP ISO Retrevial"
