@@ -1,6 +1,6 @@
 SETLOCAL EnableDelayedExpansion
 
-call C:\ProgramData\chocolatey\bin\cinst -force puppet
+call C:\ProgramData\chocolatey\bin\cinst -force puppet -y
 @powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\puppetinit.cmd')){(new-object System.Net.WebClient).DownloadFile('http://10.21.7.22/microsoft/winpe/system/puppetinit.cmd', 'c:\puppetinit.cmd')}"
 @powershell -NoLogo -Command "while(-not [IO.File]::Exists('c:\log.ps1')){(new-object System.Net.WebClient).DownloadFile('http://10.21.7.22/microsoft/winpe/system/puppet_log.ps1', 'c:\log.ps1')}"
 REM Removing currently due to issues with the registration of puppet.  Puppet should register with the puppetmaster on the first puppet run.
