@@ -45,10 +45,10 @@ define quartermaster::pxe {
       $supported_endpoint = '7'
       $archived_endpoint  = '6.6'
       if $release <= $archived_endpoint {
-        $use_archive = 'true'
+        $use_archive = true
       }
       if $release >= $supported_endpoint {
-        $use_archive = 'false'
+        $use_archive = false
       }
 
       $centos_url = $use_archive ? {
@@ -64,10 +64,10 @@ define quartermaster::pxe {
       $supported_endpoint = '20'
       $archived_endpoint  = '19'
       if $release <= $archived_endpoint {
-        $use_archive = 'true'
+        $use_archive = true
       }
       if $release >= $supported_endpoint {
-        $use_archive = 'false'
+        $use_archive = false
       }
 
       $fedora_url = $use_archive ? {
@@ -90,14 +90,14 @@ define quartermaster::pxe {
       $supported_endpoint = '12.3'
       $archived_endpoint  = '12.2'
       if $release <= $archived_endpoint {
-        $use_archive = 'true'
+        $use_archive = true
       }
       if $release >= $supported_endpoint {
-        $use_archive = 'false'
+        $use_archive = false
       }
       $opensuse_url = $use_archive ? {
-        /(true)/   => "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution",
-        /(false)/  => "http://download.opensuse.org/distribution",
+        /(true)/   => 'http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution',
+        /(false)/  => 'http://download.opensuse.org/distribution',
       }
     }
     default:{
@@ -109,8 +109,8 @@ define quartermaster::pxe {
 
   # Begin tests for dealing with OracleLinux Repos
   $is_oracle = $distro ? {
-    /(oraclelinux)/ => 'true',
-    default         => 'This is not Oracle Linux',  
+    /(oraclelinux)/ => true,
+    default         => 'This is not Oracle Linux',
   }
 
   $rel_name = $release ? {
@@ -132,41 +132,41 @@ define quartermaster::pxe {
   }
 
   $url = $distro ? {
-    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
+    /(ubuntu)/           => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
+    /(debian)/           => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
 #    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(centos)/          => "${centos_url}/os/${p_arch}/images/pxeboot",
+    /(centos)/           => "${centos_url}/os/${p_arch}/images/pxeboot",
 #    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os/images/pxeboot",
-    /(kali)/            => "http://repo.kali.org/kali/dists/kali/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
+    /(fedora)/           => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os/images/pxeboot",
+    /(kali)/             => "http://repo.kali.org/kali/dists/kali/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
-    /(oraclelinux)/     => "Enterprise ISO Required",
-    /(redhat)/          => 'Enterprise ISO Required',
-    /(sles)/            => 'Enterprise ISO Required',
-    /(sled)/            => 'Enterprise ISO Required',
-    /(opensuse)/        => "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader",
-    default             => 'No URL Specified',
+    /(oraclelinux)/      => 'Enterprise ISO Required',
+    /(redhat)/           => 'Enterprise ISO Required',
+    /(sles)/             => 'Enterprise ISO Required',
+    /(sled)/             => 'Enterprise ISO Required',
+    /(opensuse)/         => "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader",
+    default              => 'No URL Specified',
   }
 
   $tld = $distro ?{
     /(ubuntu)/ => 'com',
     /(debian)/ => 'org',
-    default    => "tld isn't needed for ${distro}",   
+    default    => "tld isn't needed for ${distro}",
   }
   $webhost = $distro ?{
     /(ubuntu)/ => 'archive',
     /(debian)/ => 'ftp.us',
-    default    => "webhost isn't needed for ${distro}",   
+    default    => "webhost isn't needed for ${distro}",
   }
 
 
   $inst_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
-    /(kali)/            => "http://repo.kali.org/kali/dists/kali",
+    /(kali)/            => 'http://repo.kali.org/kali/dists/kali',
     /(centos)/          => "${centos_url}/os/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -179,9 +179,9 @@ define quartermaster::pxe {
   $update_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
-    /(kali)/            => "http://repo.kali.org/kali/dists/kali",
+    /(kali)/            => 'http://repo.kali.org/kali/dists/kali',
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -197,7 +197,7 @@ define quartermaster::pxe {
     /(kali)/           => "http://repo.kali.org/kali//dists/kali/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${flavor}/${p_arch}/os/isolinux/splash.png",
+    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os/isolinux/splash.png",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(sles)/            => 'Enterprise ISO Required',
@@ -207,7 +207,7 @@ define quartermaster::pxe {
   }
 
   $bootsplash = $distro ? {
-    /(ubuntu|debian|kali|fedora|scientificlinux)/             => '.png',
+    /(ubuntu|debian|kali|fedora|scientificlinux)/        => '.png',
     /(redhat|centos|opensuse|sles|sled)/                 => '.jpg',
     /(windows)/                                          => 'No Bootsplash',
     /(oraclelinux)/                                      => 'No Bootsplash ',
@@ -239,11 +239,11 @@ define quartermaster::pxe {
 
   $target_initrd = $distro ? {
     /(sles|sled|opensuse)/                               => "${rel_number}.gz",
-    /(fedora)/                                           => "${rel_number}${pxe_flavor}${initrd}",
+    /(fedora)/                                           => "${rel_number}${::pxe_flavor}${initrd}",
     default                                              => "${rel_number}${initrd}",
   }
   $target_kernel = $distro ? {
-    /(fedora)/                                           => "${rel_number}${pxe_flavor}",
+    /(fedora)/                                           => "${rel_number}${::pxe_flavor}",
     default                                              => $rel_number,
   }
 
@@ -272,11 +272,11 @@ define quartermaster::pxe {
   notify { "${name}: initrd is ${initrd}":}
   notify { "${name}: linux_installer is ${linux_installer}":}
   notify { "${name}: PuppetLabs Repo is ${puppetlabs_repo}":}
-  notify { "${name}: Centos Distro = ${is_centos}":}
-  notify { "${name}: Centos Legacy = ${centos_legacy}":}
+  notify { "${name}: Centos Distro = ${::is_centos}":}
+  notify { "${name}: Centos Legacy = ${::centos_legacy}":}
   notify { "${name}: Centos URL = ${centos_url}":}
-  notify { "${name}: Fedora Distro = ${is_fedora}":}
-  notify { "${name}: Fedora Legacy = ${fedora_legacy}":}
+  notify { "${name}: Fedora Distro = ${::is_fedora}":}
+  notify { "${name}: Fedora Legacy = ${::fedora_legacy}":}
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
   notify { "${name}: Target Initrd = ${target_initrd}":}
@@ -285,19 +285,19 @@ define quartermaster::pxe {
 #  if $pxekernel == !('No supported Pxe Kernel'){
     if ! defined (Staging::File["${target_kernel}-${name}"]){
       staging::file{"${target_kernel}-${name}":
-        source => "${url}/${pxekernel}", 
-        target => "${tftpboot}/${distro}/${p_arch}/${target_kernel}",
+        source  => "${url}/${pxekernel}",
+        target  => "${tftpboot}/${distro}/${p_arch}/${target_kernel}",
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
-#  } 
+#  }
 
 # Retrieve initrd file if supported
 #  if $initrd == !('No supported Initrd Extension'){
     if ! defined (Staging::File["${target_initrd}-${name}"]){
       staging::file{"${target_initrd}-${name}":
-        source => "${url}/initrd${initrd}",
-        target => "${tftpboot}/${distro}/${p_arch}/${target_initrd}",
+        source  => "${url}/initrd${initrd}",
+        target  => "${tftpboot}/${distro}/${p_arch}/${target_initrd}",
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
@@ -307,8 +307,8 @@ define quartermaster::pxe {
   if $bootsplash == !('No Bootsplash'){
     if ! defined (Staging::File["bootsplash-${name}"]){
       staging::file{"bootsplash-${name}":
-        source => $splashurl,
-        target => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+        source  => $splashurl,
+        target  => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
         require =>  Tftp::File["${distro}/graphics"],
       }
     }
@@ -318,7 +318,7 @@ define quartermaster::pxe {
 # Distro Specific TFTP Folders
 
   if ! defined (Tftp::File[$distro]){
-    tftp::file { $distro: 
+    tftp::file { $distro:
       ensure  => directory,
     }
   }
@@ -342,7 +342,7 @@ define quartermaster::pxe {
     }
   }
 
-# Distro Specific TFTP Graphics.conf 
+# Distro Specific TFTP Graphics.conf
 
 if $linux_installer == !('No Supported Linux Installer') {
   tftp::file { "${distro}/menu/${name}.graphics.conf":
@@ -383,7 +383,7 @@ if $linux_installer == !('No Supported Linux Installer') {
     file { "${wwwroot}/${distro}/${p_arch}/.README.html":
       ensure  => file,
       require => File[ "${wwwroot}/${distro}" ],
-      content => template("quartermaster/README.html.erb"),
+      content => template('quartermaster/README.html.erb'),
     }
   }
 
@@ -398,7 +398,7 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
       target  => "${pxecfg}/default",
-      content => template("quartermaster/pxemenu/default.erb"),
+      content => template('quartermaster/pxemenu/default.erb'),
       order   => 02,
     }
   }
@@ -412,7 +412,7 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}.submenu_header"]) {
     concat::fragment {"${distro}.submenu_header":
       target  => "${tftpboot}/menu/${distro}.menu",
-      content => template("quartermaster/pxemenu/header2.erb"),
+      content => template('quartermaster/pxemenu/header2.erb'),
       order   => 01,
     }
   }

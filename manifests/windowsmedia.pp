@@ -176,7 +176,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       mode    => '0644',
       require =>  File[ "${wwwroot}/microsoft" ],
     }
-  } 
+  }
   if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"]) {
     file { "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}":
       ensure  => directory,
@@ -186,7 +186,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       mode    => '0644',
       require =>  File[ "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
     }
-  } 
+  }
   if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot"]) {
     file { "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/Boot":
       ensure  => directory,
@@ -196,7 +196,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       mode    => '0644',
       require =>  File[ "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
     }
-  } 
+  }
   if ! defined (File["${wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"]) {
     file { "${wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}":
       ensure  => link,
@@ -209,7 +209,7 @@ define quartermaster::windowsmedia( $activationkey ) {
   }
 
   staging::file{"${w_flavor}-winpe.wim":
-    source  => "http://${ipaddress}/microsoft/mount/${name}/sources/boot.wim",
+    source  => "http://${::ipaddress}/microsoft/mount/${name}/sources/boot.wim",
     target  => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
     require => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe"],
     notify  => Exec["wimlib-imagex-mount-${name}"],
@@ -225,11 +225,11 @@ define quartermaster::windowsmedia( $activationkey ) {
   #    logoutput => true,
   #  }
   # file { "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim":
-  #   ensure => present, 
+  #   ensure => present,
   #   require => Exec["copy-${w_flavor}-winpe.wim"]
   # }
-   
-#  } 
+
+#  }
 #  if ! defined (File["${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com"]) {
 #    exec { ${name}-etfsboot.com
 #       command => "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/pxe/etfsboot.com":
@@ -241,7 +241,7 @@ define quartermaster::windowsmedia( $activationkey ) {
 #      mode    => '0644',
 #      require =>  File[ "${quartermaster::wwwroot}/microsoft/${w_distro}/${w_release}/${w_arch}"],
 #    }
-#  } 
+#  }
   exec {"wimlib-imagex-mount-${name}":
     command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt.${w_arch}",
     cwd         => "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe",
@@ -252,7 +252,7 @@ define quartermaster::windowsmedia( $activationkey ) {
 #                        "${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
     notify      => Exec["wimlib-imagex-unmount-${name}"],
     logoutput   => true,
-  } 
+  }
 
 #  staging::file{"${name}-winpe-pxeboot.com":
 #    source  => "http://${ipaddress}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.com",
@@ -291,12 +291,12 @@ define quartermaster::windowsmedia( $activationkey ) {
     refreshonly => true,
     require     => File["${wwwroot}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
     logoutput   => true,
-  } 
+  }
 
   file { "${wwwroot}/microsoft/winpe/system/${name}.cmd":
     ensure  => file,
     mode    => $exe_mode,
-    content => template("quartermaster/winpe/menu/default.erb"),
+    content => template('quartermaster/winpe/menu/default.erb'),
   }
 
   file { "${wwwroot}/microsoft/${w_distro}/${w_release}/unattend/${w_flavor}.xml":
@@ -315,7 +315,7 @@ define quartermaster::windowsmedia( $activationkey ) {
     mode    => $exe_mode,
     content => template('quartermaster/autoinst/compute.erb'),
   }
-  
+
   concat::fragment{"winpe_system_cmd_a_init_${name}":
     target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/A_init.erb'),

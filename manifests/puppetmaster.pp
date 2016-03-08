@@ -20,17 +20,17 @@ class quartermaster::puppetmaster () inherits quartermaster::params {
     parser           => 'current',
     hiera_config     => '/etc/puppet/hiera.yaml',
     environments     => 'directory',
-    environmentpath => '/etc/puppet/environments',
-  } 
+    environmentpath  => '/etc/puppet/environments',
+  }
   file  {'/etc/puppet/files':
-    ensure => directory,
+    ensure  => directory,
     require => Class['puppet::master'],
   }
 
   file {'/etc/puppet/fileserver.conf':
     ensure  => file,
     require => Class['puppet::master'],
-    source  => "puppet:///modules/quartermaster/puppetmaster/fileserver.conf",
+    source  => 'puppet:///modules/quartermaster/puppetmaster/fileserver.conf',
   }
 
 }

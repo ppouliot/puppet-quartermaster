@@ -25,7 +25,7 @@ class quartermaster::syslinux (
 
   # Syslinux Staging and Extraction
   staging::deploy { "${syslinux}.tar.gz":
-    source => "${syslinux_url}/${syslinux}.tar.gz",
+    source  => "${syslinux_url}/${syslinux}.tar.gz",
     target  => $tmp,
     creates => "${tmp}/${syslinux}",
   }
@@ -74,15 +74,15 @@ class quartermaster::syslinux (
     mode    => $file_mode,
   }
 
-  concat::fragment{"default_header":
+  concat::fragment{'default_header':
     target  => "${pxecfg}/default",
-    content => template("quartermaster/pxemenu/header.erb"),
+    content => template('quartermaster/pxemenu/header.erb'),
     order   => 01,
   }
 
-  concat::fragment{"default_localboot":
+  concat::fragment{'default_localboot':
     target  => "${pxecfg}/default",
-    content => template("quartermaster/pxemenu/localboot.erb"),
+    content => template('quartermaster/pxemenu/localboot.erb'),
     order   => 01,
   }
 

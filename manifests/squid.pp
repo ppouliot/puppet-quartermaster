@@ -1,7 +1,7 @@
 # Class: quartermaster::server::squid
 #
 # This Class installs squid3 and modifies the configuration
-# to cache package file formats and remote configuration 
+# to cache package file formats and remote configuration
 # files
 #
 #

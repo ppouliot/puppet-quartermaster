@@ -44,12 +44,12 @@ class quartermaster (
 
   class{'quartermaster::dnsmasq': }     ->
   class{'quartermaster::tftpd':}        ~>
-  class{'quartermaster::syslinux':} 
+  class{'quartermaster::syslinux':}
 
   class{'quartermaster::puppetmaster':} ->
     class{'quartermaster::www':}          ->
     class{'quartermaster::squid':}          ~>
-  class{'quartermaster::winpe':}        
+  class{'quartermaster::winpe':}
 
 # NFS needs to be modified and refactored if used
 #  class { 'quartermaster::nfs': }

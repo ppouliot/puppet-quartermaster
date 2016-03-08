@@ -1,6 +1,6 @@
 # Class: quartermaster::www
 #
-# This Class defines a minimal apache::vhosts 
+# This Class defines a minimal apache::vhosts
 # for use with pxe provisioning
 # on the quartermaster node
 #
@@ -22,9 +22,9 @@ class quartermaster::www (
   }
 
   file {[
-   "${wwwroot}/bin",
-   "${wwwroot}/kickstart",
-   "${wwwroot}/preseed",
+    "${wwwroot}/bin",
+    "${wwwroot}/kickstart",
+    "${wwwroot}/preseed",
   ]:
     ensure => directory,
   }
@@ -34,21 +34,21 @@ class quartermaster::www (
   file {'firstboot.sh':
     ensure   => present,
     path     => "${wwwroot}/bin/firstboot",
-    mode     => $exe_mode,
+    mode     => $::exe_mode,
     content  => template('quartermaster/scripts/firstboot.erb'),
   }
 
   file {'secondboot.sh':
     ensure   => present,
     path     => "${wwwroot}/bin/secondboot",
-    mode     => $exe_mode,
+    mode     => $::exe_mode,
     content  => template('quartermaster/scripts/secondboot.erb'),
   }
 
   file {'postinstall.sh':
     ensure   => present,
     path     => "${wwwroot}/bin/postinstall",
-    mode     => $exe_mode,
+    mode     => $::exe_mode,
     content  => template('quartermaster/scripts/postinstall.erb'),
   }
 

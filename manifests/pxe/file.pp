@@ -15,7 +15,7 @@ define quartermaster::pxe::bootfile (
 
   concat{
 
-  } 
+  }
   file { "${quartermaster::tftpboot}/pxelinux/pxelinux.cfg/${arp_type}-${host_macaddress}":
     ensure  => directory,
     owner   => 'nobody',

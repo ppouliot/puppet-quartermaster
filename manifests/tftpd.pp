@@ -4,7 +4,7 @@
 # Also handles naming rules for winpe pxeboot environment
 #
 # Parameters:
-# //** enable_netmgmt **// 
+# //** enable_netmgmt **//
 #  creates a cisco Power On Auto Provisioning Ifrastructure.
 #
 # Actions:
@@ -26,17 +26,18 @@ class quartermaster::tftpd () inherits quartermaster::params {
 
 # Tftp Server Configuration
   class{ 'tftp':
-     inetd     => false,
-     directory => $quartermaster::params::tftpboot,
-     options   => '-vvvvs -c -m /etc/tftpd.rules',
-     require   => [ File[ 'tftpd_rules' ], ],
+    inetd     => false,
+    directory => $quartermaster::params::tftpboot,
+    options   => '-vvvvs -c -m /etc/tftpd.rules',
+    require   => [ File[ 'tftpd_rules' ], ],
   }
-  
+
 # additional tftp directories
-  tftp::file {["menu",
-               "network_devices",
-               "pxelinux",
-               "pxelinux/pxelinux.cfg"]:
+  tftp::file {[
+    'menu',
+    'network_devices',
+    'pxelinux',
+    'pxelinux/pxelinux.cfg']:
     ensure  => directory,
     mode    => '0777',
   }
