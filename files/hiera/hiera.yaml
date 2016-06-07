@@ -1,7 +1,8 @@
+---
 :backends:
   - yaml
-:yaml:
-  :datadir: /etc/puppet/hiera
 :hierarchy:
   - %{hostname}
   - %{calling_module}
+:yaml:
+  :datadir: /etc/puppet/hiera
