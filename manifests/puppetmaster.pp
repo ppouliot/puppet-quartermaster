@@ -13,7 +13,7 @@
 
 class quartermaster::puppetmaster () inherits quartermaster::params {
 
-  class {'puppetdb':}
+#  class {'puppetdb':}
   class {'puppet::master':
     autosign         => true,
     storeconfigs     => true,
