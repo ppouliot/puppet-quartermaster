@@ -12,19 +12,23 @@ class quartermaster::params {
   $q_home            = '/srv/quartermaster'
   $tmp               = '/tmp'
   $logroot           = '/var/log/quartermaster'
+  # Parameters for tftp configuration come from the puppetlabs-tftpmodule directly  
   $tftpboot          = $tftp::params::directory
   $tftp_username     = $tftp::params::username
   $tftp_group        = $tftp::params::username
+  $pxeroot           = "${tftp::params::directory}/pxelinux"
+  $pxecfg            = "${tftp::params::directory}/pxelinux/pxelinux.cfg"
+  $pxe_menu          = "${tftp::params::directory}/menu"
+  $puppetmaster_fqdn = $::fqdn
+  # Enables Cisco POAP provisioning (experimental)
   $enable_poap       = true
 
+  # parameters for the configuration of apache
   $www_username      = $apache::params::user
   $www_group         = $apache::params::group
   $wwwroot           = $q_home
   $nfsroot           = $q_home
   $bin               = "${q_home}/bin"
-  $pxeroot           = "${tftp::params::directory}/pxelinux"
-  $pxecfg            = "${tftp::params::directory}/pxelinux/pxelinux.cfg"
-  $pxe_menu          = "${tftp::params::directory}/menu"
   $puppetmaster_fqdn = $::fqdn
   $exe_mode          = '0777'
   $file_mode         = '0644'
