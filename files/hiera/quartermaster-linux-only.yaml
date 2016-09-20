@@ -17,7 +17,7 @@ linux:
     - ubuntu-14.04-i386
     - ubuntu-16.04-amd64
     - ubuntu-16.04-i386
-    - centos-6.3-x86_64
+    - centos-6.3-i386
     - centos-6.3-x86_64
     - centos-6.4-x86_64
     - centos-6.5-x86_64
