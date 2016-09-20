@@ -1,4 +1,4 @@
-FROM msopenstack/sentinel-ubuntu:latest
+FROM msopenstack/sentinel-ubuntu_trusty:latest
  
 RUN apt-get update -y
 RUN apt-get install software-properties-common -y
