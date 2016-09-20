@@ -19,7 +19,6 @@ class quartermaster::params {
   $pxeroot           = "${tftp::params::directory}/pxelinux"
   $pxecfg            = "${tftp::params::directory}/pxelinux/pxelinux.cfg"
   $pxe_menu          = "${tftp::params::directory}/menu"
-  $puppetmaster_fqdn = $::fqdn
   # Enables Cisco POAP provisioning (experimental)
   $enable_poap       = true
 
