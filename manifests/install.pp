@@ -30,6 +30,9 @@ class quartermaster::install {
   file{[
     '/srv/quartermaster',
     '/srv/quartermaster/bin',
+    '/srv/quartermaster/dban',
+    '/srv/quartermaster/dban/iso',
+    '/srv/quartermaster/dban/mnt',
     '/srv/quartermaster/iso',
     '/srv/quartermaster/kickstart',
     '/srv/quartermaster/preseed',
@@ -37,7 +40,7 @@ class quartermaster::install {
     '/srv/quartermaster/unattend.xml',
     '/srv/quartermaster/microsoft',
     '/srv/quartermaster/microsoft/iso',
-    '/srv/quartermaster/microsoft/mount',
+    '/srv/quartermaster/microsoft/mnt',
     '/srv/quartermaster/microsoft/winpe',
     '/srv/quartermaster/microsoft/winpe/bin',
     '/srv/quartermaster/microsoft/winpe/system',
@@ -77,7 +80,47 @@ class quartermaster::install {
     mode    => '0777',
     content => template('quartermaster/scripts/postinstall.erb'),
   }
-    
+
+  file{'/srv/quartermaster/microsoft/winpe/system/init.cmd':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/winpe/menu/init.erb'),
+  } ->
+  file {'/srv/quartermaster/microsoft/winpe/system/menucheck.ps1':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/winpe/menu/menucheckps1.erb'),
+  } ->
+  file {'/srv/quartermaster/microsoft/winpe/system/puppet_log.ps1':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/puppet_log.ps1.erb'),
+  } ->
+  file {'/srv/quartermaster/microsoft/winpe/system/firstboot.cmd':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/firstbootcmd.erb'),
+  } ->
+  file {'/srv/quartermaster/microsoft/winpe/system/secondboot.cmd':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/secondbootcmd.erb'),
+  }->
+  file {'/srv/quartermaster/microsoft/winpe/system/compute.cmd':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/computecmd.erb'),
+  }->
+  file {'/srv/quartermaster/microsoft/winpe/system/puppetinit.cmd':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/puppetinitcmd.erb'),
+  } ->
+  file {'/srv/quartermaster/microsoft/winpe/system/rename.ps1':
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/rename.ps1.erb'),
+  }
 
   # Configured a resolv.conf for dnsmasq to use
   file { '/etc/resolv.conf.dnsmasq':
