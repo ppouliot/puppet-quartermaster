@@ -4,11 +4,33 @@ class quartermaster::install {
   # Define some basic files on the filestem for default locations of bits.
   
   # The root of our PXE Infr
-  file{'/srv/quartermaster':
+  file{[
+    '/srv/quartermaster',
+    '/srv/quartermaster/bin',
+    '/srv/quartermaster/kickstart',
+    '/srv/quartermaster/preseed',
+  ]:
     ensure => directory,
     mode   => '1644',
     owner  => 'root',
     group  => 'root',
+  } ->
+  file {'/srv/quartermaster/bin/firstboot':
+    ensure   => file,
+    mode     => '0777',
+    content  => template('quartermaster/scripts/firstboot.erb'),
+  } ->
+
+  file {'/srv/quartermaster/bin/secondboot':
+    ensure   => file,
+    mode     => '0777',
+    content  => template('quartermaster/scripts/secondboot.erb'),
+  } ->
+
+  file {'/srv/quartermaster/bin/postinstall':
+    ensure   => file,
+    mode     => '0777',
+    content  => template('quartermaster/scripts/postinstall.erb'),
   }
     
 
@@ -21,7 +43,8 @@ class quartermaster::install {
     content => "#**** WARNING ****
 # This File is manaaged by Puppet
 search $::domain
-nameserver $quartermaster::preferred_nameserver
+# nameserver $quartermaster::preferred_nameserver
+nameserver 10.21.7.1
 nameserver 4.2.2.1
 nameserver 4.2.2.2
 ",

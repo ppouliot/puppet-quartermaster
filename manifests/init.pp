@@ -3,6 +3,8 @@
 # This module manages quartermaster
 #
 # Parameters: none
+#  /* preferred_nameserver */
+#  nameserver on your local subnet
 #
 # Actions:
 #
@@ -32,6 +34,7 @@
 # }
 #
 class quartermaster (
+  $preferred_nameserver = undef,
 #  $linux            = $quartermaster::params::linux,
 #  $windows          = $quartermaster::params::windows,
   $proxydhcp_subnets = [],
