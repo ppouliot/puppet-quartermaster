@@ -1,36 +1,81 @@
 #== Class: quartermaster::install
 class quartermaster::install {
 
-  # Define some basic files on the filestem for default locations of bits.
-  
-  # The root of our PXE Infr
+  include ::stdlib
+  # NGINX Installation
+  include ::nginx
+  nginx::resource::vhost{ $fqdn:
+    ensure               => present,
+    www_root             => '/srv/quartermaster',
+    use_default_location => false,
+    vhost_cfg_append     => {
+      autoindex => on,
+    }
+  }
+  nginx::resource::location{'/':
+    ensure => present,
+    www_root => '/srv/quartermaster',
+    vhost    => $fqdn,
+  } 
+  nginx::resource::location{"$fqdn-tftpboot":
+    ensure    => present,
+    autoindex => 'on',
+    www_root  => '/var/lib/tftpboot',
+    vhost     => $fqdn,
+    require   => Class['tftp'],
+  } 
+
+  # Define dictory structure on the filestem for default locations of bits.
+
   file{[
     '/srv/quartermaster',
     '/srv/quartermaster/bin',
+    '/srv/quartermaster/iso',
     '/srv/quartermaster/kickstart',
     '/srv/quartermaster/preseed',
+    '/srv/quartermaster/tftpboot',
+    '/srv/quartermaster/unattend.xml',
+    '/srv/quartermaster/microsoft',
+    '/srv/quartermaster/microsoft/iso',
+    '/srv/quartermaster/microsoft/mount',
+    '/srv/quartermaster/microsoft/winpe',
+    '/srv/quartermaster/microsoft/winpe/bin',
+    '/srv/quartermaster/microsoft/winpe/system',
+    '/srv/quartermaster/microsoft/winpe/system/menu',
   ]:
-    ensure => directory,
-    mode   => '0644',
-    owner  => 'root',
-    group  => 'root',
+    ensure  => directory,
+    mode    => '0777',
+    owner   => 'nginx',
+    group   => 'nginx',
+    recurse => true,
   } ->
+
+  # Firstboot Script
+  # This is script is added to the ubuntu/debian hosts via
+  # the postinstall script. It will install configuration management
+  # packages, the secondboot script, sets hostname and additional 
+  # startup config then reboots.
+
   file {'/srv/quartermaster/bin/firstboot':
-    ensure   => file,
-    mode     => '0777',
-    content  => template('quartermaster/scripts/firstboot.erb'),
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/firstboot.erb'),
   } ->
 
+  # Secondboot Script
+  # Executes configuration managment ( Puppet Currently )
   file {'/srv/quartermaster/bin/secondboot':
-    ensure   => file,
-    mode     => '0777',
-    content  => template('quartermaster/scripts/secondboot.erb'),
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/secondboot.erb'),
   } ->
 
+  # Postinstall Script
+  # Installs the firstboot script and reboots the system
   file {'/srv/quartermaster/bin/postinstall':
-    ensure   => file,
-    mode     => '0777',
-    content  => template('quartermaster/scripts/postinstall.erb'),
+    ensure  => file,
+    mode    => '0777',
+    content => template('quartermaster/scripts/postinstall.erb'),
   }
     
 
@@ -69,10 +114,10 @@ nameserver 4.2.2.2
     restart           => true,
   }
   dnsmasq::dhcp{'ProdyDHCP-PXE':
-    dhcp_start   => "$::ipaddress,proxy",
+    dhcp_start => "$::ipaddress,proxy",
     dhcp_end   => $::netmask,
-    lease_time   => '',
-    netmask => '',
+    lease_time => '',
+    netmask    => '',
   }
   dnsmasq::dhcpoption{'vendor_pxeclient':
     option  => 'vendor:PXEClient',
@@ -100,5 +145,95 @@ nameserver 4.2.2.2
     notify  => Service['dnsmasq'],
   }
 
+  ## TFTP Server Configuration
 
+  # Create the tftp remap file to allow us to boot
+  # Windows and linux installs
+
+  file { '/etc/tftpd.rules':
+    content  => template('quartermaster/tftp-remap.erb'),
+  } ->
+
+  # Tftp Server Install/Configuration
+  class{ 'tftp':
+    directory => '/srv/quartermaster/tftpboot',
+    inetd     => false,
+    options   => '-vvvvs -c -m /etc/tftpd.rules',
+  }
+
+  # additional tftp directories
+  tftp::file {[
+    'menu',
+    'network_devices',
+    'pxelinux',
+    'pxelinux/pxelinux.cfg',
+    'winpe',
+  ]:
+    ensure  => directory,
+    mode    => '0777',
+  }
+
+  class{'samba::server':
+    workgroup => 'quartermaster',
+    server_string => "Quartermaster($::ipaddress): Purveyor of Provisions & Tooling",
+    interfaces    => $::primary,
+    security      => 'share',
+  }
+  samba::server::share{'IPC$':
+    comment       => 'Fake IPC',
+    path          => '/etc/samba/fakeIPC',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => true,
+  }
+
+  samba::server::share{'installs':
+    comment       => 'Installation Bits and Bytes for all platforms',
+    path          => '/srv/quartermaster',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => true,
+  }
+  samba::server::share{'os':
+    comment       => 'Microsoft Operating System Platforms',
+    path          => '/srv/quartermaster/microsoft',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => true,
+  }
+  samba::server::share{'ISO':
+    comment       => 'Microsoft Operating System Platforms',
+    path          => '/srv/quartermaster/microsoft/iso',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => false,
+  }
+  samba::server::share{'winpe':
+    comment       => 'WinPE',
+    path          => '/srv/quartermaster/microsoft/iso',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => false,
+  }
+  samba::server::share{'system':
+    comment       => 'WinPE Installation System Scripts',
+    path          => '/srv/quartermaster/microsoft/winpe/system',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => false,
+  }
+  samba::server::share{'pxe-cfg':
+    comment       => 'Pxe Configuration Files',
+    path          => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => false,
+  }
+  samba::server::share{'pe-pxeroot':
+    comment       => 'WinPE PXEBoot Files',
+    path          => '/srv/quartermaster/tftpboot/winpe',
+    guest_ok      => true,
+    guest_account => 'nobody',
+    read_only     => false,
+  }
 }
