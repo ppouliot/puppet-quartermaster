@@ -216,11 +216,16 @@ nameserver 4.2.2.2
     mode    => '0777',
   }
 
+  $quartermaster_samba_interface = $::facts['networking']['primary']
   class{'samba::server':
-    workgroup => 'quartermaster',
-    server_string => "Quartermaster($::ipaddress): Purveyor of Provisions & Tooling",
-    interfaces    => $::primary,
-    security      => 'share',
+    workgroup      => 'quartermaster',
+    server_string  => 'Samba Server Version %v',
+    netbios_name   => $::hostname,
+    interfaces     => "${::facts['networking']['primary']} lo",
+    guest_account  => 'nobody',
+    map_to_guest   => 'Bad User',
+    kernel_oplocks => 'no',
+    security       => 'user',
   }
   samba::server::share{'IPC$':
     comment       => 'Fake IPC',
