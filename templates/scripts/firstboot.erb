@@ -4,7 +4,7 @@ QUARTERMASTER=<%= @ipaddress %>
 
 sleep 20 
 
-apt-get update -y && apt-get upgrade -y
+apt-get update -y && apt-get dist-upgrade -y && apt-get --purge autoremove -y
 
 # Test if a VM
 #dmidecode |grep -i "vm"
@@ -26,11 +26,15 @@ fi
 # this is a debian/ubuntu specific command
 release=`lsb_release -c | awk '{print $2}'`
 
-echo '### INSTALLING PUPPETLABS APT REPO ###'
-wget http://apt.puppetlabs.com/puppetlabs-release-$release.deb; dpkg -i puppetlabs-release-$release.deb
+echo '### INSTALLING PUPPETLABS APT REPO for PUPPET PC1##'
+wget http://apt.puppet.com/puppetlabs-release-pc1-$release.deb; dpkg -i puppetlabs-release-pc1-$release.deb
 if [ $? $test -eq 1 ]; then
-   echo "Could not find puppetlabs release for $release.  Trying alternative."
-   wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+   echo "Could not find puppetlabs pc1 release for $release.  Trying alternative."
+   wget http://apt.puppetlabs.com/puppetlabs-release-$release.deb; dpkg -i puppetlabs-release-$release.deb
+   if [ $? $test -eq 1 ]; then
+      echo "Could not find puppetlabs release for $release.  Trying alternative."
+      wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+   fi
 fi
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
@@ -38,11 +42,12 @@ apt-get update -y && apt-get install -y openssh-server git puppet ruby ruby-dev
 
 
 echo "### INSTALLING  LIBRARIAN-PUPPET-MAESTRODEV DUE TO BUGFIXES IN LIBRARIAN-PUPPET ###"
-gem install r10k
+gem install r10k hiera-eyaml
 
 
 # Set hostname of puppetmaster
-echo "<%= @ipaddress %> <%= @fqdn %> <%= @hostname %> puppet" >> /etc/hosts
+# This is currently disabled as the puppetmaster is no longer on the quartermaster server
+# echo "<%= @ipaddress %> <%= @fqdn %> <%= @hostname %> puppet" >> /etc/hosts
 
 #/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;" > /etc/hostname
 #
@@ -62,6 +67,14 @@ EOF
 
 fi
 
+if [ -f /etc/puppetlabs/puppet/puppet.conf ]
+then
+cat >> /etc/puppetlabs/puppet/puppet.conf << EOF
+[agent]
+server=<%= @puppetmaster_fqdn %>
+EOF
+
+fi
 if [ -f /etc/init.d/hostname.sh ]
 then
 	/bin/sed -i -e "s/debian/$NEWHOSTNAME/g" /etc/hostname
@@ -72,12 +85,6 @@ else
 	/bin/sed -i -e "s/ubuntu/$NEWHOSTNAME/g" /etc/hosts
 	/etc/init.d/hostname start
 fi
-
-
-#puppet agent --verbose --no-daemonize --certname=`cat /etc/hostname` --onetime --server <%= @hostname %>
-#/usr/bin/puppet agent --certname APPEND_TIMESTAMP_TO_HOSTNAME 
-
-#/usr/bin/puppet agent --waitforcert --server=<%= @fqdn %> --debug --trace --verbose
 
 # Remove our firstboot service so that it won"t run again
 update-rc.d firstboot remove
