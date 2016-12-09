@@ -1,5 +1,16 @@
-#== Class: quartermaster::dnsmasq
-class quartermaster::dnsmasq {
+#== Class: quartermaster::install
+class quartermaster::install {
+
+  # Define some basic files on the filestem for default locations of bits.
+  
+  # The root of our PXE Infr
+  file{'/srv/quartermaster':
+    ensure => directory,
+    mode   => '1644',
+    owner  => 'root',
+    group  => 'root',
+  }
+    
 
   # Configured a resolv.conf for dnsmasq to use
   file { '/etc/resolv.conf.dnsmasq':
@@ -20,7 +31,6 @@ nameserver 4.2.2.2
   # proxydhcp server for nextserver and bootfile 
   # dhcp options
 
-  # Caching Name Server
   class { 'dnsmasq':
     interface         => 'lo',
     expand_hosts      => true,
@@ -35,7 +45,6 @@ nameserver 4.2.2.2
     strict_order      => false,
     restart           => true,
   }
-  # Dhcp Range for PXE to Listen to
   dnsmasq::dhcp{'ProdyDHCP-PXE':
     dhcp_start   => "$::ipaddress,proxy",
     dhcp_end   => $::netmask,

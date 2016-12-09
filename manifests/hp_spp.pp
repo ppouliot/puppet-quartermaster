@@ -35,7 +35,7 @@ class quartermaster::hp_spp (
     timeout => 0,
     require =>  File["${wwwroot}/HP_SPP/iso"],
   } ->
-  concat::fragment{"pxeboot_hp_spp_default_menu":
+  concat::fragment{'pxeboot_hp_spp_default_menu':
     target  => "${pxecfg}/default",
     content => 'LABEL hp_spp.menu
         MENU LABEL HP Service Pack for Proliant Menu
@@ -46,10 +46,10 @@ class quartermaster::hp_spp (
     order   => 02,
   } ->
   file{"${tftpboot}/menu/hp_spp.menu":
-    ensure => file,
-    mode   => $tftp_filemode,
-    owner  => $tftp_username,
-    group  => $tftp_group,
-    content => template("quartermaster/pxemenu/hp_spp.erb"),
+    ensure  => file,
+    mode    => $tftp_filemode,
+    owner   => $tftp_username,
+    group   => $tftp_group,
+    content => template('quartermaster/pxemenu/hp_spp.erb'),
   }
 }

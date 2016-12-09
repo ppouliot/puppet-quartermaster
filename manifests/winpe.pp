@@ -28,10 +28,10 @@ class quartermaster::winpe (
 
 
 # Install WimLib
-  case $osfamily {
+  case $::osfamily {
     'Debian':{
       apt::ppa{'ppa:nilarimogard/webupd8':}
-      $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8'] 
+      $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8']
     }
 
     'RedHat':{
@@ -62,9 +62,9 @@ class quartermaster::winpe (
     ensure  => directory,
   }
 
-  concat::fragment{"winpe_pxe_default_menu":
+  concat::fragment{'winpe_pxe_default_menu':
     target  => "${pxecfg}/default",
-    content => template("quartermaster/pxemenu/winpe.erb"),
+    content => template('quartermaster/pxemenu/winpe.erb'),
     require => Tftp::File['pxelinux/pxelinux.cfg']
   }
 
@@ -85,7 +85,7 @@ class quartermaster::winpe (
 
   class{'::samba::server':
     workgroup            => 'PXE',
-    netbios_name         => "${::hostname}",
+    netbios_name         => $::hostname,
     security             => 'user',
     map_to_guest         => 'Bad User',
     guest_account        => 'nobody',
@@ -96,46 +96,46 @@ class quartermaster::winpe (
       'kernel oplocks = no',
       'guest ok = yes',
     ],
-    shares => {
-      'installs' => [
+    shares               => {
+      'installs'         => [
         "path = ${wwwroot}",
         'read only = yes',
         'guest ok = yes',
         'fake oplocks = true',
       ],
-      'IPC$' => [
-        "path = /etc/samba/fakeIPC",
+      'IPC$'             => [
+        'path = /etc/samba/fakeIPC',
         'read only = yes',
         'guest ok = yes',
         'valid users = nobody',
       ],
-      'os' => [
+      'os'               => [
         "path = ${wwwroot}/microsoft",
         'read only = yes',
         'guest ok = yes',
         'fake oplocks = true',
       ],
-      'ISO' => [
+      'ISO'              => [
         "path = ${wwwroot}/microsoft/iso",
         'read only = no',
         'guest ok = yes',
       ],
-      'winpe' => [
+      'winpe'            => [
         "path = ${wwwroot}/microsoft/winpe",
         'read only = no',
         'guest ok = yes',
       ],
-      'system' => [
+      'system          ' => [
         "path = ${wwwroot}/microsoft/winpe/system",
         'read only = no',
         'guest ok = yes',
       ],
-      'pxe-cfg' => [
+      'pxe-cfg'          => [
         "path = ${tftpboot}/pxelinux/pxelinux.cfg",
         'read only = no',
         'guest ok = yes',
       ],
-     'pe-pxeroot' => [
+      'pe-pxeroot'       => [
         "path = ${tftpboot}/winpe",
         'read only = no',
         'guest ok = yes',
@@ -223,22 +223,22 @@ class quartermaster::winpe (
   concat { "${wwwroot}/microsoft/winpe/system/setup.cmd":
     mode    => $exe_mode,
   }
-  concat::fragment{"winpe_system_cmd_a00_header":
+  concat::fragment{'winpe_system_cmd_a00_header':
     target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/A00_init.erb'),
     order   => 01,
   }
-  concat::fragment{"winpe_system_cmd_b00_init":
+  concat::fragment{'winpe_system_cmd_b00_init':
     target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/B00_init.erb'),
     order   => 10,
   }
-  concat::fragment{"winpe_system_cmd_c00_init":
+  concat::fragment{'winpe_system_cmd_c00_init':
     target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/C00_init.erb'),
     order   => 20,
   }
-  concat::fragment{"winpe_menu_footer":
+  concat::fragment{'winpe_menu_footer':
     target  => "${wwwroot}/microsoft/winpe/system/setup.cmd",
     content => template('quartermaster/winpe/menu/D00_init.erb'),
     order   => 99,

@@ -1,0 +1,9 @@
+"#**** WARNING ****
+# This File is manaaged by Puppet
+# module puppet-quartermaster
+<% if @quartermaster::preferred_nameserver %>
+search <%= @domain %>
+nameserver <%= @quartermaster::preferred_nameserver %>
+<% end %>
+nameserver 4.2.2.1
+nameserver 4.2.2.2

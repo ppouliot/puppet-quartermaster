@@ -32,24 +32,27 @@
 # }
 #
 class quartermaster (
-  $linux              = $quartermaster::params::linux,
-  $windows            = $quartermaster::params::windows,
-  $dhcp_proxy_subnets = [],
-  $linux              = hiera('linux',{}),
-  $windows            = hiera('windows',{}),
-  $enable_poap        = $quartermaster::params::enable_poap
+#  $linux            = $quartermaster::params::linux,
+#  $windows          = $quartermaster::params::windows,
+  $proxydhcp_subnets = [],
+  $logroot           = $quartermaster::params::logroot,
+  $wwwroot           = $quartermaster::params::wwwroot,
+  $exe_mode          = $quartermaster::params::exe_mode,
+  $linux             = hiera('linux',{}),
+  $windows           = hiera('windows',{}),
+  $enable_poap       = $quartermaster::params::enable_poap
 ) inherits quartermaster::params {
 
   validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
 
   class{'quartermaster::dnsmasq': }     ->
   class{'quartermaster::tftpd':}        ~>
-  class{'quartermaster::syslinux':} 
+  class{'quartermaster::syslinux':}
 
   class{'quartermaster::puppetmaster':} ->
     class{'quartermaster::www':}          ->
     class{'quartermaster::squid':}          ~>
-  class{'quartermaster::winpe':}        
+      class{'quartermaster::winpe':}
 
 # NFS needs to be modified and refactored if used
 #  class { 'quartermaster::nfs': }

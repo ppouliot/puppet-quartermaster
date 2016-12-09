@@ -1,6 +1,6 @@
 #Class: quartermaster::dban
 #
-# Installs and configures Dariq's Boot and Nuke as an 
+# Installs and configures Dariq's Boot and Nuke as an
 # option in the PXEBoot Menu
 #
 # Parameters: none
@@ -30,7 +30,7 @@ class quartermaster::dban(
 )inherits quartermaster::params {
 
   tftp::file{'dban':
-    ensure => directory, 
+    ensure => directory,
   }
 
   file{["${wwwroot}/dban",
@@ -47,8 +47,8 @@ class quartermaster::dban(
   }
 
   staging::file{'DBAN_ISO':
-    source => "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
-    target => "${wwwroot}/dban/iso/dban-${dban_version}_i586.iso",
+    source  => "http://sourceforge.net/projects/dban/files/dban/dban-${dban_version}/dban-${dban_version}_i586.iso/download",
+    target  => "${wwwroot}/dban/iso/dban-${dban_version}_i586.iso",
     require =>  File["${wwwroot}/dban/iso"],
   }
 

@@ -18,11 +18,12 @@ class quartermaster::server::nfs (
 #    clients => '*(rw,insecure,all_squash,no_subtree_check,nohide)',
 #  }
 
-  file { ["${nfsroot}",
-         "${nfsroot}/hosts",
-         "${nfsroot}/hosts/hiera",
-         "${nfsroot}/hosts/pxefiles",
-         "${nfsroot}/hardware"]:
+  file {[
+    $nfsroot,
+    "${nfsroot}/hosts",
+    "${nfsroot}/hosts/hiera",
+    "${nfsroot}/hosts/pxefiles",
+    "${nfsroot}/hardware"]:
     ensure  => 'directory',
     owner   => 'nobody',
     group   => 'nogroup',
