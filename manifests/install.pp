@@ -11,7 +11,7 @@ class quartermaster::install {
     '/srv/quartermaster/preseed',
   ]:
     ensure => directory,
-    mode   => '1644',
+    mode   => '0644',
     owner  => 'root',
     group  => 'root',
   } ->
