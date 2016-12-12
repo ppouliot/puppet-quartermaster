@@ -403,15 +403,82 @@ menu passwordrow 11
   }
 
   # Syslinux Staging and Extraction
-  staging::deploy { "syslinux-${syslinux_version}.tar.gz":
-    source  => "${syslinux_url}/${syslinux}.tar.gz",
+  staging::deploy { "syslinux-${quartermaster::syslinux_version}.tar.gz":
+    source  => "${quartermaster::syslinux_url}/syslinux-${quartermaster::syslinux_version}.tar.gz",
     target  => '/tmp',
-    creates => "/tmp/${syslinux}",
+    creates => "/tmp/syslinux-${quartermaster::syslinux_version}",
+  } ->
+  # Move extracted files into position into TFTPDir
+  tftp::file {'pxelinux/pxelinux.0':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/pxelinux.0",
+  } ->
+
+  tftp::file { 'pxelinux/gpxelinux0':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/gpxe/gpxelinux.0",
+  } ->
+
+  tftp::file { 'pxelinux/isolinux.bin':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/isolinux.bin",
+  } ->
+
+  tftp::file { 'pxelinux/menu.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/menu/menu.c32",
+  } ->
+
+  tftp::file { 'pxelinux/ldlinux.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/elflink/ldlinux/ldlinux.c32",
+  } -> 
+  tftp::file { 'pxelinux/libutil.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/libutil/libutil.c32",
+  } ->
+  tftp::file { 'pxelinux/chain.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/chain/chain.c32",
+  } ->
+  tftp::file { 'pxelinux/libcom32.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/lib/libcom32.c32",
   }
 
+  # Installl WimLib
+  case $::osfamily {
+    'Debian':{
+      apt::ppa{'ppa:nilarimogard/webupd8':}
+      $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8']
+    }
+    'RedHat':{
+      yumrepo{'Nux Misc':
+        name     => 'nux-misc',
+        baseurl  => 'http://li.nux.ro/download/nux/misc/el6/x86_64/',
+        enabled  => '0',
+        gpgcheck => '1',
+        gpgkey   => 'http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro',
+      }
+      $wimtool_repo = Yumrepo['Nux Misc']
+    }
+    default:{
+      warn('Currently Unsupported OSFamily for this feature')
+    }
+  } ->
 
+  package { 'wimtools':
+    ensure  => latest,
+    require => $wimtool_repo,
+  } ->
 
-
-
+  concat::fragment{'winpe_pxe_default_menu':
+    target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+    content => template('quartermaster/pxemenu/winpe.erb'),
+    require => Tftp::File['pxelinux/pxelinux.cfg']
+  }
+  include autofs
+  autofs::mount{'*':
+    mount       => '/srv/quartermaster/microsoft/mnt',
+    mapfile     => '/etc/auto.quartermaster',
+    mapcontents => [
+      '* -fstype=iso9660,loop :/srv/quartermaster/microsoft/iso/&',
+      '* -fstype=udf,loop :/srv/quartermaster/microsoft/iso/&',
+    ],
+    options     => '--timeout=10',
+    order       => '01',
+  }
 }
 
