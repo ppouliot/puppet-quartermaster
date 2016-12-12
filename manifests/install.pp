@@ -401,4 +401,17 @@ menu endrow 24
 menu passwordrow 11
 ",
   }
+
+  # Syslinux Staging and Extraction
+  staging::deploy { "syslinux-${syslinux_version}.tar.gz":
+    source  => "${syslinux_url}/${syslinux}.tar.gz",
+    target  => '/tmp',
+    creates => "/tmp/${syslinux}",
+  }
+
+
+
+
+
 }
+

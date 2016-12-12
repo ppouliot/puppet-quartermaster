@@ -6,19 +6,12 @@
 
 class quartermaster::syslinux (
 
-  $tmp            = $quartermaster::params::tmp,
   $pxeroot        = $quartermaster::params::pxeroot,
   $pxecfg         = $quartermaster::params::pxecfg,
   $pxe_menu       = $quartermaster::params::pxe_menu,
   $syslinux       = $quartermaster::params::syslinux,
   $syslinux_url   = $quartermaster::params::syslinux_url,
   $syslinux_ver   = $quartermaster::params::syslinux_ver,
-  $tftp_username  = $quartermaster::params::tftp_username,
-  $tftp_group     = $quartermaster::params::tftp_group,
-  $tftp_filemode  = $quartermaster::params::tftp_filemode,
-  $www_username   = $quartermaster::params::www_username,
-  $www_group      = $quartermaster::params::www_group,
-  $file_mode      = $quartermaster::params::file_mode,
 
 
 ) inherits quartermaster::params {
@@ -26,8 +19,8 @@ class quartermaster::syslinux (
   # Syslinux Staging and Extraction
   staging::deploy { "${syslinux}.tar.gz":
     source  => "${syslinux_url}/${syslinux}.tar.gz",
-    target  => $tmp,
-    creates => "${tmp}/${syslinux}",
+    target  => '/tmp',
+    creates => "/tmp/${syslinux}",
   }
 
   Tftp::File{
@@ -40,32 +33,32 @@ class quartermaster::syslinux (
   }
 
   tftp::file {'pxelinux/pxelinux.0':
-    source  => "${tmp}/${syslinux}/core/pxelinux.0",
+    source  => "/tmp/${syslinux}/core/pxelinux.0",
   }
 
   tftp::file { 'pxelinux/gpxelinux0':
-    source  => "${tmp}/${syslinux}/gpxe/gpxelinux.0",
+    source  => "/tmp/${syslinux}/gpxe/gpxelinux.0",
   }
 
   tftp::file { 'pxelinux/isolinux.bin':
-    source  => "${tmp}/${syslinux}/core/isolinux.bin",
+    source  => "/tmp/${syslinux}/core/isolinux.bin",
   }
 
   tftp::file { 'pxelinux/menu.c32':
-    source  => "${tmp}/${syslinux}/com32/menu/menu.c32",
+    source  => "/tmp/${syslinux}/com32/menu/menu.c32",
   }
 
   tftp::file { 'pxelinux/ldlinux.c32':
-    source  => "${tmp}/${syslinux}/com32/elflink/ldlinux/ldlinux.c32",
+    source  => "/tmp/${syslinux}/com32/elflink/ldlinux/ldlinux.c32",
   }
   tftp::file { 'pxelinux/libutil.c32':
-    source  => "${tmp}/${syslinux}/com32/libutil/libutil.c32",
+    source  => "/tmp/${syslinux}/com32/libutil/libutil.c32",
   }
   tftp::file { 'pxelinux/chain.c32':
-    source  => "${tmp}/${syslinux}/com32/chain/chain.c32",
+    source  => "/tmp/${syslinux}/com32/chain/chain.c32",
   }
   tftp::file { 'pxelinux/libcom32.c32':
-    source  => "${tmp}/${syslinux}/com32/lib/libcom32.c32",
+    source  => "/tmp/${syslinux}/com32/lib/libcom32.c32",
   }
 
   concat {"${pxecfg}/default":

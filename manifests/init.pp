@@ -35,15 +35,14 @@
 #
 class quartermaster (
   $preferred_nameserver = undef,
-#  $linux            = $quartermaster::params::linux,
-#  $windows          = $quartermaster::params::windows,
+  $syslinux_url         = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
+  $syslinux_version     = '6.03'
   $proxydhcp_subnets = [],
-  $logroot           = $quartermaster::params::logroot,
-  $wwwroot           = $quartermaster::params::wwwroot,
-  $exe_mode          = $quartermaster::params::exe_mode,
   $linux             = hiera('linux',{}),
   $windows           = hiera('windows',{}),
-  $enable_poap       = $quartermaster::params::enable_poap
+  $enable_poap       = undef,
+  $enable_dban       = undef,
+
 ) inherits quartermaster::params {
 
   validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
@@ -51,6 +50,15 @@ class quartermaster (
   class{'quartermaster::install': }     ->
   class{'quartermaster::config': }     
 
+  if $enable_poap == true {
+    class{'quartermaster::poap':}     
+  }
+
+  if $enable_dban == true {
+    class{'quartermaster::dban':}     
+  }
+
+# NFS needs to be modified and refactored if used
 # NFS needs to be modified and refactored if used
 #  class { 'quartermaster::nfs': }
 
