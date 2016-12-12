@@ -34,6 +34,7 @@ class quartermaster::install {
     '/srv/quartermaster/dban/iso',
     '/srv/quartermaster/dban/mnt',
     '/srv/quartermaster/iso',
+    '/srv/quartermaster/usb',
     '/srv/quartermaster/kickstart',
     '/srv/quartermaster/preseed',
     '/srv/quartermaster/tftpboot',
@@ -283,5 +284,73 @@ nameserver 4.2.2.2
     guest_ok      => true,
     guest_account => 'nobody',
     read_only     => false,
+  }
+
+  # Squid Package Cache for Caching Installations Sources and Updates
+  class {'squid':
+    http_ports   => { '3128' => { options => '' }},
+    coredump_dir => '/var/spool/squid3',
+  }
+  squid::acl{'Safe_ports': 
+    type    => port,
+    entries => [
+      # http
+      '80',
+      # ftp
+      '21',
+      # https
+      '443',
+      # gopher
+      '70',
+      # wais
+      '210',
+      # unregistered ports
+      '1025-65535',
+      # http-mgmt
+      '280',
+      # gss-http
+      '488',
+      # filemaker 
+      '591',
+      # multiling http
+      '777',
+    ],
+  }
+  squid::http_access{'!Safe_ports':
+    action => deny,
+  }
+  squid::acl{'SSL_ports':
+    type => port,
+    entries => ['443'],
+  }
+  squid::acl{'CONNECT':
+    type => method,
+    entries => ['CONNECT'],
+  }
+  squid::http_access{'CONNECT !SSL_ports':
+    action => deny,
+  }
+  squid::http_access{'localhost manager':
+    action => 'allow',
+  }
+  squid::http_access{'manager':
+    action => 'deny',
+  }
+  squid::http_access{'all':
+    action => 'deny',
+  }
+#  squid:::extra_config_section{'refresh_pattern':
+#    order          => '60',
+  squid::extra_config_section{'refresh_pattern':
+    config_entries => {
+      'refresh_pattern -i .*microsoft\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf)'     => '129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private',
+      'refresh_pattern -i .*windowsupdate\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf)' => '129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private',
+      'refresh_pattern -i .*windows\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf)'       => '129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private',
+      'refresh_pattern ^ftp:'                                                                   => '1440	20%	10080',
+      'refresh_pattern ^gopher:'                                                                => '1440	0%	1440',
+      'refresh_pattern -i (/cgi-bin/|\?)'                                                       => '0	0%	0',
+      'refresh_pattern (Release|Packagesi(.gz)*)$'                                              => '0	20%	2880',
+      'refresh_pattern .'                                                                       => '0	20%	4230',
+    },
   }
 }
