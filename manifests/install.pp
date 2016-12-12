@@ -54,6 +54,23 @@ class quartermaster::install {
     recurse => true,
   } ->
 
+
+  file { '/srv/quartermaster/bin/concatenate_files.sh':
+    ensure  => present,
+    owner   => 'nobody',
+    group   => 'nogroup',
+    mode    => '0777',
+    content => '#!/bin/bash
+# First argument ($1): directory containing the file fragments
+# Second argument ($2): path to the resulting file
+rm -rf $2
+# Concatenate the fragments
+for FRAGMENT in `ls $1`; do
+     cat $1/$FRAGMENT >> $2
+done
+',
+  } ->
+
   # Firstboot Script
   # This is script is added to the ubuntu/debian hosts via
   # the postinstall script. It will install configuration management

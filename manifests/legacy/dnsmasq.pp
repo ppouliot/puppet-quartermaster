@@ -1,30 +1,56 @@
-# Class: quartermaster::proxydhcp
-#
-# This Class configures dnsmasq as a proxydhcp server
-#
-# Parameters: none
-#
-# Actions:
-#
+#== Class: quartermaster::dnsmasq
+class quartermaster::dnsmasq {
 
-# Install DNSMasq and configure as a proxydhcp server
-class quartermaster::proxydhcp {
-
-# Install DNSMasq Package
-  package { 'dnsmasq':
-    ensure => latest,
-  }
-
-# Configure DNSMasq as ProxyDHCP
-
-  file {'quartermaster.conf':
+  # Configured a resolv.conf for dnsmasq to use
+  file { '/etc/resolv.conf.dnsmasq':
     ensure  => file,
-    path    => '/etc/dnsmasq.d/quartermaster.conf',
-    content => template('quartermaster/dnsmasq.erb'),
-    require => Package['dnsmasq'],
-    notify  => Service['dnsmasq'],
+    owner   => 'dnsmasq',
+    group   => 'root',
+    mode    => '0644',
+    content => "#**** WARNING ****
+# This File is manaaged by Puppet
+search $::domain
+nameserver $quartermaster::preferred_nameserver
+nameserver 4.2.2.1
+nameserver 4.2.2.2
+",
+  } ->
+  
+  # Install dnsmasq and configure a dns cache and 
+  # proxydhcp server for nextserver and bootfile 
+  # dhcp options
+
+  # Caching Name Server
+  class { 'dnsmasq':
+    interface         => 'lo',
+    expand_hosts      => true,
+    dhcp_no_override  => true,
+    domain_needed     => true,
+    bogus_priv        => true,
+    no_negcache       => true,
+    no_hosts          => true,
+    resolv_file       => '/etc/resolv.conf.dnsmasq',
+    reload_resolvconf => false,
+    cache_size        => '1000',
+    strict_order      => false,
+    restart           => true,
+  }
+  # Dhcp Range for PXE to Listen to
+  dnsmasq::dhcp{'ProdyDHCP-PXE':
+    dhcp_start   => "$::ipaddress,proxy",
+    dhcp_end   => $::netmask,
+    lease_time   => '',
+    netmask => '',
+  }
+  dnsmasq::dhcpoption{'vendor_pxeclient':
+    option  => 'vendor:PXEClient',
+    content => '6,2b',
+  }
+  dnsmasq::pxe_service{'Quartermaster PXE Provisioning':
+    content => 'pxelinux/pxelinux.0',
   }
 
+  # Configure dnsmasq log rotation
   file {'/etc/logrotate.d/dnsmasq':
     ensure  => file,
     content => '/var/log/dnsmasq.log {
@@ -42,10 +68,6 @@ class quartermaster::proxydhcp {
     notify  => Service['dnsmasq'],
   }
 
-  service {'dnsmasq':
-    ensure  => running,
-    enable  => true,
-    require => [Package['dnsmasq'],File['quartermaster.conf']],
-  }
 
 }
+    

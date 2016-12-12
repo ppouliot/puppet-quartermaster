@@ -48,19 +48,11 @@ class quartermaster (
 
   validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
 
-  class{'quartermaster::dnsmasq': }     ->
-  class{'quartermaster::tftpd':}        ~>
-  class{'quartermaster::syslinux':}
-
-  class{'quartermaster::puppetmaster':} ->
-    class{'quartermaster::www':}          ->
-    class{'quartermaster::squid':}          ~>
-      class{'quartermaster::winpe':}
+  class{'quartermaster::install': }     ->
+  class{'quartermaster::config': }     
 
 # NFS needs to be modified and refactored if used
 #  class { 'quartermaster::nfs': }
-# Scripts class is current unneeded as parts were redistributed
-#  class { 'quartermaster::scripts': }
 
 if $linux {
 ##  create_resources(quartermaster::pxe,$linux)
