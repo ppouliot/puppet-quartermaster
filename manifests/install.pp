@@ -370,4 +370,35 @@ nameserver 4.2.2.2
       'refresh_pattern .'                                                                       => '0	20%	4230',
     },
   }
+
+  concat {"/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default":
+    owner   => $tftp_username,
+    group   => $tftp_group,
+    mode    => $file_mode,
+  }
+
+  concat::fragment{'default_header':
+    target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+    content => template('quartermaster/pxemenu/header.erb'),
+    order   => 01,
+  }
+
+  concat::fragment{'default_localboot':
+    target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+    content => template('quartermaster/pxemenu/localboot.erb'),
+    order   => 01,
+  }
+
+
+  tftp::file {'pxelinux/pxelinux.cfg/graphics.cfg':
+    content =>"menu width 80
+menu margin 10
+menu passwordmargin 3
+menu rows 12
+menu tabmsgrow 18
+menu cmdlinerow 18
+menu endrow 24
+menu passwordrow 11
+",
+  }
 }
