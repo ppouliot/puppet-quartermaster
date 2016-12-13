@@ -68,7 +68,6 @@ class quartermaster (
   $linux                = hiera('linux',{}),
   $windows              = hiera('windows',{}),
   $enable_poap          = undef,
-  $enable_dban          = undef,
 
 ) inherits quartermaster::params {
 
