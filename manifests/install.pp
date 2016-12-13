@@ -2,6 +2,7 @@
 class quartermaster::install {
 
   include ::stdlib
+
   # NGINX Installation
   include ::nginx
   nginx::resource::vhost{ $fqdn:
@@ -479,6 +480,38 @@ menu passwordrow 11
     ],
     options     => '--timeout=10',
     order       => '01',
+  }
+
+    concat { "/srv/quartermaster/microsoft/winpe/system/setup.cmd":
+    mode    => $exe_mode,
+  }
+  concat::fragment{'winpe_system_cmd_a00_header':
+    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    content => template('quartermaster/winpe/menu/A00_init.erb'),
+    order   => 01,
+  }
+  concat::fragment{'winpe_system_cmd_b00_init':
+    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    content => template('quartermaster/winpe/menu/B00_init.erb'),
+    order   => 10,
+  }
+  concat::fragment{'winpe_system_cmd_c00_init':
+    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    content => template('quartermaster/winpe/menu/C00_init.erb'),
+    order   => 20,
+  }
+  concat::fragment{'winpe_menu_footer':
+    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    content => template('quartermaster/winpe/menu/D00_init.erb'),
+    order   => 99,
+  }
+
+  class{'::nfs':
+    server_enabled => true,
+  }
+  nfs::server::export{'/srv/quartermaster':
+    ensure => 'mounted',
+    clients => '*(ro,sync)',
   }
 }
 

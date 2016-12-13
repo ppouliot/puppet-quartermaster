@@ -36,10 +36,10 @@ class quartermaster::params {
   $nameserver        = '4.2.2.2'
 
   # Syslinux/Pxelinux
-  $syslinux_url             = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
-  $syslinux_ver             = '5.01'
-  $syslinux                 = "syslinux-${syslinux_ver}"
-  $syslinuxroot             = "${tmp}/${syslinux}"
+#  $syslinux_url             = 'http://www.kernel.org/pub/linux/utils/boot/syslinux'
+#  $syslinux_ver             = '5.01'
+#  $syslinux                 = "syslinux-${syslinux_ver}"
+#  $syslinuxroot             = "${tmp}/${syslinux}"
   $arp_type                 = '01'
   $host_macaddress          = regsubst($::macaddress, '(\:)','-','G')
   $default_pxeboot_option   = 'menu.c32'
