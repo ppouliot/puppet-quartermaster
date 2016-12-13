@@ -10,33 +10,39 @@
 # Requires: see Modulefile
 #
 #
-class quartermaster::dban(
+class quartermaster::dban {
 
-  $quartermaster::dban_version   = '2.2.8',
+  if $dban_enable == true {
 
-)inherits quartermaster::params {
+    tftp::file{'dban':
+      ensure => directory,
+    }
 
-  tftp::file{'dban':
-    ensure => directory,
-  }
+    file{[
+     "/srv/quartermaster/dban",
+     "/srv/quartermaster/dban/iso",
+     "/srv/quartermaster/dban/mnt",
+    ]:
+      ensure => directory,
+    }
 
-  file{["/srv/quartermaster/dban",
-        "/srv/quartermaster/dban/iso",
-        "/srv/quartermaster/dban/mnt"]:
-    ensure => directory,
-  }
+    autofs::mount{'/srv/quartermaster/dban/mnt':
+      mapfile     => '/etc/auto.quartermaster_dban',
+      mapcontents => [ "-fstype=iso9660,loop :/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso" ],
+      options     => '--timeout=10',
+      order       => '01',
+    }
 
-  autofs::mount{ "/srv/quartermaster/dban/mnt":
-    map     => ":/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso",
-    options => [
-      '-fstype=iso9660,loop',
-    ],
-  }
+    staging::file{"dban-${quartermaster::dban_version}_i586.iso":
+      source  => "http://sourceforge.net/projects/dban/files/dban/dban-${quartermaster::dban_version}/dban-${quartermaster::dban_version}_i586.iso/download",
+      target  => "/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso",
+      require =>  File["/srv/quartermaster/dban/iso"],
+    }
 
-  staging::file{'DBAN_ISO':
-    source  => "http://sourceforge.net/projects/dban/files/dban/dban-${quartermaster::dban_version}/dban-${quartermaster::dban_version}_i586.iso/download",
-    target  => "/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso",
-    require =>  File["/srv/quartermaster/dban/iso"],
+  } else {
+
+    warning('this is used if ensure_dban = true')
+
   }
 
 }

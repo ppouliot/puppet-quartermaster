@@ -73,21 +73,22 @@ class quartermaster (
 
   validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
 
+  class{'::quartermaster::install': }     ->
+  class{'::quartermaster::configure': }     
+
   contain quartermaster::install
   contain quartermaster::configure
 
 
-  class{'::quartermaster::install': }     ->
-  class{'::quartermaster::configure': }     
 
   if $enable_poap == true {
-    contain quartermaster::poap
     class{'::quartermaster::poap':}     
+    contain quartermaster::poap
   }
 
   if $enable_dban == true {
-    contain quartermaster::dban
     class{'::quartermaster::dban':}     
+    contain quartermaster::dban
   }
 
 #if $linux {

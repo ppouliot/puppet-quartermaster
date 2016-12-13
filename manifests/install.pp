@@ -31,9 +31,6 @@ class quartermaster::install {
   file{[
     '/srv/quartermaster',
     '/srv/quartermaster/bin',
-    '/srv/quartermaster/dban',
-    '/srv/quartermaster/dban/iso',
-    '/srv/quartermaster/dban/mnt',
     '/srv/quartermaster/iso',
     '/srv/quartermaster/usb',
     '/srv/quartermaster/kickstart',
