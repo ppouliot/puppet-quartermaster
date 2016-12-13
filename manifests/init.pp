@@ -72,7 +72,6 @@ class quartermaster (
 ) inherits quartermaster::params {
 
   validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
-  include ::stdlib
 
   contain quartermaster::install
   contain quartermaster::configure
