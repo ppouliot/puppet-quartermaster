@@ -7,11 +7,10 @@
 define quartermaster::pxebootfile (
   $interface_name         = split($::interfaces,','),
   $interface_macaddr      = inline_template("\$macaddress_${interface_name}"),
-  $arp_type               = $quartermaster::params::arp_type,
-  $default_pxeboot_option = $quartermaster::params::default_pxe_option,
-  $pxe_menu_timeout       = $quartermaster::params::pxe_menu_timeout,
+  $arp_type               = '01',
+  $default_pxeboot_option = 'menu.c32',
+  $pxe_menu_timeout       = '10',
 ){
-
 
   #$host_macaddress = regsubst($macaddress, '(\:)','(\-)','G')
   #$host_macaddress = regsubst($macaddress, '(\:)','-','G')
