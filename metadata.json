@@ -1,5 +1,5 @@
 {  
-  "name": "puppet-quartermaster",
+  "name": "ppouliot-quartermaster",
   "version": "1.0.0",
   "source": "git://github.com/ppouliot/puppet-quartermaster",
   "author": "Peter J. Pouliot",
