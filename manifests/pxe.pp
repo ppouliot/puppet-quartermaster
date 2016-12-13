@@ -2,24 +2,7 @@
 #
 # This Class defines the creation of the linux pxe infrastructure
 #
-
-
 define quartermaster::pxe {
-
-  $tmp            = $quartermaster::params::tmp
-  $pxeroot        = $quartermaster::params::pxeroot
-  $pxecfg         = $quartermaster::params::pxecfg
-  $pxe_menu       = $quartermaster::params::pxe_menu
-  $tftpboot       = $quartermaster::params::tftpboot
-  $tftp_username  = $quartermaster::params::tftp_username
-  $tftp_group     = $quartermaster::params::tftp_group
-  $tftp_filemode  = $quartermaster::params::tftp_filemode
-  $wwwroot        = $quartermaster::params::wwwroot
-  $www_username   = $quartermaster::params::www_username
-  $www_group      = $quartermaster::params::www_group
-  $file_mode      = $quartermaster::params::file_mode
-
-
 
 # account for "."
   if $name =~ /([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)/ {
@@ -287,7 +270,7 @@ define quartermaster::pxe {
     if ! defined (Staging::File["${target_kernel}-${name}"]){
       staging::file{"${target_kernel}-${name}":
         source  => "${url}/${pxekernel}",
-        target  => "${tftpboot}/${distro}/${p_arch}/${target_kernel}",
+        target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
@@ -298,7 +281,7 @@ define quartermaster::pxe {
     if ! defined (Staging::File["${target_initrd}-${name}"]){
       staging::file{"${target_initrd}-${name}":
         source  => "${url}/initrd${initrd}",
-        target  => "${tftpboot}/${distro}/${p_arch}/${target_initrd}",
+        target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
         require =>  Tftp::File["${distro}/${p_arch}"],
       }
     }
@@ -309,7 +292,7 @@ define quartermaster::pxe {
     if ! defined (Staging::File["bootsplash-${name}"]){
       staging::file{"bootsplash-${name}":
         source  => $splashurl,
-        target  => "${tftpboot}/${distro}/graphics/${name}${bootsplash}",
+        target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${bootsplash}",
         require =>  Tftp::File["${distro}/graphics"],
       }
     }
@@ -353,37 +336,37 @@ if $linux_installer == !('No Supported Linux Installer') {
 }
 # Begin Creating Distro Specific HTTP Folders
 
-  if ! defined (File["${wwwroot}/${distro}"]) {
-    file { "${wwwroot}/${distro}":
+  if ! defined (File["/srv/quartermaster/${distro}"]) {
+    file { "/srv/quartermaster/${distro}":
       ensure  => directory,
-      require => File[ $wwwroot ],
+      require => File[ '/srv/quartermaster' ],
     }
   }
 
-  if ! defined (File["${wwwroot}/${distro}/${autofile}"]) {
-    file { "${wwwroot}/${distro}/${autofile}":
+  if ! defined (File["/srv/quartermaster/${distro}/${autofile}"]) {
+    file { "/srv/quartermaster/${distro}/${autofile}":
       ensure  => directory,
-      require => File[ "${wwwroot}/${distro}" ],
+      require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
 
-  if ! defined (File["${wwwroot}/${distro}/${p_arch}"]) {
-    file { "${wwwroot}/${distro}/${p_arch}":
+  if ! defined (File["/srv/quartermaster/${distro}/${p_arch}"]) {
+    file { "/srv/quartermaster/${distro}/${p_arch}":
       ensure  => directory,
-      require => File[ "${wwwroot}/${distro}" ],
+      require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
 
-  if ! defined (File["${wwwroot}/${distro}/ISO"]) {
-    file { "${wwwroot}/${distro}/ISO":
+  if ! defined (File["/srv/quartermaster/${distro}/ISO"]) {
+    file { "/srv/quartermaster/${distro}/ISO":
       ensure  => directory,
-      require => File[ "${wwwroot}/${distro}" ],
+      require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
-  if ! defined (File["${wwwroot}/${distro}/${p_arch}/.README.html"]) {
-    file { "${wwwroot}/${distro}/${p_arch}/.README.html":
+  if ! defined (File["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
+    file { "/srv/quartermaster/${distro}/${p_arch}/.README.html":
       ensure  => file,
-      require => File[ "${wwwroot}/${distro}" ],
+      require => File[ "/srv/quartermaster/${distro}" ],
       content => template('quartermaster/README.html.erb'),
     }
   }
@@ -391,28 +374,26 @@ if $linux_installer == !('No Supported Linux Installer') {
 # Kickstart/Preseed File
   file { "${name}.${autofile}":
     ensure  => file,
-    path    => "${wwwroot}/${distro}/${autofile}/${name}.${autofile}",
+    path    => "/srv/quartermaster/${distro}/${autofile}/${name}.${autofile}",
     content => template("quartermaster/autoinst/${autofile}.erb"),
-    require => File[ "${wwwroot}/${distro}/${autofile}" ],
+    require => File[ "/srv/quartermaster/${distro}/${autofile}" ],
   }
 
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
-      target  => "${pxecfg}/default",
+      target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
       content => template('quartermaster/pxemenu/default.erb'),
       order   => 02,
     }
   }
 
-  if ! defined (Concat["${tftpboot}/menu/${distro}.menu"]) {
-    concat { "${tftpboot}/menu/${distro}.menu":
-      mode    => $tftp_filemode,
-#      require => Tftp::File['menu'],
+  if ! defined (Concat["/srv/quartermaster/tftpboot/menu/${distro}.menu"]) {
+    concat { "/srv/quartermaster/tftpboot/menu/${distro}.menu":
     }
   }
   if ! defined (Concat::Fragment["${distro}.submenu_header"]) {
     concat::fragment {"${distro}.submenu_header":
-      target  => "${tftpboot}/menu/${distro}.menu",
+      target  => "/srv/quartermaster/tftpboot/menu/${distro}.menu",
       content => template('quartermaster/pxemenu/header2.erb'),
       order   => 01,
     }
@@ -420,7 +401,7 @@ if $linux_installer == !('No Supported Linux Installer') {
 #  if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}${name}.menu_item"]) {
     concat::fragment {"${distro}.${name}.menu_item":
-      target  => "${tftpboot}/menu/${distro}.menu",
+      target  => "/srv/quartermaster/tftpboot/menu/${distro}.menu",
       content => template("quartermaster/pxemenu/${linux_installer}.erb"),
     }
   }
