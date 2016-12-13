@@ -17,7 +17,7 @@
 #  [* syslinux_url *]
 #   The default syslinux_url is http://www.kernel.org/pub/linux/utils/boot/syslinux
 #
-#  [*  enable_dban *]
+#  [*  dban_enable *]
 #  Turns on DBAN functionality.  DBAN provides automated disk erasure and data wiping
 #  By default this is set to undef, setting to enabled will download and integrage 
 #  The components into the pxe infrastructure.  For more information on DBAN
@@ -59,21 +59,23 @@
 # }
 #
 class quartermaster (
-  $preferred_nameserver = undef,
-  $syslinux_url         = 'http://www.kernel.org/pub/linux/utils/boot/syslinux',
-  $syslinux_version     = '6.03',
-  $enable_dban          = undef,
-  $dban_version         = '2.2.8',
-  $proxydhcp_subnets    = [],
-  $linux                = hiera('linux',{}),
-  $windows              = hiera('windows',{}),
-  $enable_poap          = undef,
-
+  $preferred_nameserver             = undef,
+  $syslinux_url                     = 'http://www.kernel.org/pub/linux/utils/boot/syslinux',
+  $syslinux_version                 = '6.03',
+  $dban_enable                      = undef,
+  $dban_version                     = '2.3.0',
+  $proxydhcp_subnets                = [],
+  $linux                            = hiera('linux',{}),
+  $windows                          = hiera('windows',{}),
+  $enable_poap                      = undef,
+  $enable_hp_spp                    = undef,
+  $hp_spp_iso_complete_url_location = 'ftp://ftp.hp.com/pub/softlib2/software1/cd-generic/p67859018/v108240/SPP2015040.2015_0407.5.iso',
+  $hp_spp_iso_name                  = 'SPP2015040.2015_0407.5.iso',
 ) inherits quartermaster::params {
 
   validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
 
-  class{'::quartermaster::install': }     ->
+  class{'::quartermaster::install': } ->
   class{'::quartermaster::configure': }     
 
   contain quartermaster::install
@@ -86,7 +88,7 @@ class quartermaster (
     contain quartermaster::poap
   }
 
-  if $enable_dban == true {
+  if $dban_enable == true {
     class{'::quartermaster::dban':}     
     contain quartermaster::dban
   }
