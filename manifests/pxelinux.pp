@@ -36,7 +36,7 @@ define quartermaster::pxelinux {
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/core"
         $fedora_flavor  = ""
       }
-      '7','8','9','11','12','13','14','15','16','17','18','19':{
+      '7','8','9','10','11','12','13','14','15','16','17','18','19':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
         $fedora_flavor  = "Fedora/"
       }
