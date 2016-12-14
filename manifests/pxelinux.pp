@@ -3,17 +3,18 @@
 # This Class defines the creation of the linux pxe infrastructure
 #
 define quartermaster::pxelinux {
-
-# works w/ no .
+# this regex works w/ no .
 #if $name =~ /([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)/ {
-  # Check for proper name formatting
+
+  # Define proper name formatting matching distro-release-p_arch
   if $name =~ /([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)/ {
     $distro  = $1
     $release = $2
     $p_arch  = $3
   } else {
-    fail('You must put your entry in format "distro-release-arch"')
+    fail('You must put your entry in format "<Distro>-<Release>-<Processor Arch>" like "centos-7-x86_64" or "ubuntu-14.04-amd64"')
   }
+  validate_string($distro, '^(debian|centos|fedora|kali|scientificlinux|opensuse|ubuntu)$', 'The currently supported values for distro are debian, centos, fedora, kali, oraclelinux, scientificlinux, opensuse',)
   # convert release into rel_number to check to major and minor releases
   $rel_number = regsubst($release, '(\.)','','G')
 
@@ -225,10 +226,8 @@ define quartermaster::pxelinux {
   notify { "${name}: linux_installer is ${linux_installer}":}
   notify { "${name}: PuppetLabs Repo is ${puppetlabs_repo}":}
   notify { "${name}: Centos Distro = ${::is_centos}":}
-  notify { "${name}: Centos Legacy = ${::centos_legacy}":}
   notify { "${name}: Centos URL = ${centos_url}":}
   notify { "${name}: Fedora Distro = ${::is_fedora}":}
-  notify { "${name}: Fedora Legacy = ${::fedora_legacy}":}
   notify { "${name}: Fedora URL = ${fedora_url}":}
   notify { "${name}: Oracle Distro = ${is_oracle}":}
   notify { "${name}: Target Initrd = ${target_initrd}":}
