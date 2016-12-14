@@ -1,25 +1,25 @@
 # OpenSuse
-  quartermaster::pxelinux{'opensuse-10.2-i586':}
+  quartermaster::pxelinux{'opensuse-10.2-i386':}
   quartermaster::pxelinux{'opensuse-10.2-x86_64':}
-  quartermaster::pxelinux{'opensuse-10.3-i586':}
+  quartermaster::pxelinux{'opensuse-10.3-i386':}
   quartermaster::pxelinux{'opensuse-10.3-x86_64':}
-  quartermaster::pxelinux{'opensuse-11.0-i586':}
+  quartermaster::pxelinux{'opensuse-11.0-i386':}
   quartermaster::pxelinux{'opensuse-11.0-x86_64':}
-  quartermaster::pxelinux{'opensuse-11.1-i586':}
+  quartermaster::pxelinux{'opensuse-11.1-i386':}
   quartermaster::pxelinux{'opensuse-11.1-x86_64':}
-  quartermaster::pxelinux{'opensuse-11.2-i586':}
+  quartermaster::pxelinux{'opensuse-11.2-i386':}
   quartermaster::pxelinux{'opensuse-11.2-x86_64':}
-  quartermaster::pxelinux{'opensuse-11.3-i586':}
+  quartermaster::pxelinux{'opensuse-11.3-i386':}
   quartermaster::pxelinux{'opensuse-11.3-x86_64':}
-  quartermaster::pxelinux{'opensuse-11.4-i586':}
+  quartermaster::pxelinux{'opensuse-11.4-i386':}
   quartermaster::pxelinux{'opensuse-11.4-x86_64':}
-  quartermaster::pxelinux{'opensuse-12.1-i586':}
+  quartermaster::pxelinux{'opensuse-12.1-i386':}
   quartermaster::pxelinux{'opensuse-12.1-x86_64':}
-  quartermaster::pxelinux{'opensuse-12.2-i586':}
+  quartermaster::pxelinux{'opensuse-12.2-i386':}
   quartermaster::pxelinux{'opensuse-12.2-x86_64':}
-  quartermaster::pxelinux{'opensuse-12.3-i586':}
+  quartermaster::pxelinux{'opensuse-12.3-i386':}
   quartermaster::pxelinux{'opensuse-12.3-x86_64':}
-  quartermaster::pxelinux{'opensuse-13.1-i586':}
+  quartermaster::pxelinux{'opensuse-13.1-i386':}
   quartermaster::pxelinux{'opensuse-13.1-x86_64':}
-  quartermaster::pxelinux{'opensuse-13.2-i586':}
+  quartermaster::pxelinux{'opensuse-13.2-i386':}
   quartermaster::pxelinux{'opensuse-13.2-x86_64':}

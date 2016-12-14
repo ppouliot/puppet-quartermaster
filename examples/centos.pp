@@ -21,8 +21,6 @@
   quartermaster::pxelinux{'centos-4.3-i386':}
   quartermaster::pxelinux{'centos-4.3-x86_64':}
   quartermaster::pxelinux{'centos-4.4-i386':}
-  quartermaster::pxelinux{'centos-4.3-x86_64':}
-  quartermaster::pxelinux{'centos-4.4-i386':}
   quartermaster::pxelinux{'centos-4.4-x86_64':}
   quartermaster::pxelinux{'centos-4.5-i386':}
   quartermaster::pxelinux{'centos-4.5-x86_64':}
@@ -43,8 +41,6 @@
   quartermaster::pxelinux{'centos-5.3-i386':}
   quartermaster::pxelinux{'centos-5.3-x86_64':}
   quartermaster::pxelinux{'centos-5.4-i386':}
-  quartermaster::pxelinux{'centos-5.3-x86_64':}
-  quartermaster::pxelinux{'centos-5.4-i386':}
   quartermaster::pxelinux{'centos-5.4-x86_64':}
   quartermaster::pxelinux{'centos-5.5-i386':}
   quartermaster::pxelinux{'centos-5.5-x86_64':}
@@ -63,8 +59,6 @@
   quartermaster::pxelinux{'centos-6.2-i386':}
   quartermaster::pxelinux{'centos-6.2-x86_64':}
   quartermaster::pxelinux{'centos-6.3-i386':}
-  quartermaster::pxelinux{'centos-6.3-x86_64':}
-  quartermaster::pxelinux{'centos-6.4-i386':}
   quartermaster::pxelinux{'centos-6.3-x86_64':}
   quartermaster::pxelinux{'centos-6.4-i386':}
   quartermaster::pxelinux{'centos-6.4-x86_64':}

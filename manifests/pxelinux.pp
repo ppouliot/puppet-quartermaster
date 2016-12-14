@@ -25,7 +25,7 @@ define quartermaster::pxelinux {
     warning("${distro} ${release} does not have major and minor point releases.")
   }
 
-  if ( $distro == 'centos') and ( $release <= '6.8' ) {
+  if ( $distro == 'centos') and ( $release <= '6.7' ) {
     $centos_url = "http://vault.centos.org/${release}"
   } else {
     $centos_url = "http://mirror.centos.org/centos/${rel_major}"
@@ -36,13 +36,23 @@ define quartermaster::pxelinux {
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/core"
         $fedora_flavor  = "Fedora"
       }
-      '9','11','12','13','14','15','16','17','18','19','20','21':{
+      '7','8','9','11','12','13','14','15','16','17','18','19','20','21':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
         $fedora_flavor  = "Fedora"
       }
       '22','23','24','25':{
         $fedora_url = "http://download.fedoraproject.org/pub/fedora/linux/releases"
         $fedora_flavor  = "Everything"
+      }
+    }
+  }
+  if ( $distro == 'scientificlinux'){
+    case $release {
+      '50','51','52','53','54','55','56','57','58','59','510','511':{
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}"
+      }
+      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','7.0','7.1','7.2':{
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
       }
     }
   }
@@ -93,7 +103,7 @@ define quartermaster::pxelinux {
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
     /(fedora)/           => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os/images/pxeboot",
     /(kali)/             => "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
-    /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
+    /(scientificlinux)/  => "${scientificlinux_url}/images/pxeboot",
     /(oraclelinux)/      => 'Enterprise ISO Required',
     /(redhat)/           => 'Enterprise ISO Required',
     /(sles)/             => 'Enterprise ISO Required',
