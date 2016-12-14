@@ -32,17 +32,21 @@ define quartermaster::pxelinux {
   }
   if ( $distro == 'fedora') {
     case $release {
-      '1','2','3','4','5','6':{
+      '2','3','4','5','6':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/core"
-        $fedora_flavor  = "Fedora"
+        $fedora_flavor  = ""
       }
-      '7','8','9','11','12','13','14','15','16','17','18','19','20','21':{
+      '7','8','9','11','12','13','14','15','16','17','18','19':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
-        $fedora_flavor  = "Fedora"
+        $fedora_flavor  = "Fedora/"
+      }
+      '20','21':{
+        $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
+        $fedora_flavor  = "Server/"
       }
       '22','23','24','25':{
         $fedora_url = "http://download.fedoraproject.org/pub/fedora/linux/releases"
-        $fedora_flavor  = "Everything"
+        $fedora_flavor  = "Server/"
       }
     }
   }
@@ -101,7 +105,7 @@ define quartermaster::pxelinux {
     /(centos)/           => "${centos_url}/os/${p_arch}/images/pxeboot",
 #    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    /(fedora)/           => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os/images/pxeboot",
+    /(fedora)/           => "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot",
     /(kali)/             => "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
     /(scientificlinux)/  => "${scientificlinux_url}/images/pxeboot",
     /(oraclelinux)/      => 'Enterprise ISO Required',

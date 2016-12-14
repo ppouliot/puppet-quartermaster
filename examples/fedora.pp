@@ -1,4 +1,5 @@
-quartermaster::pxelinux{'fedora-1-i386':}
+# Fedora 1 had no pxe kernels
+#quartermaster::pxelinux{'fedora-1-i386':}
 quartermaster::pxelinux{'fedora-1-x86_64':}
 quartermaster::pxelinux{'fedora-2-i386':}
 quartermaster::pxelinux{'fedora-2-x86_64':}
