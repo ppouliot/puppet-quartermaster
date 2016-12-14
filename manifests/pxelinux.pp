@@ -1,95 +1,61 @@
-# Class: quartermaster::pxe
+# Class: quartermaster::pxelinux
 #
 # This Class defines the creation of the linux pxe infrastructure
 #
-define quartermaster::pxe {
+define quartermaster::pxelinux {
 
-# account for "."
-  if $name =~ /([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)/ {
 # works w/ no .
 #if $name =~ /([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)/ {
+  # Check for proper name formatting
+  if $name =~ /([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)/ {
     $distro  = $1
-#    $rel_number = regsubst($2, '(\.)','','G')
     $release = $2
     $p_arch  = $3
+  } else {
+    fail('You must put your entry in format "distro-release-arch"')
   }
-
+  # convert release into rel_number to check to major and minor releases
   $rel_number = regsubst($release, '(\.)','','G')
 
   if $release =~/([0-9]+).([0-9])/{
     $rel_major = $1
     $rel_minor = $2
+  } else {
+    warning("${distro} ${release} does not have major and minor point releases.")
   }
 
-
-  case $distro {
-
-    'centos':{
-      $supported_endpoint = '7'
-      $archived_endpoint  = '6.6'
-      if $release <= $archived_endpoint {
-        $use_archive = true
+  if ( $distro == 'centos') and ( $release <= '6.8' ) {
+    $centos_url = "http://vault.centos.org/${release}"
+  } else {
+    $centos_url = "http://mirror.centos.org/centos/${rel_major}"
+  }
+  if ( $distro == 'fedora') {
+    case $release {
+      '1','2','3','4','5','6':{
+        $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/core"
+        $fedora_flavor  = "Fedora"
       }
-      if $release >= $supported_endpoint {
-        $use_archive = false
+      '9','11','12','13','14','15','16','17','18','19','20','21':{
+        $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
+        $fedora_flavor  = "Fedora"
       }
-
-      $centos_url = $use_archive ? {
-        /(true)/   => "http://vault.centos.org/${release}",
-        /(false)/  => "http://mirror.centos.org/centos/${rel_major}",
+      '22','23','24','25':{
+        $fedora_url = "http://download.fedoraproject.org/pub/fedora/linux/releases"
+        $fedora_flavor  = "Everything"
       }
-
-      if ( $release >= '7.0' ) and ( $p_arch == 'i386'){
-        fail("Centos ${release} does not provide support for processor architecture i386")
-      }
-    }
-    'fedora':{
-      $supported_endpoint = '20'
-      $archived_endpoint  = '19'
-      if $release <= $archived_endpoint {
-        $use_archive = true
-      }
-      if $release >= $supported_endpoint {
-        $use_archive = false
-      }
-
-      $fedora_url = $use_archive ? {
-        /(true)/   => 'http://archives.fedoraproject.org/pub/archive',
-        /(false)/  => 'http://dl.fedoraproject.org/pub',
-      }
-
-      #case $release {
-      #  '21':{
-      #    $flavor     = ['Workstation','Server',]
-      #    $pxe_flavor = ['W','S',]
-      #  }
-      #  default:{
-      #    $flavor = 'Fedora'
-      #    $pxe_flavor = undef
-      #  }
-      #}
-    }
-    'opensuse':{
-      $supported_endpoint = '12.3'
-      $archived_endpoint  = '12.2'
-      if $release <= $archived_endpoint {
-        $use_archive = true
-      }
-      if $release >= $supported_endpoint {
-        $use_archive = false
-      }
-      $opensuse_url = $use_archive ? {
-        /(true)/   => 'http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution',
-        /(false)/  => 'http://download.opensuse.org/distribution',
-      }
-    }
-    default:{
-      $use_archive        = undef
-      $archived_endpoint  = '0'
-      $supported_endpoint = $release
     }
   }
 
+  if ( $distro == 'opensuse') and ( $release <= '12.2' ){
+    $opensuse_url = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution"
+  } else {
+    $opensuse_url = "http://download.opensuse.org/distribution"
+  }
+ 
+  if ($distro == /(centos|fedora|oraclelinux)/) and ( $release >= '7.0' ) and ( $p_arch == 'i386'){
+    fail("${distro} ${release} does not provide support for processor architecture i386")
+  }
+  
   # Begin tests for dealing with OracleLinux Repos
   $is_oracle = $distro ? {
     /(oraclelinux)/ => true,
@@ -107,7 +73,9 @@ define quartermaster::pxe {
     /(14.10)/     => 'utopic',
     /(15.04)/     => 'vivid',
     /(15.10)/     => 'wily',
-    /(16.04)/     => 'utopic',
+    /(16.04)/     => 'xenial',
+    /(16.10)/     => 'yakkety',
+    /(17.04)/     => 'zesty',
     /(oldstable)/ => 'squeeze',
     /(stable)/    => 'wheezy',
     /(testing)/   => 'jessie',
@@ -122,8 +90,8 @@ define quartermaster::pxe {
     /(centos)/           => "${centos_url}/os/${p_arch}/images/pxeboot",
 #    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
 #    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    /(fedora)/           => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os/images/pxeboot",
-    /(kali)/             => "http://repo.kali.org/kali/dists/kali/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
+    /(fedora)/           => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os/images/pxeboot",
+    /(kali)/             => "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
     /(scientificlinux)/  => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images/pxeboot",
     /(oraclelinux)/      => 'Enterprise ISO Required',
     /(redhat)/           => 'Enterprise ISO Required',
@@ -148,9 +116,9 @@ define quartermaster::pxe {
   $inst_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
-    /(kali)/            => 'http://repo.kali.org/kali/dists/kali',
+    /(kali)/            => 'http://http.kali.org/kali/dists/kali-rolling',
     /(centos)/          => "${centos_url}/os/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -163,9 +131,9 @@ define quartermaster::pxe {
   $update_repo = $distro ? {
     /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
     /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
-    /(kali)/            => 'http://repo.kali.org/kali/dists/kali',
+    /(kali)/            => 'http://http.kali.org/kali/dists/kali-rolling',
     /(centos)/          => "${centos_url}/updates/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os",
+    /(fedora)/          => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(redhat)/          => 'Enterprise ISO Required',
@@ -178,10 +146,10 @@ define quartermaster::pxe {
   $splashurl = $distro ? {
     /(ubuntu)/         => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
     /(debian)/         => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
-    /(kali)/           => "http://repo.kali.org/kali//dists/kali/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash.png",
+    /(kali)/           => "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash.png",
     /(redhat)/          => 'Enterprise ISO Required',
     /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
-    /(fedora)/          => "${fedora_url}/${distro}/linux/releases/${release}/${::flavor}/${p_arch}/os/isolinux/splash.png",
+    /(fedora)/          => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os/isolinux/splash.png",
     /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
     /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
     /(sles)/            => 'Enterprise ISO Required',
