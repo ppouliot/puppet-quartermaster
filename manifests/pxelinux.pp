@@ -7,7 +7,16 @@ define quartermaster::pxelinux {
 #if $name =~ /([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)/ {
 
   Staging::File {
-    curl_option => "--proxy http://${ipaddress}:3128",
+    # Some curl_options to add for downloading large files over questionable links
+    # Use local cache   * --proxy http://${ipaddress}:3128
+    # Continue Download * -C 
+    # Maximum Time      * --max-time 1500 
+    # Retry             * --retry 3 
+    curl_option => "--proxy http://${ipaddress}:3128 --retry 3",
+    #
+    # Puppet waits for the Curl execution to finish
+    #
+    timeout     => '0',
   }
 
   # Define proper name formatting matching distro-release-p_arch
@@ -15,19 +24,40 @@ define quartermaster::pxelinux {
     $distro  = $1
     $release = $2
     $p_arch  = $3
+    notice($distro)
+    notice($release)
+    notice($p_arch)
+    validate_string($distro, '^(debian|centos|fedora|kali|scientificlinux|opensuse|oraclelinux|ubuntu)$', 'The currently supported values for distro are debian, centos, fedora, kali, oraclelinux, scientificlinux, opensuse',)
+    validate_string($p_arch, '^(i386|i586|i686|x86_65|amd64)$', 'The currently supported values for pocessor architecture  are i386,i586,i686,x86_64,amd64',)
   } else {
     fail('You must put your entry in format "<Distro>-<Release>-<Processor Arch>" like "centos-7-x86_64" or "ubuntu-14.04-amd64"')
   }
-  validate_string($distro, '^(debian|centos|fedora|kali|scientificlinux|opensuse|ubuntu)$', 'The currently supported values for distro are debian, centos, fedora, kali, oraclelinux, scientificlinux, opensuse',)
   # convert release into rel_number to check to major and minor releases
   $rel_number = regsubst($release, '(\.)','','G')
+  notice($rel_number)
 
   if $release =~/([0-9]+).([0-9])/{
     $rel_major = $1
     $rel_minor = $2
+    notice($rel_major)
+    notice($rel_minor)
   } else {
     warning("${distro} ${release} does not have major and minor point releases.")
   }
+
+  notice($_dot_bootsplash)
+  notice($autofile)
+  notice($linux_installer)
+  notice($pxekernel)
+  notice($initrd)
+  notice($target_initrd)
+  notice($url)
+  notice($inst_repo)
+  notice($update_repo)
+  notice($splashurl)
+  notice($boot_iso_url)
+  notice($boot_iso_name)
+  notice($rel_name)
 
   if ( $distro == 'centos') {
     case $release {
@@ -35,17 +65,18 @@ define quartermaster::pxelinux {
       '4.0','4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9',
       '5.0','5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
         $centos_url = "http://vault.centos.org/${release}"
-        $bootsplash = '.lss'
+        $_dot_bootsplash = '.lss'
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
         $centos_url = "http://vault.centos.org/${release}"
-        $bootsplash = '.jpg'
+        $_dot_bootsplash = '.jpg'
       }
       '7.0','7.1','7.2':{
         $centos_url = "http://mirror.centos.org/centos/${rel_major}"
-        $bootsplash = '.png'
+        $_dot_bootsplash = '.png'
       }
     }
+    notice($centos_url)
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
@@ -54,7 +85,7 @@ define quartermaster::pxelinux {
     $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
     $inst_repo       = "${centos_url}/os/${p_arch}/"
     $update_repo     = "${centos_url}/updates/${p_arch}/"
-    $splashurl       = "${centos_url}/isolinux/splash${bootsplash}"
+    $splashurl       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
     $boot_iso_url  = "${centos_url}/os/${p_arch}/images/boot.iso"
 
   }
@@ -64,24 +95,26 @@ define quartermaster::pxelinux {
       '2','3','4','5','6':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/core"
         $fedora_flavor  = ""
-        $bootsplash = '.lss'
+        $_dot_bootsplash = '.lss'
       }
       '7','8','9','10','11','12','13','14','15','16','17','18','19','20':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
         $fedora_flavor  = "Fedora/"
-        $bootsplash = '.jpg'
+        $_dot_bootsplash = '.jpg'
       }
       '21':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
         $fedora_flavor  = "Server/"
-        $bootsplash = '.png'
+        $_dot_bootsplash = '.png'
       }
       '22','23','24','25':{
         $fedora_url = "http://download.fedoraproject.org/pub/fedora/linux/releases"
         $fedora_flavor  = "Server/"
-        $bootsplash = '.png'
+        $_dot_bootsplash = '.png'
       }
     }
+    notice($fedora_url)
+    notice($fedora_flavor)
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
@@ -90,24 +123,25 @@ define quartermaster::pxelinux {
     $url             = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot"
     $inst_repo       = "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os"
     $update_repo     = "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os"
-    $splashurl       = "${fedora_url}/isolinux/splash${bootsplash}"
+    $splashurl       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
     $boot_iso_url    = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/boot.iso"
   }
   if ( $distro == 'scientificlinux'){
     case $release {
       '50','51','52','53','54','55','56','57','58','59','510','511':{
         $scientificlinux_url        = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}"
-        $bootsplash = '.lss'
+        $_dot_bootsplash = '.lss'
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
-        $bootsplash = '.jpg'
+        $_dot_bootsplash = '.jpg'
       }
       '7.0','7.1','7.2':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
-        $bootsplash = '.png'
+        $_dot_bootsplash = '.png'
       }
     }
+    notice($scientificlinux_url)
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
@@ -116,25 +150,31 @@ define quartermaster::pxelinux {
     $url             = "${scientificlinux_url}/images/pxeboot"
     $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
-    $splashurl       = "${scientificlinux_url}/isolinux/splash${bootsplash}" 
+    $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}" 
     $boot_iso_url    = "${scientificlinux_url}/images/boot.iso"
   }
 
   if ( $distro == 'opensuse') {
     case $release {
       '10.2','10.3','11.0','11.1','11.2','11.3','11.4','12.1','12.2':{
+        warning("OpenSUSE ${release} for ${p_arch} a discontinued distribution downloaded from ${url}")
         $opensuse_url = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution"
       }
       '12.3','13.1','13.2':{
+        warning("OpenSUSE ${release} will be downloaded from ${url}")
         $opensuse_url = "http://download.opensuse.org/distribution"
       }
+      'openSUSE-stable','openSUSE-current':{
+        warning("OpenSUSE ${release} isn't currently functional")
+      }
     }
+      notice($opensuse_url)
     $autofile        = 'autoyast'
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
     $initrd          = undef
     $target_initrd   = "${rel_number}.gz"
-    $bootsplash      = '.jpg'
+    $_dot_bootsplash      = '.jpg'
     $url             = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
     $inst_repo       = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
     $update_repo     = "${opensuse_url}/${release}/repo/non-oss/suse"
@@ -157,8 +197,9 @@ define quartermaster::pxelinux {
         $_U = 'u'
       }
     }
+    notice($_U)
     case $release {
-      '7.1','7.2':{
+      '7.1','7.2','7.3':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
@@ -173,7 +214,7 @@ define quartermaster::pxelinux {
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $target_initrd   = "${rel_number}${initrd}"
-    $bootsplash      = '.png'
+    $_dot_bootsplash      = '.png'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
     $update_repo     = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
@@ -185,7 +226,7 @@ define quartermaster::pxelinux {
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $target_initrd   = "${rel_number}${initrd}"
-    $bootsplash      = '.jpg'
+    $_dot_bootsplash      = '.jpg'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
@@ -198,7 +239,7 @@ define quartermaster::pxelinux {
     $pxekernel       = 'linux'
     $initrd          = undef
     $target_initrd   = "${rel_number}.gz"
-    $bootsplash      = '.jpg'
+    $_dot_bootsplash      = '.jpg'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
@@ -211,7 +252,7 @@ define quartermaster::pxelinux {
     $pxekernel       = 'linux'
     $initrd          = undef
     $target_initrd   = "${rel_number}.gz"
-    $bootsplash      = '.jpg'
+    $_dot_bootsplash      = '.jpg'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
@@ -245,11 +286,11 @@ define quartermaster::pxelinux {
     $pxekernel       = 'linux'
     $initrd          = '.gz'
     $target_initrd   = "${rel_number}${initrd}"
-    $bootsplash      = '.png'
+    $_dot_bootsplash      = '.png'
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
     $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
-    $splashurl       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${bootsplash}"
+    $splashurl       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
 
@@ -266,11 +307,11 @@ define quartermaster::pxelinux {
     $pxekernel       = 'linux'
     $initrd          = '.gz'
     $target_initrd   = "${rel_number}${initrd}"
-    $bootsplash      = '.png'
+    $_dot_bootsplash      = '.png'
     $url             = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://ftp.debian.org/${distro}/dists/${rel_name}"
     $update_repo     = "http://ftp.debian.org/${distro}/dists/${rel_name}"
-    $splashurl       = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${bootsplash}"
+    $splashurl       = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
   if ( $distro == 'kali' ) {
@@ -279,11 +320,11 @@ define quartermaster::pxelinux {
     $pxekernel       = 'linux'
     $initrd          = '.gz'
     $target_initrd   = "${rel_number}${initrd}"
-    $bootsplash      = '.png'
+    $_dot_bootsplash      = '.png'
     $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = 'http://http.kali.org/kali/dists/kali-rolling'
     $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'
-    $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${bootsplash}"
+    $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
 
@@ -293,6 +334,7 @@ define quartermaster::pxelinux {
     /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/products/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
+  notice(puppetlabs_repo)
 
 # Retrieve installation kernel file if supported
   case $url {
@@ -303,7 +345,7 @@ define quartermaster::pxelinux {
       } else {
         $final_boot_iso_name = "${release}-${p_arch}-boot.iso" 
       } 
-      
+      notice($final_boot_iso_name) 
       if ! defined (Staging::File["${name}-boot.iso"]){
         staging::file{"${name}-boot.iso":
           source  => $boot_iso_url,
@@ -335,20 +377,20 @@ define quartermaster::pxelinux {
           require =>  Tftp::File["${distro}/${p_arch}"],
         }
       }
-#      if ! defined (Staging::File["bootsplash-${name}"]){
-#        staging::file{"bootsplash-${name}":
-#          source  => $splashurl,
-#          target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${bootsplash}",
-#          require =>  Tftp::File["${distro}/graphics"],
-#        }
-#      }
+ #     if ! defined (Staging::File["dot_bootsplash-${name}"]){
+ #       staging::file{"dot_bootsplash-${name}":
+ #         source  => $splashurl,
+ #         target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${_dot_bootsplash}",
+ #         require =>  Tftp::File["${distro}/graphics"],
+ #       }
+ #     }
     }
   }
 
-#  if ! defined (Staging::File["bootsplash-${name}"]){
-#    staging::file{"bootsplash-${name}":
+#  if ! defined (Staging::File["_dot_bootsplash-${name}"]){
+#    staging::file{"_dot_bootsplash-${name}":
 #      source  => $splashurl,
-#      target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${bootsplash}",
+#      target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${_dot_bootsplash}",
 #      require =>  Tftp::File["${distro}/graphics"],
 #    }
 #  }
