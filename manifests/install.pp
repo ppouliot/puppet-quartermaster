@@ -11,7 +11,7 @@ class quartermaster::install {
     use_default_location => false,
     vhost_cfg_append     => {
       autoindex => on,
-    }
+    },
   }
   nginx::resource::location{'/':
     ensure => present,
@@ -19,7 +19,7 @@ class quartermaster::install {
     vhost    => $fqdn,
   } 
   nginx::resource::location{"$fqdn-tftpboot":
-    ensure    => present,
+    ensure    => absent,
     autoindex => 'on',
     www_root  => '/var/lib/tftpboot',
     vhost     => $fqdn,
@@ -348,14 +348,15 @@ nameserver 4.2.2.2
   squid::http_access{'localhost manager':
     action => 'allow',
   }
+  squid::http_access{'localhost':
+    action => 'allow',
+  }
   squid::http_access{'manager':
     action => 'deny',
   }
   squid::http_access{'all':
-    action => 'deny',
+    action => 'allow',
   }
-#  squid:::extra_config_section{'refresh_pattern':
-#    order          => '60',
   squid::extra_config_section{'refresh_pattern':
     config_entries => {
       'refresh_pattern -i .*microsoft\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf)'     => '129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private',
@@ -367,6 +368,14 @@ nameserver 4.2.2.2
       'refresh_pattern (Release|Packagesi(.gz)*)$'                                              => '0	20%	2880',
       'refresh_pattern .'                                                                       => '0	20%	4230',
     },
+  } ->
+  file_line{'add_proxy_to_etc_environment':
+    ensure => present,
+    path   => '/etc/environment',
+    line   => "# Following lines managed by Puppet
+http_proxy=http://${ipaddress}:3128/
+ftp_proxy=http://${ipaddress}:3128/
+",
   }
 
   concat {"/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default":

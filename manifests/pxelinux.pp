@@ -6,6 +6,10 @@ define quartermaster::pxelinux {
 # this regex works w/ no .
 #if $name =~ /([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)/ {
 
+  Staging::File {
+    curl_option => "--proxy http://${ipaddress}:3128",
+  }
+
   # Define proper name formatting matching distro-release-p_arch
   if $name =~ /([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)-([a-zA-Z0-9_\.]+)/ {
     $distro  = $1
@@ -25,46 +29,118 @@ define quartermaster::pxelinux {
     warning("${distro} ${release} does not have major and minor point releases.")
   }
 
-  if ( $distro == 'centos') and ( $release <= '6.7' ) {
-    $centos_url = "http://vault.centos.org/${release}"
-  } else {
-    $centos_url = "http://mirror.centos.org/centos/${rel_major}"
+  if ( $distro == 'centos') {
+    case $release {
+      '2.1','3.1','3.3','3.4','3.5','3.6','3.7','3.8','3.9',
+      '4.0','4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9',
+      '5.0','5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
+        $centos_url = "http://vault.centos.org/${release}"
+        $bootsplash = '.lss'
+      }
+      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
+        $centos_url = "http://vault.centos.org/${release}"
+        $bootsplash = '.jpg'
+      }
+      '7.0','7.1','7.2':{
+        $centos_url = "http://mirror.centos.org/centos/${rel_major}"
+        $bootsplash = '.png'
+      }
+    }
+    $autofile        = 'kickstart'
+    $linux_installer = 'anaconda'
+    $pxekernel       = 'vmlinuz'
+    $initrd          = '.img'
+    $target_initrd   = "${rel_number}${initrd}"
+    $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
+    $inst_repo       = "${centos_url}/os/${p_arch}/"
+    $update_repo     = "${centos_url}/updates/${p_arch}/"
+    $splashurl       = "${centos_url}/isolinux/splash${bootsplash}"
+    $boot_iso_url  = "${centos_url}/os/${p_arch}/images/boot.iso"
+
   }
+      
   if ( $distro == 'fedora') {
     case $release {
       '2','3','4','5','6':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/core"
         $fedora_flavor  = ""
+        $bootsplash = '.lss'
       }
-      '7','8','9','10','11','12','13','14','15','16','17','18','19':{
+      '7','8','9','10','11','12','13','14','15','16','17','18','19','20':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
         $fedora_flavor  = "Fedora/"
+        $bootsplash = '.jpg'
       }
-      '20','21':{
+      '21':{
         $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
         $fedora_flavor  = "Server/"
+        $bootsplash = '.png'
       }
       '22','23','24','25':{
         $fedora_url = "http://download.fedoraproject.org/pub/fedora/linux/releases"
         $fedora_flavor  = "Server/"
+        $bootsplash = '.png'
       }
     }
+    $autofile        = 'kickstart'
+    $linux_installer = 'anaconda'
+    $pxekernel       = 'vmlinuz'
+    $initrd          = '.img'
+    $target_initrd   = "${rel_number}${initrd}"
+    $url             = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot"
+    $inst_repo       = "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os"
+    $update_repo     = "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os"
+    $splashurl       = "${fedora_url}/isolinux/splash${bootsplash}"
+    $boot_iso_url    = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/boot.iso"
   }
   if ( $distro == 'scientificlinux'){
     case $release {
       '50','51','52','53','54','55','56','57','58','59','510','511':{
-        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}"
+        $scientificlinux_url        = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}"
+        $bootsplash = '.lss'
       }
-      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','7.0','7.1','7.2':{
+      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
+        $bootsplash = '.jpg'
+      }
+      '7.0','7.1','7.2':{
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
+        $bootsplash = '.png'
       }
     }
+    $autofile        = 'kickstart'
+    $linux_installer = 'anaconda'
+    $pxekernel       = 'vmlinuz'
+    $initrd          = '.img'
+    $target_initrd   = "${rel_number}${initrd}"
+    $url             = "${scientificlinux_url}/images/pxeboot"
+    $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
+    $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
+    $splashurl       = "${scientificlinux_url}/isolinux/splash${bootsplash}" 
+    $boot_iso_url    = "${scientificlinux_url}/images/boot.iso"
   }
 
-  if ( $distro == 'opensuse') and ( $release <= '12.2' ){
-    $opensuse_url = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution"
-  } else {
-    $opensuse_url = "http://download.opensuse.org/distribution"
+  if ( $distro == 'opensuse') {
+    case $release {
+      '10.2','10.3','11.0','11.1','11.2','11.3','11.4','12.1','12.2':{
+        $opensuse_url = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution"
+      }
+      '12.3','13.1','13.2':{
+        $opensuse_url = "http://download.opensuse.org/distribution"
+      }
+    }
+    $autofile        = 'autoyast'
+    $linux_installer = 'yast'
+    $pxekernel       = 'linux'
+    $initrd          = undef
+    $target_initrd   = "${rel_number}.gz"
+    $bootsplash      = '.jpg'
+    $url             = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
+    $inst_repo       = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
+    $update_repo     = "${opensuse_url}/${release}/repo/non-oss/suse"
+    $splash_url      = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader/back.jpg"
+    $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
+    $boot_iso_url    = "${opensuse_url}/${release}/iso"
   }
  
   if ($distro == /(centos|fedora|oraclelinux)/) and ( $release >= '7.0' ) and ( $p_arch == 'i386'){
@@ -72,213 +148,210 @@ define quartermaster::pxelinux {
   }
   
   # Begin tests for dealing with OracleLinux Repos
-  $is_oracle = $distro ? {
-    /(oraclelinux)/ => true,
-    default         => 'This is not Oracle Linux',
+  if ( $distro == 'oraclelinux' ) {
+    case $rel_major {
+      '6':{
+        $_U = 'U'
+      }
+      '7':{
+        $_U = 'u'
+      }
+    }
+    case $release {
+      '7.1','7.2':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+      }
+      default:{
+        warning("Oracle Linux ${release} is using the default name for the final boot.iso")
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
+      }
+    }
+    $autofile        = 'kickstart'
+    $linux_installer = 'anaconda'
+    $pxekernel       = 'vmlinuz'
+    $initrd          = '.img'
+    $target_initrd   = "${rel_number}${initrd}"
+    $bootsplash      = '.png'
+    $url             = 'ISO Required instead of URL'
+    $inst_repo       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
+    $update_repo     = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
+    $splashurl       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
+  }
+  if ( $distro == 'redhat' ) {
+    $autofile        = 'kickstart'
+    $linux_installer = 'anaconda'
+    $pxekernel       = 'vmlinuz'
+    $initrd          = '.img'
+    $target_initrd   = "${rel_number}${initrd}"
+    $bootsplash      = '.jpg'
+    $url             = 'ISO Required instead of URL'
+    $inst_repo       = 'Install ISO Required'
+    $update_repo     = 'Update ISO or Mirror Required'
+    $splashurl       = 'ISO Required for Splash'
+    $boot_iso_url  = 'No mini.iso or boot.iso to download'
+  }
+  if ( $distro == 'sles' ) {
+    $autofile        = 'autoyast'
+    $linux_installer = 'yast'
+    $pxekernel       = 'linux'
+    $initrd          = undef
+    $target_initrd   = "${rel_number}.gz"
+    $bootsplash      = '.jpg'
+    $url             = 'ISO Required instead of URL'
+    $inst_repo       = 'Install ISO Required'
+    $update_repo     = 'Update ISO or Mirror Required'
+    $splashurl       = 'ISO Required for Splash'
+    $boot_iso_url  = 'No mini.iso or boot.iso to download'
+  }
+  if ( $distro == 'sled' ) {
+    $autofile        = 'autoyast'
+    $linux_installer = 'yast'
+    $pxekernel       = 'linux'
+    $initrd          = undef
+    $target_initrd   = "${rel_number}.gz"
+    $bootsplash      = '.jpg'
+    $url             = 'ISO Required instead of URL'
+    $inst_repo       = 'Install ISO Required'
+    $update_repo     = 'Update ISO or Mirror Required'
+    $splashurl       = 'ISO Required for Splash'
+    $boot_iso_url  = 'No mini.iso or boot.iso to download'
+  }
+  if ( $distro == 'windows' ) {
+    $autofile        = 'unattend.xml'
   }
 
-  $rel_name = $release ? {
-    /(11.04)/     => 'natty',
-    /(11.10)/     => 'oneric',
-    /(12.04)/     => 'precise',
-    /(12.10)/     => 'quantal',
-    /(13.04)/     => 'raring',
-    /(13.10)/     => 'saucy',
-    /(14.04)/     => 'trusty',
-    /(14.10)/     => 'utopic',
-    /(15.04)/     => 'vivid',
-    /(15.10)/     => 'wily',
-    /(16.04)/     => 'xenial',
-    /(16.10)/     => 'yakkety',
-    /(17.04)/     => 'zesty',
-    /(oldstable)/ => 'squeeze',
-    /(stable)/    => 'wheezy',
-    /(testing)/   => 'jessie',
-    /(unstable)/  => 'sid',
-    default      => "Unsupported ${distro} Release",
+
+  if ( $distro == 'ubuntu' ) {
+    $rel_name = $release ? {
+      /(11.04)/     => 'natty',
+      /(11.10)/     => 'oneric',
+      /(12.04)/     => 'precise',
+      /(12.10)/     => 'quantal',
+      /(13.04)/     => 'raring',
+      /(13.10)/     => 'saucy',
+      /(14.04)/     => 'trusty',
+      /(14.10)/     => 'utopic',
+      /(15.04)/     => 'vivid',
+      /(15.10)/     => 'wily',
+      /(16.04)/     => 'xenial',
+      /(16.10)/     => 'yakkety',
+      /(17.04)/     => 'zesty',
+      default       => "${name} is not an Ubuntu release",
+    }
+    $autofile        = 'preseed'
+    $linux_installer = 'd-i'
+    $pxekernel       = 'linux'
+    $initrd          = '.gz'
+    $target_initrd   = "${rel_number}${initrd}"
+    $bootsplash      = '.png'
+    $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
+    $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
+    $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
+    $splashurl       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${bootsplash}"
+    $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
 
-  $url = $distro ? {
-    /(ubuntu)/           => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(debian)/           => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-#    /(ubuntu|debian)/   => "http://${webhost}.${distro}.${tld}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}",
-    /(centos)/           => "${centos_url}/os/${p_arch}/images/pxeboot",
-#    /(fedora)/          => "http://dl.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-#    /(fedora)/          => "http://archives.fedoraproject.org/pub/${distro}/linux/releases/${release}/Fedora/${p_arch}/os/images/pxeboot",
-    /(fedora)/           => "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot",
-    /(kali)/             => "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}",
-    /(scientificlinux)/  => "${scientificlinux_url}/images/pxeboot",
-    /(oraclelinux)/      => 'Enterprise ISO Required',
-    /(redhat)/           => 'Enterprise ISO Required',
-    /(sles)/             => 'Enterprise ISO Required',
-    /(sled)/             => 'Enterprise ISO Required',
-    /(opensuse)/         => "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader",
-    default              => 'No URL Specified',
+  if ( $distro == 'debian' ) {
+    $rel_name = $release ? {
+      /(oldstable)/ => 'squeeze',
+      /(stable)/    => 'wheezy',
+      /(testing)/   => 'jessie',
+      /(unstable)/  => 'sid',
+      default       => "${name} is not an Debian release",
+    }
+    $autofile        = 'preseed'
+    $linux_installer = 'd-i'
+    $pxekernel       = 'linux'
+    $initrd          = '.gz'
+    $target_initrd   = "${rel_number}${initrd}"
+    $bootsplash      = '.png'
+    $url             = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
+    $inst_repo       = "http://ftp.debian.org/${distro}/dists/${rel_name}"
+    $update_repo     = "http://ftp.debian.org/${distro}/dists/${rel_name}"
+    $splashurl       = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${bootsplash}"
+    $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
-
-  $tld = $distro ?{
-    /(ubuntu)/ => 'com',
-    /(debian)/ => 'org',
-    default    => "tld isn't needed for ${distro}",
-  }
-  $webhost = $distro ?{
-    /(ubuntu)/ => 'archive',
-    /(debian)/ => 'ftp.us',
-    default    => "webhost isn't needed for ${distro}",
-  }
-
-
-  $inst_repo = $distro ? {
-    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
-    /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
-    /(kali)/            => 'http://http.kali.org/kali/dists/kali-rolling',
-    /(centos)/          => "${centos_url}/os/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os",
-    /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os",
-    /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
-    /(redhat)/          => 'Enterprise ISO Required',
-    /(sles)/            => 'Enterprise ISO Required',
-    /(sled)/            => 'Enterprise ISO Required',
-    /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader",
-    default             => 'No URL Specified',
-  }
-
-  $update_repo = $distro ? {
-    /(ubuntu)/          => "http://archive.ubuntu.com/${distro}/dists/${rel_name}",
-    /(debian)/          => "http://ftp.debian.org/${distro}/dists/${rel_name}",
-    /(kali)/            => 'http://http.kali.org/kali/dists/kali-rolling',
-    /(centos)/          => "${centos_url}/updates/${p_arch}/",
-    /(fedora)/          => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os",
-    /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security",
-    /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
-    /(redhat)/          => 'Enterprise ISO Required',
-    /(sles)/            => 'Enterprise ISO Required',
-    /(sled)/            => 'Enterprise ISO Required',
-    /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/non-oss/suse",
-    default             => 'No URL Specified',
-  }
-
-  $splashurl = $distro ? {
-    /(ubuntu)/         => "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
-    /(debian)/         => "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash.png",
-    /(kali)/           => "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash.png",
-    /(redhat)/          => 'Enterprise ISO Required',
-    /(centos)/          => "${centos_url}/os/${p_arch}/isolinux/splash.jpg",
-    /(fedora)/          => "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os/isolinux/splash.png",
-    /(scientificlinux)/ => "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/isolinux/splash.jpg",
-    /(oraclelinux)/     => "http://public-yum.oracle.com/repo/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}/",
-    /(sles)/            => 'Enterprise ISO Required',
-    /(sled)/            => 'Enterprise ISO Required',
-    /(opensuse)/        => "http://download.opensuse.org/distribution/${release}/repo/oss/boot/${p_arch}/loader/back.jpg",
-    default             => 'No URL Specified',
-  }
-
-  $bootsplash = $distro ? {
-    /(ubuntu|debian|kali|fedora|scientificlinux)/        => '.png',
-    /(redhat|centos|opensuse|sles|sled)/                 => '.jpg',
-    /(windows)/                                          => 'No Bootsplash',
-    /(oraclelinux)/                                      => 'No Bootsplash ',
-    default                                              => 'No Bootsplash',
-  }
-
-  $autofile = $distro ? {
-    /(ubuntu|debian|kali)/                               => 'preseed',
-    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'kickstart',
-    /(sles|sled|opensuse)/                               => 'autoyast',
-    /(windows)/                                          => 'unattend.xml',
-    default                                              => 'No Automation File',
-#    default                                              => undef,
-  }
-
-  $pxekernel = $distro ? {
-    /(ubuntu|debian|kali)/                               => 'linux',
-    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'vmlinuz',
-    /(sles|sled|opensuse)/                               => 'linux',
-    default                                              => 'No supported Pxe Kernel',
-  }
-
-  $initrd = $distro ? {
-    /(ubuntu|debian|kali)/                               => '.gz',
-    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => '.img',
-    /(sles|sled|opensuse)/                               => undef,
-    default                                              => 'No supported Initrd Extension',
-  }
-
-  $target_initrd = $distro ? {
-    /(sles|sled|opensuse)/                               => "${rel_number}.gz",
-    /(fedora)/                                           => "${rel_number}${::pxe_flavor}${initrd}",
-    default                                              => "${rel_number}${initrd}",
-  }
-  $target_kernel = $distro ? {
-    /(fedora)/                                           => "${rel_number}${::pxe_flavor}",
-    default                                              => $rel_number,
-  }
-
-  $linux_installer = $distro ? {
-    /(ubuntu|debian|kali)/                               => 'd-i',
-    /(redhat|centos|fedora|scientificlinux|oraclelinux)/ => 'anaconda',
-    /(sles|sled|opensuse)/                               => 'yast',
-    default                                              => 'No Supported Linux Installer',
+  if ( $distro == 'kali' ) {
+    $autofile        = 'preseed'
+    $linux_installer = 'd-i'
+    $pxekernel       = 'linux'
+    $initrd          = '.gz'
+    $target_initrd   = "${rel_number}${initrd}"
+    $bootsplash      = '.png'
+    $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
+    $inst_repo       = 'http://http.kali.org/kali/dists/kali-rolling'
+    $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'
+    $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${bootsplash}"
+    $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
 
   $puppetlabs_repo = $distro ? {
-    /(ubuntu|debian)/                                    => "http://apt.puppetlabs.com/dists/${rel_name}",
-    /(fedora)/                                           => "http://yum.puppetlabs.com/fedora/f${rel_number}/products/${p_arch}",
-    /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppetlabs.com/el/${rel_major}/products/${p_arch}",
+    /(ubuntu|debian)/                                    => "http://apt.puppet.com/dists/${rel_name}",
+    /(fedora)/                                           => "http://yum.puppet.com/fedora/f${rel_number}/products/${p_arch}",
+    /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/products/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
 
-  notify { "${name}: distro is ${distro}":}
-  notify { "${name}: release is ${release}":}
-  notify { "${name}: rel_major is ${rel_major}":}
-  notify { "${name}: rel_minor is ${rel_minor}":}
-  notify { "${name}: p_arch is  ${p_arch}":}
-  notify { "${name}: url is ${url}":}
-  notify { "${name}: inst_repo is ${inst_repo}":}
-  notify { "${name}: kernel is ${pxekernel}":}
-  notify { "${name}: initrd is ${initrd}":}
-  notify { "${name}: linux_installer is ${linux_installer}":}
-  notify { "${name}: PuppetLabs Repo is ${puppetlabs_repo}":}
-  notify { "${name}: Centos Distro = ${::is_centos}":}
-  notify { "${name}: Centos URL = ${centos_url}":}
-  notify { "${name}: Fedora Distro = ${::is_fedora}":}
-  notify { "${name}: Fedora URL = ${fedora_url}":}
-  notify { "${name}: Oracle Distro = ${is_oracle}":}
-  notify { "${name}: Target Initrd = ${target_initrd}":}
-
 # Retrieve installation kernel file if supported
-#  if $pxekernel == !('No supported Pxe Kernel'){
-    if ! defined (Staging::File["${target_kernel}-${name}"]){
-      staging::file{"${target_kernel}-${name}":
-        source  => "${url}/${pxekernel}",
-        target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
-        require =>  Tftp::File["${distro}/${p_arch}"],
+  case $url {
+    'ISO Required instead of URL':{
+      if $boot_iso_name {
+        warning("A specific boot_iso_name: ${boot_iso_name} exists for ${name}" )
+        $final_boot_iso_name = $boot_iso_name 
+      } else {
+        $final_boot_iso_name = "${release}-${p_arch}-boot.iso" 
+      } 
+      
+      if ! defined (Staging::File["${name}-boot.iso"]){
+        staging::file{"${name}-boot.iso":
+          source  => $boot_iso_url,
+          target  => "/srv/quartermaster/${distro}/ISO/${final_boot_iso_name}",
+          require =>[
+            Tftp::File["${distro}/${p_arch}"],
+            File["/srv/quartermaster/${distro}/ISO"],
+          ],
+        }
       }
     }
-#  }
-
-# Retrieve initrd file if supported
-#  if $initrd == !('No supported Initrd Extension'){
-    if ! defined (Staging::File["${target_initrd}-${name}"]){
-      staging::file{"${target_initrd}-${name}":
-        source  => "${url}/initrd${initrd}",
-        target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
-        require =>  Tftp::File["${distro}/${p_arch}"],
-      }
+    'No URL Specified':{
+      warning("No URL is specified for ${name}")
     }
-#  }
-
-# Retrieve Bootsplash file if present
-  if $bootsplash == !('No Bootsplash'){
-    if ! defined (Staging::File["bootsplash-${name}"]){
-      staging::file{"bootsplash-${name}":
-        source  => $splashurl,
-        target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${bootsplash}",
-        require =>  Tftp::File["${distro}/graphics"],
+    default:{
+    # Retrieve installation kernel file if supported
+      if ! defined (Staging::File["${rel_number}-${name}"]){
+        staging::file{"${rel_number}-${name}":
+          source  => "${url}/${pxekernel}",
+          target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${rel_number}",
+          require => Tftp::File["${distro}/${p_arch}"],
+        }
       }
+      # Retrieve initrd file if supported
+      if ! defined (Staging::File["${target_initrd}-${name}"]){
+        staging::file{"${target_initrd}-${name}":
+          source  => "${url}/initrd${initrd}",
+          target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
+          require =>  Tftp::File["${distro}/${p_arch}"],
+        }
+      }
+#      if ! defined (Staging::File["bootsplash-${name}"]){
+#        staging::file{"bootsplash-${name}":
+#          source  => $splashurl,
+#          target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${bootsplash}",
+#          require =>  Tftp::File["${distro}/graphics"],
+#        }
+#      }
     }
   }
 
+#  if ! defined (Staging::File["bootsplash-${name}"]){
+#    staging::file{"bootsplash-${name}":
+#      source  => $splashurl,
+#      target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${bootsplash}",
+#      require =>  Tftp::File["${distro}/graphics"],
+#    }
+#  }
 
 # Distro Specific TFTP Folders
 
@@ -340,6 +413,12 @@ if $linux_installer == !('No Supported Linux Installer') {
 
   if ! defined (File["/srv/quartermaster/${distro}/ISO"]) {
     file { "/srv/quartermaster/${distro}/ISO":
+      ensure  => directory,
+      require => File[ "/srv/quartermaster/${distro}" ],
+    }
+  }
+  if ! defined (File["/srv/quartermaster/${distro}/mnt"]) {
+    file { "/srv/quartermaster/${distro}/mnt":
       ensure  => directory,
       require => File[ "/srv/quartermaster/${distro}" ],
     }
