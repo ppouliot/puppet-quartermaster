@@ -465,6 +465,40 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
+  if ! defined (Concat["/srv/quartermaster/${distro}/.README.html"]) {
+     concat{ "/srv/quartermaster/${distro}/.README.html":
+      owner   => 'nginx',
+      group   => 'nginx',
+      mode    => '0644',
+      require => File[ "/srv/quartermaster/${distro}" ],
+#      content => template('quartermaster/README.html.erb'),
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}.default_README_header"]) {
+    concat::fragment { "${distro}.default_README_header":
+      target => "/srv/quartermaster/${distro}/.README.html",
+      content => "<html>
+<head><title> <%= @distro %> <%= @release%> <%=@p_arch%></title></head>
+<body>
+<h1>Operating System: <%= @distro %> </h1>
+<h2>>Platform Release: <h2>",
+      order   => 01,
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}.default_README_release_body.${name}"]) {
+    concat::fragment { "${distro}.default_README_release_body.${name}":
+      target => "/srv/quartermaster/${distro}/.README.html",
+      content => "<li><b>* <i>${distro}-${release}</i> *</b></li>",
+      order   => 02,
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}.default_README_footer"]) {
+    concat::fragment { "${distro}.default_README_footer":
+      target => "/srv/quartermaster/${distro}/.README.html",
+      content => template('quartermaster/README.html.footer.erb'),
+      order   => 03,
+    }
+  }
   if ! defined (Concat["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
      concat{ "/srv/quartermaster/${distro}/${p_arch}/.README.html":
       owner   => 'nginx',
@@ -474,13 +508,35 @@ if $linux_installer == !('No Supported Linux Installer') {
 #      content => template('quartermaster/README.html.erb'),
     }
   }
-  if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_entry"]) {
-    concat::fragment { "${distro}.default_${p_arch}_README_entry":
+  if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_header"]) {
+    concat::fragment { "${distro}.default_${p_arch}_README_header":
       target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
-      content => template('quartermaster/README.html.erb'),
+      content => template('quartermaster/README.html.header.erb'),
+      order   => 01,
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}.default_README_p_arch_body"]) {
+    concat::fragment { "${distro}.default_README_p_arch_body":
+      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
+      content => "<h3>Processor Arch: ${p_arch}</h3>",
       order   => 02,
     }
   }
+  if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_body.${name}"]) {
+    concat::fragment { "${distro}.default_${p_arch}_README_body.${name}":
+      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
+      content => template('quartermaster/README.html.body.erb'),
+      order   => 03,
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_footer"]) {
+    concat::fragment { "${distro}.default_${p_arch}_README_footer":
+      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
+      content => template('quartermaster/README.html.footer.erb'),
+      order   => 04,
+    }
+  }
+
 
 # Kickstart/Preseed File
   file { "${name}.${autofile}":
