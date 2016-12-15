@@ -4,13 +4,19 @@ class quartermaster::install {
   include ::stdlib
 
   # NGINX Installation
-  include ::nginx
+#  include ::nginx
+  class{'::nginx':
+    package_name => 'nginx-extras',
+  }
   nginx::resource::vhost{ $fqdn:
     ensure               => present,
     www_root             => '/srv/quartermaster',
     use_default_location => false,
     vhost_cfg_append     => {
-      autoindex => on,
+      autoindex             => on,
+      fancyindex            => on,
+      fancyindex_exact_size => off,
+      fancyindex_footer     => '.README.html',
     },
   }
   nginx::resource::location{'/':

@@ -465,11 +465,20 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
-  if ! defined (File["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
-    file { "/srv/quartermaster/${distro}/${p_arch}/.README.html":
-      ensure  => file,
-      require => File[ "/srv/quartermaster/${distro}" ],
+  if ! defined (Concat["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
+     concat{ "/srv/quartermaster/${distro}/${p_arch}/.README.html":
+      owner   => 'nginx',
+      group   => 'nginx',
+      mode    => '0644',
+      require => File[ "/srv/quartermaster/${distro}/${p_arch}" ],
+#      content => template('quartermaster/README.html.erb'),
+    }
+  }
+  if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_entry"]) {
+    concat::fragment { "${distro}.default_${p_arch}_README_entry":
+      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
       content => template('quartermaster/README.html.erb'),
+      order   => 02,
     }
   }
 
