@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Quartermaster</title>
+</head>
+<style>
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: left;
+    max-width: 160px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul a {
+    text-decoration: none;
+}
+
+article {
+    margin-left: 170px;
+<!--    border-left: 1px solid gray; -->
+    padding: 1em;
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+Supplies, Tools & Provisions
+</header>
+<nav>
+<img src="http://images.vector-images.com/217/quartermaster_corps_emb_n11082.gif" alt="Quartermaster Military Insignia">
+<iframe src="http://<%= @ipaddress %>/status">Nginx Status</iframe>
+</nav>
+<article>
+<dl>
+<dt><h1>Quartermaster</h1><dt>
+<dd> A military or naval term, the meaning of which depends on the country and service.</dd>
+<dd>In land armies, a quartermaster is generally a relatively senior soldier who supervises stores and
+distributes supplies and provisions.</dd>
+<dd>In many navies, quartermaster is a non-commissioned officer (petty officer) rank.</dd>
+</dl>
+</article>
+<small>
+<ul style="list-style-type:disc">
+<li>Quartermaster - <a href="https://en.wikipedia.org/wiki/Quartermaster">Wikipedia</a></li>
+</ul>
+</small>
+</article>
+<footer>
+<small>
+***
+<a href="https://github.com/ppouliot/puppet-quartermaster.git">
+Quartermaster on GitHub
+</a>
+***
+</small>
+</footer>
+</div>
+</body>
+</html>
