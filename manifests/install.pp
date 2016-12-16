@@ -60,7 +60,30 @@ class quartermaster::install {
     group   => 'nginx',
     recurse => true,
   } ->
-
+  ## .README.html (FILE) /srv/quartermaster/distro/.README.html
+  file{[
+    '/srv/quartermaster/.README.html',
+    '/srv/quartermaster/bin/.README.html',
+    '/srv/quartermaster/iso/.README.html',
+    '/srv/quartermaster/logs/.README.html',
+    '/srv/quartermaster/usb/.README.html',
+    '/srv/quartermaster/kickstart/.README.html',
+    '/srv/quartermaster/preseed/.README.html',
+    '/srv/quartermaster/tftpboot/.README.html',
+    '/srv/quartermaster/unattend.xml/.README.html',
+    '/srv/quartermaster/microsoft/.README.html',
+    '/srv/quartermaster/microsoft/iso/.README.html',
+    '/srv/quartermaster/microsoft/mnt/.README.html',
+    '/srv/quartermaster/microsoft/winpe/.README.html',
+    '/srv/quartermaster/microsoft/winpe/bin/README.html',
+    '/srv/quartermaster/microsoft/winpe/system/README.html',
+    '/srv/quartermaster/microsoft/winpe/system/menu/.README.html',
+  ]:
+    ensure => file,
+    owner  => 'nginx',
+    group  => 'nginx',
+    mode   => '0644',
+  }
 
   file { '/srv/quartermaster/bin/concatenate_files.sh':
     ensure  => present,
