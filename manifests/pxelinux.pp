@@ -42,7 +42,7 @@ define quartermaster::pxelinux {
     notice($rel_major)
     notice($rel_minor)
   } else {
-    warning("${distro} ${release} does not have major and minor point releases.")
+    warning("${distro} ${release} does not have major and minor point releases for ${name}.")
   }
 
   notice($_dot_bootsplash)
@@ -93,7 +93,7 @@ define quartermaster::pxelinux {
   if ( $distro == 'fedora') {
     case $release {
       '2','3','4','5','6':{
-        $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/core"
+        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/core'
         $fedora_flavor  = ""
         $_dot_bootsplash = '.lss'
       }
@@ -150,7 +150,7 @@ define quartermaster::pxelinux {
     $url             = "${scientificlinux_url}/images/pxeboot"
     $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
-    $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}" 
+    $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
     $boot_iso_url    = "${scientificlinux_url}/images/boot.iso"
   }
 
@@ -182,13 +182,13 @@ define quartermaster::pxelinux {
     $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
     $boot_iso_url    = "${opensuse_url}/${release}/iso"
   }
- 
   if ($distro == /(centos|fedora|oraclelinux)/) and ( $release >= '7.0' ) and ( $p_arch == 'i386'){
     fail("${distro} ${release} does not provide support for processor architecture i386")
   }
   
   # Begin tests for dealing with OracleLinux Repos
   if ( $distro == 'oraclelinux' ) {
+    # Character Adjustment for Releases between 6 and 7
     case $rel_major {
       '6':{
         $_U = 'U'
@@ -260,7 +260,7 @@ define quartermaster::pxelinux {
     $boot_iso_url  = 'No mini.iso or boot.iso to download'
   }
   if ( $distro == 'windows' ) {
-    $autofile        = 'unattend.xml'
+    $autofile = 'unattend.xml'
   }
 
 
@@ -341,11 +341,11 @@ define quartermaster::pxelinux {
     'ISO Required instead of URL':{
       if $boot_iso_name {
         warning("A specific boot_iso_name: ${boot_iso_name} exists for ${name}" )
-        $final_boot_iso_name = $boot_iso_name 
+        $final_boot_iso_name = $boot_iso_name
       } else {
-        $final_boot_iso_name = "${release}-${p_arch}-boot.iso" 
-      } 
-      notice($final_boot_iso_name) 
+        $final_boot_iso_name = "${release}-${p_arch}-boot.iso"
+      }
+      notice($final_boot_iso_name)
       if ! defined (Staging::File["${name}-boot.iso"]){
         staging::file{"${name}-boot.iso":
           source  => $boot_iso_url,
@@ -377,13 +377,13 @@ define quartermaster::pxelinux {
           require =>  Tftp::File["${distro}/${p_arch}"],
         }
       }
- #     if ! defined (Staging::File["dot_bootsplash-${name}"]){
- #       staging::file{"dot_bootsplash-${name}":
- #         source  => $splashurl,
- #         target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${_dot_bootsplash}",
- #         require =>  Tftp::File["${distro}/graphics"],
- #       }
- #     }
+#     if ! defined (Staging::File["dot_bootsplash-${name}"]){
+#       staging::file{"dot_bootsplash-${name}":
+#         source  => $splashurl,
+#         target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${_dot_bootsplash}",
+#         require =>  Tftp::File["${distro}/graphics"],
+#       }
+#     }
     }
   }
 
@@ -430,13 +430,17 @@ if $linux_installer == !('No Supported Linux Installer') {
     require => Tftp::File["${distro}/menu"],
   }
 }
-# Begin Creating Distro Specific HTTP Folders
-
+#################################################
+# Begin Creating Distro Specific HTTP Folder Tree 
+#################################################
+  
+  
   if ! defined (File["/srv/quartermaster/${distro}"]) {
     file { "/srv/quartermaster/${distro}":
       ensure  => directory,
       require => File[ '/srv/quartermaster' ],
     }
+    notice(File["/srv/quartermaster/$distro}"])
   }
 
   if ! defined (File["/srv/quartermaster/${distro}/${autofile}"]) {
@@ -465,18 +469,29 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
+
+  ## Distro WebRoot Folder
+  if ! defined (File["/srv/quartermaster/${distro}"]) {
+    file { "/srv/quartermaster/${distro}":
+      ensure  => directory,
+      require => File[ '/srv/quartermaster' ],
+    }
+    notice(File["/srv/quartermaster/$distro}"])
+  }
+  ## Distro WebRoot Folder.README.html
+
   if ! defined (Concat["/srv/quartermaster/${distro}/.README.html"]) {
-     concat{ "/srv/quartermaster/${distro}/.README.html":
+    concat{ "/srv/quartermaster/${distro}/.README.html":
       owner   => 'nginx',
       group   => 'nginx',
       mode    => '0644',
       require => File[ "/srv/quartermaster/${distro}" ],
-#      content => template('quartermaster/README.html.erb'),
     }
   }
+  # .README.html Header
   if ! defined (Concat::Fragment["${distro}.default_README_header"]) {
     concat::fragment { "${distro}.default_README_header":
-      target => "/srv/quartermaster/${distro}/.README.html",
+      target  => "/srv/quartermaster/${distro}/.README.html",
       content => "<html>
 <head><title> ${distro} ${release} ${p_arch}</title></head>
 <body>
@@ -485,60 +500,62 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 01,
     }
   }
+  # .README.html Body
   if ! defined (Concat::Fragment["${distro}.default_README_release_body.${name}"]) {
     concat::fragment { "${distro}.default_README_release_body.${name}":
-      target => "/srv/quartermaster/${distro}/.README.html",
-      content => "<b><li>* <i>${distro}-${release}</i> *</li></b>",
+      target  => "/srv/quartermaster/${distro}/.README.html",
+      content => "${release}",
       order   => 02,
     }
   }
   if ! defined (Concat::Fragment["${distro}.default_README_footer"]) {
     concat::fragment { "${distro}.default_README_footer":
-      target => "/srv/quartermaster/${distro}/.README.html",
+      target  => "/srv/quartermaster/${distro}/.README.html",
       content => template('quartermaster/README.html.footer.erb'),
       order   => 03,
     }
   }
+  notice(File["/srv/quartermaster/$distro}/.README.html"])
+
   if ! defined (Concat["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
      concat{ "/srv/quartermaster/${distro}/${p_arch}/.README.html":
-      owner   => 'nginx',
-      group   => 'nginx',
-      mode    => '0644',
-      require => File[ "/srv/quartermaster/${distro}/${p_arch}" ],
-#      content => template('quartermaster/README.html.erb'),
+      owner    => 'nginx',
+      group    => 'nginx',
+      mode     => '0644',
+      require  => File[ "/srv/quartermaster/${distro}/${p_arch}" ],
     }
   }
   if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_header"]) {
     concat::fragment { "${distro}.default_${p_arch}_README_header":
-      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
+      target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
       content => template('quartermaster/README.html.header.erb'),
       order   => 01,
     }
-  }
+  } 
   if ! defined (Concat::Fragment["${distro}.default_README_p_arch_body"]) {
     concat::fragment { "${distro}.default_README_p_arch_body":
-      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
+      target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
       content => "<h3>Processor Arch: ${p_arch}</h3>",
       order   => 02,
     }
   }
   if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_body.${name}"]) {
     concat::fragment { "${distro}.default_${p_arch}_README_body.${name}":
-      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
+      target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
       content => template('quartermaster/README.html.body.erb'),
       order   => 03,
     }
   }
   if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_footer"]) {
     concat::fragment { "${distro}.default_${p_arch}_README_footer":
-      target => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
+      target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
       content => template('quartermaster/README.html.footer.erb'),
       order   => 04,
     }
   }
 
 
-# Kickstart/Preseed File
+#  Distro Kickstart/Preseed File
   file { "${name}.${autofile}":
     ensure  => file,
     path    => "/srv/quartermaster/${distro}/${autofile}/${name}.${autofile}",

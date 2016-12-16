@@ -30,14 +30,24 @@ class quartermaster::install {
     www_root  => '/var/lib/tftpboot',
     vhost     => $fqdn,
     require   => Class['tftp'],
-  } 
+  }  
 
+  # Log Visualization Tools
+  # https://code.google.com/p/logstalgia/
+  # http://goaccess.prosoftcorp.com/
+
+  package{['logstalgia','goaccess']:
+    ensure => latest,
+    require => File['/srv/quartermaster/logs'],
+  }
+  
   # Define dictory structure on the filestem for default locations of bits.
 
   file{[
     '/srv/quartermaster',
     '/srv/quartermaster/bin',
     '/srv/quartermaster/iso',
+    '/srv/quartermaster/logs',
     '/srv/quartermaster/usb',
     '/srv/quartermaster/kickstart',
     '/srv/quartermaster/preseed',
