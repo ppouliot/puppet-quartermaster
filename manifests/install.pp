@@ -182,7 +182,7 @@ nameserver 4.2.2.2
     restart           => true,
   }
   dnsmasq::dhcp{'ProdyDHCP-PXE':
-    dhcp_start => $::ipaddress,proxy,
+    dhcp_start => "${::ipaddress},proxy",
     dhcp_end   => $::netmask,
     lease_time => '',
     netmask    => '',

@@ -76,7 +76,7 @@ define quartermaster::pxelinux {
         $_dot_bootsplash = '.png'
       }
       default:{
-        warning{"${name} is not a centos release")
+        warning("${name} is not a centos release")
       }
     }
     notice($centos_url)
