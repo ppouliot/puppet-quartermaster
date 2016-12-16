@@ -8,7 +8,7 @@ class quartermaster::install {
   class{'::nginx':
     package_name => 'nginx-extras',
   }
-  nginx::resource::vhost{ $fqdn:
+  nginx::resource::vhost{ $::fqdn:
     ensure               => present,
     www_root             => '/srv/quartermaster',
     use_default_location => false,
@@ -20,24 +20,17 @@ class quartermaster::install {
     },
   }
   nginx::resource::location{'/':
-    ensure => present,
+    ensure   => present,
     www_root => '/srv/quartermaster',
-    vhost    => $fqdn,
-  } 
-  nginx::resource::location{"$fqdn-tftpboot":
-    ensure    => absent,
-    autoindex => 'on',
-    www_root  => '/var/lib/tftpboot',
-    vhost     => $fqdn,
-    require   => Class['tftp'],
-  }  
+    vhost    => $::fqdn,
+  }
 
   # Log Visualization Tools
   # https://code.google.com/p/logstalgia/
   # http://goaccess.prosoftcorp.com/
 
   package{['logstalgia','goaccess']:
-    ensure => latest,
+    ensure  => latest,
     require => File['/srv/quartermaster/logs'],
   }
   
@@ -162,8 +155,8 @@ done
     mode    => '0644',
     content => "#**** WARNING ****
 # This File is manaaged by Puppet
-search $::domain
-# nameserver $quartermaster::preferred_nameserver
+search ${::domain}
+# nameserver ${quartermaster::preferred_nameserver}
 nameserver 10.21.7.1
 nameserver 4.2.2.1
 nameserver 4.2.2.2
@@ -189,7 +182,7 @@ nameserver 4.2.2.2
     restart           => true,
   }
   dnsmasq::dhcp{'ProdyDHCP-PXE':
-    dhcp_start => "$::ipaddress,proxy",
+    dhcp_start => $::ipaddress,proxy,
     dhcp_end   => $::netmask,
     lease_time => '',
     netmask    => '',
@@ -205,6 +198,8 @@ nameserver 4.2.2.2
   # Configure dnsmasq log rotation
   file {'/etc/logrotate.d/dnsmasq':
     ensure  => file,
+    require => Package['dnsmasq'],
+    notify  => Service['dnsmasq'],
     content => '/var/log/dnsmasq.log {
     monthly
     missingok
@@ -216,8 +211,6 @@ nameserver 4.2.2.2
     endscript
     create 0640 dnsmasq dnsmasq
 }',
-    require => Package['dnsmasq'],
-    notify  => Service['dnsmasq'],
   }
 
   ## TFTP Server Configuration
@@ -226,7 +219,7 @@ nameserver 4.2.2.2
   # Windows and linux installs
 
   file { '/etc/tftpd.rules':
-    content  => template('quartermaster/tftp-remap.erb'),
+    content => template('quartermaster/tftp-remap.erb'),
   } ->
 
   # Tftp Server Install/Configuration
@@ -244,8 +237,8 @@ nameserver 4.2.2.2
     'pxelinux/pxelinux.cfg',
     'winpe',
   ]:
-    ensure  => directory,
-    mode    => '0777',
+    ensure => directory,
+    mode   => '0777',
   }
 
   $quartermaster_samba_interface = $::facts['networking']['primary']
@@ -319,10 +312,14 @@ nameserver 4.2.2.2
 
   # Squid Package Cache for Caching Installations Sources and Updates
   class {'squid':
-    http_ports   => { '3128' => { options => '' }},
+    http_ports   => {
+      '3128' => {
+        options => ''
+      }
+    },
     coredump_dir => '/var/spool/squid3',
   }
-  squid::acl{'Safe_ports': 
+  squid::acl{'Safe_ports':
     type    => port,
     entries => [
       # http
@@ -341,7 +338,7 @@ nameserver 4.2.2.2
       '280',
       # gss-http
       '488',
-      # filemaker 
+      # filemaker
       '591',
       # multiling http
       '777',
@@ -351,11 +348,11 @@ nameserver 4.2.2.2
     action => deny,
   }
   squid::acl{'SSL_ports':
-    type => port,
+    type    => port,
     entries => ['443'],
   }
   squid::acl{'CONNECT':
-    type => method,
+    type    => method,
     entries => ['CONNECT'],
   }
   squid::http_access{'CONNECT !SSL_ports':
@@ -378,40 +375,34 @@ nameserver 4.2.2.2
       'refresh_pattern -i .*microsoft\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf)'     => '129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private',
       'refresh_pattern -i .*windowsupdate\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf)' => '129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private',
       'refresh_pattern -i .*windows\.com/.*\.(cab|exe|ms[i|u|f]|asf|wm[v|a]|dat|zip|psf)'       => '129600 100% 129600 override-expire override-lastmod reload-into-ims ignore-reload ignore-no-cache ignore-private',
-      'refresh_pattern ^ftp:'                                                                   => '1440	20%	10080',
-      'refresh_pattern ^gopher:'                                                                => '1440	0%	1440',
-      'refresh_pattern -i (/cgi-bin/|\?)'                                                       => '0	0%	0',
-      'refresh_pattern (Release|Packagesi(.gz)*)$'                                              => '0	20%	2880',
-      'refresh_pattern .'                                                                       => '0	20%	4230',
+      'refresh_pattern ^ftp:'                                                                   => '1440 20% 10080',
+      'refresh_pattern ^gopher:'                                                                => '1440 0% 1440',
+      'refresh_pattern -i (/cgi-bin/|\?)'                                                       => '0 0% 0',
+      'refresh_pattern (Release|Packagesi(.gz)*)$'                                              => '0 20% 2880',
+      'refresh_pattern .'                                                                       => '0 20% 4230',
     },
   } ->
   file_line{'add_proxy_to_etc_environment':
     ensure => present,
     path   => '/etc/environment',
     line   => "# Following lines managed by Puppet
-http_proxy=http://${ipaddress}:3128/
-ftp_proxy=http://${ipaddress}:3128/
+http_proxy=http://${::ipaddress}:3128/
+ftp_proxy=http://${::ipaddress}:3128/
 ",
   }
 
-  concat {"/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default":
-    owner   => $tftp_username,
-    group   => $tftp_group,
-    mode    => $file_mode,
-  }
-
+  concat {'/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default': }
   concat::fragment{'default_header':
-    target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+    target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
     content => template('quartermaster/pxemenu/header.erb'),
     order   => 01,
   }
 
   concat::fragment{'default_localboot':
-    target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+    target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
     content => template('quartermaster/pxemenu/localboot.erb'),
     order   => 01,
   }
-
 
   tftp::file {'pxelinux/pxelinux.cfg/graphics.cfg':
     content =>"menu width 80
@@ -424,7 +415,6 @@ menu endrow 24
 menu passwordrow 11
 ",
   }
-
   # Syslinux Staging and Extraction
   staging::deploy { "syslinux-${quartermaster::syslinux_version}.tar.gz":
     source  => "${quartermaster::syslinux_url}/syslinux-${quartermaster::syslinux_version}.tar.gz",
@@ -433,32 +423,32 @@ menu passwordrow 11
   } ->
   # Move extracted files into position into TFTPDir
   tftp::file {'pxelinux/pxelinux.0':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/pxelinux.0",
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/pxelinux.0",
   } ->
 
   tftp::file { 'pxelinux/gpxelinux0':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/gpxe/gpxelinux.0",
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/gpxe/gpxelinux.0",
   } ->
 
   tftp::file { 'pxelinux/isolinux.bin':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/isolinux.bin",
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/isolinux.bin",
   } ->
 
   tftp::file { 'pxelinux/menu.c32':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/menu/menu.c32",
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/menu/menu.c32",
   } ->
 
   tftp::file { 'pxelinux/ldlinux.c32':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/elflink/ldlinux/ldlinux.c32",
-  } -> 
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/elflink/ldlinux/ldlinux.c32",
+  } ->
   tftp::file { 'pxelinux/libutil.c32':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/libutil/libutil.c32",
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/libutil/libutil.c32",
   } ->
   tftp::file { 'pxelinux/chain.c32':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/chain/chain.c32",
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/chain/chain.c32",
   } ->
   tftp::file { 'pxelinux/libcom32.c32':
-    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/lib/libcom32.c32",
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/lib/libcom32.c32",
   }
 
   # Installl WimLib
@@ -488,7 +478,7 @@ menu passwordrow 11
   } ->
 
   concat::fragment{'winpe_pxe_default_menu':
-    target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+    target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
     content => template('quartermaster/pxemenu/winpe.erb'),
     require => Tftp::File['pxelinux/pxelinux.cfg']
   }
@@ -504,26 +494,24 @@ menu passwordrow 11
     order       => '01',
   }
 
-    concat { "/srv/quartermaster/microsoft/winpe/system/setup.cmd":
-    mode    => $exe_mode,
-  }
+  concat { '/srv/quartermaster/microsoft/winpe/system/setup.cmd': }
   concat::fragment{'winpe_system_cmd_a00_header':
-    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    target  => '/srv/quartermaster/microsoft/winpe/system/setup.cmd',
     content => template('quartermaster/winpe/menu/A00_init.erb'),
     order   => 01,
   }
   concat::fragment{'winpe_system_cmd_b00_init':
-    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    target  => '/srv/quartermaster/microsoft/winpe/system/setup.cmd',
     content => template('quartermaster/winpe/menu/B00_init.erb'),
     order   => 10,
   }
   concat::fragment{'winpe_system_cmd_c00_init':
-    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    target  => '/srv/quartermaster/microsoft/winpe/system/setup.cmd',
     content => template('quartermaster/winpe/menu/C00_init.erb'),
     order   => 20,
   }
   concat::fragment{'winpe_menu_footer':
-    target  => "/srv/quartermaster/microsoft/winpe/system/setup.cmd",
+    target  => '/srv/quartermaster/microsoft/winpe/system/setup.cmd',
     content => template('quartermaster/winpe/menu/D00_init.erb'),
     order   => 99,
   }
@@ -532,8 +520,7 @@ menu passwordrow 11
     server_enabled => true,
   }
   nfs::server::export{'/srv/quartermaster':
-    ensure => 'mounted',
+    ensure  => 'mounted',
     clients => '*(ro,sync)',
   }
 }
-
