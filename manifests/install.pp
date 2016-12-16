@@ -24,6 +24,12 @@ class quartermaster::install {
     www_root => '/srv/quartermaster',
     vhost    => $::fqdn,
   }
+  nginx::resource::location{'/status':
+    ensure                 => present,
+    vhost                  => $::fqdn,
+    www_root => '/srv/quartermaster',
+    stub_status            => true,
+  }
 
   # Log Visualization Tools
   # https://code.google.com/p/logstalgia/
@@ -40,6 +46,7 @@ class quartermaster::install {
     '/srv/quartermaster',
     '/srv/quartermaster/bin',
     '/srv/quartermaster/iso',
+    '/srv/quartermaster/images',
     '/srv/quartermaster/logs',
     '/srv/quartermaster/usb',
     '/srv/quartermaster/kickstart',
@@ -73,16 +80,95 @@ class quartermaster::install {
     '/srv/quartermaster/unattend.xml/.README.html',
     '/srv/quartermaster/microsoft/.README.html',
     '/srv/quartermaster/microsoft/iso/.README.html',
-    '/srv/quartermaster/microsoft/mnt/.README.html',
     '/srv/quartermaster/microsoft/winpe/.README.html',
     '/srv/quartermaster/microsoft/winpe/bin/README.html',
     '/srv/quartermaster/microsoft/winpe/system/README.html',
     '/srv/quartermaster/microsoft/winpe/system/menu/.README.html',
   ]:
-    ensure => file,
-    owner  => 'nginx',
-    group  => 'nginx',
-    mode   => '0644',
+    ensure  => file,
+    owner   => 'nginx',
+    group   => 'nginx',
+    mode    => '0644',
+    content => '<html>
+<head>
+<title>Quartermaster</title></head>
+<style>
+div.container {
+    width: 100%;
+    border: 0px solid gray;
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: left;
+    max-width: 240px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+nav iframe {
+    border-width: 0px;
+}
+
+article {
+    margin-left: 170px;
+<!--    border-left: 2px solid gray; -->
+    padding: 1em;
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+Supplies, Tools & Provisions
+</header>
+<nav>
+<ul>
+<li><img src="http://images.vector-images.com/217/quartermaster_corps_emb_n11082.gif" alt="Quartermaster Military Insignia" height="100"></li>
+<li><h4><u>Nginx Status</u></h4>
+<iframe src="http://quartermaster.openstack.tld/status" frameborder="0" width="240" height="80" >Nginx Status</iframe></li>
+</ul>
+</nav>
+<article>
+<dl>
+<dt><h1>Quartermaster</h1><dt>
+<dd> A military or naval term, the meaning of which depends on the country and service.</dd>
+<dd>In land armies, a quartermaster is generally a relatively senior soldier who supervises stores and 
+distributes supplies and provisions.</dd>
+<dd>In many navies, quartermaster is a non-commissioned officer (petty officer) rank.</dd>
+</dl>
+<small>
+<ul style="list-style-type:disc">
+<li>Quartermaster - <a href="https://en.wikipedia.org/wiki/Quartermaster">Wikipedia</a> </li>
+</ul>
+</small>
+</article>
+<footer>
+<small>
+***
+<a href="https://github.com/ppouliot/puppet-quartermaster.git">
+Quartermaster on GitHub
+</a>
+***
+</small>
+</footer></div></body></html>
+',
   }
 
   file { '/srv/quartermaster/bin/concatenate_files.sh':
@@ -334,6 +420,15 @@ nameserver 4.2.2.2
   }
 
   # Squid Package Cache for Caching Installations Sources and Updates
+
+  # Squid monitoring tools
+  package{[
+    'squidview',
+    'squidtaild',
+    'squidclient',
+  ]:
+    ensure => latest,
+  }
   class {'squid':
     http_ports   => {
       '3128' => {
