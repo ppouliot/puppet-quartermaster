@@ -12,7 +12,7 @@ define quartermaster::pxelinux {
     # Continue Download * -C 
     # Maximum Time      * --max-time 1500 
     # Retry             * --retry 3 
-    curl_option => "--proxy http://${ipaddress}:3128 --retry 3",
+    curl_option => "--proxy http://${::ipaddress}:3128 --retry 3",
     #
     # Puppet waits for the Curl execution to finish
     #
@@ -75,6 +75,9 @@ define quartermaster::pxelinux {
         $centos_url = "http://mirror.centos.org/centos/${rel_major}"
         $_dot_bootsplash = '.png'
       }
+      default:{
+        warning{"${name} is not a centos release")
+      }
     }
     notice($centos_url)
     $autofile        = 'kickstart'
@@ -94,23 +97,26 @@ define quartermaster::pxelinux {
     case $release {
       '2','3','4','5','6':{
         $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/core'
-        $fedora_flavor  = ""
+        $fedora_flavor  = ''
         $_dot_bootsplash = '.lss'
       }
       '7','8','9','10','11','12','13','14','15','16','17','18','19','20':{
-        $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
-        $fedora_flavor  = "Fedora/"
+        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
+        $fedora_flavor  = 'Fedora/'
         $_dot_bootsplash = '.jpg'
       }
       '21':{
-        $fedora_url = "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases"
-        $fedora_flavor  = "Server/"
+        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
+        $fedora_flavor  = 'Server/'
         $_dot_bootsplash = '.png'
       }
       '22','23','24','25':{
-        $fedora_url = "http://download.fedoraproject.org/pub/fedora/linux/releases"
-        $fedora_flavor  = "Server/"
+        $fedora_url = 'http://download.fedoraproject.org/pub/fedora/linux/releases'
+        $fedora_flavor  = 'Server/'
         $_dot_bootsplash = '.png'
+      }
+      default:{
+        warning("${name} isn't a fedora release!")
       }
     }
     notice($fedora_url)
@@ -140,6 +146,9 @@ define quartermaster::pxelinux {
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash = '.png'
       }
+      default:{
+        warning("${name} isn't a scientificlinux release!")
+      }
     }
     notice($scientificlinux_url)
     $autofile        = 'kickstart'
@@ -158,14 +167,17 @@ define quartermaster::pxelinux {
     case $release {
       '10.2','10.3','11.0','11.1','11.2','11.3','11.4','12.1','12.2':{
         warning("OpenSUSE ${release} for ${p_arch} a discontinued distribution downloaded from ${url}")
-        $opensuse_url = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution"
+        $opensuse_url = 'http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution'
       }
       '12.3','13.1','13.2':{
         warning("OpenSUSE ${release} will be downloaded from ${url}")
-        $opensuse_url = "http://download.opensuse.org/distribution"
+        $opensuse_url = 'http://download.opensuse.org/distribution'
       }
       'openSUSE-stable','openSUSE-current':{
         warning("OpenSUSE ${release} isn't currently functional")
+      }
+      default:{
+        warning("${name} isn't a openSuSE release!")
       }
     }
       notice($opensuse_url)
@@ -195,6 +207,9 @@ define quartermaster::pxelinux {
       }
       '7':{
         $_U = 'u'
+      }
+      default:{
+        notice("${name} does not need the _U variable!")
       }
     }
     notice($_U)
@@ -440,7 +455,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       ensure  => directory,
       require => File[ '/srv/quartermaster' ],
     }
-    notice(File["/srv/quartermaster/$distro}"])
+    notice(File["/srv/quartermaster/${distro}"])
   }
 
   if ! defined (File["/srv/quartermaster/${distro}/${autofile}"]) {
@@ -476,7 +491,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       ensure  => directory,
       require => File[ '/srv/quartermaster' ],
     }
-    notice(File["/srv/quartermaster/$distro}"])
+    notice(File["/srv/quartermaster/${distro}"])
   }
   ## Distro WebRoot Folder.README.html
 
@@ -504,7 +519,7 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}.default_README_release_body.${name}"]) {
     concat::fragment { "${distro}.default_README_release_body.${name}":
       target  => "/srv/quartermaster/${distro}/.README.html",
-      content => "${release}",
+      content => $release,
       order   => 02,
     }
   }
@@ -515,14 +530,13 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 03,
     }
   }
-  notice(File["/srv/quartermaster/$distro}/.README.html"])
-
+  notice(File["/srv/quartermaster/${distro}/.README.html"])
   if ! defined (Concat["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
-     concat{ "/srv/quartermaster/${distro}/${p_arch}/.README.html":
-      owner    => 'nginx',
-      group    => 'nginx',
-      mode     => '0644',
-      require  => File[ "/srv/quartermaster/${distro}/${p_arch}" ],
+    concat{ "/srv/quartermaster/${distro}/${p_arch}/.README.html":
+      owner   => 'nginx',
+      group   => 'nginx',
+      mode    => '0644',
+      require => File[ "/srv/quartermaster/${distro}/${p_arch}" ],
     }
   }
   if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_header"]) {
@@ -531,7 +545,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       content => template('quartermaster/README.html.header.erb'),
       order   => 01,
     }
-  } 
+  }
   if ! defined (Concat::Fragment["${distro}.default_README_p_arch_body"]) {
     concat::fragment { "${distro}.default_README_p_arch_body":
       target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
@@ -565,7 +579,7 @@ if $linux_installer == !('No Supported Linux Installer') {
 
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
-      target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+      target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
       content => template('quartermaster/pxemenu/default.erb'),
       order   => 02,
     }
