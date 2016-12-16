@@ -493,8 +493,8 @@ if $linux_installer == !('No Supported Linux Installer') {
     }
     notice(File["/srv/quartermaster/${distro}"])
   }
-  ## Distro WebRoot Folder.README.html
 
+  ## .README.html (FILE) /srv/quartermaster/distro/.README.html
   if ! defined (Concat["/srv/quartermaster/${distro}/.README.html"]) {
     concat{ "/srv/quartermaster/${distro}/.README.html":
       owner   => 'nginx',
@@ -503,7 +503,8 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
-  # .README.html Header
+
+  ## .README.html (HEADER) /srv/quartermaster/distro/.README.html
   if ! defined (Concat::Fragment["${distro}.default_README_header"]) {
     concat::fragment { "${distro}.default_README_header":
       target  => "/srv/quartermaster/${distro}/.README.html",
@@ -515,7 +516,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 01,
     }
   }
-  # .README.html Body
+  ## .README.html (BODY) /srv/quartermaster/distro/.README.html
   if ! defined (Concat::Fragment["${distro}.default_README_release_body.${name}"]) {
     concat::fragment { "${distro}.default_README_release_body.${name}":
       target  => "/srv/quartermaster/${distro}/.README.html",
@@ -523,6 +524,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 02,
     }
   }
+  ## .README.html (FOOTER) /srv/quartermaster/distro/.README.html
   if ! defined (Concat::Fragment["${distro}.default_README_footer"]) {
     concat::fragment { "${distro}.default_README_footer":
       target  => "/srv/quartermaster/${distro}/.README.html",
@@ -531,6 +533,9 @@ if $linux_installer == !('No Supported Linux Installer') {
     }
   }
   notice(File["/srv/quartermaster/${distro}/.README.html"])
+
+
+  ## .README.html (FILE) /quartermaster/distro/p_arch/.README.html
   if ! defined (Concat["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
     concat{ "/srv/quartermaster/${distro}/${p_arch}/.README.html":
       owner   => 'nginx',
@@ -539,6 +544,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}/${p_arch}" ],
     }
   }
+  ## .README.html (HEADER) /quartermaster/distro/p_arch/.README.html
   if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_header"]) {
     concat::fragment { "${distro}.default_${p_arch}_README_header":
       target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
@@ -546,6 +552,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 01,
     }
   }
+  ## .README.html (BODY 1) /quartermaster/distro/p_arch/.README.html
   if ! defined (Concat::Fragment["${distro}.default_README_p_arch_body"]) {
     concat::fragment { "${distro}.default_README_p_arch_body":
       target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
@@ -553,6 +560,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 02,
     }
   }
+  ## .README.html (BODY TEMPLATE) /quartermaster/distro/p_arch/.README.html
   if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_body.${name}"]) {
     concat::fragment { "${distro}.default_${p_arch}_README_body.${name}":
       target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
@@ -560,6 +568,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 03,
     }
   }
+  ## .README.html (FOOTER) /quartermaster/distro/p_arch/.README.html
   if ! defined (Concat::Fragment["${distro}.default_${p_arch}_README_footer"]) {
     concat::fragment { "${distro}.default_${p_arch}_README_footer":
       target  => "/srv/quartermaster/${distro}/${p_arch}/.README.html",
@@ -576,7 +585,6 @@ if $linux_installer == !('No Supported Linux Installer') {
     content => template("quartermaster/autoinst/${autofile}.erb"),
     require => File[ "/srv/quartermaster/${distro}/${autofile}" ],
   }
-
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
       target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
@@ -584,7 +592,6 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 02,
     }
   }
-
   if ! defined (Concat["/srv/quartermaster/tftpboot/menu/${distro}.menu"]) {
     concat { "/srv/quartermaster/tftpboot/menu/${distro}.menu":
     }
@@ -596,18 +603,13 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 01,
     }
   }
-#  if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}${name}.menu_item"]) {
     concat::fragment {"${distro}.${name}.menu_item":
       target  => "/srv/quartermaster/tftpboot/menu/${distro}.menu",
       content => template("quartermaster/pxemenu/${linux_installer}.erb"),
     }
   }
-#}
-
-#  if $linux_installer == !('No Supported Linux Installer') {
-    tftp::file { "${distro}/menu/${name}.menu":
-      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
-    }
-#  }
+  tftp::file { "${distro}/menu/${name}.menu":
+    content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+  }
 }
