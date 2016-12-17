@@ -10,4 +10,6 @@ mod 'puppetlabs/concat'
 mod 'puppetlabs/apt'
 mod 'puppetlabs/tftp'
 mod 'puppetlabs/stdlib'
-
+mod "puppet/quartermaster", 
+  :git    => 'https://github.com/ppouliot/puppet-quartermaster',
+  :branch => 'master'
