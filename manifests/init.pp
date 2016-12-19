@@ -74,7 +74,7 @@ class quartermaster (
 ) inherits quartermaster::params {
 
   validate_string($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
-  validate_bool( $dban_enable )
+  #validate_bool( $dban_enable )
   validate_string( $dban_version )
 
   class{'::quartermaster::install': } ->
