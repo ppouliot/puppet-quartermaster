@@ -73,7 +73,7 @@ class quartermaster (
   $hp_spp_iso_name                  = 'SPP2015040.2015_0407.5.iso',
 ) inherits quartermaster::params {
 
-  validate_re($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
+  validate_string($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
   validate_bool( $dban_enable )
   validate_string( $dban_version )
 
