@@ -1,6 +1,6 @@
 define quartermaster::proxydhcp_subnet(
-  $network_ipaddr
-  $network_subnet_mask
+  $network_ipaddr,
+  $network_subnet_mask,
 ) {
   
   dnsmasq::dhcp{$name:
