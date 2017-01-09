@@ -3,7 +3,7 @@ class quartermaster::params {
 
   # Include Params from other modules so we can use them here
   include tftp::params
-  include apache::params
+#  include apache::params
   case $::osfamily {
     'Debian':{ include apt }
     default:{ warning("${::osfamily} doesn't require the Apt Class") }
@@ -23,8 +23,8 @@ class quartermaster::params {
   $enable_poap       = true
 
   # parameters for the configuration of apache
-  $www_username      = $apache::params::user
-  $www_group         = $apache::params::group
+#  $www_username      = $apache::params::user
+#  $www_group         = $apache::params::group
   $wwwroot           = $q_home
   $nfsroot           = $q_home
   $bin               = "${q_home}/bin"
