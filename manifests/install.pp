@@ -51,7 +51,6 @@ class quartermaster::install {
     '/srv/quartermaster/usb',
     '/srv/quartermaster/kickstart',
     '/srv/quartermaster/preseed',
-    '/srv/quartermaster/tftpboot',
     '/srv/quartermaster/unattend.xml',
     '/srv/quartermaster/microsoft',
     '/srv/quartermaster/microsoft/iso',
@@ -66,6 +65,14 @@ class quartermaster::install {
     owner   => 'nginx',
     group   => 'nginx',
     recurse => true,
+  } ->
+  file{ '/srv/quartermaster/tftpboot':
+    ensure  => directory,
+    mode    => '0777',
+    owner   => 'tftp',
+    group   => 'tftp',
+    recurse => true,
+    require => Class['tftp'],
   } ->
   ## .README.html (FILE) /srv/quartermaster/distro/.README.html
   file{[
@@ -277,20 +284,40 @@ nameserver 4.2.2.2
   # dhcp options
 
   class { 'dnsmasq':
-    interface         => 'lo',
-    expand_hosts      => true,
-    dhcp_no_override  => true,
-    domain_needed     => true,
-    bogus_priv        => true,
-    no_negcache       => true,
-    no_hosts          => true,
-    resolv_file       => '/etc/resolv.conf.dnsmasq',
-    reload_resolvconf => false,
-    cache_size        => '1000',
+#  Begin Disable DNS Cache
+    port              => 0,
+    expand_hosts      => false,
+    bogus_priv        => false,
+    no_negcache       => false,
+    domain_needed     => false,
     strict_order      => false,
-    restart           => true,
+    no_resolv         => true,
+    no_hosts          => true,
+    reload_resolvconf => false,
+    cache_size        => '0',
+#  End Disable DNS Cache
+#  Begin Enable DNS Cache
+#    interface         => 'lo',
+#    expand_hosts      => true,
+#    dhcp_no_override  => true,
+#    domain_needed     => true,
+#    bogus_priv        => true,
+#    no_negcache       => true,
+#    no_hosts          => true,
+#    reload_resolvconf => false,
+#    cache_size        => '1000',
+#    strict_order      => false,
+#    restart           => true,
+#  End Enable DNS Cache
+#    resolv_file       => '/etc/resolv.conf.dnsmasq',
+    config_hash       => {
+#      'log-facility' => '/var/log/quartermaster/dnsmasq.log',
+      'log-queries'  => true,
+      'log-dhcp'     => true,
+      'no-poll'      => true,
+    },
   }
-  dnsmasq::dhcp{'ProdyDHCP-PXE':
+  dnsmasq::dhcp{'ProxyDHCP-PXE':
     dhcp_start => "${::ipaddress},proxy",
     dhcp_end   => $::netmask,
     lease_time => '',
@@ -301,9 +328,13 @@ nameserver 4.2.2.2
     content => '6,2b',
   }
   dnsmasq::pxe_service{'Quartermaster PXE Provisioning':
-    content => 'pxelinux/pxelinux.0',
+    content => 'pxelinux/pxelinux',
   }
-
+#  dnsmasq::dhcpboot{'proxydhcp':
+#    file => 'pxelinux/pxelinux.0',
+#    tag  => 'p1p0',
+#    bootserver=> $::ipaddress,
+#  }
   # Configure dnsmasq log rotation
   file {'/etc/logrotate.d/dnsmasq':
     ensure  => file,
@@ -509,7 +540,10 @@ ftp_proxy=http://${::ipaddress}:3128/
 ",
   }
 
-  concat {'/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default': }
+  concat {'/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default':
+    owner => 'tftp',
+    group => 'tftp',
+  }
   concat::fragment{'default_header':
     target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
     content => template('quartermaster/pxemenu/header.erb'),

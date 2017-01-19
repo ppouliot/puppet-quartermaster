@@ -1,3 +1,4 @@
+#== Class: quartermaster::proxydhcp_subnet
 define quartermaster::proxydhcp_subnet(
   $network_ipaddr,
   $network_subnet_mask,
