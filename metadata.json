@@ -22,7 +22,7 @@
       "version_requirement": ">= 2.6.1"
     },{
       "name": "puppet/staging",
-      "version_requirement": ">= 2.0.1"
+      "version_requirement": ">= 2.1.0"
     },{
       "name": "puppet/nginx",
       "version_requirement": ">= 0.5.0"

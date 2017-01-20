@@ -1,5 +1,11 @@
 #== Class: quartermaster::install
-class quartermaster::install {
+class quartermaster::install (
+  $default_pxeboot_option   = $quartermaster::default_pxeboot_option,
+  $pxe_menu_timeout         = $quartermaster::pxe_menu_timeout,
+  $pxemenu_total_timeout    = $quartermaster::pxemenu_total_timeout,
+  $pxe_allow_user_arguments = $quartermaster::pxe_allow_user_arguments,
+  $pxemenu_default_graphics = $quartermaster::pxemenu_default_graphics,
+){
 
   include ::stdlib
 
@@ -556,7 +562,7 @@ ftp_proxy=http://${::ipaddress}:3128/
     order   => 01,
   }
 
-  tftp::file {'pxelinux/pxelinux.cfg/graphics.cfg':
+  tftp::file {'pxelinux/graphics.cfg':
     content =>"menu width 80
 menu margin 10
 menu passwordmargin 3

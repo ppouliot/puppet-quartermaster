@@ -381,6 +381,8 @@ define quartermaster::pxelinux {
         staging::file{"${rel_number}-${name}":
           source  => "${url}/${pxekernel}",
           target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${rel_number}",
+          owner   => 'tftp',
+          group   => 'tftp',
           require => Tftp::File["${distro}/${p_arch}"],
         }
       }
@@ -389,6 +391,8 @@ define quartermaster::pxelinux {
         staging::file{"${target_initrd}-${name}":
           source  => "${url}/initrd${initrd}",
           target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
+          owner   => 'tftp',
+          group   => 'tftp',
           require =>  Tftp::File["${distro}/${p_arch}"],
         }
       }
@@ -411,6 +415,11 @@ define quartermaster::pxelinux {
 #  }
 
 # Distro Specific TFTP Folders
+
+  Tftp::File{
+    owner => 'tftp',
+    group => 'tftp',
+  }
 
   if ! defined (Tftp::File[$distro]){
     tftp::file { $distro:
