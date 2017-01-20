@@ -1,19 +1,19 @@
-label <%= @name %>
-        menu label (<%= @name %>): ^Manual installation
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.repo=<%= @inst_repo %>
+LABEL <%= @name %>
+        MENU LABEL (<%= @name %>): ^Manual installation
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.repo=<%= @inst_repo %>
 
-label <%= @name %>-<%= @autofile %>
-        menu label (<%= @name %>): ^<%= @autofile %> Installation
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> inst.rep=<%= @inst_repo %>
-label <%= @name %>-VM-<%= @autofile %>
-        menu label (<%= @name %>): Virtual Machine <%= @autofile %> installation
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> inst.repo=<%= @inst_repo %>
+LABEL <%= @name %>-<%= @autofile %>
+        MENU LABEL (<%= @name %>): ^<%= @autofile %> Installation
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> inst.rep=<%= @inst_repo %>
+LABEL <%= @name %>-VM-<%= @autofile %>
+        MENU LABEL (<%= @name %>): Virtual Machine <%= @autofile %> installation
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> inst.repo=<%= @inst_repo %>
 
-label <%= @name %>-rescue
-        menu label (<%= @name %>): Rescue
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.repo=<%= @inst_repo %>
+LABEL <%= @name %>-rescue
+        MENU LABEL (<%= @name %>): Rescue
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %><%= @initrd %> inst.repo=<%= @inst_repo %>
 

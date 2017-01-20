@@ -1,20 +1,20 @@
-label <%= @name %>
-        menu label <%= @release %> <%= @p_arch %>: ^Manual 
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %>
+LABEL <%= @name %>
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^Manual 
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %>
 
-label <%= @name %>-<%= @autofile %>
-        menu label <%= @release %> <%= @p_arch %>: ^BareMetal/KVM <%= @autofile %> 
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
+LABEL <%= @name %>-<%= @autofile %>
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^BareMetal/KVM <%= @autofile %> 
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
 
-label <%= @name %>-VM-<%= @autofile %>
-        menu label <%= @release %> <%= @p_arch %>: ^Hyper-V VM (LIS Enabled) <%= @autofile %> 
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-	append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> ksdevice=eth1 ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
+LABEL <%= @name %>-VM-<%= @autofile %>
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^Hyper-V VM (LIS Enabled) <%= @autofile %> 
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> ksdevice=eth1 ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
 
-label <%= @name %>-rescue
-        menu label <%= @release %> <%= @p_arch %>: ^Rescue
-        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        append initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %>
+LABEL <%= @name %>-rescue
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^Rescue
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %>
 

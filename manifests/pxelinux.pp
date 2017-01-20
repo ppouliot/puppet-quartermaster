@@ -2,7 +2,14 @@
 #
 # This Class defines the creation of the linux pxe infrastructure
 #
-define quartermaster::pxelinux {
+define quartermaster::pxelinux (
+  $default_pxeboot_option   = $quartermaster::default_pxeboot_option,
+  $pxe_menu_timeout         = $quartermaster::pxe_menu_timeout,
+  $pxemenu_total_timeout    = $quartermaster::pxemenu_total_timeout,
+  $pxe_allow_user_arguments = $quartermaster::pxe_allow_user_arguments,
+  $pxemenu_default_graphics = $quartermaster::pxemenu_default_graphics,
+){
+
 # this regex works w/ no .
 #if $name =~ /([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)/ {
 
