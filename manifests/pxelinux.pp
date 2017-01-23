@@ -622,7 +622,8 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}${name}.menu_item"]) {
     concat::fragment {"${distro}.${name}.menu_item":
       target  => "/srv/quartermaster/tftpboot/menu/${distro}.menu",
-      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+#      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+      content => template("quartermaster/pxemenu/default2.erb"),
     }
   }
   tftp::file { "${distro}/menu/${name}.menu":
