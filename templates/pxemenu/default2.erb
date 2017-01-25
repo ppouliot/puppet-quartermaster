@@ -1,4 +1,4 @@
-LABEL <%= @distro %>.menu
-        MENU LABEL <%= @distro %> Installation Menu
+LABEL <%= @distro %>-<%= @release %>-<%= @p_arch %>.menu
+        MENU LABEL <%= @distro %>-<%= @release %>-<%= @p_arch %> Installation Menu
         KERNEL menu.c32
         APPEND ../<%= @distro %>/graphics.cfg ../<%= @distro %>/menu/<%=@distro %>-<%= @release %>-<%= @p_arch %>.menu
