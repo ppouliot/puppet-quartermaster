@@ -20,4 +20,4 @@ RUN rm -rf /etc/hiera.yaml
 RUN ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml
 RUN mkdir /etc/puppet/hiera
 RUN cp -R /etc/puppet/modules/quartermaster/files/hiera/quartermaster.yaml /etc/puppet/hiera/quartermaster.yaml
-RUN puppet apply --debug --trace --verbose /etc/puppet/modules/quartermaster/tests/init.pp
+RUN puppet apply --debug --trace --verbose /etc/puppet/modules/quartermaster/examples/init.pp
