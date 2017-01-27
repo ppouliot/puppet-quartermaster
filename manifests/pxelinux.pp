@@ -3,11 +3,12 @@
 # This Class defines the creation of the linux pxe infrastructure
 #
 define quartermaster::pxelinux (
-  $default_pxeboot_option   = $quartermaster::default_pxeboot_option,
-  $pxe_menu_timeout         = $quartermaster::pxe_menu_timeout,
-  $pxemenu_total_timeout    = $quartermaster::pxemenu_total_timeout,
-  $pxe_allow_user_arguments = $quartermaster::pxe_allow_user_arguments,
-  $pxemenu_default_graphics = $quartermaster::pxemenu_default_graphics,
+  # The following pxe menu variables are required for the templates used in this class
+  $default_pxeboot_option        = $quartermaster::default_pxeboot_option,
+  $pxe_menu_timeout              = $quartermaster::pxe_menu_timeout,
+  $pxe_menu_total_timeout        = $quartermaster::pxe_menu_total_timeout,
+  $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
+  $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
 ){
 
 # this regex works w/ no .

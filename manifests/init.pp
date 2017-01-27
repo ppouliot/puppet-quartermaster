@@ -73,9 +73,9 @@ class quartermaster (
   $hp_spp_iso_name                  = 'SPP2015040.2015_0407.5.iso',
   $default_pxeboot_option           = 'menu.c32',
   $pxe_menu_timeout                 = '10',
-  $pxemenu_total_timeout            = '120',
-  $pxe_allow_user_arguments         = '0',
-  $pxemenu_default_graphics         = 'graphics.cfg',
+  $pxe_menu_total_timeout           = '120',
+  $pxe_menu_allow_user_arguments    = '0',
+  $pxe_menu_default_graphics        = '../pxelinux/pxelinux.cfg/graphics.cfg',
 
 ) inherits quartermaster::params {
 
@@ -88,8 +88,6 @@ class quartermaster (
 
   contain quartermaster::install
   contain quartermaster::configure
-
-
 
   if $enable_poap == true {
     class{'::quartermaster::poap':}     

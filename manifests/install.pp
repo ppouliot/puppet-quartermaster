@@ -1,10 +1,10 @@
 #== Class: quartermaster::install
 class quartermaster::install (
-  $default_pxeboot_option   = $quartermaster::default_pxeboot_option,
-  $pxe_menu_timeout         = $quartermaster::pxe_menu_timeout,
-  $pxemenu_total_timeout    = $quartermaster::pxemenu_total_timeout,
-  $pxe_allow_user_arguments = $quartermaster::pxe_allow_user_arguments,
-  $pxemenu_default_graphics = $quartermaster::pxemenu_default_graphics,
+  $default_pxeboot_option        = $quartermaster::default_pxeboot_option,
+  $pxe_menu_timeout              = $quartermaster::pxe_menu_timeout,
+  $pxe_menu_total_timeout        = $quartermaster::pxe_menu_total_timeout,
+  $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
+  $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
 ){
 
   include ::stdlib
