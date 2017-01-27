@@ -76,6 +76,7 @@ class quartermaster (
   $pxe_menu_total_timeout           = '120',
   $pxe_menu_allow_user_arguments    = '0',
   $pxe_menu_default_graphics        = '../pxelinux/pxelinux.cfg/graphics.cfg',
+  $puppetmaster                     = undef,
 
 ) inherits quartermaster::params {
 

@@ -9,6 +9,7 @@ define quartermaster::pxelinux (
   $pxe_menu_total_timeout        = $quartermaster::pxe_menu_total_timeout,
   $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
   $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
+  $puppetmaster                  = $quartermaster::puppetmaster,
 ){
 
 # this regex works w/ no .

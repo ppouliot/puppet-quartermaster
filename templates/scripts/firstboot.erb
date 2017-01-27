@@ -1,6 +1,6 @@
 #!/bin/sh
 
-QUARTERMASTER=<%= @ipaddress %>
+QUARTERMASTER=<%= @fqdn %>
 
 sleep 20 
 
@@ -47,7 +47,7 @@ gem install r10k hiera-eyaml
 
 # Set hostname of puppetmaster
 # This is currently disabled as the puppetmaster is no longer on the quartermaster server
-# echo "<%= @ipaddress %> <%= @fqdn %> <%= @hostname %> puppet" >> /etc/hosts
+# echo "<%= @fqdn %> <%= @fqdn %> <%= @hostname %> puppet" >> /etc/hosts
 
 #/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;" > /etc/hostname
 #
@@ -62,7 +62,7 @@ if [ -f /etc/puppet/puppet.conf ]
 then
 cat >> /etc/puppet/puppet.conf << EOF
 [agent]
-server=<%= @puppetmaster_fqdn %>
+server=<%= @puppetmaster %>
 EOF
 
 fi
@@ -71,7 +71,7 @@ if [ -f /etc/puppetlabs/puppet/puppet.conf ]
 then
 cat >> /etc/puppetlabs/puppet/puppet.conf << EOF
 [agent]
-server=<%= @puppetmaster_fqdn %>
+server=<%= @puppetmaster %>
 EOF
 
 fi
@@ -90,7 +90,7 @@ fi
 update-rc.d firstboot remove
 rm /etc/init.d/firstboot /root/firstboot
 
-wget http://<%= @ipaddress %>/bin/secondboot -O /root/secondboot
+wget http://<%= @fqdn %>/bin/secondboot -O /root/secondboot
 chmod +x /root/secondboot
 
 

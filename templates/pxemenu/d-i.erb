@@ -6,12 +6,12 @@ LABEL <%= @name %>
 LABEL <%= @name %>-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^BareMetal/KVM <%= @autofile %> 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netconfig/get_hostname=auto preseed/url=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netconfig/get_hostname=auto preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-VM-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Hyper-V VM (LIS Enabled) <%= @autofile %>  
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netcfg/choose_interface=eth1 netconfig/get_hostname=auto preseed/url=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netcfg/choose_interface=eth1 netconfig/get_hostname=auto preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-dkirkland-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Dustin Kirkland Uinstall <%= @autofile %>  

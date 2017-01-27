@@ -4,7 +4,7 @@
 release=`lsb_release -c | awk '{print $2}'`
 
 # Install Fisrtboot script
-wget http://<%= @ipaddress %>/bin/firstboot -O /root/firstboot
+wget http://<%= @fqdn %>/bin/firstboot -O /root/firstboot
 chmod +x /root/firstboot
 cat > /etc/init.d/firstboot << EOF
 ### BEGIN INIT INFO

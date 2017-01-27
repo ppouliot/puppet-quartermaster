@@ -4,9 +4,9 @@
 install
 text
 url --url=<%= @inst_repo %> 
-#--proxy=http://<%= @ipaddress %>:8000
+#--proxy=http://<%= @fqdn %>:8000
 # ssl proxy for install
-#url --url=<%= @inst_repo %> --proxy=https://<%= @ipaddress %>:8000 --noverifyssl
+#url --url=<%= @inst_repo %> --proxy=https://<%= @fqdn %>:8000 --noverifyssl
 lang en_US.UTF-8
 keyboard us
 network --onboot yes --bootproto dhcp --noipv6
@@ -142,7 +142,7 @@ if [ -f /etc/puppet/puppet.conf ]
    then
    cat << EOF >> /etc/puppet/puppet.conf
 [agent]
-server=<%= @fqdn %>
+server=<%= @puppetmaster %>
 EOF
 
 fi

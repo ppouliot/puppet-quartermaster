@@ -19,7 +19,7 @@ d-i netcfg/choose_interface select auto
 #d-i mirror/country string manual
 d-i mirror/http/hostname string mirrors.med.harvard.edu
 d-i mirror/http/directory string /<%= @distro %>
-#d-i mirror/http/proxy string http://<%= @ipaddress %>:8000/
+#d-i mirror/http/proxy string http://<%= @fqdn %>:8000/
 # Partitioning
 d-i partman-auto/choose_recipe select atomic
 d-i partman-auto/purge_lvm_from_device boolean true
@@ -90,5 +90,5 @@ d-i debian-installer/exit/halt boolean false
 d-i debian-installer/exit/poweroff boolean false
 byobu byobu/launch-by-default boolean true
 # Example 
-#d-i preseed/late_command string chroot /target sh -c "/usr/bin/curl -o /tmp/postinstall http://<%= @ipaddress %>/bin/postinstall && /bin/sh -x /tmp/postinstall"
-d-i preseed/late_command string chroot /target sh -c "wget http://<%= @ipaddress %>/bin/postinstall -O /tmp/postinstall && /bin/sh -x /tmp/postinstall"
+#d-i preseed/late_command string chroot /target sh -c "/usr/bin/curl -o /tmp/postinstall http://<%= @fqdn %>/bin/postinstall && /bin/sh -x /tmp/postinstall"
+d-i preseed/late_command string chroot /target sh -c "wget http://<%= @fqdn %>/bin/postinstall -O /tmp/postinstall && /bin/sh -x /tmp/postinstall"

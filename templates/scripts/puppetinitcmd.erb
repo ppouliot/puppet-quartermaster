@@ -1,9 +1,9 @@
 @echo on
 
 REM Short ping check.  Because 5 seconds is a small price to pay for an easy debugging aide.
-@ping puppet.<%=@domain %>
+@ping <%=@puppetmaster %>
 
-call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --debug --trace --verbose --test --waitforcert 60 --server puppet.<%= @domain %>
+call "c:\Program Files (x86)\Puppet Labs\puppet\bin\puppet.bat" agent --debug --trace --verbose --test --waitforcert 60 --server <%= @puppetmaster %>
 net start puppet
 
 REM Reboot to apply paths and bits that need such.  This should let the puppet service run clean after the reboot.
