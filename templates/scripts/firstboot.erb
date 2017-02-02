@@ -14,7 +14,8 @@ HOSTNAME=`hostname -s`
 if [ "$HOSTNAME" = "ubuntu" -o "$HOSTNAME" = "debian" ];
 then 
   #set hostname to mac address of eth0
-  NEWHOSTNAME=`/sbin/ifconfig | grep "eth" | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
+  ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
+  NEWHOSTNAME=`/sbin/ifconfig | grep $ACTIVE_INTERFACE | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
   echo $NEWHOSTNAME > /etc/hostname
   echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
 else 

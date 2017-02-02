@@ -10,6 +10,7 @@ define quartermaster::pxelinux (
   $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
   $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
   $puppetmaster                  = $quartermaster::puppetmaster,
+  $vnc_passwd                    = $quartermaster::vnc_passwd,
 ){
 
 # this regex works w/ no .
@@ -75,14 +76,22 @@ define quartermaster::pxelinux (
       '5.0','5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
         $centos_url = "http://vault.centos.org/${release}"
         $_dot_bootsplash = '.lss'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+
       }
-      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
+      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7':{
         $centos_url = "http://vault.centos.org/${release}"
         $_dot_bootsplash = '.jpg'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
       }
-      '7.0','7.1','7.2':{
+      '6.8','7.0','7.1','7.2':{
         $centos_url = "http://mirror.centos.org/centos/${rel_major}"
         $_dot_bootsplash = '.png'
+        $vnc_option        = 'inst.vnc'
+        $vnc_option_passwd = 'inst.vncpasswd'
+
       }
       default:{
         warning("${name} is not a centos release")
@@ -108,21 +117,29 @@ define quartermaster::pxelinux (
         $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/core'
         $fedora_flavor  = ''
         $_dot_bootsplash = '.lss'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
       }
       '7','8','9','10','11','12','13','14','15','16','17','18','19','20':{
         $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
         $fedora_flavor  = 'Fedora/'
         $_dot_bootsplash = '.jpg'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
       }
       '21':{
         $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
         $fedora_flavor  = 'Server/'
         $_dot_bootsplash = '.png'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
       }
       '22','23','24','25':{
         $fedora_url = 'http://download.fedoraproject.org/pub/fedora/linux/releases'
         $fedora_flavor  = 'Server/'
         $_dot_bootsplash = '.png'
+        $vnc_option        = 'inst.vnc'
+        $vnc_option_passwd = 'inst.vncpasswd'
       }
       default:{
         warning("${name} isn't a fedora release!")
@@ -144,16 +161,22 @@ define quartermaster::pxelinux (
   if ( $distro == 'scientificlinux'){
     case $release {
       '50','51','52','53','54','55','56','57','58','59','510','511':{
-        $scientificlinux_url        = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}"
-        $_dot_bootsplash = '.lss'
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}"
+        $_dot_bootsplash     = '.lss'
+        $vnc_option          = 'vnc'
+        $vnc_option_passwd   = 'vncpasswd'
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
-        $_dot_bootsplash = '.jpg'
+        $_dot_bootsplash     = '.jpg'
+        $vnc_option          = 'vnc'
+        $vnc_option_passwd   = 'vncpasswd'
       }
       '7.0','7.1','7.2':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
-        $_dot_bootsplash = '.png'
+        $_dot_bootsplash     = '.png'
+        $vnc_option          = 'inst.vnc'
+        $vnc_option_passwd   = 'inst.vncpasswd'
       }
       default:{
         warning("${name} isn't a scientificlinux release!")
@@ -212,10 +235,15 @@ define quartermaster::pxelinux (
     # Character Adjustment for Releases between 6 and 7
     case $rel_major {
       '6':{
-        $_U = 'U'
+        $_U                = 'U'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+
       }
       '7':{
-        $_U = 'u'
+        $_U                = 'u'
+        $vnc_option        = 'inst.vnc'
+        $vnc_option_passwd = 'inst.vncpasswd'
       }
       default:{
         notice("${name} does not need the _U variable!")
@@ -228,6 +256,7 @@ define quartermaster::pxelinux (
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
       }
+
       default:{
         warning("Oracle Linux ${release} is using the default name for the final boot.iso")
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"

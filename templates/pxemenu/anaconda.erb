@@ -3,6 +3,11 @@ LABEL <%= @name %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %>
 
+LABEL <%= @name %>-manual-vnc
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^VNC Activeated Manual Installation
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %> <%= @vnc_option %> <%= @vnc_option_passwd %>=<%= @vnc_passwd %>
+
 LABEL <%= @name %>-<%= @autofile %>
         MENU LABEL <%= @release %> <%= @p_arch %>: ^BareMetal/KVM <%= @autofile %> 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
