@@ -8,7 +8,7 @@ d-i console-setup/ask_detect boolean false
 d-i keyboard-configuration/layout select English (US)
 d-i keyboard-configuration/variant select English (US)
 #network configuration
-d-i netcfg/choose_interface select auto
+#d-i netcfg/choose_interface select auto
 #d-i netcfg/get_nameservers string 
 #d-i netcfg/get_ipaddress string 
 #d-i netcfg/get_netmask string 255.255.255.0
@@ -31,6 +31,7 @@ d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-lvm/device_remove_md boolean true
 d-i partman-lvm/device_remove_lvm_span boolean true
 d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
 # Partitioning Confirmation
 d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
@@ -91,4 +92,4 @@ d-i debian-installer/exit/poweroff boolean false
 byobu byobu/launch-by-default boolean true
 # Example 
 #d-i preseed/late_command string chroot /target sh -c "/usr/bin/curl -o /tmp/postinstall http://<%= @fqdn %>/bin/postinstall && /bin/sh -x /tmp/postinstall"
-d-i preseed/late_command string chroot /target sh -c "wget http://<%= @fqdn %>/bin/postinstall -O /tmp/postinstall && /bin/sh -x /tmp/postinstall"
+d-i preseed/late_command string chroot /target sh -c "/usr/bin/wget http://<%= @fqdn %>/bin/postinstall -O /tmp/postinstall && /bin/sh -x /tmp/postinstall"

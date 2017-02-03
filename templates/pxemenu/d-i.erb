@@ -1,31 +1,43 @@
 LABEL <%= @name %>
-        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Manual 
+        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): Manual ^Installation 
+        IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND priority=low video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-network-console
-        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Network Console based Installation
+        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): Manual Installation over ^Network Console
+        IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical auto-install/enabled=true video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto anna/choose_modules=network-console network-console/password=<%= @vnc_passwd %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND priority=critical auto-install/enabled=true video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 anna/choose_modules=network-console network-console/password=<%= @vnc_passwd %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-<%= @autofile %>
-        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^BareMetal/KVM <%= @autofile %> 
+        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Minimal installation <%= @autofile %> 
+        IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-VM-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Hyper-V VM (LIS Enabled) <%= @autofile %>  
+        IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netcfg/choose_interface=eth1 netconfig/get_hostname=auto preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netcfg/choose_interface=auto netconfig/get_hostname=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-dkirkland-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Dustin Kirkland Uinstall <%= @autofile %>  
+        IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto preseed/url=http://91.189.95.84/~bikeshed/bikeshed/trunk/download/head:/uquick-20110404223115-0cr3zfxu3wpjbsmo-1/uquick initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 preseed/url=http://91.189.95.84/~bikeshed/bikeshed/trunk/download/head:/uquick-20110404223115-0cr3zfxu3wpjbsmo-1/uquick initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 
 LABEL <%= @name %>-rescue
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Rescue Boot
+        IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND priority=low video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en rescue/enable=true initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+
+LABEL <%= @name %>-rescue-network-console
+        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Network Console Rescue
+        IPAPPEND 2
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND priority=critical auto-install/enabled=true video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 anna/choose_modules=network-console network-console/password=<%= @vnc_passwd %> rescue/enable=true initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 

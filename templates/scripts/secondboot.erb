@@ -12,8 +12,21 @@ QUARTERMASTER=<%= @fqdn %>
 sleep 20 
 /usr/bin/puppet agent --debug --trace --verbose --test --waitforcert=60 --server <%= @puppetmaster %>
 
-# Remove our secondboot service so that it won't run again
-update-rc.d secondboot remove
-rm /etc/init.d/secondboot /root/secondboot
+use_upstart=`ps -p 1 -o command | awk '{print $1}'|grep -c init`
+use_systemd=`ps -p 1 -o command | awk '{print $1}'|grep -c systemd`
 
-#/sbin/reboot
+if [ $use_upstart -eq 0 ]
+then
+  echo "### Remove our secondboot upstart service so that it will not run again ###"
+  update-rc.d secondboot remove
+  rm /etc/init.d/secondboot /root/secondboot 
+else 
+  echo "no UPSTART scripts to remove
+fi
+if [ $use_systemd -eq 0 ]
+then
+  echo "### Remove our secondboot systemd service so that it will not run again ###"
+  rm /root/secondboot /etc/systemd/system/secondboot.service
+else 
+  echo "no UPSTART scripts to remove
+fi

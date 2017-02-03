@@ -1,8 +1,9 @@
 #!/bin/sh
 
 QUARTERMASTER=<%= @fqdn %>
-
 sleep 20 
+
+
 
 apt-get update -y && apt-get dist-upgrade -y && apt-get --purge autoremove -y
 
@@ -42,7 +43,7 @@ echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
 apt-get update -y && apt-get install -y openssh-server git puppet ruby ruby-dev
 
 
-echo "### INSTALLING  LIBRARIAN-PUPPET-MAESTRODEV DUE TO BUGFIXES IN LIBRARIAN-PUPPET ###"
+echo "### INSTALLING R10K and Hierra-eyaml ###"
 gem install r10k hiera-eyaml
 
 
@@ -87,15 +88,22 @@ else
 	/etc/init.d/hostname start
 fi
 
-# Remove our firstboot service so that it won"t run again
-update-rc.d firstboot remove
-rm /etc/init.d/firstboot /root/firstboot
-
+echo "### Install Secondboot script to /root ###"
 wget http://<%= @fqdn %>/bin/secondboot -O /root/secondboot
 chmod +x /root/secondboot
 
+use_upstart=`ps -p 1 -o command | awk '{print $1}'|grep -c init`
+use_systemd=`ps -p 1 -o command | awk '{print $1}'|grep -c systemd`
 
-cat > /etc/init.d/secondboot << EOF
+if [ $use_upstart -eq 0 ]
+then
+  echo "### Remove our firstboot service so that it will not run again"
+  update-rc.d firstboot remove
+  echo "### Remove all firstboot script files ###"
+  rm /etc/init.d/firstboot /root/firstboot
+
+  echo "#### ADDING SECONDBOOT TO UPSTART CONFIGURATION #####"
+  cat > /etc/init.d/secondboot << EOF
 ### BEGIN INIT INFO
 # Provides:        secondboot
 # Required-Start:  $networking
@@ -108,12 +116,35 @@ cat > /etc/init.d/secondboot << EOF
 
 cd /root ; /usr/bin/nohup sh -x /root/secondboot &
 
-
 EOF
 
-chmod +x /etc/init.d/secondboot
-update-rc.d secondboot defaults
-echo "Finished Firstboot Script"
+  chmod +x /etc/init.d/secondboot
+  update-rc.d secondboot defaults
+else
+  echo "### No UPSTART Configuration needed ###"
+fi
 
+if [ $use_systemd -eq 0 ]
+then
+  echo "### Remove all firstboot script files ###"
+  rm /etc/systemd/system/firstboot.service /root/firstboot
+  echo "#### ADDING SECONDBOOT TO SYSTEMD CONFIGURATION #####"
+  cat > /etc/systemd/system/secondboot.service << EOF
+[Unit]
+After=network.target
+
+[Service]
+ExecStart=/root/secondboot
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+  systemctl enable secondboot.service
+else
+  echo "### No SYSTEMD Configuration needed ###"
+fi
+
+echo "Finished Firstboot Script"
 # Reboot into the new kernel
 /sbin/reboot
