@@ -10,6 +10,7 @@ QUARTERMASTER=<%= @fqdn %>
 # time. The time for DHCP to catch up.
 #sleep 120
 sleep 20 
+/usr/bin/puppet agent --enable
 /usr/bin/puppet agent --debug --trace --verbose --test --waitforcert=60 --server <%= @puppetmaster %>
 
 use_upstart=`ps -p 1 -o command | awk '{print $1}'|grep -c init`
