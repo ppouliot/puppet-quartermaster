@@ -19,7 +19,7 @@ d-i keyboard-configuration/variant select English (US)
 #d-i mirror/country string manual
 d-i mirror/http/hostname string mirrors.med.harvard.edu
 d-i mirror/http/directory string /<%= @distro %>
-#d-i mirror/http/proxy string http://<%= @fqdn %>:8000/
+d-i mirror/http/proxy string http://<%= @fqdn %>:3128/
 # Partitioning
 d-i partman-auto/choose_recipe select atomic
 d-i partman-auto/purge_lvm_from_device boolean true

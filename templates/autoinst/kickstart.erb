@@ -81,9 +81,10 @@ NETWORKING=yes
 HOSTNAME=$NEWHOSTNAME
 EOF
 
-if [-f /etc/hostname]; then
-rm -f /etc/hostname
-cat <<EOF > /etc/hostname
+if [ -f /etc/hostname ]
+then
+  rm -f /etc/hostname
+  cat <<EOF > /etc/hostname
 $NEWHOSTNAME
 EOF
 fi
@@ -126,11 +127,11 @@ fi
 # R10K"
 if [ -f /bin/gem ]
   then
-  /bin/gem install r10k 
+  /bin/gem install r10k hiera-eyaml
 fi
 if [ -f /usr/bin/gem ]
   then
-  /usr/bin/gem install r10k 
+  /usr/bin/gem install r10k hiera-eyaml
 fi
 
 if [ -f /etc/sysconfig/puppet ]
