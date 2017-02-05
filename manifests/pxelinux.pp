@@ -384,7 +384,9 @@ define quartermaster::pxelinux (
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppet.com/dists/${rel_name}",
     /(fedora)/                                           => "http://yum.puppet.com/fedora/f${rel_number}/products/${p_arch}",
-    /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/products/${p_arch}",
+# This is for puppet 3.x packages
+#    /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/products/${p_arch}",
+    /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/PC1/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
   notice(puppetlabs_repo)
