@@ -135,7 +135,7 @@ define quartermaster::pxelinux (
         $vnc_option_passwd = 'vncpasswd'
       }
       '22','23','24','25':{
-        $fedora_url = 'http://download.fedoraproject.org/pub/fedora/linux/releases'
+        $fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
         $fedora_flavor  = 'Server/'
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
