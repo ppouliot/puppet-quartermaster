@@ -9,7 +9,7 @@ LABEL <%= @name %>-manual-vnc
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %> <%= @vnc_option %> <%= @vnc_option_passwd %>=<%= @vnc_passwd %>
 
 LABEL <%= @name %>-<%= @autofile %>
-        MENU LABEL <%= @release %> <%= @p_arch %>: ^Minimal Kickstart Installation <%= @autofile %> 
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^Minimal <%= @autofile %> Installation
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
 	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> ks=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
 
