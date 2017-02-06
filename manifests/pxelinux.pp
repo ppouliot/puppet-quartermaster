@@ -78,6 +78,7 @@ define quartermaster::pxelinux (
         $_dot_bootsplash = '.lss'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
 
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7':{
@@ -85,12 +86,14 @@ define quartermaster::pxelinux (
         $_dot_bootsplash = '.jpg'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
       }
       '6.8','7.0','7.1','7.2':{
         $centos_url = "http://mirror.centos.org/centos/${rel_major}"
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
+        $ks_option         = 'ks'
 
       }
       default:{
@@ -114,18 +117,20 @@ define quartermaster::pxelinux (
   if ( $distro == 'fedora') {
     case $release {
       '2','3','4','5','6':{
-        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/core'
-        $fedora_flavor  = ''
-        $_dot_bootsplash = '.lss'
+        $fedora_url        = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/core'
+        $fedora_flavor     = ''
+        $_dot_bootsplash   = '.lss'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
       }
       '7','8','9','10','11','12','13','14','15','16','17','18','19','20':{
-        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
-        $fedora_flavor  = 'Fedora/'
-        $_dot_bootsplash = '.jpg'
+        $fedora_url        = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
+        $fedora_flavor     = 'Fedora/'
+        $_dot_bootsplash   = '.jpg'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
       }
       '21':{
         $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
@@ -133,13 +138,17 @@ define quartermaster::pxelinux (
         $_dot_bootsplash = '.png'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
       }
       '22','23','24','25':{
-        $fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
+        # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
+        #$fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
+        $fedora_url = 'http://mirrors.mit.edu/fedora/linux/releases'
         $fedora_flavor  = 'Server/'
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
+        $ks_option         = 'inst.ks'
       }
       default:{
         warning("${name} isn't a fedora release!")
@@ -153,10 +162,10 @@ define quartermaster::pxelinux (
     $initrd          = '.img'
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot"
-    $inst_repo       = "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os"
-    $update_repo     = "${fedora_url}/${release}/${fedora_flavor}/${p_arch}/os"
-    $splashurl       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
+    $inst_repo       = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os"
+    $update_repo     = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os"
     $boot_iso_url    = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/boot.iso"
+    $splashurl       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
   }
   if ( $distro == 'scientificlinux'){
     case $release {
@@ -165,18 +174,21 @@ define quartermaster::pxelinux (
         $_dot_bootsplash     = '.lss'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
+        $ks_option         = 'ks'
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.jpg'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
+        $ks_option         = 'ks'
       }
       '7.0','7.1','7.2':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.png'
         $vnc_option          = 'inst.vnc'
         $vnc_option_passwd   = 'inst.vncpasswd'
+        $ks_option           = 'inst.ks'
       }
       default:{
         warning("${name} isn't a scientificlinux release!")
@@ -238,12 +250,14 @@ define quartermaster::pxelinux (
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
 
       }
       '7':{
         $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
+        $ks_option         = 'inst.ks'
       }
       default:{
         notice("${name} does not need the _U variable!")
@@ -285,6 +299,7 @@ define quartermaster::pxelinux (
     $update_repo     = 'Update ISO or Mirror Required'
     $splashurl       = 'ISO Required for Splash'
     $boot_iso_url  = 'No mini.iso or boot.iso to download'
+    $ks_option         = 'ks'
   }
   if ( $distro == 'sles' ) {
     $autofile        = 'autoyast'
@@ -383,9 +398,10 @@ define quartermaster::pxelinux (
 
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppet.com/dists/${rel_name}",
-    /(fedora)/                                           => "http://yum.puppet.com/fedora/f${rel_number}/products/${p_arch}",
-# This is for puppet 3.x packages
+# These are for puppet 3.x packages
 #    /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/products/${p_arch}",
+#    /(fedora)/                                           => "http://yum.puppet.com/fedora/f${rel_number}/products/${p_arch}",
+    /(fedora)/                                           => "http://yum.puppet.com/fedora/f${rel_number}/PC1/${p_arch}",
     /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/PC1/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
