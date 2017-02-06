@@ -232,7 +232,7 @@ define quartermaster::pxelinux (
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
     $url             = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
-    $inst_repo       = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
+    $inst_repo       = "${opensuse_url}/${release}/repo/oss"
     $update_repo     = "${opensuse_url}/${release}/repo/non-oss/suse"
     $splash_url      = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader/back.jpg"
     $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
