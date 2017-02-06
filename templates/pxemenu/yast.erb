@@ -11,12 +11,12 @@ LABEL <%= @name %>-manual-vnc
 LABEL <%= @name %>-<%= @autofile %>
 	MENU LABEL <%= @release %> <%= @p_arch %>: ^BareMetal/KVM <%= @autofile %> 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND autoyast=http://<%= @fqdn %>/install/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
+        APPEND autoyast=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
 LABEL <%= @name %>-VM-<%= @autofile %>
 	MENU LABEL <%= @release %> <%= @p_arch %>: Hyper-V VM (LIS Enabled) <%= @autofile %> 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND autoyast=http://<%= @fqdn %>/install/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
+        APPEND autoyast=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
 
 LABEL <%= @name %>-rescue

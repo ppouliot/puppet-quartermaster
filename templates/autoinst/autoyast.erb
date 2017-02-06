@@ -43,7 +43,7 @@
 
     <partitioning config:type="list">
         <drive>
-            <device>/dev/sda</device>
+<!--            <device>/dev/vda</device> -->
             <initialize config:type="boolean">true</initialize>
             <partitions config:type="list">
                 <partition>
@@ -106,7 +106,7 @@
         <interfaces config:type="list">
             <interface>
                 <bootproto>dhcp</bootproto>
-                <device>enp0s3</device>
+                <device>eth0</device>
                 <startmode>onboot</startmode>
             </interface>
         </interfaces>
@@ -126,15 +126,8 @@
             <pattern>base</pattern>
         </patterns>
         <packages config:type="list">
-            <package>kernel-default-devel</package>
-            <package>gcc</package>
-            <package>glibc-locale</package>
-            <package>grub2</package>
-            <package>make</package>
-            <package>iproute2</package>
             <package>ntp</package>
             <package>openssh</package>
-            <package>procps</package>
             <package>sudo</package>
             <package>vim-data</package>
             <package>yast2-hardware-detection</package>
@@ -145,17 +138,16 @@
             <package>autoyast2-installation</package>
             <package>autoyast2</package>
             <package>bundle-lang-common-en</package>
-            <package>yast2-installation</package>
             <package>yast2-network</package>
 	    <package>yast2-theme-openSUSE</package>
 	    <package>iputils</package>
 	    <package>vim</package>
         </packages>
-#        <remove-packages config:type="list">
-#            <package>desktop-translations</package>
-#            <package>kernel-firmware</package>
-#            <package>yast2-branding-openSUSE</package>
-#        </remove-packages>
+        <remove-packages config:type="list">
+            <package>desktop-translations</package>
+            <package>kernel-firmware</package>
+            <package>yast2-branding-openSUSE</package>
+        </remove-packages>
     </software>
 
     <runlevel>
