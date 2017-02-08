@@ -5,11 +5,19 @@
 
 <profile xmlns="http://www.suse.com/1.0/yast2ns" xmlns:config="http://www.suse.com/1.0/configns">
     <general>
-        <mode>
-            <confirm config:type="boolean">false</confirm>
-            <forceboot config:type="boolean">true</forceboot>
-            <final_reboot config:type="boolean">false</final_reboot>
-        </mode>
+     <signature-handling>
+          <accept_unsigned_file config:type="boolean">true</accept_unsigned_file>
+          <accept_file_without_checksum config:type="boolean">true</accept_file_without_checksum>
+          <accept_verification_failed   config:type="boolean">true</accept_verification_failed>
+          <accept_unknown_gpg_key       config:type="boolean">true</accept_unknown_gpg_key>
+          <import_gpg_key               config:type="boolean">true</import_gpg_key>
+          <accept_non_trusted_gpg_key   config:type="boolean">true</accept_non_trusted_gpg_key>
+      </signature-handling>
+      <mode>
+          <confirm config:type="boolean">false</confirm>
+          <forceboot config:type="boolean">true</forceboot>
+          <final_reboot config:type="boolean">false</final_reboot>
+     </mode>
     </general>
     <report>
         <messages>
@@ -51,7 +59,7 @@
                     <mount>/boot</mount>
                     <mountby config:type="symbol">label</mountby>
                     <partition_type>primary</partition_type>
-                    <size>200M</size>
+                    <size>500M</size>
                 </partition>
                 <partition>
                     <label>system</label>
@@ -101,7 +109,7 @@
             <dhcp_hostname config:type="boolean">true</dhcp_hostname>
             <dhcp_resolv config:type="boolean">true</dhcp_resolv>
             <domain>local</domain>
-            <hostname>linux</hostname>
+            <hostname><%= @distro %></hostname>
         </dns>
         <interfaces config:type="list">
             <interface>
@@ -116,6 +124,18 @@
         <enable_firewall config:type="boolean">false</enable_firewall>
         <start_firewall config:type="boolean">false</start_firewall>
     </firewall>
+    <add-on>
+     <add_on_products config:type="list">
+      <listentry>
+        <media_url>http://download.opensuse.org/repositories/systemsmanagement:/puppet/openSUSE_<%= @release %>/</media_url>
+        <product>systemsmanagement_puppet</product>
+        <product_dir>/</product_dir>
+        <ask_on_error config:type="boolean">false</ask_on_error>
+        <!-- available since openSUSE 11.0/SLES 11 -->
+        <name>systemsmanagement:puppet</name> <!-- available since openSUSE 11.1/SLES11 (bnc#433981) -->
+      </listentry>
+     </add_on_products>
+    </add-on>
 
     <software>
         <image/>
@@ -123,30 +143,33 @@
         <do_online_update config:type="boolean">true</do_online_update>
         <kernel>kernel-default</kernel>
         <patterns config:type="list">
+            <pattern>minimal_base</pattern>
+<!-- Trying to get to a minimal install
             <pattern>base</pattern>
+            <pattern>enhanced_base</pattern>
+-->
+            <pattern>console</pattern>
+            <pattern>yast2_basis</pattern>
         </patterns>
         <packages config:type="list">
             <package>ntp</package>
             <package>openssh</package>
             <package>sudo</package>
-            <package>vim-data</package>
-            <package>yast2-hardware-detection</package>
-            <package>yast2-users</package>
-            <package>zypper</package>
-            <package>bash</package>
-            <package>puppet</package>
-            <package>autoyast2-installation</package>
-            <package>autoyast2</package>
-            <package>bundle-lang-common-en</package>
-            <package>yast2-network</package>
-	    <package>yast2-theme-openSUSE</package>
+            <package>rsync</package>
+            <package>wget</package>
+            <package>curl</package>
+            <package>git</package>
 	    <package>iputils</package>
-	    <package>vim</package>
+	    <package>zypper</package>
+            <!-- Puppet/R10K/Hiera-Eyaml Installation -->
+            <package>rubygem-puppet</package>
         </packages>
         <remove-packages config:type="list">
+<!--
             <package>desktop-translations</package>
             <package>kernel-firmware</package>
             <package>yast2-branding-openSUSE</package>
+-->
         </remove-packages>
     </software>
 
@@ -210,4 +233,79 @@
     <kdump>
         <add_crash_kernel config:type="boolean">false</add_crash_kernel>
     </kdump>
+    <!-- Pre Install Scripts -->
+    <scripts>
+    <pre-scripts config:type="list">
+      <script>                          
+        <filename>pre_script_test.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+echo "Testing Pre Script" > /tmp/pre_script_test.txt
+]]>
+        </source>                       
+      </script> 
+    </pre-scripts>
+    <!-- Post Partition Scripts -->
+    <postpartitioning-scripts config:type="list">
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>pre_script_test.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+echo "Testing PostPartition Script" > /tmp/post_partition_script_test.txt
+]]>
+        </source>                       
+      </script> 
+    </postpartitioning-scripts>
+    <!-- Chroot Scripts -->
+    <chroot-scripts config:type="list">
+    </chroot-scripts>
+    <!-- Post Scripts -->
+    <post-scripts config:type="list">
+      <script>
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>rename_host.sh</filename>    
+        <interpreter>shell</interpreter>
+        <network_needed config:type="boolean">true</network_needed>
+        <source>
+        <![CDATA[#!/bin/bash
+# SET HOSTNAME
+if [ "$HOSTNAME" = "opensuse" -o "$HOSTNAME" = "linux-*" ];
+then
+  #set hostname to mac address of eth0
+  ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
+  NEWHOSTNAME=`/sbin/ifconfig | grep $ACTIVE_INTERFACE | tr -s " " | cut -d " " -f5 | /usr/bin/perl -p -e "s/://g;"`
+  echo $NEWHOSTNAME > /etc/hostname
+  echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+else
+  echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+fi
+
+if [ -f /etc/hostname ]
+then
+  echo $NEWHOSTNAME > /etc/hostname
+fi
+]]>
+        </source>                       
+      </script>
+    </post-scripts>
+    <init-scripts config:type="list">
+      <!--  Init scripts -->
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>install_r10k_hiera-eyaml.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+/usr/bin/gem install r10k hiera-eyaml
+]]>
+        </source>                       
+      </script> 
+    </init-scripts>
+  </scripts>
 </profile>

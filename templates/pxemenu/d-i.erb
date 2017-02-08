@@ -11,16 +11,10 @@ LABEL <%= @name %>-network-console
         APPEND priority=critical auto-install/enabled=true video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 anna/choose_modules=network-console network-console/password=<%= @vnc_passwd %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-<%= @autofile %>
-        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Minimal installation <%= @autofile %> 
+        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Minimal <%= @autofile.capitalize %>Installation
         IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
-
-LABEL <%= @name %>-VM-<%= @autofile %>
-        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Hyper-V VM (LIS Enabled) <%= @autofile %>  
-        IPAPPEND 2
-        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netcfg/choose_interface=auto netconfig/get_hostname=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>-dkirkland-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Dustin Kirkland Uinstall <%= @autofile %>  

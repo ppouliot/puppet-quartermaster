@@ -9,14 +9,9 @@ LABEL <%= @name %>-manual-vnc
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> url=<%= @inst_repo %> <%= @vnc_option %> <%= @vnc_option_passwd %>=<%= @vnc_passwd %>
 
 LABEL <%= @name %>-<%= @autofile %>
-        MENU LABEL <%= @release %> <%= @p_arch %>: ^Minimal <%= @autofile %> Installation
+        MENU LABEL <%= @release %> <%= @p_arch %>: Minimal ^<%= @autofile.capitalize %> Installation
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
 	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @ks_option %>=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
-
-LABEL <%= @name %>-VM-<%= @autofile %>
-        MENU LABEL <%= @release %> <%= @p_arch %>: ^Hyper-V VM (LIS Enabled) <%= @autofile %> 
-        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> ksdevice=eth1 <%= @ks_option %>=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
 
 LABEL <%= @name %>-rescue
         MENU LABEL <%= @release %> <%= @p_arch %>: ^Rescue
