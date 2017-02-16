@@ -16,11 +16,15 @@ class quartermaster::install (
   class{'::nginx':
     package_name => 'nginx-extras',
   }
-  nginx::resource::vhost{ $::fqdn:
+  # nginx module = 0.5.0
+  # nginx::resource::vhost{ $::fqdn:
+  nginx::resource::server{ $::fqdn:
     ensure               => present,
     www_root             => '/srv/quartermaster',
     use_default_location => false,
-    vhost_cfg_append     => {
+    # nginx module = 0.5.0
+    #vhost_cfg_append     => {
+    server_cfg_append     => {
       autoindex             => on,
       fancyindex            => on,
       fancyindex_exact_size => off,
@@ -30,13 +34,17 @@ class quartermaster::install (
   nginx::resource::location{'/':
     ensure   => present,
     www_root => '/srv/quartermaster',
-    vhost    => $::fqdn,
+    # nginx module  0.5.0
+    # vhost   => $::fqdn,
+    server   => $::fqdn,
   }
   nginx::resource::location{'/status':
-    ensure                 => present,
-    vhost                  => $::fqdn,
-    www_root => '/srv/quartermaster',
-    stub_status            => true,
+    ensure      => present,
+    # nginx module  0.5.0
+    # vhost   => $::fqdn,
+    server      => $::fqdn,
+    www_root    => '/srv/quartermaster',
+    stub_status => true,
   }
 
   # Log Visualization Tools
@@ -70,15 +78,18 @@ class quartermaster::install (
   ]:
     ensure  => directory,
     mode    => '0777',
-    owner   => 'nginx',
-    group   => 'nginx',
+# nginx module  0.5.0
+#    owner   => 'nginx',
+#    group   => 'nginx',
+    owner   => $::nginx::daemon_user,
+    group   => $::nginx::daemon_user,
     recurse => true,
   } ->
   file{ '/srv/quartermaster/tftpboot':
     ensure  => directory,
     mode    => '0777',
-    owner   => 'tftp',
-    group   => 'tftp',
+    owner   => $::tftp::username,
+    group   => $::tftp::username,
     recurse => true,
     require => Class['tftp'],
   } ->
@@ -101,8 +112,8 @@ class quartermaster::install (
     '/srv/quartermaster/microsoft/winpe/system/menu/.README.html',
   ]:
     ensure  => file,
-    owner   => 'nginx',
-    group   => 'nginx',
+    owner   => $::nginx::daemon_user,
+    group   => $::nginx::daemon_user,
     mode    => '0644',
     content => '<html>
 <head>
@@ -274,18 +285,17 @@ done
   # Configured a resolv.conf for dnsmasq to use
   file { '/etc/resolv.conf.dnsmasq':
     ensure  => file,
-    owner   => 'dnsmasq',
+    owner   => 'root',
     group   => 'root',
     mode    => '0644',
     content => "#**** WARNING ****
 # This File is manaaged by Puppet
 search ${::domain}
-# nameserver ${quartermaster::preferred_nameserver}
-nameserver 10.21.7.1
+nameserver ${quartermaster::preferred_nameserver}
 nameserver 4.2.2.1
 nameserver 4.2.2.2
 ",
-  } ->
+  }
   
   # Install dnsmasq and configure a dns cache and 
   # proxydhcp server for nextserver and bootfile 
@@ -549,8 +559,8 @@ ftp_proxy=http://${::ipaddress}:3128/
   }
 
   concat {'/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default':
-    owner => 'tftp',
-    group => 'tftp',
+    owner => $::tftp::username,
+    group => $::tftp::username,
   }
   concat::fragment{'default_header':
     target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
@@ -614,6 +624,9 @@ menu passwordrow 11
   # Installl WimLib
   case $::osfamily {
     'Debian':{
+      package {'software-properties-common':
+        ensure => latest,
+      } -> 
       apt::ppa{'ppa:nilarimogard/webupd8':}
       $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8']
     }
@@ -651,7 +664,7 @@ menu passwordrow 11
       '* -fstype=udf,loop :/srv/quartermaster/microsoft/iso/&',
     ],
     options     => '--timeout=10',
-    order       => '01',
+    order       => 01,
   }
 
   concat { '/srv/quartermaster/microsoft/winpe/system/setup.cmd': }

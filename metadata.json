@@ -25,7 +25,7 @@
       "version_requirement": ">= 2.1.0"
     },{
       "name": "puppet/nginx",
-      "version_requirement": ">= 0.5.0"
+      "version_requirement": ">= 0.6.0"
     },{
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.13.1"

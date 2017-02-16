@@ -32,7 +32,7 @@ class quartermaster::dban {
       mapfile     => '/etc/auto.dban',
       mapcontents => [ "${quartermaster::dban_version} -fstype=iso9660,loop :/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso" ],
       options     => '--timeout=10',
-      order       => '01',
+      order       => 01,
     } ->
 
     staging::file{"dban-${quartermaster::dban_version}_i586.iso":
@@ -115,3 +115,4 @@ class quartermaster::dban {
   }
 
 }
+Class['quartermaster::config'] -> Class['quartermaster::dban']

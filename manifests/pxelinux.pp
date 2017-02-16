@@ -421,6 +421,11 @@ define quartermaster::pxelinux (
         staging::file{"${name}-boot.iso":
           source  => $boot_iso_url,
           target  => "/srv/quartermaster/${distro}/ISO/${final_boot_iso_name}",
+          # Because we are grabbing ISOs here we may need more time when downloading depending on network connection
+          # This wget_option will continue downloads (-c) use ipv4 (-4) retry refused connections and failed errors (--retry-connrefused ) then wait 1 sec
+          # before next retry (--waitretry=1), wait a max of 20 seconds if no data is recieved and try again (--read-timeout=20)
+          # wait max 15 sec before initial connect times out ( --timeout=15) and retry inifinite times ( -t 0)
+          wget_option => '-c -4 --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0',
           require =>[
             Tftp::File["${distro}/${p_arch}"],
             File["/srv/quartermaster/${distro}/ISO"],
@@ -437,8 +442,8 @@ define quartermaster::pxelinux (
         staging::file{"${rel_number}-${name}":
           source  => "${url}/${pxekernel}",
           target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${rel_number}",
-          owner   => 'tftp',
-          group   => 'tftp',
+          owner   => $::tftp::username,
+          group   => $::tftp::username,
           require => Tftp::File["${distro}/${p_arch}"],
         }
       }
@@ -447,8 +452,8 @@ define quartermaster::pxelinux (
         staging::file{"${target_initrd}-${name}":
           source  => "${url}/initrd${initrd}",
           target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
-          owner   => 'tftp',
-          group   => 'tftp',
+          owner   => $::tftp::username,
+          group   => $::tftp::username,
           require =>  Tftp::File["${distro}/${p_arch}"],
         }
       }
@@ -473,8 +478,8 @@ define quartermaster::pxelinux (
 # Distro Specific TFTP Folders
 
   Tftp::File{
-    owner => 'tftp',
-    group => 'tftp',
+    owner => $::tftp::username,
+    group => $::tftp::username,
   }
 
   if ! defined (Tftp::File[$distro]){
@@ -562,8 +567,8 @@ if $linux_installer == !('No Supported Linux Installer') {
   ## .README.html (FILE) /srv/quartermaster/distro/.README.html
   if ! defined (Concat["/srv/quartermaster/${distro}/.README.html"]) {
     concat{ "/srv/quartermaster/${distro}/.README.html":
-      owner   => 'nginx',
-      group   => 'nginx',
+      owner   => $::nginx::daemon_user,
+      group   => $::nginx::daemon_user,
       mode    => '0644',
       require => File[ "/srv/quartermaster/${distro}" ],
     }
@@ -603,8 +608,8 @@ if $linux_installer == !('No Supported Linux Installer') {
   ## .README.html (FILE) /quartermaster/distro/p_arch/.README.html
   if ! defined (Concat["/srv/quartermaster/${distro}/${p_arch}/.README.html"]) {
     concat{ "/srv/quartermaster/${distro}/${p_arch}/.README.html":
-      owner   => 'nginx',
-      group   => 'nginx',
+      owner   => $::nginx::daemon_user,
+      group   => $::nginx::daemon_user,
       mode    => '0644',
       require => File[ "/srv/quartermaster/${distro}/${p_arch}" ],
     }
