@@ -548,11 +548,14 @@ nameserver 4.2.2.2
       'refresh_pattern (Release|Packagesi(.gz)*)$'                                              => '0 20% 2880',
       'refresh_pattern .'                                                                       => '0 20% 4230',
     },
-  } ->
+  }
+ ->
   file_line{'add_proxy_to_etc_environment':
     ensure => present,
     path   => '/etc/environment',
-    line   => "# Following lines managed by Puppet
+    match   => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
+    line   => "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games\"
+ Following lines managed by Puppet
 http_proxy=http://${::ipaddress}:3128/
 ftp_proxy=http://${::ipaddress}:3128/
 ",
