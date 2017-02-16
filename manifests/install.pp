@@ -555,7 +555,6 @@ nameserver 4.2.2.2
     path   => '/etc/environment',
     match   => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
     line   => "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games\"
- Following lines managed by Puppet
 http_proxy=http://${::ipaddress}:3128/
 ftp_proxy=http://${::ipaddress}:3128/
 ",
