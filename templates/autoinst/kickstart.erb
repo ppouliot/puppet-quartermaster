@@ -116,12 +116,12 @@ fi
 # Test if yum is in /bin
 if [ -f /bin/yum ]
   then
-  /bin/yum install puppet rubygems make gcc ruby-devel git -y
+  /bin/yum install puppet-agent rubygems make gcc ruby-devel git -y
 fi
 # Test if yum is in /usr/bin
 if [ -f /usr/bin/yum ]
   then
-  /usr/bin/yum install puppet rubygems make gcc ruby-devel git -y
+  /usr/bin/yum install puppet-agent rubygems make gcc ruby-devel git -y
 fi
 %end
 

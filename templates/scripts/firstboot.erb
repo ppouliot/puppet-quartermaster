@@ -40,7 +40,7 @@ if [ $? $test -eq 1 ]; then
 fi
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
-apt-get update -y && apt-get install -y openssh-server git puppet ruby ruby-dev
+apt-get update -y && apt-get install -y openssh-server git puppet-agent ruby ruby-dev
 
 
 echo "### INSTALLING R10K and Hierra-eyaml ###"
