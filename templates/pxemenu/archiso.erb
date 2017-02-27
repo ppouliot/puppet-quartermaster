@@ -1,0 +1,5 @@
+LABEL <%= @name %>
+        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): Manual ^Installation 
+        IPAPPEND 2
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND rootdelay=10 nomodset initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
