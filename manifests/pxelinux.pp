@@ -397,7 +397,7 @@ define quartermaster::pxelinux (
     $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
-  if { $distro == 'archlinux' ){
+  if ( $distro == 'archlinux' ){
     case $release {
       '2016.12.01','2017.01.01','2017.02.01','latest':{
         warning("Archlinux ${release} for ${p_arch} will be activated")
@@ -418,7 +418,7 @@ define quartermaster::pxelinux (
     $splashurl       = "http://mirrors.kernel.org/archlinux/iso/$rel_name/arch/${p_arch}/airootfs.sfs"
     $boot_iso_url    = "http://mirrors.kernel.org/archlinux/iso/$rel_name/archlinux-${rel_name}-dual.iso"
   }
-  if { $distro == 'coreos' ) {
+  if ( $distro == 'coreos' ) {
     case $release {
       'stable','beta','alpha':{
         warning("coreos ${release} for ${p_arch} will be activated")
