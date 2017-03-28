@@ -269,11 +269,13 @@ define quartermaster::pxelinux (
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "https://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
       }
 
       default:{
         warning("Oracle Linux ${release} is using the default name for the final boot.iso")
         $boot_iso_url    = "https://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
+#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
       }
     }
     $autofile        = 'kickstart'
@@ -375,7 +377,7 @@ define quartermaster::pxelinux (
     $pxekernel       = 'linux'
     $initrd          = '.gz'
     $target_initrd   = "${rel_number}${initrd}"
-    $_dot_bootsplash      = '.png'
+    $_dot_bootsplash = '.png'
     $url             = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://ftp.debian.org/${distro}/dists/${rel_name}"
     $update_repo     = "http://ftp.debian.org/${distro}/dists/${rel_name}"
@@ -395,6 +397,57 @@ define quartermaster::pxelinux (
     $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
+
+  if { $distro == 'archlinux' ) {
+    case $release {
+      '2016.12.01','2017.01.01','2017.02.01','latest':{
+        warning("Archlinux ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${name} is not a valid Archlinux release! Try using 2016.12.01,2017.01.01,2017.02.01, or latest for your release vs. ${release} which you are curenntly using.")
+      }
+    }
+    $autofile        = 'archiso'
+    $linux_installer = 'archiso'
+    $pxekernel       = 'vmlinuz'
+    $initrd          = '.img'
+    $target_initrd   = "${rel_number}${initrd}"
+    $_dot_bootsplash = '.png'
+    $url             = "http://mirrors.kernel.org/archlinux/iso/${release}/arch/boot/${p_arch}"
+    $inst_repo       = "http://mirrors.kernel.org/archlinux/iso/${release}/arch/boot/initramfs_${p_arch}.${initrd}"
+    $update_repo     = "http://mirrors.kernel.org/archlinux/core/os/${p_arch}/$rel_name/arch/${p_arch}/airootfs.sfs"
+    $splashurl       = "http://mirrors.kernel.org/archlinux/iso/$rel_name/arch/${p_arch}/airootfs.sfs"
+    $boot_iso_url    = "http://mirrors.kernel.org/archlinux/iso/$rel_name/archlinux-${rel_name}-dual.iso"
+  }
+  if { $distro == 'coreos' ) {
+    case $release {
+      'stable','beta','alpha':{
+        warning("coreos ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${name} is not a valid coreos release! Valid release are stable, beta  or alpha.")
+      }
+    }
+    case $p_arch {
+      'amd64','arm64':{
+        warning("coreos ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${p_arch} is not a valid processor architecture for coreos, valid arch's are amd64 and arm64.")
+      }
+    }
+    $autofile        = 'cloud-config.yaml'
+    $linux_installer = "coreos-install"
+    $pxe_kernel      = "coreos_production_pxe_image.vmlinuz"
+    $initrd          = "cpio.gz"
+    $target_initrd   = "coreos_production_pxe_image.${initrd}"
+    $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current/"
+    $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current/"
+    $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
+
+  }
+
+  
 
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppet.com/dists/${rel_name}",
