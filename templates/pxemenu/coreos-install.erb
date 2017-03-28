@@ -1,9 +1,9 @@
 LABEL <%= @name %>
         MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^Manual Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND coreos.autologin=tty1 initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> coreos.autologin=tty1
 
 LABEL <%= @name %>-<%= @autofile %>
         MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^<%= @autofile %> Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
