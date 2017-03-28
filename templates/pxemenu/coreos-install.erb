@@ -1,11 +1,11 @@
 LABEL <%= @name %>
         MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^Manual^Installation 
         IPAPPEND 2
-        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @pxe_kernel %>
-        APPEND coreos.autologin=tty1 initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        KERNEL ../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @pxe_kernel %>
+        APPEND coreos.autologin=tty1 initrd=../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>
         MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^Manual^Installation 
         IPAPPEND 2
-        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @pxe_kernel %>
-        APPEND coreos.config.url=https://<%= @fqdn %>/<%= @distro %>/cloud-config.yaml  initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+        KERNEL ../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @pxe_kernel %>
+        APPEND coreos.config.url=https://<%= @fqdn %>/<%= @distro %>/cloud-config.yaml  initrd=../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @target_initrd %>
