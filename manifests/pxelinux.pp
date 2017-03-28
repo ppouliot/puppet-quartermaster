@@ -105,6 +105,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
     $inst_repo       = "${centos_url}/os/${p_arch}/"
@@ -160,6 +161,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot"
     $inst_repo       = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os"
@@ -199,6 +201,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${scientificlinux_url}/images/pxeboot"
     $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
@@ -229,6 +232,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
     $initrd          = undef
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
     $url             = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
@@ -282,6 +286,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
     $url             = 'ISO Required instead of URL'
@@ -294,6 +299,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.jpg'
     $url             = 'ISO Required instead of URL'
@@ -308,6 +314,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
     $initrd          = undef
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
     $url             = 'ISO Required instead of URL'
@@ -321,6 +328,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
     $initrd          = undef
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
     $url             = 'ISO Required instead of URL'
@@ -355,6 +363,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'd-i'
     $pxekernel       = 'linux'
     $initrd          = '.gz'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
@@ -376,6 +385,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'd-i'
     $pxekernel       = 'linux'
     $initrd          = '.gz'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
@@ -389,6 +399,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'd-i'
     $pxekernel       = 'linux'
     $initrd          = '.gz'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
     $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
@@ -410,6 +421,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'archiso'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = "http://mirrors.kernel.org/archlinux/iso/${release}/arch/boot/${p_arch}"
@@ -439,7 +451,8 @@ define quartermaster::pxelinux (
     $linux_installer = 'coreos-install'
     $pxe_kernel      = 'coreos_production_pxe_image.vmlinuz'
     $initrd          = 'cpio.gz'
-    $target_initrd   = "coreos_production_pxe_image.${initrd}"
+    $target_kernel   = "${release}-${pxe_kernel}"
+    $target_initrd   = "${release}-coreos_production_pxe_image.${initrd}"
     $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current/"
     $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current/"
     $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
@@ -488,10 +501,10 @@ define quartermaster::pxelinux (
     }
     default:{
     # Retrieve installation kernel file if supported
-      if ! defined (Staging::File["${rel_number}-${name}"]){
-        staging::file{"${rel_number}-${name}":
+      if ! defined (Staging::File["${target_kernel}-${name}"]){
+        staging::file{"${target_kernel}-${name}":
           source  => "${url}/${pxekernel}",
-          target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${rel_number}",
+          target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
           owner   => $::tftp::username,
           group   => $::tftp::username,
           require => Tftp::File["${distro}/${p_arch}"],
