@@ -105,6 +105,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
@@ -161,6 +162,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot"
@@ -201,6 +203,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${scientificlinux_url}/images/pxeboot"
@@ -232,6 +235,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
     $initrd          = undef
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
@@ -286,6 +290,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
@@ -299,6 +304,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.jpg'
@@ -314,6 +320,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
     $initrd          = undef
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
@@ -328,6 +335,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
     $initrd          = undef
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
@@ -363,6 +371,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'd-i'
     $pxekernel       = 'linux'
     $initrd          = '.gz'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
@@ -385,6 +394,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'd-i'
     $pxekernel       = 'linux'
     $initrd          = '.gz'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
@@ -399,6 +409,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'd-i'
     $pxekernel       = 'linux'
     $initrd          = '.gz'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
@@ -421,6 +432,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'archiso'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
+    $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
@@ -451,6 +463,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'coreos-install'
     $pxe_kernel      = 'coreos_production_pxe_image.vmlinuz'
     $initrd          = 'cpio.gz'
+    $src_initrd      = "coreos_production_pxe_image.${initrd}"
     $target_kernel   = "${release}-${pxe_kernel}"
     $target_initrd   = "${release}-coreos_production_pxe_image.${initrd}"
     $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current/"
@@ -513,7 +526,7 @@ define quartermaster::pxelinux (
       # Retrieve initrd file if supported
       if ! defined (Staging::File["${target_initrd}-${name}"]){
         staging::file{"${target_initrd}-${name}":
-          source  => "${url}/initrd${initrd}",
+          source  => "${url}/${src_initrd}",
           target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
           owner   => $::tftp::username,
           group   => $::tftp::username,

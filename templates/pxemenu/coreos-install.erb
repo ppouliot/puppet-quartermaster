@@ -5,7 +5,7 @@ LABEL <%= @name %>
         APPEND coreos.autologin=tty1 initrd=../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @target_initrd %>
 
 LABEL <%= @name %>
-        MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^Manual^Installation 
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^Unattended Installation 
         IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @pxe_kernel %>
-        APPEND coreos.config.url=https://<%= @fqdn %>/<%= @distro %>/cloud-config.yaml  initrd=../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @target_initrd %>
+        APPEND coreos.config.url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>  initrd=../<%= @distro %>/<%= @release %>/<%= @p_arch %>/<%= @target_initrd %>
