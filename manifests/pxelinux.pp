@@ -433,21 +433,19 @@ define quartermaster::pxelinux (
         warning("coreos ${release} for ${p_arch} will be activated")
       }
       default:{
-        fail("${p_arch} is not a valid processor architecture for coreos, valid arch's are amd64 and arm64.")
+        fail("${p_arch} is not a valid processor architecture for coreos, valid processor arch are amd64 and arm64.")
       }
     }
     $autofile        = 'cloud-config.yaml'
-    $linux_installer = "coreos-install"
-    $pxe_kernel      = "coreos_production_pxe_image.vmlinuz"
-    $initrd          = "cpio.gz"
+    $linux_installer = 'coreos-install'
+    $pxe_kernel      = 'coreos_production_pxe_image.vmlinuz'
+    $initrd          = 'cpio.gz'
     $target_initrd   = "coreos_production_pxe_image.${initrd}"
     $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current/"
     $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current/"
     $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
 
   }
-
-  
 
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppet.com/dists/${rel_name}",
