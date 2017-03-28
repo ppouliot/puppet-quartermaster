@@ -397,7 +397,6 @@ define quartermaster::pxelinux (
     $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
-
   if { $distro == 'archlinux' ) {
     case $release {
       '2016.12.01','2017.01.01','2017.02.01','latest':{
