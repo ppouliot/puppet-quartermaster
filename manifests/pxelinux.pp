@@ -463,9 +463,9 @@ define quartermaster::pxelinux (
     }
     $autofile        = 'cloud-config.yaml'
     $linux_installer = 'coreos-install'
-    $pxekernel      = 'coreos_production_pxe_image.vmlinuz'
+    $pxekernel      = 'coreos_production_pxe.vmlinuz'
     $initrd          = 'cpio.gz'
-    $src_initrd      = "coreos_production_pxe_image.${initrd}"
+    $src_initrd      = "coreos_production_pxe.${initrd}"
     $target_kernel   = "${release}_production.vmlinuz"
     $target_initrd   = "${release}_production.${initrd}"
     $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current"
