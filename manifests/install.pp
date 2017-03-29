@@ -6,6 +6,7 @@ class quartermaster::install (
   $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
   $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
   $puppetmaster                  = $quartermaster::puppetmaster,
+  $use_local_proxy               = $quartermaster::use_local_proxy,
   $vnc_passwd                    = $quartermaster::vnc_passwd,
 ){
 
@@ -550,14 +551,16 @@ nameserver 4.2.2.2
     },
   }
  ->
-  file_line{'add_proxy_to_etc_environment':
-    ensure => present,
-    path   => '/etc/environment',
-    match   => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
-    line   => "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games\"
+  if $quartermaster::use_local_proxy {
+    file_line{'add_proxy_to_etc_environment':
+      ensure => present,
+      path   => '/etc/environment',
+      match   => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
+      line   => "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games\"
 http_proxy=http://${::ipaddress}:3128/
 ftp_proxy=http://${::ipaddress}:3128/
 ",
+    }
   }
 
   concat {'/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default':
