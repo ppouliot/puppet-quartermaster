@@ -10,23 +10,25 @@ define quartermaster::pxelinux (
   $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
   $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
   $puppetmaster                  = $quartermaster::puppetmaster,
+  $use_local_proxy               = $quartermaster::use_local_proxy,
   $vnc_passwd                    = $quartermaster::vnc_passwd,
 ){
 
 # this regex works w/ no .
 #if $name =~ /([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)-([a-zA-Z0-9_]+)/ {
-
-  Staging::File {
-    # Some curl_options to add for downloading large files over questionable links
-    # Use local cache   * --proxy http://${ipaddress}:3128
-    # Continue Download * -C 
-    # Maximum Time      * --max-time 1500 
-    # Retry             * --retry 3 
-    curl_option => "--proxy http://${::ipaddress}:3128 --retry 3",
-    #
-    # Puppet waits for the Curl execution to finish
-    #
-    timeout     => '0',
+  if $quartermaster::use_local_proxy {
+    Staging::File {
+      # Some curl_options to add for downloading large files over questionable links
+      # Use local cache   * --proxy http://${ipaddress}:3128
+      # Continue Download * -C 
+      # Maximum Time      * --max-time 1500 
+      # Retry             * --retry 3 
+      curl_option => "--proxy http://${::ipaddress}:3128 --retry 3",
+      #
+      # Puppet waits for the Curl execution to finish
+      #
+      timeout     => '0',
+    }
   }
 
   # Define proper name formatting matching distro-release-p_arch
@@ -461,7 +463,7 @@ define quartermaster::pxelinux (
     }
     $autofile        = 'cloud-config.yaml'
     $linux_installer = 'coreos-install'
-    $pxe_kernel      = 'coreos_production_pxe_image.vmlinuz'
+    $pxekernel      = 'coreos_production_pxe_image.vmlinuz'
     $initrd          = 'cpio.gz'
     $src_initrd      = "coreos_production_pxe_image.${initrd}"
     $target_kernel   = "${release}_production.vmlinuz"
