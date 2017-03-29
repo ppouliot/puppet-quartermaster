@@ -550,7 +550,6 @@ nameserver 4.2.2.2
       'refresh_pattern .'                                                                       => '0 20% 4230',
     },
   }
- ->
   if $quartermaster::use_local_proxy {
     file_line{'add_proxy_to_etc_environment':
       ensure => present,
