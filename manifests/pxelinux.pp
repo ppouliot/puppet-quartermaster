@@ -468,9 +468,9 @@ define quartermaster::pxelinux (
     $src_initrd      = "coreos_production_pxe_image.${initrd}"
     $target_kernel   = "${release}_production.vmlinuz"
     $target_initrd   = "${release}_production.${initrd}"
-    $url             = "http://${release}.release.core-os.net/${p_arch}-usr/current"
-    $inst_repo       = "http://${release}.release.core-os.net/${p_arch}-usr/current"
-    $boot_iso_url    = "http://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
+    $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current"
+    $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current"
+    $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
 
   }
 
