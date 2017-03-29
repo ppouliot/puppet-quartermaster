@@ -465,7 +465,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'coreos-install'
     $pxekernel      = 'coreos_production_pxe.vmlinuz'
     $initrd          = 'cpio.gz'
-    $src_initrd      = "coreos_production_pxe.${initrd}"
+    $src_initrd      = "coreos_production_pxe_image.${initrd}"
     $target_kernel   = "${release}_production.vmlinuz"
     $target_initrd   = "${release}_production.${initrd}"
     $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current"
