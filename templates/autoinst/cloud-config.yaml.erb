@@ -11,7 +11,7 @@ coreos:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
     discovery: "https://discovery.etcd.io/abe50e15454eef382f4db9947ad526f8"
   units:
-   - name: 00-e.network
+    - name: 00-e.network
       runtime: true
       content: |
         [Match]
