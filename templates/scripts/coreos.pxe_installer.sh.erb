@@ -1,5 +1,14 @@
 #!/bin/bash
+
+# Remove each partition
+for v_partition in $(parted -s /dev/sda print|awk '/^ / {print $1}')
+do
+   parted -s /dev/sda rm ${v_partition}
+done
+# Zero MBR
 dd if=/dev/zero of=/dev/sda bs=512 count=1
+# Download cloud-config
 curl -O http://<%= @fqdn %>/coreos/cloud-config.yaml/<%= @name %>.<%= @autofile %>
-sudo coreos-install -d /dev/sda -C <%= @release%> -c <%= @name %>.<%= @autofile %>
+# Run install 
+sudo coreos-install -d /dev/sda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
 sudo reboot
