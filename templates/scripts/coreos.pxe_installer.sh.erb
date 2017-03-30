@@ -8,7 +8,7 @@ phyiscal_disk="/dev/sda"    # /   (root directory)
 if [ -b "$virtual_disk" ]
 then
   echo "$virtual_disk is a block device."
-  for v_partition in $(parted -s $virtual_disk print|awk '/^ / {print $1}')
+  for v_partition in $(sudo parted -s $virtual_disk print|awk '/^ / {print $1}')
   do
     sudo parted -s $virtual_disk rm ${v_partition}
   done
@@ -20,7 +20,7 @@ fi
 if [ -b "$physical_disk" ]
 then
   echo "$physical_disk is a block device."
-  for v_partition in $(parted -s $physical_disk print|awk '/^ / {print $1}')
+  for v_partition in $(sudo parted -s $physical_disk print|awk '/^ / {print $1}')
   do
     sudo parted -s $physical_disk rm ${v_partition}
   done

@@ -31,16 +31,6 @@ coreos:
 
         [Install]
         WantedBy=sockets.target
-nit]
-        Description=Docker Socket for the API
-
-        [Socket]
-        ListenStream=2375
-        Service=docker.service
-        BindIPv6Only=both
-
-        [Install]
-        WantedBy=sockets.target
 
     # Puppet Agent Service for host
 #    - name: %n
