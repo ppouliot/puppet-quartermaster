@@ -243,7 +243,7 @@ done
   }
   # deploys coreos onto /dev/sda and reboots
   file {'/srv/quartermaster/bin/coreos_pxe_bootstrap.sh':
-    ensure  => file,
+    ensure  => absent,
     mode    => '0777',
     content => template('quartermaster/scripts/coreos_pxe_bootstrap.sh.erb'),
   }

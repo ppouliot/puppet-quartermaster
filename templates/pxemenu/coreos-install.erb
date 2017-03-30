@@ -6,7 +6,7 @@ LABEL <%= @name %>
 LABEL <%= @name %>-<%= @autofile %>-install
         MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^<%= @autofile.capitalize %> Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/bin/coreos_pxe_bootstrap.sh
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.pxe_installer.sh
 
 LABEL <%= @name %>-<%= @autofile %>-running-instance
         MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS <%= @autofile.capitalize %> ^Running Instance

@@ -472,6 +472,15 @@ define quartermaster::pxelinux (
     $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current"
     $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
 
+    
+    # This adds scripts to deploy to the system after booting into coreos 
+    # when finished it should reboot.
+    file {"/srv/quartermaster/${distro}/${autofile}/${release}.pxe_installer.sh":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/scripts/coreos.pxe_installer.sh.erb'),
+    }
+
   }
 
   $puppetlabs_repo = $distro ? {
