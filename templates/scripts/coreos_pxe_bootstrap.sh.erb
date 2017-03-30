@@ -1,0 +1,4 @@
+#!/bin/bash
+curl -O http://<%= @fqdn %>/coreos/cloud-config.yaml/coreos-stable-amd64.cloud-config.yaml
+sudo coreos-install -d /dev/sda -c cloud-config.yaml
+sudo reboot
