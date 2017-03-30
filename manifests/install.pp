@@ -241,11 +241,6 @@ done
     mode    => '0777',
     content => template('quartermaster/scripts/postinstall.erb'),
   }
-  # deploys coreos onto /dev/sda and reboots
-  file {'/srv/quartermaster/bin/coreos_pxe_bootstrap.sh':
-    ensure  => absent,
-  }
-
   file{'/srv/quartermaster/microsoft/winpe/system/init.cmd':
     ensure  => file,
     mode    => '0777',
