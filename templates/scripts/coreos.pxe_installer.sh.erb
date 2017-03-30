@@ -1,14 +1,34 @@
 #!/bin/bash
-
-# Remove each partition
-for v_partition in $(parted -s /dev/sda print|awk '/^ / {print $1}')
-do
-   parted -s /dev/sda rm ${v_partition}
-done
-# Zero MBR
-dd if=/dev/zero of=/dev/sda bs=512 count=1
 # Download cloud-config
 curl -O http://<%= @fqdn %>/coreos/cloud-config.yaml/<%= @name %>.<%= @autofile %>
 # Run install 
-sudo coreos-install -d /dev/sda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
+virtual_disk="/dev/vda"    # /   (root directory)
+phyiscal_disk="/dev/sda"    # /   (root directory)
+
+if [ -b "$virtual_disk" ]
+then
+  echo "$virtual_disk is a block device."
+  for v_partition in $(parted -s $virtual_disk print|awk '/^ / {print $1}')
+  do
+    sudo parted -s $virtual_disk rm ${v_partition}
+  done
+  # Zero MBR
+  sudo dd if=/dev/zero of=$virtual_disk bs=512 count=1
+  sudo coreos-install -d $virtual_disk -C <%= @release %> -c <%= @name %>.<%= @autofile %>
+fi
+
+if [ -b "$physical_disk" ]
+then
+  echo "$physical_disk is a block device."
+  for v_partition in $(parted -s $physical_disk print|awk '/^ / {print $1}')
+  do
+    sudo parted -s $physical_disk rm ${v_partition}
+  done
+  # Zero MBR
+  sudo dd if=/dev/zero of=$physical_disk bs=512 count=1
+  sudo coreos-install -d $physical_disk -C <%= @release %> -c <%= @name %>.<%= @autofile %>
+fi
+
+
+# Reboot 
 sudo reboot
