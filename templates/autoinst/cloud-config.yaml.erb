@@ -19,6 +19,8 @@ coreos:
 
         [Network]
         DHCP=yes
+        LinkLocalAddressing=no
+        IPv6AcceptRA=no
 
     - name: etcd2.service
       command: start
