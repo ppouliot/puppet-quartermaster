@@ -31,34 +31,35 @@ coreos:
 
         [Install]
         WantedBy=sockets.target
-
+<% @puppetmaster %>
     # Puppet Agent Service for host
-#    - name: %n
-#      command: start
-#      content: |
-#        [Unit]
-#        Description=Puppet Agent
-#        After=docker.service
-#      
-#        [Service]
-#        ExecStart=/usr/bin/docker run \
-#          --name %n \
-#          --net=host \
-#          -v /media/staging:/opt/staging \
-#          -v /etc/systemd:/etc/systemd \
-#          -v /etc/puppet:/etc/puppet \
-#          -v /var/lib/puppet:/var/lib/puppet \
-#          -v /home/core:/home/core \
-#          -v /etc/os-release:/etc/os-release:ro \
-#          -v /etc/lsb-release:/etc/lsb-release:ro \
-#          -v /etc/coreos:/etc/coreos:rw \
-#          -v /run:/run:ro \
-#          -v /usr/bin/systemctl:/usr/bin/systemctl:ro \
-#          -v /lib64:/lib64:ro \
-#          -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-#          jumanjiman/puppet:latest \
-#          agent --no-daemonize --logdest=console --server=puppet --environment=production --summeriz
-#        ExecStop=/usr/bin/docker stop %n
+    - name: %n
+      command: start
+      content: |
+        [Unit]
+        Description=Puppet Agent
+        After=docker.service
+      
+        [Service]
+        ExecStart=/usr/bin/docker run \
+          --name %n \
+          --net=host \
+          -v /media/staging:/opt/staging \
+          -v /etc/systemd:/etc/systemd \
+          -v /etc/puppet:/etc/puppet \
+          -v /var/lib/puppet:/var/lib/puppet \
+          -v /home/core:/home/core \
+          -v /etc/os-release:/etc/os-release:ro \
+          -v /etc/lsb-release:/etc/lsb-release:ro \
+          -v /etc/coreos:/etc/coreos:rw \
+          -v /run:/run:ro \
+          -v /usr/bin/systemctl:/usr/bin/systemctl:ro \
+          -v /lib64:/lib64:ro \
+          -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+          jumanjiman/puppet:latest \
+          agent --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summerize
+        ExecStop=/usr/bin/docker stop %n
+<% @puppetmaster %>
 #hostname:
 users:
   - name: "hyper-v_ci"
