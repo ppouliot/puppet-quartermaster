@@ -1,5 +1,5 @@
 #!/bin/bash
 dd if=/dev/zero of=/dev/sda bs=512 count=1
 curl -O http://<%= @fqdn %>/coreos/cloud-config.yaml/<%= @name %>.<%= @autofile %>
-sudo coreos-install -d /dev/sda -C <%=release%> -c <%= @name %>.<%= @autofile %>
+sudo coreos-install -d /dev/sda -C <%= @release%> -c <%= @name %>.<%= @autofile %>
 sudo reboot
