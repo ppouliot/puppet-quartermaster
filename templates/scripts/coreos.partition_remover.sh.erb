@@ -1,0 +1,18 @@
+#!/bin/bash
+disk=/dev/sda    # /   (root directory)
+
+if [ -b "$disk" ]
+then
+  echo "$disk is a block device."
+  for partition in $(sudo parted -s $disk print|awk '/^ / {print $1}')
+  do
+    sudo parted -s $disk rm $partition
+  done
+#  # Zero MBR
+  sudo dd if=/dev/zero of=$disk bs=512 count=1
+#  sudo coreos-install -d $disk -C stable -c coreos-stable-amd64.cloud-config.yaml
+fi
+
+
+# Reboot 
+# sudo reboot
