@@ -1,14 +1,21 @@
+TITLE CoreOS
 LABEL <%= @name %>
         MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^Manual Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rootfstype=btrfs coreos.autologin
 
 LABEL <%= @name %>-<%= @autofile %>-install
-        MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^<%= @autofile.capitalize %> Installation 
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @distro %>.pxe_installer.sh
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @release %>.pxe_installer.sh
 
 LABEL <%= @name %>-<%= @autofile %>-running-instance
-        MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS <%= @autofile.capitalize %> ^Running Instance
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> ^Running Instance
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
+
+LABEL <%= @name %>-<%= @autofile %>-partition_remover
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> ^Partition Remover
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @release %>.partition_remover.sh
+
