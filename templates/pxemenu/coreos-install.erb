@@ -4,6 +4,12 @@ LABEL <%= @name %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rootfstype=btrfs coreos.autologin
 
+LABEL <%= @name %>-<%= @autofile %>-stage0
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Stage 0 - Get to Root using Github Gist
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=https://gist.github.com/ppouliot/e49ad503228d250a175f1de2734754ed
+
+
 LABEL <%= @name %>-<%= @autofile %>-install
         MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
