@@ -249,7 +249,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "${opensuse_url}/${release}/iso"
     # This adds scripts to deploy to the system after booting into coreos 
     # when finished it should reboot.
-    file {"/srv/quartermaster/${distro}/${autofile}/kernelbuilder-${name}.${autofile}":
+    file {"/srv/quartermaster/${distro}/${autofile}/kernelbuilder.${name}.${autofile}":
       ensure  => file,
       mode    => '0777',
       content => template('quartermaster/kernelbuilder/autoyast.erb'),
