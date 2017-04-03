@@ -247,6 +247,13 @@ define quartermaster::pxelinux (
     $splash_url      = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader/back.jpg"
     $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
     $boot_iso_url    = "${opensuse_url}/${release}/iso"
+    # This adds scripts to deploy to the system after booting into coreos 
+    # when finished it should reboot.
+    file {"/srv/quartermaster/${distro}/${autofile}/kernelbuilder-${name}.${autofile}":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/kernelbuilder/autoyast.erb'),
+    }
   }
   if ($distro == /(centos|fedora|oraclelinux)/) and ( $release >= '7.0' ) and ( $p_arch == 'i386'){
     fail("${distro} ${release} does not provide support for processor architecture i386")
@@ -461,7 +468,7 @@ define quartermaster::pxelinux (
         fail("${p_arch} is not a valid processor architecture for coreos, valid processor arch are amd64 and arm64.")
       }
     }
-    $autofile        = 'cloud-config.yaml'
+    $autofile        = 'cloud-config.yml'
     $linux_installer = 'coreos-install'
     $pxekernel      = 'coreos_production_pxe.vmlinuz'
     $initrd          = 'cpio.gz'
