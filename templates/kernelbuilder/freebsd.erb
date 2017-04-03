@@ -1,0 +1,41 @@
+# disable all kinds of prompt but enable debug
+debug=yes
+nonInteractive=yes
+noConfirm=yes
+noWarn=no
+
+# specify the network interface
+netDev=alc0
+
+# network information
+hostname=testbox
+defaultrouter=192.168.0.1
+ipaddr=192.168.0.11
+netmask=255.255.255.0
+
+
+# FTP server
+_ftpPath=ftp://192.168.0.1/pub/FreeBSD
+mediaSetFTP
+
+# distributions to extract
+distSetMinimum
+
+# Partition parameters
+disk=ad10
+partition=all
+bootManager=boot
+diskPartitionEditor
+
+# Label parameters
+ad10s1-1=ufs 2097152 / 1
+ad10s1-2=swap 4194304 none
+ad10s1-3=ufs 4194304 /var 1
+ad10s1-4=ufs 2097152 /tmp 1
+ad10s1-1=ufs 0 /usr 1
+diskLabelEditor
+diskLabelCommit
+
+# Commit everything
+installCommit
+shutdown
