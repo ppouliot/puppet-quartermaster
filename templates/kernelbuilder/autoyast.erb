@@ -163,6 +163,11 @@
 	    <package>zypper</package>
             <!-- Puppet/R10K/Hiera-Eyaml Installation -->
             <package>rubygem-puppet</package>
+            <!-- docker -->
+            <package>docker</package>
+            <!-- rpm package repo creation tool -->
+            <package>createrepo</package>
+
         </packages>
         <remove-packages config:type="list">
 <!--
@@ -304,6 +309,31 @@ fi
         <![CDATA[#!/bin/bash
 /usr/bin/gem install r10k hiera-eyaml
 ]]>
+        </source>                       
+      </script> 
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>build_kernel_linux-next-<%=@name%></filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+mkdir -p /root/.quartermaster/
+touch /root/.quartermaster/inst.devpattern
+/usr/bin/zypper refresh && zypper install -t pattern devel_C_C++
+move /root/.quartermaster/inst.devpattern /.root/quartermaster/inst.devpattern.complete
+touch /root/.quartermaster/clone.kernelrepo
+/usr/bin/clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next
+move /root/.quartermaster/clone.kernelrepo.complete /root/.quartermaster/clone.kernelrepo.complete
+
+touch /root/.quartermaster/build.kernel
+cd /usr/src/linux-next && yes "" |make oldconfig && make rpm
+#rpm -ivh kernel-*.rpm
+move /root/.quartermaster/build.kernel /root/.quartermaster/build.kernel.complete
+
+
+]]>
+
         </source>                       
       </script> 
     </init-scripts>
