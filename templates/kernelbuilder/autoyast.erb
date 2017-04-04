@@ -300,20 +300,6 @@ fi
 ]]>
         </source>                       
       </script>
-    </post-scripts>
-    <init-scripts config:type="list">
-      <!--  Init scripts -->
-      <script>                          
-        <debug config:type="boolean">true</debug>
-        <feedback config:type="boolean">false</feedback>
-        <filename>install_r10k_hiera-eyaml.sh</filename>    
-        <interpreter>shell</interpreter>
-        <source>
-        <![CDATA[#!/bin/bash
-/usr/bin/gem install r10k hiera-eyaml
-]]>
-        </source>                       
-      </script> 
       <script>                          
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
@@ -333,6 +319,21 @@ move /root/.quartermaster/build.kernel /root/.quartermaster/build.kernel.complet
 
 ]]>
 
+        </source>                       
+      </script> 
+    </init-scripts>
+    </post-scripts>
+    <init-scripts config:type="list">
+      <!--  Init scripts -->
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>install_r10k_hiera-eyaml.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+/usr/bin/gem install r10k hiera-eyaml
+]]>
         </source>                       
       </script> 
     </init-scripts>
