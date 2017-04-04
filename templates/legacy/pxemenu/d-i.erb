@@ -1,0 +1,26 @@
+label <%= @name %>
+        menu label (<%= @rel_name %>-<%= @p_arch %>): ^Manual 
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append priority=low video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+
+label <%= @name %>-<%= @autofile %>
+        menu label (<%= @rel_name %>-<%= @p_arch %>): ^BareMetal/KVM <%= @autofile %> 
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netconfig/get_hostname=auto preseed/url=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+
+label <%= @name %>-VM-<%= @autofile %>
+        menu label (<%= @rel_name %>-<%= @p_arch %>): ^Hyper-V VM (LIS Enabled) <%= @autofile %>  
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netcfg/choose_interface=eth1 netconfig/get_hostname=auto preseed/url=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+
+label <%= @name %>-dkirkland-<%= @autofile %>
+        menu label (<%= @rel_name %>-<%= @p_arch %>): ^Dustin Kirkland Uinstall <%= @autofile %>  
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netconfig/get_hostname=auto preseed/url=http://91.189.95.84/~bikeshed/bikeshed/trunk/download/head:/uquick-20110404223115-0cr3zfxu3wpjbsmo-1/uquick initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+
+
+label <%= @name %>-rescue
+        menu label (<%= @rel_name %>-<%= @p_arch %>): ^Rescue Boot
+        kernel ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        append priority=low video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en rescue/enable=true initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
+

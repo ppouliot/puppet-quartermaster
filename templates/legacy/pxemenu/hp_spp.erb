@@ -1,0 +1,49 @@
+#
+# This is an example PXE linux configuration file.
+#
+# Use this as an example of how to configure your TFTP server to
+#    PXE boot the SPP.
+#
+#
+# Important kernel paramters:
+#
+# iso1 - The ISO Image to modify.  Can be either a ISO image or a directory
+#        with the contents of the SPP copied into it.
+#
+#        Example:
+#
+#        iso1=nfs://nfsserver.localdomain.net/path/to/spp.iso
+#        iso1=nfs://nfsserver.localdomain.net/path/to/spp_directory
+#        iso1=cifs://winfsserver.localdomain.net/path/to/spp.iso
+#        iso1=cifs://user@winfsserver.localdomain.net/path/to/spp_directory
+#        iso1=cifs://user:password@winfsserver.localdomain.net/path/to/spp_directory
+#
+#
+# iso1mnt - The directory where iso1 should be mounted.  MUST BE iso1mnt=/mnt/bootdevice
+#
+# iso1opts - (Optional) The mount options to use when mounting the SPP.
+#             Use this to add any special mount options you might need for
+#             your network.
+#
+DEFAULT vsos
+MENU TITLE HP Service Pack for ProLiant PXE Boot Menu
+TIMEOUT 30
+
+label Main Menu
+      MENU LABEL ^Return to Main Menu
+      KERNEL menu.c32
+      APPEND pxelinux.cfg/default
+
+label sos
+  MENU LABEL Automatic Firmware Update Version 2013.09.0
+  kernel ../spp2013090/vmlinuz
+  append initrd=../spp2013090/initrd.img media=network rw root=/dev/ram0 ramdisk_size=808296 init=/bin/init loglevel=3 ide=nodma ide=noraid nopat pnpbios=off vga=791 splash=silent hp_fibre showopts noexec32=off numa=off nox2apic TYPE=AUTOMATIC AUTOPOWEROFFONSUCCESS=no AUTOREBOOTONSUCCESS=no iso1=nfs://10.21.7.22/srv/nfs/hp-spp iso1mnt=/mnt/bootdevice
+  #append initrd=../spp2013090/initrd.img PROTOCOL=DHCP ip=dhcp media=cdrom rw root=/dev/ram0 ramdisk_size=808296 init=/bin/init loglevel=3 ide=nodma ide=noraid nopat pnpbios=off vga=791 splash=silent hp_fibre showopts noexec32=off numa=off nox2apic TYPE=AUTOMATIC AUTOPOWEROFFONSUCCESS=no AUTOREBOOTONSUCCESS=yes iso1=nfs://10.21.7.22:/srv/nfs/spp.iso iso1mnt=/mnt/bootdevice
+
+label vsos
+  MENU LABEL Interactive Firmware Update Version 2013.09.0
+  kernel ../spp2013090/vmlinuz
+  append initrd=../spp2013090/initrd.img media=network rw root=/dev/ram0 ramdisk_size=808296 init=/bin/init loglevel=3 ide=nodma ide=noraid nopat pnpbios=off vga=791 splash=silent hp_fibre showopts noexec32=off numa=off nox2apic TYPE=MANUAL AUTOPOWEROFFONSUCCESS=no iso1=nfs://10.21.7.22/srv/nfs/hp-spp iso1mnt=/mnt/bootdevice
+
+
+

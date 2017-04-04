@@ -1,0 +1,5 @@
+default <%= @default_pxeboot_option %>
+prompt <%= @pxe_menu_timeout %>
+MENU TITLE <%= @distro %> Installations
+MENU INCLUDE ../<%= @distro %>/graphics.cfg
+MENU AUTOBOOT Starting Local System in # seconds
