@@ -144,6 +144,8 @@
         <kernel>kernel-default</kernel>
         <patterns config:type="list">
             <pattern>minimal_base</pattern>
+<!-- PATTERN FOR KERNEL BUILDING ENVIRONMENT -->
+            <pattern>devel_C_C++</pattern>
 <!-- Trying to get to a minimal install
             <pattern>base</pattern>
             <pattern>enhanced_base</pattern>
@@ -318,12 +320,8 @@ fi
         <interpreter>shell</interpreter>
         <source>
         <![CDATA[#!/bin/bash
-mkdir -p /root/.quartermaster/
-touch /root/.quartermaster/inst.devpattern
-/usr/bin/zypper refresh && zypper install -y -t pattern devel_C_C++
-move /root/.quartermaster/inst.devpattern /.root/quartermaster/inst.devpattern.complete
 touch /root/.quartermaster/clone.kernelrepo
-/usr/bin/clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next
+/usr/bin/git clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next
 move /root/.quartermaster/clone.kernelrepo.complete /root/.quartermaster/clone.kernelrepo.complete
 
 touch /root/.quartermaster/build.kernel
