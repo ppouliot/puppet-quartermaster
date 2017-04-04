@@ -320,7 +320,7 @@ fi
         <![CDATA[#!/bin/bash
 mkdir -p /root/.quartermaster/
 touch /root/.quartermaster/inst.devpattern
-/usr/bin/zypper refresh && zypper install -t pattern devel_C_C++
+/usr/bin/zypper refresh && zypper install -y -t pattern devel_C_C++
 move /root/.quartermaster/inst.devpattern /.root/quartermaster/inst.devpattern.complete
 touch /root/.quartermaster/clone.kernelrepo
 /usr/bin/clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next
