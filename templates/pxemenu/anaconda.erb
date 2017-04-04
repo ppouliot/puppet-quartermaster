@@ -13,6 +13,11 @@ LABEL <%= @name %>-<%= @autofile %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
 	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @ks_option %>=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
 
+LABEL <%= @name %>-hyper-v_vm-<%= @autofile %>
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^Hyper-V VM (LIS Enabled) <%= @autofile %>
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> ksdevice=eth1 ks=http://<%= @ipaddress %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> url=<%= @inst_repo %>
+
 LABEL <%= @name %>-rescue
         MENU LABEL <%= @release %> <%= @p_arch %>: ^Rescue
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
