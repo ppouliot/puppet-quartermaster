@@ -14,31 +14,7 @@
 #
 
 define quartermaster::windowsmedia( $activationkey ) {
-  # The following pxe menu variables are required for the templates used in this class
-  $default_pxeboot_option        = $quartermaster::default_pxeboot_option,
-  $pxe_menu_timeout              = $quartermaster::pxe_menu_timeout,
-  $pxe_menu_total_timeout        = $quartermaster::pxe_menu_total_timeout,
-  $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
-  $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
-  $puppetmaster                  = $quartermaster::puppetmaster,
-  $use_local_proxy               = $quartermaster::use_local_proxy,
-  $vnc_passwd                    = $quartermaster::vnc_passwd,
 ){
-
-
-  $tftpboot       = $quartermaster::params::tftpboot
-  $tftp_username  = $quartermaster::params::tftp_username
-  $tftp_group     = $quartermaster::params::tftp_group
-  $tftp_filemode  = $quartermaster::params::tftp_filemode
-  $wwwroot        = $quartermaster::params::wwwroot
-  $www_username   = $quartermaster::params::www_username
-  $www_group      = $quartermaster::params::www_group
-  $file_mode      = $quartermaster::params::file_mode
-  $dir_mode       = $quartermaster::params::dir_mode
-  $quartermaster::exe_mode       = $quartermaster::params::exe_mode
-  $windows_isos   = $quartermaster::params::windows_isos
-  $os             = $quartermaster::params::os
-
 
   $isofile  = $name
 #    $iso_path = "/srv/quartermaster/WinPE/ISO/${name}"
