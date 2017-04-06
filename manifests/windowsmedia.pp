@@ -14,7 +14,6 @@
 #
 
 define quartermaster::windowsmedia( $activationkey ) {
-){
 
   $isofile  = $name
 #    $iso_path = "/srv/quartermaster/WinPE/ISO/${name}"
