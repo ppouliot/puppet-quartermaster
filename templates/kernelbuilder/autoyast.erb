@@ -386,6 +386,22 @@ fi
       <script>                          
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
+        <filename>install_r10k_hiera-eyaml.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+echo "installing powershell"
+import https://packages.microsoft.com/keys/microsoft.asc
+sudo zypper install https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/powershell-6.0.0_alpha.18-1.suse.42.1.x86_64.rpm
+
+
+]]>
+        </source>                       
+      </script> 
+    </init-scripts>
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
         <filename>03-build_kernel_linux-next-<%=@name%></filename>    
         <interpreter>shell</interpreter>
         <source>
