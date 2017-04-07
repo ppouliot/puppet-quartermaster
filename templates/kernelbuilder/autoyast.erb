@@ -143,8 +143,7 @@
         <do_online_update config:type="boolean">true</do_online_update>
         <kernel>kernel-default</kernel>
         <patterns config:type="list">
-            <pattern>minimal_base</pattern>
-<!-- PATTERN FOR KERNEL BUILDING ENVIRONMENT -->
+            <pattern>minimal_base</pattern> <!-- PATTERN FOR KERNEL BUILDING ENVIRONMENT -->
             <pattern>devel_C_C++</pattern>
             <pattern>devel_rpm_build</pattern>
 <!-- Trying to get to a minimal install
@@ -152,9 +151,18 @@
             <pattern>enhanced_base</pattern>
 -->
             <pattern>console</pattern>
+            <pattern>remote_desktop</pattern>
             <pattern>yast2_basis</pattern>
         </patterns>
         <packages config:type="list">
+            <package>curl</package>
+            <package>git</package>
+<!--
+# Additinal SCM to add later
+            <package>svn</package>
+            <package>cvs</package>
+-->
+	    <package>iputils</package>
             <package>ntp</package>
             <package>openssh</package>
             <package>sudo</package>
@@ -163,14 +171,40 @@
             <package>curl</package>
             <package>git</package>
 	    <package>iputils</package>
+            <!-- ipmi tooling
+	    <package>freeipmi</package>
+	    <package>freeipmi-bmc-watchdog</package>
+	    <package>freeipmi-ipmidetectd</package>
+	    <package>OpenIPMI</package>
+            -->
 	    <package>zypper</package>
             <!-- Puppet/R10K/Hiera-Eyaml Installation -->
+            <package>puppet</package>
             <package>rubygem-puppet</package>
             <!-- docker -->
             <package>docker</package>
             <!-- rpm package repo creation tool -->
             <package>createrepo</package>
-
+            <!-- Python Tooling for PyJenkinsAPI++ -->
+            <package>python</package>
+            <package>python-d2to1</package>
+            <package>python-setuptools</package>
+            <package>python-setuptools-git</package>
+            <package>python-py</package>
+            <package>python-pytz</package>
+            <package>python-requests</package>
+            <package>python-jenkinsapi</package>
+            <package>python-glanceclient</package>
+            <package>python-glanceclient-test</package>
+            <package>python-pysnmp</package>
+            <!-- Begin Windows Tooling Support -->
+            <!-- # RDP Support -->
+            <!-- ## FreeRDP 
+            <package>freerdp</package>
+            <package>freerdp-devel</package>
+            <package>libfreerdp-1_0</package>
+            <package>libfreerdp-1_0-plugins</package>
+            -->
         </packages>
         <remove-packages config:type="list">
 <!--
@@ -237,6 +271,23 @@
             <user_password><%= @distro %></user_password>
             <username><%= @distro %></username>
         </user>
+        <user>
+            <fullname>jenkins</fullname>
+            <gid>100</gid>
+            <home>/opt/jenkins</home>
+            <password_settings>
+                <expire/>
+                <flag/>
+                <inact>-1</inact>
+                <max>99999</max>
+                <min>0</min>
+                <warn>7</warn>
+            </password_settings>
+            <shell>/bin/bash</shell>
+            <uid>1000</uid>
+            <user_password><%= @distro %></user_password>
+            <username>jenkins</username>
+        </user>
     </users>
     <kdump>
         <add_crash_kernel config:type="boolean">false</add_crash_kernel>
@@ -276,7 +327,39 @@ echo "Testing PostPartition Script" > /tmp/post_partition_script_test.txt
       <script>
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
-        <filename>rename_host.sh</filename>    
+        <filename>01-get_jenkin.sh</filename>    
+        <interpreter>shell</interpreter>
+        <network_needed config:type="boolean">true</network_needed>
+        <source>
+        </source>
+        <![CDATA[#!/bin/bash
+###
+# # Get the Jenkins Slave and Server Ware files and Create a Startup Script for each
+### Valid Jenkins versions are 2.2 and 3.3
+#JENKINS_VERSION=3.3
+# Make the Directory Structure
+mkdir -p /opt/jenkins/swarm ;
+mkdir -p /opt/jenkins/logs ;
+cd /opt/jenkins/bin/ ;
+
+echo "*** Downloading Jenkins Swarm Slave ***" && \ 
+wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/<%= @quartermaster::jenkins_swarm_version_to_use %>/swarm-client-<%=@quartermaster::jenkins_swarm_version_to_use%>-jar-with-dependencies.jar swarm-client-<%= @quartermaster::jenkins_swarm_version_to_use %>-jar-with-dependencies.jar
+ 2> ../logs/01-get_jenkins.sh.log;
+
+echo "*** Creating Jenkins Swarm Slave Startup Script ***" && \ 
+echo '#
+#!/bin/bash
+echo Starting up connection to $1 using name: $2  
+java -jar swarm-client-<%= @quartermaster::swarm_client_version_to_use %>-jar-with-dependencies.jar -master $1 -executors 2 -name $2 > ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;
+chmod +X ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;
+
+        ]]>
+      </script>
+
+      <script>
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>02-rename_host.sh</filename>    
         <interpreter>shell</interpreter>
         <network_needed config:type="boolean">true</network_needed>
         <source>
@@ -303,18 +386,17 @@ fi
       <script>                          
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
-        <filename>build_kernel_linux-next-<%=@name%></filename>    
+        <filename>03-build_kernel_linux-next-<%=@name%></filename>    
         <interpreter>shell</interpreter>
         <source>
         <![CDATA[#!/bin/bash
-touch /root/.quartermaster/clone.kernelrepo
-/usr/bin/git clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next
-move /root/.quartermaster/clone.kernelrepo.complete /root/.quartermaster/clone.kernelrepo.complete
+# Get Upstream Kernel Source
+/usr/bin/git clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next 2> ../logs/03-build_kernel_linux_next.sh.log;
 
-touch /root/.quartermaster/build.kernel
-cd /usr/src/linux-next && yes "" |make oldconfig && make rpm
-#rpm -ivh kernel-*.rpm
-move /root/.quartermaster/build.kernel /root/.quartermaster/build.kernel.complete
+# CD to  Kernel Source and Do work
+cd /usr/src/linux-next && yes "" |make oldconfig && make rpm;
+# Blunt force install the packages
+rpm -ivh /usr/local/src/packages/RPMS/x86_64/kernel-*.rpm --force ;
 
 
 ]]>
