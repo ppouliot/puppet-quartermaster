@@ -26,6 +26,7 @@ class quartermaster::install (
     } 
     default:{
       class{'::nginx':
+      }
     }
   }
 
