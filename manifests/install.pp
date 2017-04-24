@@ -19,9 +19,11 @@ class quartermaster::install (
       class{'::nginx':
         package_name => 'nginx-extras',
       }
+    }
     'RedHat':{
       class{'::nginx':
       }
+    } 
     default:{
       class{'::nginx':
     }
