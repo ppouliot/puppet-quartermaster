@@ -10,6 +10,7 @@ define quartermaster::pxelinux (
   $pxe_menu_allow_user_arguments = $quartermaster::pxe_menu_allow_user_arguments,
   $pxe_menu_default_graphics     = $quartermaster::pxe_menu_default_graphics,
   $puppetmaster                  = $quartermaster::puppetmaster,
+  $jenkins_swarm_version_to_use  = $quartermaster::jenkins_swarm_version_to_use,
   $use_local_proxy               = $quartermaster::use_local_proxy,
   $vnc_passwd                    = $quartermaster::vnc_passwd,
 ){
