@@ -14,9 +14,19 @@ class quartermaster::install (
 
   # NGINX Installation
 #  include ::nginx
-  class{'::nginx':
-    package_name => 'nginx-extras',
+  case $::osfamily {
+    'Debian':{
+      class{'::nginx':
+        package_name => 'nginx-extras',
+      }
+    'RedHat':{
+      class{'::nginx':
+      }
+    default:{
+      class{'::nginx':
+    }
   }
+
   # nginx module = 0.5.0
   # nginx::resource::vhost{ $::fqdn:
   nginx::resource::server{ $::fqdn:
