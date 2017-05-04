@@ -331,7 +331,6 @@ echo "Testing PostPartition Script" > /tmp/post_partition_script_test.txt
         <interpreter>shell</interpreter>
         <network_needed config:type="boolean">true</network_needed>
         <source>
-        </source>
         <![CDATA[#!/bin/bash
 mkdir -p /opt/jenkins/bin ;
 mkdir -p /opt/jenkins/logs ;
@@ -345,8 +344,8 @@ echo '#!/bin/bash
 echo Starting up connection to $1 using name: $2  
 java -jar swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar -master $1 -executors 2 -name $2 > ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;
 chmod +X ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;'
-
         ]]>
+        </source>
       </script>
 
       <script>
