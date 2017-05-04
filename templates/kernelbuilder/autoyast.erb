@@ -180,7 +180,9 @@
 	    <package>zypper</package>
             <!-- Puppet/R10K/Hiera-Eyaml Installation -->
             <package>puppet</package>
+            <!--
             <package>rubygem-puppet</package>
+            -->
             <!-- docker -->
             <package>docker</package>
             <!-- rpm package repo creation tool -->
@@ -189,7 +191,6 @@
             <package>python</package>
             <package>python-d2to1</package>
             <package>python-setuptools</package>
-            <package>python-setuptools-git</package>
             <package>python-py</package>
             <package>python-pytz</package>
             <package>python-requests</package>
@@ -393,12 +394,12 @@ sudo zypper install https://github.com/PowerShell/PowerShell/releases/download/v
       <script>                          
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
-        <filename>build_kernel_linux-next-<%=@name%></filename>    
+        <filename>build_kernel_linux-next-<%=@name%>.sh</filename>    
         <interpreter>shell</interpreter>
         <source>
         <![CDATA[#!/bin/bash
 # Get Upstream Kernel Source
-/usr/bin/git clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next 2> ../logs/03-build_kernel_linux_next.sh.log;
+/usr/bin/git clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next
 
 # CD to  Kernel Source and Do work
 cd /usr/src/linux-next && yes "" |make oldconfig && make rpm;
