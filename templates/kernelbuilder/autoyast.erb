@@ -342,7 +342,8 @@ mkdir -p /opt/jenkins/swarm ;
 mkdir -p /opt/jenkins/logs ;
 cd /opt/jenkins/bin/ ;
 
-echo "*** Downloading Jenkins Swarm Slave ***" && wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/<%= @jenkins_swarm_version_to_use %>/swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar 2> ../logs/01-get_jenkins.sh.log;
+echo "*** Downloading Jenkins Swarm Slave ***" 
+wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/<%= @jenkins_swarm_version_to_use %>/swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar 2> ../logs/01-get_jenkins.sh.log;
 
 echo "*** Creating Jenkins Swarm Slave Startup Script ***" 
 echo '#
