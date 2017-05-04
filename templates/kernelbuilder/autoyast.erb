@@ -342,11 +342,9 @@ mkdir -p /opt/jenkins/swarm ;
 mkdir -p /opt/jenkins/logs ;
 cd /opt/jenkins/bin/ ;
 
-echo "*** Downloading Jenkins Swarm Slave ***" && \ 
-wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/<%= @jenkins_swarm_version_to_use %>/swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar
- 2> ../logs/01-get_jenkins.sh.log;
+echo "*** Downloading Jenkins Swarm Slave ***" && wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/<%= @jenkins_swarm_version_to_use %>/swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar 2> ../logs/01-get_jenkins.sh.log;
 
-echo "*** Creating Jenkins Swarm Slave Startup Script ***" && \ 
+echo "*** Creating Jenkins Swarm Slave Startup Script ***" 
 echo '#
 #!/bin/bash
 echo Starting up connection to $1 using name: $2  
@@ -359,7 +357,7 @@ chmod +X ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;
       <script>
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
-        <filename>02-rename_host.sh</filename>    
+        <filename>rename_host.sh</filename>    
         <interpreter>shell</interpreter>
         <network_needed config:type="boolean">true</network_needed>
         <source>
@@ -386,7 +384,7 @@ fi
       <script>                          
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
-        <filename>install_r10k_hiera-eyaml.sh</filename>    
+        <filename>install_powershell_from_ms_package.sh</filename>    
         <interpreter>shell</interpreter>
         <source>
         <![CDATA[#!/bin/bash
@@ -398,11 +396,10 @@ sudo zypper install https://github.com/PowerShell/PowerShell/releases/download/v
 ]]>
         </source>                       
       </script> 
-    </init-scripts>
       <script>                          
         <debug config:type="boolean">true</debug>
         <feedback config:type="boolean">false</feedback>
-        <filename>03-build_kernel_linux-next-<%=@name%></filename>    
+        <filename>build_kernel_linux-next-<%=@name%></filename>    
         <interpreter>shell</interpreter>
         <source>
         <![CDATA[#!/bin/bash
