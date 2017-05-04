@@ -341,11 +341,10 @@ echo "*** Downloading Jenkins Swarm Slave ***"
 wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/<%= @jenkins_swarm_version_to_use %>/swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar 2> ../logs/01-get_jenkins.sh.log;
 
 echo "*** Creating Jenkins Swarm Slave Startup Script ***" 
-echo '#
-#!/bin/bash
+echo '#!/bin/bash
 echo Starting up connection to $1 using name: $2  
 java -jar swarm-client-<%= @jenkins_swarm_version_to_use %>-jar-with-dependencies.jar -master $1 -executors 2 -name $2 > ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;
-chmod +X ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;
+chmod +X ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;'
 
         ]]>
       </script>
