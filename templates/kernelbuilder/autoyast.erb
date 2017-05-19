@@ -412,6 +412,27 @@ rpm -ivh /usr/local/src/packages/RPMS/x86_64/kernel-*.rpm --force ;
 
         </source>                       
       </script> 
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>build_linux_omi-<%=@name%>.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+# Get Upstream Kernel Source
+/usr/bin/git clone https://github.com/Microsoft/omi
+
+# CD to  Kernel Source and Do work
+#cd /usr/src/omi && yes "" |make oldconfig && make rpm;
+cd /usr/src/omi && ./configure --prefix=/opt/omi --bindir=/usr/local/bin && make && make rpm;
+# Blunt force install the packages
+rpm -ivh /usr/local/src/packages/RPMS/x86_64/omi-*.rpm --force ;
+
+
+]]>
+
+        </source>                       
+      </script> 
     </post-scripts>
     <init-scripts config:type="list">
       <!--  Init scripts -->
