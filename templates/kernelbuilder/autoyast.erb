@@ -420,7 +420,7 @@ rpm -ivh /usr/local/src/packages/RPMS/x86_64/kernel-*.rpm --force ;
         <source>
         <![CDATA[#!/bin/bash
 # Get Upstream Kernel Source
-/usr/bin/git clone https://github.com/Microsoft/omi
+/usr/bin/git clone https://github.com/Microsoft/omi /usr/src/omi
 
 # CD to  Kernel Source and Do work
 #cd /usr/src/omi && yes "" |make oldconfig && make rpm;
