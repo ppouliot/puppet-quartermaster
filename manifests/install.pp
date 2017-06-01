@@ -708,7 +708,7 @@ menu passwordrow 11
   class{'::nfs':
     server_enabled => true,
     nfs_v4_client  => false,
-    nfs_v4_idmap_domain  => $::domain,
+    nfs_v4_idmap_domain  => '.local',
   }
   nfs::server::export{'/srv/quartermaster':
     ensure  => 'mounted',
