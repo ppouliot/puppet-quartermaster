@@ -1,0 +1,454 @@
+<?xml version="1.0"?>
+<!DOCTYPE profile>
+
+<!-- http://doc.opensuse.org/projects/autoyast/configuration.html -->
+
+<profile xmlns="http://www.suse.com/1.0/yast2ns" xmlns:config="http://www.suse.com/1.0/configns">
+    <general>
+     <signature-handling>
+          <accept_unsigned_file config:type="boolean">true</accept_unsigned_file>
+          <accept_file_without_checksum config:type="boolean">true</accept_file_without_checksum>
+          <accept_verification_failed   config:type="boolean">true</accept_verification_failed>
+          <accept_unknown_gpg_key       config:type="boolean">true</accept_unknown_gpg_key>
+          <import_gpg_key               config:type="boolean">true</import_gpg_key>
+          <accept_non_trusted_gpg_key   config:type="boolean">true</accept_non_trusted_gpg_key>
+      </signature-handling>
+      <mode>
+          <confirm config:type="boolean">false</confirm>
+          <forceboot config:type="boolean">true</forceboot>
+          <final_reboot config:type="boolean">false</final_reboot>
+     </mode>
+    </general>
+    <report>
+        <messages>
+            <show config:type="boolean">false</show>
+            <timeout config:type="integer">10</timeout>
+            <log config:type="boolean">true</log>
+        </messages>
+        <warnings>
+            <show config:type="boolean">false</show>
+            <timeout config:type="integer">10</timeout>
+            <log config:type="boolean">true</log>
+        </warnings>
+        <errors>
+            <show config:type="boolean">false</show>
+            <timeout config:type="integer">10</timeout>
+            <log config:type="boolean">true</log>
+        </errors>
+    </report>
+
+    <keyboard>
+        <keymap>english-us</keymap>
+    </keyboard>
+    <language>
+        <language>en_US</language>
+        <languages>en_US</languages>
+    </language>
+    <timezone>
+        <hwclock>UTC</hwclock>
+        <timezone>US/Eastern</timezone>
+    </timezone>
+
+    <partitioning config:type="list">
+        <drive>
+<!--            <device>/dev/vda</device> -->
+            <initialize config:type="boolean">true</initialize>
+            <partitions config:type="list">
+                <partition>
+                    <label>boot</label>
+                    <mount>/boot</mount>
+                    <mountby config:type="symbol">label</mountby>
+                    <partition_type>primary</partition_type>
+                    <size>500M</size>
+                </partition>
+                <partition>
+                    <label>system</label>
+                    <lvm_group>system</lvm_group>
+                    <partition_type>primary</partition_type>
+                    <size>max</size>
+                </partition>
+            </partitions>
+            <use>all</use>
+        </drive>
+        <drive>
+            <device>/dev/system</device>
+            <initialize config:type="boolean">true</initialize>
+            <is_lvm_vg config:type="boolean">true</is_lvm_vg>
+            <partitions config:type="list">
+                <partition>
+                    <label>swap</label>
+                    <mountby config:type="symbol">label</mountby>
+                    <filesystem config:type="symbol">swap</filesystem>
+                    <lv_name>swap</lv_name>
+                    <mount>swap</mount>
+                    <size>2G</size>
+                </partition>
+                <partition>
+                    <label>root</label>
+                    <mountby config:type="symbol">label</mountby>
+                    <filesystem config:type="symbol">ext4</filesystem>
+                    <lv_name>root</lv_name>
+                    <mount>/</mount>
+                    <size>max</size>
+                </partition>
+            </partitions>
+            <pesize>4M</pesize>
+            <type config:type="symbol">CT_LVM</type>
+            <use>all</use>
+        </drive>
+    </partitioning>
+
+    <bootloader>
+        <loader_type>grub2</loader_type>
+    </bootloader>
+
+    <networking>
+        <ipv6 config:type="boolean">false</ipv6>
+        <keep_install_network config:type="boolean">true</keep_install_network>
+        <dns>
+            <dhcp_hostname config:type="boolean">true</dhcp_hostname>
+            <dhcp_resolv config:type="boolean">true</dhcp_resolv>
+            <domain>local</domain>
+            <hostname>opensuse</hostname>
+        </dns>
+        <interfaces config:type="list">
+            <interface>
+                <bootproto>dhcp</bootproto>
+                <device>eth0</device>
+                <startmode>onboot</startmode>
+            </interface>
+        </interfaces>
+    </networking>
+
+    <firewall>
+        <enable_firewall config:type="boolean">false</enable_firewall>
+        <start_firewall config:type="boolean">false</start_firewall>
+    </firewall>
+    <add-on>
+     <add_on_products config:type="list">
+      <listentry>
+        <media_url>http://download.opensuse.org/repositories/systemsmanagement:/puppet/openSUSE_13.2/</media_url>
+        <product>systemsmanagement_puppet</product>
+        <product_dir>/</product_dir>
+        <ask_on_error config:type="boolean">false</ask_on_error>
+        <!-- available since openSUSE 11.0/SLES 11 -->
+        <name>systemsmanagement:puppet</name> <!-- available since openSUSE 11.1/SLES11 (bnc#433981) -->
+      </listentry>
+     </add_on_products>
+    </add-on>
+
+    <software>
+        <image/>
+        <instsource>http://download.opensuse.org/distribution/13.2/repo/oss</instsource>
+        <do_online_update config:type="boolean">true</do_online_update>
+        <kernel>kernel-default</kernel>
+        <patterns config:type="list">
+            <pattern>minimal_base</pattern> <!-- PATTERN FOR KERNEL BUILDING ENVIRONMENT -->
+            <pattern>devel_C_C++</pattern>
+            <pattern>devel_rpm_build</pattern>
+<!-- Trying to get to a minimal install
+            <pattern>base</pattern>
+            <pattern>enhanced_base</pattern>
+-->
+            <pattern>console</pattern>
+            <pattern>remote_desktop</pattern>
+            <pattern>yast2_basis</pattern>
+        </patterns>
+        <packages config:type="list">
+            <package>curl</package>
+            <package>git</package>
+<!--
+# Additinal SCM to add later
+            <package>svn</package>
+            <package>cvs</package>
+-->
+	    <package>iputils</package>
+            <package>ntp</package>
+            <package>openssh</package>
+            <package>sudo</package>
+            <package>rsync</package>
+            <package>wget</package>
+            <package>curl</package>
+            <package>git</package>
+	    <package>iputils</package>
+            <!-- ipmi tooling
+	    <package>freeipmi</package>
+	    <package>freeipmi-bmc-watchdog</package>
+	    <package>freeipmi-ipmidetectd</package>
+	    <package>OpenIPMI</package>
+            -->
+	    <package>zypper</package>
+            <!-- Puppet/R10K/Hiera-Eyaml Installation -->
+            <package>puppet</package>
+            <!--
+            <package>rubygem-puppet</package>
+            -->
+            <!-- docker -->
+            <package>docker</package>
+            <!-- rpm package repo creation tool -->
+            <package>createrepo</package>
+            <!-- Python Tooling for PyJenkinsAPI++ -->
+            <package>python</package>
+            <package>python-d2to1</package>
+            <package>python-setuptools</package>
+            <package>python-py</package>
+            <package>python-pytz</package>
+            <package>python-requests</package>
+            <package>python-jenkinsapi</package>
+            <package>python-glanceclient</package>
+            <package>python-glanceclient-test</package>
+            <package>python-pysnmp</package>
+            <!-- Begin Windows Tooling Support -->
+            <!-- # RDP Support -->
+            <!-- ## FreeRDP 
+            <package>freerdp</package>
+            <package>freerdp-devel</package>
+            <package>libfreerdp-1_0</package>
+            <package>libfreerdp-1_0-plugins</package>
+            -->
+        </packages>
+        <remove-packages config:type="list">
+<!--
+            <package>desktop-translations</package>
+            <package>kernel-firmware</package>
+            <package>yast2-branding-openSUSE</package>
+-->
+        </remove-packages>
+    </software>
+
+    <runlevel>
+        <default>3</default>
+        <services config:type="list">
+            <service>
+                <service_name>ntp</service_name>
+                <service_status>enable</service_status>
+            </service>
+            <service>
+                <service_name>sshd</service_name>
+                <service_status>enable</service_status>
+            </service>
+        </services>
+    </runlevel>
+
+    <groups config:type="list">
+        <group>
+            <gid>100</gid>
+            <groupname>users</groupname>
+            <userlist/>
+        </group>
+    </groups>
+
+    <user_defaults>
+        <expire/>
+        <group>100</group>
+        <groups/>
+        <home>/home</home>
+        <inactive>-1</inactive>
+        <no_groups config:type="boolean">true</no_groups>
+        <shell>/bin/bash</shell>
+        <skel>/etc/skel</skel>
+        <umask>022</umask>
+    </user_defaults>
+
+    <users config:type="list">
+        <user>
+            <user_password>opensuse</user_password>
+            <username>root</username>
+        </user>
+        <user>
+            <fullname>opensuse</fullname>
+            <gid>100</gid>
+            <home>/home/opensuse</home>
+            <password_settings>
+                <expire/>
+                <flag/>
+                <inact>-1</inact>
+                <max>99999</max>
+                <min>0</min>
+                <warn>7</warn>
+            </password_settings>
+            <shell>/bin/bash</shell>
+            <uid>1000</uid>
+            <user_password>opensuse</user_password>
+            <username>opensuse</username>
+        </user>
+        <user>
+            <fullname>jenkins</fullname>
+            <gid>100</gid>
+            <home>/opt/jenkins</home>
+            <password_settings>
+                <expire/>
+                <flag/>
+                <inact>-1</inact>
+                <max>99999</max>
+                <min>0</min>
+                <warn>7</warn>
+            </password_settings>
+            <shell>/bin/bash</shell>
+            <uid>1000</uid>
+            <user_password>opensuse</user_password>
+            <username>jenkins</username>
+        </user>
+    </users>
+    <kdump>
+        <add_crash_kernel config:type="boolean">false</add_crash_kernel>
+    </kdump>
+    <!-- Pre Install Scripts -->
+    <scripts>
+    <pre-scripts config:type="list">
+      <script>                          
+        <filename>pre_script_test.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+echo "Testing Pre Script" > /tmp/pre_script_test.txt
+]]>
+        </source>                       
+      </script> 
+    </pre-scripts>
+    <!-- Post Partition Scripts -->
+    <postpartitioning-scripts config:type="list">
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>pre_script_test.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+echo "Testing PostPartition Script" > /tmp/post_partition_script_test.txt
+]]>
+        </source>                       
+      </script> 
+    </postpartitioning-scripts>
+    <!-- Chroot Scripts -->
+    <chroot-scripts config:type="list">
+    </chroot-scripts>
+    <!-- Post Scripts -->
+    <post-scripts config:type="list">
+      <script>
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>01-get_jenkin.sh</filename>    
+        <interpreter>shell</interpreter>
+        <network_needed config:type="boolean">true</network_needed>
+        <source>
+        <![CDATA[#!/bin/bash
+mkdir -p /opt/jenkins/bin ;
+mkdir -p /opt/jenkins/logs ;
+cd /opt/jenkins/bin/ ;
+
+echo "*** Downloading Jenkins Swarm Slave ***" 
+<!-- wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.3/swarm-client-3.3-jar-with-dependencies.jar swarm-client-3.3-jar-with-dependencies.jar 2> ../logs/01-get_jenkins.sh.log; -->
+
+wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.3/swarm-client-3.3.jar swarm-client-3.3.jar 2> ../logs/01-get_jenkins.sh.log;
+echo "*** Creating Jenkins Swarm Slave Startup Script ***" 
+echo '#!/bin/bash
+echo Starting up connection to $1 using name: $2  
+java -jar swarm-client-3.3.jar -master $1 -executors 2 -name $2 > ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;
+chmod +X ./start_slave.sh 2> ../logs/01-get_jenkins.sh.log;'
+        ]]>
+        </source>
+      </script>
+
+      <script>
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>rename_host.sh</filename>    
+        <interpreter>shell</interpreter>
+        <network_needed config:type="boolean">true</network_needed>
+        <source>
+        <![CDATA[#!/bin/bash
+# SET HOSTNAME
+if [ "$HOSTNAME" = "opensuse" -o "$HOSTNAME" = "linux-*" ];
+then
+  #set hostname to mac address of eth0
+  ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
+  NEWHOSTNAME=`/sbin/ifconfig | grep $ACTIVE_INTERFACE | tr -s " " | cut -d " " -f5 | /usr/bin/perl -p -e "s/://g;"`
+  echo $NEWHOSTNAME > /etc/hostname
+  echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+else
+  echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+fi
+
+if [ -f /etc/hostname ]
+then
+  echo $NEWHOSTNAME > /etc/hostname
+fi
+]]>
+        </source>                       
+      </script>
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>install_powershell_from_ms_package.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+echo "installing powershell"
+import https://packages.microsoft.com/keys/microsoft.asc
+sudo zypper install https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/powershell-6.0.0_alpha.18-1.suse.42.1.x86_64.rpm
+
+
+]]>
+        </source>                       
+      </script> 
+<!--
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>build_kernel_linux-next-opensuse-13.2-x86_64.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+# Get Upstream Kernel Source
+/usr/bin/git clone git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git /usr/src/linux-next
+
+# CD to  Kernel Source and Do work
+cd /usr/src/linux-next && yes "" |make oldconfig && make rpm;
+# Blunt force install the packages
+rpm -ivh /usr/local/src/packages/RPMS/x86_64/kernel-*.rpm --force ;
+
+
+]]>
+
+        </source>                       
+      </script> 
+-->
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>build_linux_omi-opensuse-13.2-x86_64.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+# Get Upstream Kernel Source
+/usr/bin/git clone https://github.com/Microsoft/omi /usr/srv/omi
+
+# CD to  Kernel Source and Do work
+#cd /usr/src/omi && yes "" |make oldconfig && make rpm;
+cd /usr/src/omi && ./configure --prefix=/opt/omi --bindir=/usr/local/bin && make && make rpm;
+# Blunt force install the packages
+rpm -ivh /usr/local/src/packages/RPMS/x86_64/omi-*.rpm --force ;
+
+
+]]>
+
+        </source>                       
+      </script> 
+    </post-scripts>
+    <init-scripts config:type="list">
+      <!--  Init scripts -->
+      <script>                          
+        <debug config:type="boolean">true</debug>
+        <feedback config:type="boolean">false</feedback>
+        <filename>install_r10k_hiera-eyaml.sh</filename>    
+        <interpreter>shell</interpreter>
+        <source>
+        <![CDATA[#!/bin/bash
+/usr/bin/gem install r10k hiera-eyaml
+]]>
+        </source>                       
+      </script> 
+    </init-scripts>
+  </scripts>
+</profile>
