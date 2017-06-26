@@ -1,12 +1,10 @@
 #!/bin/bash
 
-NEWHOSTNAME=/usr/bin/ip a | /usr/bin/grep "ether" | /usr/bin/tr -s " " | /usr/bin/cut -d " " -f3 | /usr/bin/sed -e "s/://g;"
+NEWHOSTNAME=`/usr/bin/ip a | /usr/bin/grep "ether" | /usr/bin/tr -s " " | /usr/bin/cut -d " " -f3 | /usr/bin/sed -e "s/://g;"`
 sudo hostname $NEWHOSTNAME
 
-if [ -e "/dev/vda" ]
-
 # Download cloud-config
-curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @coreos %>/<%= @name %>.<%= @autofile %>
+curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
 # Run install 
 
 if [ -e "/dev/vda" ]
