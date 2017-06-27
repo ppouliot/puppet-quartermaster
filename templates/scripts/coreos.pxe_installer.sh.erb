@@ -1,7 +1,9 @@
 #!/bin/bash
 
 NEWHOSTNAME=`/usr/bin/ip a | /usr/bin/grep "ether" | /usr/bin/tr -s " " | /usr/bin/cut -d " " -f3 | /usr/bin/sed -e "s/://g;"`
-sudo hostnamectl set-hostname  $NEWHOSTNAME
+export $NEWHOSTNAME
+sudo hostname -s $NEWHOSTNAME
+sudo hostnamectl set-hostname $NEWHOSTNAME
 
 # Download cloud-config
 curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
