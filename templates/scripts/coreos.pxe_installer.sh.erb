@@ -8,7 +8,7 @@ sudo hostnamectl set-hostname $NEWHOSTNAME
 
 # Download cloud-config
 curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
-sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./coreos-stable-amd64.cloud-config.yml
+sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autofile %>
 
 # Run install 
 
