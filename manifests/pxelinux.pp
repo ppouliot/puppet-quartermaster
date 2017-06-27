@@ -493,6 +493,11 @@ define quartermaster::pxelinux (
       mode    => '0777',
       content => template('quartermaster/scripts/coreos.partition_remover.sh.erb'),
     }
+    file {"/srv/quartermaster/${distro}/${autofile}/${release}.custom_ip_resolution.sh":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/scripts/coreos.custom_ip_resolution.sh.erb'),
+    }
 
   }
 
