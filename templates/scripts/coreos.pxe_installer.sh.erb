@@ -8,6 +8,8 @@ sudo hostnamectl set-hostname $NEWHOSTNAME
 
 # Download cloud-config
 curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
+sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./coreos-stable-amd64.cloud-config.yml
+
 # Run install 
 
 if [ -e "/dev/vda" ]
