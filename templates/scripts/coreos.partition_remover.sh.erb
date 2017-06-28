@@ -23,7 +23,7 @@ do
     # Zero MBR
     sudo dd if=/dev/zero of=$disk bs=512 count=1
     # Zero MBR
-    sudo coreos-install -d /dev/sda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
+    sudo coreos-install -d $disk -C <%= @release %> -c <%= @name %>.<%= @autofile %>
   fi
 done
 
