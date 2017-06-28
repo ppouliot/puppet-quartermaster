@@ -86,37 +86,3 @@ write_files:
       mkdir -p /opt/bin
       curl -L `curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.assets[].browser_download_url | select(contains("Linux") and contains("x86_64"))'` > /opt/bin/docker-compose
       chmod +x /opt/bin/docker-compose
-  - path: "/home/core/docker_remove_images.sh"
-    permissions: "0777"
-    owner: "core"
-    content: |
-      #! /bin/bash
-      echo "Removing exited docker containers..."
-      docker rm -v $(docker ps -a -f status=exited -q)
-      echo "Removing untagged images..."
-      docker rmi $(docker images --no-trunc | grep "<none>" | awk '{print $3}')
-      echo "Removing unused docker images"
-      images=($(docker images | awk '{print $1":"$2}'))
-      containers=($(docker ps -a | awk '{print $2}'))
-      containers_reg=" ${containers[*]} "
-      remove=()
-      for item in ${images[@]}; do
-        if [[ ! $containers_reg =~ " $item " ]]; then
-        remove+=($item)
-      fi
-      done
-      remove_images=" ${remove[*]} "
-      docker rmi ${remove_images}
-      echo "Done"
-  - path: "/home/core/docker_remove_running_containers.sh"
-    permissions: "0777"
-    owner: "core"
-    content: |
-      #!/bin/bash
-      docker ps -a | awk '{print $1}' | xargs --no-run-if-empty docker rm -f
-  - path: "/home/core/docker_remove_stale_containers.sh"
-    permissions: "0777"
-    owner: "core"
-    content: |
-      #!/bin/bash
-      docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
