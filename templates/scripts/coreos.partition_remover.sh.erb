@@ -1,4 +1,14 @@
 #!/bin/bash
+ACTIVE_INTERFACE=`/usr/bin/ip route get 1 | /usr/bin/tr -s " " | /usr/bin/cut -d " " -f5`
+NEWHOSTNAME=`/usr/bin/ifconfig $ACTIVE_INTERFACE | /usr/bin/grep "ether" | /usr/bin/tr -s " " | /usr/bin/cut -d " " -f3 | /usr/bin/sed -e "s/://g;"`
+echo $ACTIVE_INTERFACE
+echo $NEWHOSTNAME
+sudo hostname -s $NEWHOSTNAME
+sudo hostnamectl set-hostname $NEWHOSTNAME
+
+# Download cloud-config
+curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
+sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autofile %>
 
 for disk in /dev/sda /dev/vda
 do
@@ -10,11 +20,13 @@ do
     do
       sudo parted -s $disk rm $partition
     done
-#  # Zero MBR
+    # Zero MBR
     sudo dd if=/dev/zero of=$disk bs=512 count=1
+    # Zero MBR
+    sudo coreos-install -d /dev/sda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
   fi
 done
 
 
 # Reboot 
- sudo reboot
+sudo reboot
