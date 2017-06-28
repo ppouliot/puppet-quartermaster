@@ -1,17 +1,19 @@
 #!/bin/bash
-disk=/dev/sda    # /   (root directory)
 
-if [ -b "$disk" ]
-then
-  sudo parted /dev/sda unit s print free
-  echo "$disk is a block device."
-  for partition in $(sudo parted -s $disk print|awk '/^ / {print $1}')
-  do
-    sudo parted -s $disk rm $partition
-  done
+for disk in /dev/sda /dev/vda
+do
+  if [ -b "$disk" ]
+  then
+    sudo parted $disk unit s print free
+    echo "$disk is a block device."
+    for partition in $(sudo parted -s $disk print|awk '/^ / {print $1}')
+    do
+      sudo parted -s $disk rm $partition
+    done
 #  # Zero MBR
-  sudo dd if=/dev/zero of=$disk bs=512 count=1
-fi
+    sudo dd if=/dev/zero of=$disk bs=512 count=1
+  fi
+done
 
 
 # Reboot 
