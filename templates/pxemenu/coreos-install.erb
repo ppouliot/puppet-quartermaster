@@ -4,24 +4,20 @@ LABEL <%= @name %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rootfstype=btrfs coreos.autologin
 
-LABEL <%= @name %>-<%= @autofile %>-stage0-debug
-        MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Stage 0 - Get to Root using Github Gist
-        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND rootfstype=brtfs coreos.autologin initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=https://gist.github.com/ppouliot/e49ad503228d250a175f1de2734754ed.js
-
-
 LABEL <%= @name %>-<%= @autofile %>-install
         MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @release %>.pxe_installer.sh
 
-LABEL <%= @name %>-<%= @autofile %>-running-instance
-        MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> ^Running Instance
+LABEL <%= @name %>-<%= @autofile %>-cloud-config-only
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> Cloud-config ^Only
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
 
-LABEL <%= @name %>-<%= @autofile %>-partition_remover
-        MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> ^Partition Remover
+LABEL <%= @name %>-<%= @autofile %>-running-instance
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> ^Running Instance
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @release %>.partition_remover.sh
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.running_instance.sh
+
+
 

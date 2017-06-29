@@ -15,31 +15,6 @@ curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @au
 sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autofile %>
 sed -i "/ discovery: \"https://discovery.etcd.io/<token>\"/c\ $DISCOVERY" ./<%= @name %>.<%= @autofile %>
 
-
-# Run install 
-
-if [ -e "/dev/vda" ]
-then
-  for v_partition in $(sudo parted -s /dev/vda print|awk '/^ / {print $1}')
-  do
-    sudo parted -s /dev/vda rm ${v_partition}
-  done
- # Zero MBR
-  sudo dd if=/dev/zero of=/dev/vda bs=512 count=1
-  sudo coreos-install -d /dev/vda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
-fi
-
-
-if [ -e "/dev/sda" ]
-then
-  for partition in $(sudo parted -s /dev/sda print|awk '/^ / {print $1}')
-  do
-    sudo parted -s /dev/sda rm ${partition}
-  done
-  # Zero MBR
-  sudo dd if=/dev/zero of=/dev/sda bs=512 count=1
-  sudo coreos-install -d /dev/sda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
-fi
-
-# Reboot 
-sudo reboot
+# apply cloud config
+sudo coreos-cloudinit -validate --from-file ./<%= @name %>.<%= @autofile %>
+sudo coreos-cloudinit --from-file ./<%= @name %>.<%= @autofile %>

@@ -488,10 +488,10 @@ define quartermaster::pxelinux (
       mode    => '0777',
       content => template('quartermaster/scripts/coreos.pxe_installer.sh.erb'),
     }
-    file {"/srv/quartermaster/${distro}/${autofile}/${release}.partition_remover.sh":
+    file {"/srv/quartermaster/${distro}/${autofile}/${release}.running_instance.sh":
       ensure  => file,
       mode    => '0777',
-      content => template('quartermaster/scripts/coreos.partition_remover.sh.erb'),
+      content => template('quartermaster/scripts/coreos.running_instance.sh.erb'),
     }
     file {"/srv/quartermaster/${distro}/${autofile}/${release}.custom_ip_resolution.sh":
       ensure  => file,
