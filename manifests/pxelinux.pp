@@ -147,7 +147,7 @@ define quartermaster::pxelinux (
       }
       '22','23','24':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
-        $fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
+        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
         $fedora_flavor  = 'Server/'
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
