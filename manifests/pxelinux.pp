@@ -177,7 +177,7 @@ define quartermaster::pxelinux (
   if ( $distro == 'scientificlinux'){
     case $release {
       '50','51','52','53','54','55','56','57','58','59','510','511':{
-        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}"
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/obsolete/${release}/${p_arch}"
         $_dot_bootsplash     = '.lss'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
