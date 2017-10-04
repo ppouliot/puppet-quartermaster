@@ -231,8 +231,13 @@ define quartermaster::pxelinux (
         warning("OpenSUSE ${release} for ${p_arch} a discontinued distribution downloaded from ${url}")
         $opensuse_url = 'http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution'
       }
-      'openSUSE-stable','openSUSE-current':{
-        warning("OpenSUSE ${release} isn't currently functional")
+      'tumbleweed':{
+        warning("OpenSUSE ${release} rolling upgrades")
+        $opensuse_url = 'http://download.opensuse.org'
+      }
+      '42.2','42.3':{
+        warning("OpenSUSE ${release} rolling upgrades")
+        $opensuse_url = 'http://download.opensuse.org/distribution/leap'
       }
       default:{
         warning("${name} isn't a openSuSE release!")
