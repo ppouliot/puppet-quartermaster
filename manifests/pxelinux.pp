@@ -236,7 +236,7 @@ define quartermaster::pxelinux (
         $opensuse_url = 'http://download.opensuse.org'
       }
       '42.2','42.3':{
-        warning("OpenSUSE ${release} rolling upgrades")
+        warning("OpenSUSE ${release} LEAP")
         $opensuse_url = 'http://download.opensuse.org/distribution/leap'
       }
       default:{
