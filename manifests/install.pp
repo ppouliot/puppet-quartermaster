@@ -84,7 +84,7 @@ class quartermaster::install (
     '/srv/quartermaster/unattend.xml',
     '/srv/quartermaster/microsoft',
     '/srv/quartermaster/microsoft/iso',
-    '/srv/quartermaster/microsoft/mnt',
+    '/srv/quartermaster/microsoft/mount',
     '/srv/quartermaster/microsoft/winpe',
     '/srv/quartermaster/microsoft/winpe/bin',
     '/srv/quartermaster/microsoft/winpe/system',
