@@ -154,7 +154,7 @@ define quartermaster::pxelinux (
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
       }
-      '25':{
+      '25','26':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
         #$fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
         $fedora_url = 'http://mirrors.mit.edu/fedora/linux/releases'
