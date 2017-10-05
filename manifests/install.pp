@@ -384,6 +384,13 @@ nameserver 4.2.2.2
 }',
   }
 
+  file_line{'etc_default_dnsmasq_DNSMASQ_EXCEPT_lo':
+    ensure => present,
+    path   => '/etc/default/dnsmasq',
+    line   => 'DNSMASQ_EXCEPT=lo',
+    notify => Service['dnsmasq'],
+  }
+
   ## TFTP Server Configuration
 
   # Create the tftp remap file to allow us to boot
