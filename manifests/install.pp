@@ -673,7 +673,7 @@ menu passwordrow 11
   }
   include autofs
   autofs::mount{'*':
-    mount       => '/srv/quartermaster/microsoft/mnt',
+    mount       => '/srv/quartermaster/microsoft/mount',
     mapfile     => '/etc/auto.quartermaster',
     mapcontents => [
       '* -fstype=iso9660,loop :/srv/quartermaster/microsoft/iso/&',
