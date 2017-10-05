@@ -227,7 +227,7 @@ define quartermaster::pxelinux (
 
   if ( $distro == 'opensuse') {
     case $release {
-      '10.2','10.3','11.0','11.1','11.2','11.3','11.4','12.1','12.2','12.3','13.1','13.3':{
+      '10.2','10.3','11.0','11.1','11.2','11.3','11.4','12.1','12.2','12.3','13.1','13.2','13.3':{
         warning("OpenSUSE ${release} for ${p_arch} a discontinued distribution downloaded from ${url}")
         $opensuse_url = 'http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution'
       }
