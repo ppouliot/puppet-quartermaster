@@ -676,8 +676,8 @@ menu passwordrow 11
     mount       => '/srv/quartermaster/microsoft/mount',
     mapfile     => '/etc/auto.quartermaster',
     mapcontents => [
-      '* -fstype=iso9660,loop :/srv/quartermaster/microsoft/iso/&',
       '* -fstype=udf,loop :/srv/quartermaster/microsoft/iso/&',
+      '* -fstype=iso9660,loop :/srv/quartermaster/microsoft/iso/&',
     ],
     options     => '--timeout=10',
     order       => 01,
