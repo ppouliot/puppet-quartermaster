@@ -391,7 +391,16 @@ define quartermaster::pxelinux (
       /(16.04)/     => 'xenial',
       /(16.10)/     => 'yakkety',
       /(17.04)/     => 'zesty',
+      /(17.10)/     => 'artful',
       default       => "${name} is not an Ubuntu release",
+    }
+    case $release {
+      '12.04','14,04','15.04','16.04','16.10','17.04','17.10':{
+        warning("Ubuntu ${release} is an active release")
+      }
+      default:{
+        warning("${name} isn't an active ubuntu release!")
+      }
     }
     $autofile        = 'preseed'
     $linux_installer = 'd-i'
