@@ -166,9 +166,9 @@ define quartermaster::pxelinux (
         $url_option        = 'url'
       }
       '21':{
-        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
-        $fedora_flavor  = 'Server/'
-        $_dot_bootsplash = '.png'
+        $fedora_url        = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
+        $fedora_flavor     = 'Server/'
+        $_dot_bootsplash   = '.png'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
@@ -176,13 +176,13 @@ define quartermaster::pxelinux (
       }
       '22','23','24':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
-        $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
-        $fedora_flavor  = 'Server/'
-        $_dot_bootsplash = '.png'
+        $fedora_url        = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
+        $fedora_flavor     = 'Server/'
+        $_dot_bootsplash   = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
-        $url_option        = 'inst.repo'
+        $url_option        = 'url'
       }
       '25','26':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
@@ -221,14 +221,16 @@ define quartermaster::pxelinux (
         $_dot_bootsplash     = '.lss'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
-        $ks_option         = 'ks'
+        $ks_option           = 'ks'
+        $url_option          = 'url'
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.jpg'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
-        $ks_option         = 'ks'
+        $ks_option           = 'ks'
+        $url_option          = 'url'
       }
       '7.0','7.1','7.2','7.3','7.4':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
@@ -236,6 +238,7 @@ define quartermaster::pxelinux (
         $vnc_option          = 'inst.vnc'
         $vnc_option_passwd   = 'inst.vncpasswd'
         $ks_option           = 'inst.ks'
+        $url_option          = 'url'
       }
       default:{
         warning("${name} isn't a scientificlinux release!")
@@ -254,7 +257,6 @@ define quartermaster::pxelinux (
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
     $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
     $boot_iso_url    = "${scientificlinux_url}/images/boot.iso"
-    $url_option      = 'url'
   }
 
   if ( $distro == 'opensuse') {
@@ -311,6 +313,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
 
       }
       '7':{
@@ -318,6 +321,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
+        $url_option        = 'inst.repo'
       }
       default:{
         notice("${name} does not need the _U variable!")
@@ -345,7 +349,7 @@ define quartermaster::pxelinux (
     $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
-    $_dot_bootsplash      = '.png'
+    $_dot_bootsplash = '.png'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
     $update_repo     = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
@@ -359,13 +363,14 @@ define quartermaster::pxelinux (
     $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
-    $_dot_bootsplash      = '.jpg'
+    $_dot_bootsplash = '.jpg'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
     $splashurl       = 'ISO Required for Splash'
-    $boot_iso_url  = 'No mini.iso or boot.iso to download'
-    $ks_option         = 'ks'
+    $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $ks_option       = 'ks'
+    $url_option      = 'url'
   }
   if ( $distro == 'sles' ) {
     $autofile        = 'autoyast'
@@ -375,12 +380,12 @@ define quartermaster::pxelinux (
     $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
-    $_dot_bootsplash      = '.jpg'
+    $_dot_bootsplash = '.jpg'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
     $splashurl       = 'ISO Required for Splash'
-    $boot_iso_url  = 'No mini.iso or boot.iso to download'
+    $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
   if ( $distro == 'sled' ) {
     $autofile        = 'autoyast'
@@ -390,12 +395,12 @@ define quartermaster::pxelinux (
     $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.gz"
-    $_dot_bootsplash      = '.jpg'
+    $_dot_bootsplash = '.jpg'
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
     $splashurl       = 'ISO Required for Splash'
-    $boot_iso_url  = 'No mini.iso or boot.iso to download'
+    $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
   if ( $distro == 'windows' ) {
     $autofile = 'unattend.xml'
