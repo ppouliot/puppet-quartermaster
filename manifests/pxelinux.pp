@@ -329,7 +329,7 @@ define quartermaster::pxelinux (
     }
     notice($_U)
     case $release {
-      '7.1','7.2','7.3':{
+      '7.1','7.2','7.3','7.4':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "https://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
