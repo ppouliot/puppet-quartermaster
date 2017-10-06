@@ -82,6 +82,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
 
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7':{
@@ -90,20 +91,39 @@ define quartermaster::pxelinux (
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
       }
-      '6.8','7.0.1406','7.1.1503','7.2.1511':{
+      '6.8':{
         $centos_url = "http://vault.centos.org/centos/${release}"
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
       }
-      '6.9','7.3.1611','7.4.1708':{
+      '6.9':{
         $centos_url = "http://mirror.centos.org/centos/${release}"
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
+      }
+      '7.0.1406','7.1.1503','7.2.1511':{
+        $centos_url = "http://vault.centos.org/centos/${release}"
+        $_dot_bootsplash = '.png'
+        $vnc_option        = 'inst.vnc'
+        $vnc_option_passwd = 'inst.vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'inst.repo'
+      }
+      '7.3.1611','7.4.1708':{
+        $centos_url = "http://mirror.centos.org/centos/${release}"
+        $_dot_bootsplash = '.png'
+        $vnc_option        = 'inst.vnc'
+        $vnc_option_passwd = 'inst.vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'inst.repo'
       }
       default:{
         warning("${name} is not a centos release")
@@ -134,6 +154,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
       }
       '7','8','9','10','11','12','13','14','15','16','17','18','19','20':{
         $fedora_url        = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
@@ -142,6 +163,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
       }
       '21':{
         $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
@@ -150,6 +172,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
+        $url_option        = 'url'
       }
       '22','23','24':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
@@ -159,6 +182,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
+        $url_option        = 'inst.repo'
       }
       '25','26':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
@@ -169,6 +193,7 @@ define quartermaster::pxelinux (
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
+        $url_option        = 'inst.repo'
       }
       default:{
         warning("${name} isn't a fedora release!")
@@ -229,6 +254,7 @@ define quartermaster::pxelinux (
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
     $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
     $boot_iso_url    = "${scientificlinux_url}/images/boot.iso"
+    $url_option      = 'url'
   }
 
   if ( $distro == 'opensuse') {
