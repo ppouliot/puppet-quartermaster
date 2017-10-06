@@ -592,6 +592,7 @@ define quartermaster::pxelinux (
             Tftp::File["${distro}/${p_arch}"],
             File["/srv/quartermaster/${distro}/ISO"],
           ],
+          timeout     => '0',
         }
       }
     }
