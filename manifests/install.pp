@@ -69,6 +69,12 @@ class quartermaster::install (
     ensure  => latest,
     require => File['/srv/quartermaster/logs'],
   }
+
+  # Kickstart Validator
+  package{'pykickstart':
+    ensure => latest,
+  }
+  
   
   # Define dictory structure on the filestem for default locations of bits.
 
