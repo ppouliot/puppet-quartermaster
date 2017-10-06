@@ -419,11 +419,12 @@ define quartermaster::pxelinux (
 
   if ( $distro == 'debian' ) {
     $rel_name = $release ? {
-      /(oldstable)/ => 'squeeze',
-      /(stable)/    => 'wheezy',
-      /(testing)/   => 'jessie',
-      /(unstable)/  => 'sid',
-      default       => "${name} is not an Debian release",
+      /(oldoldstable)/ => 'wheezy',
+      /(oldstable)/    => 'jessie',
+      /(stable)/       => 'stretch',
+      /(testing)/      => 'buster',
+      /(unstable)/     => 'sid',
+      default          => "${name} is not an Debian release",
     }
     $autofile        = 'preseed'
     $linux_installer = 'd-i'
