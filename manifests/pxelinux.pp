@@ -205,7 +205,7 @@ define quartermaster::pxelinux (
         $vnc_option_passwd   = 'vncpasswd'
         $ks_option         = 'ks'
       }
-      '7.0','7.1','7.2':{
+      '7.0','7.1','7.2','7.3','7.4':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.png'
         $vnc_option          = 'inst.vnc'
