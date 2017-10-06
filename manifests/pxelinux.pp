@@ -91,8 +91,8 @@ define quartermaster::pxelinux (
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
       }
-      '6.8','7.0.1406','7.1.1503','7.2.1511','7.3.1611','7.4.1708':{
-        $centos_url = "http://mirror.centos.org/centos/${rel_major}"
+      '6.8','6.9','7.0.1406','7.1.1503','7.2.1511','7.3.1611','7.4.1708':{
+        $centos_url = "http://mirror.centos.org/centos/${release}"
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
