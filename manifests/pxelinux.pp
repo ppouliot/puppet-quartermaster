@@ -351,7 +351,7 @@ define quartermaster::pxelinux (
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = 'ISO Required instead of URL'
-    $inst_repo       = "http://public-yum.oracle.com/repo/oracle/OracleLinux/OL${rel_major}${rel_minor}/base/${p_arch}"
+    $inst_repo       = "http://public-yum.oracle.com/repo/oracle/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}"
     $update_repo     = "http://yum.oracle.com/repo/OracleLinux/oracle/OL${rel_major}/latest/${p_arch}"
     $splashurl       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
   }
