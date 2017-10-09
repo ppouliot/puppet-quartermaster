@@ -614,7 +614,6 @@ define quartermaster::pxelinux (
             target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
             owner   => $::tftp::username,
             group   => $::tftp::username,
-            require =>  Tftp::File["${distro}/${p_arch}"],
             require => [
               Autofs::Mount["${distro}"],
               Staging::File["${name}-boot.iso"],
