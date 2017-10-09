@@ -711,20 +711,30 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
+  autofs::mount{'*':
+    mount       => "/srv/quartermaster/${distro}/mnt",
+    mapfile     => "/etc/auto.${distro}",
+    mapcontents => [
+      "* -fstype=iso9660,loop :/srv/quartermaster/${distro}/ISO/&",
+    ],
+    options     => '--timeout=10',
+    order       => 01,
+  }
+
   if ! defined (File["/srv/quartermaster/${distro}/mnt"]) {
     file { "/srv/quartermaster/${distro}/mnt":
       ensure  => directory,
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
-
-  ## Distro WebRoot Folder
-  if ! defined (File["/srv/quartermaster/${distro}"]) {
-    file { "/srv/quartermaster/${distro}":
-      ensure  => directory,
-      require => File[ '/srv/quartermaster' ],
-    }
-    notice(File["/srv/quartermaster/${distro}"])
+  autofs::mount{'*':
+    mount       => "/srv/quartermaster/${distro}/mnt",
+    mapfile     => "/etc/auto.${distro}",
+    mapcontents => [
+      "* -fstype=iso9660,loop :/srv/quartermaster/${distro}/ISO/&",
+    ],
+    options     => '--timeout=10',
+    order       => 01,
   }
 
   ## .README.html (FILE) /srv/quartermaster/distro/.README.html
