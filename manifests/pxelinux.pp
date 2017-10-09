@@ -340,18 +340,37 @@ define quartermaster::pxelinux (
         $url_option        = 'url'
 
       }
-      '5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
+      '5.0':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
-#        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
-#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/GA/${p_arch}/${boot_iso_name}"
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'url'
+      }
 
+      '5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
+        $_U                = 'U'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'url'
+      }
+
+      '6.0':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/GA/${p_arch}/${boot_iso_name}"
+        $_U                = 'U'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'url'
       }
 
       '6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','6.9':{
@@ -363,18 +382,30 @@ define quartermaster::pxelinux (
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'url'
-
       }
-      '7.1','7.2','7.3','7.4':{
+
+      '7.0':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/GA/${p_arch}/${boot_iso_name}"
         $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
         $url_option        = 'inst.repo'
       }
+
+      '7.1','7.2','7.3','7.4':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
+        $_U                = 'u'
+        $vnc_option        = 'inst.vnc'
+        $vnc_option_passwd = 'inst.vncpasswd'
+        $ks_option         = 'inst.ks'
+        $url_option        = 'inst.repo'
+      }
+
       default:{
         warning("${name} isn't a oraclelinux release!")
       }
