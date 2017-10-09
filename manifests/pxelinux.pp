@@ -874,7 +874,7 @@ if $linux_installer == !('No Supported Linux Installer') {
 #      content => template('quartermaster/README.html.footer.erb'),
       content => '</ul>
 </body>
-</html>',,
+</html>',
       order   => 03,
     }
   }
