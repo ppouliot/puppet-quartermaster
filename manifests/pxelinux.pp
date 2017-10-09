@@ -594,6 +594,33 @@ define quartermaster::pxelinux (
           ],
           timeout     => '0',
         }
+        # Retrieve installation kernel file if supported
+        if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
+          staging::file{"bootiso-${target_kernel}-${name}":
+            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${pxekernel}",
+            target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
+            owner   => $::tftp::username,
+            group   => $::tftp::username,
+            require => [
+              Autofs::Mount["${distro}"],
+              Staging::File["${name}-boot.iso"],
+            ],
+          }
+        }
+        # Retrieve initrd file if supported
+        if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
+          staging::file{"bootiso-${target_initrd}-${name}":
+            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${src_initrd}",
+            target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
+            owner   => $::tftp::username,
+            group   => $::tftp::username,
+            require =>  Tftp::File["${distro}/${p_arch}"],
+            require => [
+              Autofs::Mount["${distro}"],
+              Staging::File["${name}-boot.iso"],
+            ],
+          }
+        }
       }
     }
     'No URL Specified':{
