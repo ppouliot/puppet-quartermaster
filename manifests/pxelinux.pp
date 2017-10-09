@@ -711,14 +711,16 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
-  autofs::mount{'*':
-    mount       => "/srv/quartermaster/${distro}/mnt",
-    mapfile     => "/etc/auto.${distro}",
-    mapcontents => [
-      "* -fstype=iso9660,loop :/srv/quartermaster/${distro}/ISO/&",
-    ],
-    options     => '--timeout=10',
-    order       => 01,
+  if ! defined (Autofs::Mount["${distro}"]) {
+    autofs::mount{"${distro}":
+      mount       => "/srv/quartermaster/${distro}/mnt",
+      mapfile     => "/etc/auto.${distro}",
+      mapcontents => [
+        "* -fstype=iso9660,loop :/srv/quartermaster/${distro}/ISO/&",
+      ],
+      options     => '--timeout=10',
+      order       => 01,
+    }
   }
 
   if ! defined (File["/srv/quartermaster/${distro}/mnt"]) {
