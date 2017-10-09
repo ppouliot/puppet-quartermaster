@@ -822,7 +822,8 @@ if $linux_installer == !('No Supported Linux Installer') {
 <head><title> ${distro} ${release} ${p_arch}</title></head>
 <body>
 <h1>Operating System: ${distro} </h1>
-<h2>Platform Releases Installed: </h2>",
+<h2>Platform Releases Installed: </h2>
+<ul>",
       order   => 01,
     }
   }
@@ -830,8 +831,7 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}.default_README_release_body.${name}"]) {
     concat::fragment { "${distro}.default_README_release_body.${name}":
       target  => "/srv/quartermaster/${distro}/.README.html",
-      content => "${release},
-",
+      content => "<li>${release}</li> ",
       order   => 02,
     }
   }
@@ -839,7 +839,10 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}.default_README_footer"]) {
     concat::fragment { "${distro}.default_README_footer":
       target  => "/srv/quartermaster/${distro}/.README.html",
-      content => template('quartermaster/README.html.footer.erb'),
+#      content => template('quartermaster/README.html.footer.erb'),
+      content => '</ul>
+</body>
+</html>',,
       order   => 03,
     }
   }
