@@ -332,7 +332,7 @@ define quartermaster::pxelinux (
       '4.4','4.5','4.6','4.7','4.8':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -343,7 +343,7 @@ define quartermaster::pxelinux (
       '5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
 #        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
 #       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
         $_U                = 'U'
@@ -357,7 +357,7 @@ define quartermaster::pxelinux (
       '6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','6.9':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
