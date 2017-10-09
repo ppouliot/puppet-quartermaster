@@ -307,8 +307,32 @@ define quartermaster::pxelinux (
   # Begin tests for dealing with OracleLinux Repos
   if ( $distro == 'oraclelinux' ) {
     # Character Adjustment for Releases between 6 and 7
-    case $rel_major {
-      '6':{
+#    case $rel_major {
+#      '6':{
+#        $_U                = 'U'
+#        $vnc_option        = 'vnc'
+#        $vnc_option_passwd = 'vncpasswd'
+#        $ks_option         = 'ks'
+#        $url_option        = 'url'
+#
+#      }
+#      '7':{
+#        $_U                = 'u'
+#        $vnc_option        = 'inst.vnc'
+#        $vnc_option_passwd = 'inst.vncpasswd'
+#        $ks_option         = 'inst.ks'
+#        $url_option        = 'inst.repo'
+#      }
+#      default:{
+#        notice("${name} does not need the _U variable!")
+#      }
+#    }
+#    notice($_U)
+    case $release {
+      '4.4','4.5','4.6','4.7','4.8':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -316,7 +340,35 @@ define quartermaster::pxelinux (
         $url_option        = 'url'
 
       }
-      '7':{
+      '5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+#        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $_U                = 'U'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'url'
+
+      }
+
+      '6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','6.9':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $_U                = 'U'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'url'
+
+      }
+      '7.1','7.2','7.3','7.4':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
         $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
@@ -324,24 +376,15 @@ define quartermaster::pxelinux (
         $url_option        = 'inst.repo'
       }
       default:{
-        notice("${name} does not need the _U variable!")
+        warning("${name} isn't a oraclelinux release!")
       }
+#      default:{
+#        warning("Oracle Linux ${release} is using the default name for the final boot.iso")
+#        $boot_iso_url    = "https://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
+#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
+#      }
     }
     notice($_U)
-    case $release {
-      '7.1','7.2','7.3','7.4':{
-        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
-        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
-#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
-      }
-
-      default:{
-        warning("Oracle Linux ${release} is using the default name for the final boot.iso")
-        $boot_iso_url    = "https://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
-#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
-      }
-    }
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
@@ -573,17 +616,19 @@ define quartermaster::pxelinux (
 # Retrieve installation kernel file if supported
   case $url {
     'ISO Required instead of URL':{
-      if $boot_iso_name {
-        warning("A specific boot_iso_name: ${boot_iso_name} exists for ${name}" )
-        $final_boot_iso_name = $boot_iso_name
-      } else {
-        $final_boot_iso_name = "${release}-${p_arch}-boot.iso"
-      }
-      notice($final_boot_iso_name)
+#      if $boot_iso_name {
+#        warning("A specific boot_iso_name: ${boot_iso_name} exists for ${name}" )
+#        $final_boot_iso_name = $boot_iso_name
+#      } else {
+#        $final_boot_iso_name = "${release}-${p_arch}-boot.iso"
+#        $final_boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+#      }
+#      notice($final_boot_iso_name)
       if ! defined (Staging::File["${name}-boot.iso"]){
         staging::file{"${name}-boot.iso":
           source  => $boot_iso_url,
-          target  => "/srv/quartermaster/${distro}/ISO/${final_boot_iso_name}",
+#          target  => "/srv/quartermaster/${distro}/ISO/${final_boot_iso_name}",
+          target  => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
           # Because we are grabbing ISOs here we may need more time when downloading depending on network connection
           # This wget_option will continue downloads (-c) use ipv4 (-4) retry refused connections and failed errors (--retry-connrefused ) then wait 1 sec
           # before next retry (--waitretry=1), wait a max of 20 seconds if no data is recieved and try again (--read-timeout=20)
@@ -598,7 +643,8 @@ define quartermaster::pxelinux (
         # Retrieve installation kernel file if supported
         if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
           staging::file{"bootiso-${target_kernel}-${name}":
-            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${pxekernel}",
+#            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${pxekernel}",
+            source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
             target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
             owner   => $::tftp::username,
             group   => $::tftp::username,
@@ -611,7 +657,8 @@ define quartermaster::pxelinux (
         # Retrieve initrd file if supported
         if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
           staging::file{"bootiso-${target_initrd}-${name}":
-            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${src_initrd}",
+#            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${src_initrd}",
+            source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
             target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
             owner   => $::tftp::username,
             group   => $::tftp::username,
