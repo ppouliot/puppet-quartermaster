@@ -863,7 +863,7 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}.default_README_release_body.${name}"]) {
     concat::fragment { "${distro}.default_README_release_body.${name}":
       target  => "/srv/quartermaster/${distro}/.README.html",
-      content => "<li>${release}</li> ",
+      content => "<li>${release} (${p_arch})</li> ",
       order   => 02,
     }
   }
