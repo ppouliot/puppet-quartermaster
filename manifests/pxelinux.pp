@@ -332,7 +332,7 @@ define quartermaster::pxelinux (
       '7.1','7.2','7.3','7.4':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "https://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
 #       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${boot_iso_name}"
       }
 
@@ -351,9 +351,9 @@ define quartermaster::pxelinux (
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = 'ISO Required instead of URL'
-    $inst_repo       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
-    $update_repo     = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
-    $splashurl       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}/"
+    $inst_repo       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
+    $update_repo     = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
+    $splashurl       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
   }
   if ( $distro == 'redhat' ) {
     $autofile        = 'kickstart'
