@@ -1,5 +1,5 @@
-# Preseed for Hyper-V VM
-# by Peter Pouliot <ppouliot@microsoft.com>
+# Preseed for <%= @distro  %>-<%= @release %>-<%= @p_arch %>
+# by Peter Pouliot <peter@pouliot.net>
 d-i debian-installer/locale select en_US.UTF-8
 d-i localechooser/supported-locales multiselect en_US.UTF-8
 d-i localechooser/countrylist/North_America select US
@@ -17,7 +17,7 @@ d-i keyboard-configuration/variant select English (US)
 # Setup Local Mirror
 #d-i mirror/protocol string ftp
 #d-i mirror/country string manual
-d-i mirror/http/hostname string mirrors.med.harvard.edu
+d-i mirror/http/hostname string mirrors.kernel.org
 d-i mirror/http/directory string /<%= @distro %>
 d-i mirror/http/proxy string http://<%= @fqdn %>:3128/
 # Partitioning
@@ -73,11 +73,13 @@ d-i apt-setup/services-select multiselect security
 #d-i apt-setup/local0/key string http://apt.puppetlabs.com/pubkey.gpg
 
 d-i debian-installer/allow_unauthenticated string false
-# This line causes everything to be installed on Debian, while minimal on ubuntu
-# d-i tasksel/first multiselect
-# d-i tasksel/first multiselect	""
-tasksel tasksel/first multiselect	""
-# 
+
+<% if @distro == 'debian' %>
+tasksel tasksel/first multiselect standard
+<% else %>
+d-i tasksel/first multiselect
+<% end %>
+
 d-i pkgsel/include string vim screen git openssh-server software-properties-common
 d-i pkgsel/upgrade select safe-upgrade
 d-i pkgsel/language-packs multiselect 
