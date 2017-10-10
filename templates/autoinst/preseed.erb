@@ -75,11 +75,12 @@ d-i apt-setup/services-select multiselect security
 d-i debian-installer/allow_unauthenticated string false
 
 <% if @distro == 'debian' %>
-tasksel tasksel/first multiselect standard
+# tasksel tasksel/first multiselect standard
 <% else %>
-d-i tasksel/first multiselect
+# d-i tasksel/first multiselect
 <% end %>
 
+d-i tasksel/first multiselect
 d-i pkgsel/include string vim screen git openssh-server software-properties-common
 d-i pkgsel/upgrade select safe-upgrade
 d-i pkgsel/language-packs multiselect 
