@@ -224,7 +224,7 @@ define quartermaster::pxelinux (
         $ks_option           = 'ks'
         $url_option          = 'url'
       }
-      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8':{
+      '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','6.9':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.jpg'
         $vnc_option          = 'vnc'
