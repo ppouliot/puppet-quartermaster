@@ -73,7 +73,9 @@ d-i apt-setup/services-select multiselect security
 #d-i apt-setup/local0/key string http://apt.puppetlabs.com/pubkey.gpg
 
 d-i debian-installer/allow_unauthenticated string false
-d-i tasksel/first multiselect
+# This line causes everything to be installed on Debian, while minimal on ubuntu
+d-i tasksel/first multiselect	""
+# 
 d-i pkgsel/include string vim screen git openssh-server software-properties-common
 d-i pkgsel/upgrade select safe-upgrade
 d-i pkgsel/language-packs multiselect 
