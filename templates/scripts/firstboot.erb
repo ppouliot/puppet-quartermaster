@@ -16,7 +16,7 @@ if [ "$HOSTNAME" = "ubuntu" -o "$HOSTNAME" = "debian" ];
 then 
   #set hostname to mac address of eth0
   ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
-  NEWHOSTNAME=`/sbin/ifconfig | grep $ACTIVE_INTERFACE | tr -s " " | cut -d " " -f5 | /usr/bin/perl -pi -e "s/://g;"`
+  NEWHOSTNAME=`/sbin/ifconfig | grep $ACTIVE_INTERFACE | tr -s " " | cut -d " " -f5 | /bin/sed -e "s/://g;"`
   echo $NEWHOSTNAME > /etc/hostname
   echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
 else 
@@ -28,19 +28,23 @@ fi
 # this is a debian/ubuntu specific command
 release=`lsb_release -c | awk '{print $2}'`
 
-echo '### INSTALLING PUPPETLABS APT REPO for PUPPET PC1##'
-wget http://apt.puppet.com/puppetlabs-release-pc1-$release.deb; dpkg -i puppetlabs-release-pc1-$release.deb
+echo '*** Attempting to install the puppet5 release apt repository from apt.puppet.com first ***'
+puppet_package='puppet-agent'; wget http://apt.puppet.com/puppet5-release-$release.deb; dpkg -i puppet5-release-$release.deb
 if [ $? $test -eq 1 ]; then
-   echo "Could not find puppetlabs pc1 release for $release.  Trying alternative."
-   wget http://apt.puppetlabs.com/puppetlabs-release-$release.deb; dpkg -i puppetlabs-release-$release.deb
+   echo "*** Could not find puppet5-release for $release.  Trying puppetlabs-release-pc1 as alternative. ***"
+   puppet_package='puppet-agent'; wget http://apt.puppet.com/puppetlabs-release-pc1-$release.deb; dpkg -i puppetlabs-release-pc1-$release.deb
    if [ $? $test -eq 1 ]; then
-      echo "Could not find puppetlabs release for $release.  Trying alternative."
-      wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+      echo "*** Could not find puppetlabs pc1 release for $release.  Trying puppetlabs-release alternative. ***"
+      puppet_package='puppet'; wget http://apt.puppet.com/puppetlabs-release-$release.deb; dpkg -i puppetlabs-release-$release.deb
+      if [ $? $test -eq 1 ]; then
+         echo "Could not find puppetlabs-release for $release.  Trying puppetlabs-release-precise as alternative."
+         puppet_package='puppet'; wget http://apt.puppet.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
+      fi
    fi
 fi
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
-apt-get update -y && apt-get install -y openssh-server git puppet-agent ruby ruby-dev
+apt-get update -y && apt-get install -y $puppet_package ruby ruby-dev
 
 
 echo "### INSTALLING R10K and Hierra-eyaml ###"
