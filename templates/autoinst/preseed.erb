@@ -76,7 +76,7 @@ d-i debian-installer/allow_unauthenticated string false
 
 # Packages
 <% if @distro == 'debian' %>
-tasksel tasksel/first multiselect ssh-server
+tasksel tasksel/first multiselect standard ssh-server
 d-i pkgsel/include string vim screen git net-tools software-properties-common
 <% else %>
 d-i pkgsel/include string vim screen git openssh-server software-properties-common
