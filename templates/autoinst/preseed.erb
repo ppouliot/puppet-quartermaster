@@ -74,28 +74,36 @@ d-i apt-setup/services-select multiselect security
 
 d-i debian-installer/allow_unauthenticated string false
 
+# Packages
 <% if @distro == 'debian' %>
-# tasksel tasksel/first multiselect standard
+tasksel tasksel/first multiselect ssh-server
+d-i pkgsel/include string vim screen git software-properties-common
 <% else %>
-# d-i tasksel/first multiselect
-<% end %>
-
-d-i tasksel/first multiselect
 d-i pkgsel/include string vim screen git openssh-server software-properties-common
+<% end %>
 d-i pkgsel/upgrade select safe-upgrade
 d-i pkgsel/language-packs multiselect 
+
+# Update Policy
 d-i pkgsel/update-policy select unattend-upgrades
 #d-i pkgsel/update-policy select none
 d-i pkgsel/updatedb boolean true
+
+# Bootloader Configuration
 d-i grub-installer/skip boolean false
 d-i lilo-installer/skip boolean false
 d-i grub-installer/only_debian boolean true
 d-i grub-installer/with_other_os boolean true
+<% if @distro == 'debian' %>
+d-i grub-installer/bootdev string default
+<% end %>
 d-i finish-install/keep-consoles boolean false
 d-i finish-install/reboot_in_progress note 
 d-i cdrom-detect/eject boolean true
 d-i debian-installer/exit/halt boolean false
 d-i debian-installer/exit/poweroff boolean false
+
+
 byobu byobu/launch-by-default boolean true
 # Example 
 #d-i preseed/late_command string chroot /target sh -c "/usr/bin/curl -o /tmp/postinstall http://<%= @fqdn %>/bin/postinstall && /bin/sh -x /tmp/postinstall"
