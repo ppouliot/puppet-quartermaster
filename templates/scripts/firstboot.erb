@@ -1,6 +1,6 @@
 #!/bin/sh
-# LOGFILE='./firstboot.log'
-# exec >> $LOGFILE 2>&1
+LOGFILE='./firstboot.log'
+exec >> $LOGFILE 2>&1
 
 QUARTERMASTER=<%= @fqdn %>
 HOSTNAME=`hostname -s`
