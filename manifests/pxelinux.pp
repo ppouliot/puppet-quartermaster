@@ -518,7 +518,8 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
-    $mirror_url      = "archive.ubuntu.com"
+    $mirror_host     = "archive.ubuntu.com"
+    $mirror_path     = "${distro}/"
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
     $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
@@ -585,7 +586,8 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
-    $mirror_url      = "http.kali.org"
+    $mirror_host      = "http.kali.org"
+    $mirror_path     = "${distro}/"
     $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = 'http://http.kali.org/kali/dists/kali-rolling'
     $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'
