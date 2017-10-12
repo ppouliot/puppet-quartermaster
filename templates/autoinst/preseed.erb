@@ -16,7 +16,9 @@ d-i keyboard-configuration/variant select English (US)
 #d-i netcfg/confirm_static boolean true
 # Setup Local Mirror
 #d-i mirror/protocol string ftp
+<% if @distro == 'debian' %>
 d-i mirror/country string manual
+<% end %>
 d-i mirror/http/hostname string <%= @mirror_host %>
 d-i mirror/http/directory string /<%= @mirror_path %>
 d-i mirror/http/proxy string http://<%= @fqdn %>:3128/
