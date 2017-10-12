@@ -543,7 +543,10 @@ define quartermaster::pxelinux (
       default          => "${name} is not an Debian release",
     }
     case $release {
-      '2.0','2.1','2.2','3','3.1','4','5','6':{
+      '2.0','2.1','2.2','3','3.1':{
+        warning("${name} is not currently a pxeable debian release!")
+      }
+      '4','5','6':{
         $debian_url = "http://archive.debian.org"
       }
       '6','7','8','9','10':{
