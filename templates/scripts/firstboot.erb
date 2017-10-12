@@ -1,19 +1,21 @@
 #!/bin/sh
+LOGFILE='./firstboot.log'
+exec >> $LOGFILE 2>&1
+
+
+echo "### RELEASE_NAME:" $release_name "RELEASE_NUMBER:" $release_number "###"
+
 
 QUARTERMASTER=<%= @fqdn %>
 HOSTNAME=`hostname -s` 
 
 release_name=`lsb_release -c | awk '{print $2}'`
-release_number=`lsb_release -r | awk '{print $2}'`
+release_number=`lsb_release -r | awk '{print $2}'| tr -d '.'`
+echo "### RELEASE_NAME:" $release_name "RELEASE_NUMBER:" $release_number "###"
 
 sleep 20 
 
-# Test if a VM
-#dmidecode |grep -i "vm"
-
-HOSTNAME=`hostname -s` 
-
-if [[ "$HOSTNAME" = "debian" &&  "$release_number" -ge 10 ] -o ["$HOSTNAME" = "ubuntu" && "$release_number" -ge 17.10 ]];
+if [[ "$HOSTNAME" = "debian" ] && [ "$release_number" -ge 10 ] || ["$HOSTNAME" = "ubuntu" ] && [ "$release_number" -ge 17.10 ]];
 then
   ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
   NEWHOSTNAME=`/sbin/ifconfig | grep -3 $ACTIVE_INTERFACE | grep ether | tr -s " " | cut -d " " -f3 | /bin/sed -e "s/://g;"`
