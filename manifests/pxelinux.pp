@@ -547,7 +547,7 @@ define quartermaster::pxelinux (
       '2.0','2.1','2.2','3','3.1':{
         warning("${name} is not currently a pxeable debian release!")
       }
-      '4','5','6':{
+      '4','5':{
         $debian_url = "http://archive.debian.org"
         $mirror_url = "archive.debian.org"
       }
