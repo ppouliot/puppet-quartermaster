@@ -81,7 +81,7 @@ d-i debian-installer/allow_unauthenticated string false
 tasksel tasksel/first multiselect standard ssh-server
 d-i pkgsel/include string vim screen git net-tools software-properties-common
 <% else %>
-d-i pkgsel/include string vim screen git openssh-server software-properties-common
+d-i pkgsel/include string vim screen git net-tools openssh-server software-properties-common
 <% end %>
 d-i pkgsel/upgrade select safe-upgrade
 d-i pkgsel/language-packs multiselect 

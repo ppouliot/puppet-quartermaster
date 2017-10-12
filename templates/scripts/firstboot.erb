@@ -1,6 +1,11 @@
 #!/bin/sh
 
 QUARTERMASTER=<%= @fqdn %>
+HOSTNAME=`hostname -s` 
+
+release_name=`lsb_release -c | awk '{print $2}'`
+release_number=`lsb_release -r | awk '{print $2}'`
+
 sleep 20 
 
 # Test if a VM
@@ -8,7 +13,16 @@ sleep 20
 
 HOSTNAME=`hostname -s` 
 
-if [ "$HOSTNAME" = "ubuntu" -o "$HOSTNAME" = "debian" ];
+if [[ "$HOSTNAME" = "debian" &&  "$release_number" -ge 10 ] -o ["$HOSTNAME" = "ubuntu" && "$release_number" -ge 17.10 ]];
+then
+  ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
+  NEWHOSTNAME=`/sbin/ifconfig | grep -3 $ACTIVE_INTERFACE | grep ether | tr -s " " | cut -d " " -f3 | /bin/sed -e "s/://g;"`
+  echo $NEWHOSTNAME > /etc/hostname
+  echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
+fi
+
+
+if [ "$HOSTNAME" = "ubuntu" -o "$HOSTNAME" = "debian" -o "$HOSTNAME" = "kali" ];
 then 
   #set hostname to mac address of eth0
   ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
@@ -22,18 +36,18 @@ fi
 
 
 # this is a debian/ubuntu specific command
-release=`lsb_release -c | awk '{print $2}'`
+release_name=`lsb_release -c | awk '{print $2}'`
 
 echo '*** Attempting to install the puppet5 release apt repository from apt.puppet.com first ***'
-puppet_package='puppet-agent'; wget http://apt.puppet.com/puppet5-release-$release.deb; dpkg -i puppet5-release-$release.deb
+puppet_package='puppet-agent'; wget http://apt.puppet.com/puppet5-release-$release_name.deb; dpkg -i puppet5-release-$release_name.deb
 if [ $? $test -eq 1 ]; then
-   echo "*** Could not find puppet5-release for $release.  Trying puppetlabs-release-pc1 as alternative. ***"
-   puppet_package='puppet-agent'; wget http://apt.puppet.com/puppetlabs-release-pc1-$release.deb; dpkg -i puppetlabs-release-pc1-$release.deb
+   echo "*** Could not find puppet5-release for $release_name.  Trying puppetlabs-release-pc1 as alternative. ***"
+   puppet_package='puppet-agent'; wget http://apt.puppet.com/puppetlabs-release-pc1-$release_name.deb; dpkg -i puppetlabs-release-pc1-$release_name.deb
    if [ $? $test -eq 1 ]; then
-      echo "*** Could not find puppetlabs pc1 release for $release.  Trying puppetlabs-release alternative. ***"
-      puppet_package='puppet'; wget http://apt.puppet.com/puppetlabs-release-$release.deb; dpkg -i puppetlabs-release-$release.deb
+      echo "*** Could not find puppetlabs pc1 release for $release_name.  Trying puppetlabs-release alternative. ***"
+      puppet_package='puppet'; wget http://apt.puppet.com/puppetlabs-release-$release_name.deb; dpkg -i puppetlabs-release-$release_name.deb
       if [ $? $test -eq 1 ]; then
-         echo "Could not find puppetlabs-release for $release.  Trying puppetlabs-release-precise as alternative."
+         echo "Could not find puppetlabs-release for $release_name.  Trying puppetlabs-release-precise as alternative."
          puppet_package='puppet'; wget http://apt.puppet.com/puppetlabs-release-precise.deb; dpkg -i puppetlabs-release-precise.deb
       fi
    fi
