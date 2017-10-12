@@ -518,7 +518,7 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
-    $mirror_host     = "mirroris.kernel.org"
+    $mirror_host     = "mirrors.kernel.org"
     $mirror_path     = "${distro}"
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
