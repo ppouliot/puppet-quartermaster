@@ -545,10 +545,10 @@ define quartermaster::pxelinux (
       default => "${name} is not an Debian release",
     }
     case $release {
-      '2.0','2.1','2.2','3','3.1':{
+      '2.0','2.1','2.2','3','3.1','4':{
         warning("${name} is not currently a pxeable debian release!")
       }
-      '4','5','6':{
+      '5','6':{
         $debian_url = "http://archive.debian.org"
         $mirror_host = "archive.debian.org"
         $mirror_path = "${distro}"
