@@ -518,7 +518,7 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
-    $mirror_url      = "http://archive.ubuntu.com"
+    $mirror_url      = "archive.ubuntu.com"
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
     $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
@@ -549,9 +549,11 @@ define quartermaster::pxelinux (
       }
       '4','5','6':{
         $debian_url = "http://archive.debian.org"
+        $mirror_url = "archive.debian.org"
       }
       '6','7','8','9','10':{
         $debian_url = "http://ftp.debian.org"
+        $mirror_url = "ftp.debian.org"
       }
       default:{
         warning("${name} isn't a debian release!")
@@ -568,7 +570,6 @@ define quartermaster::pxelinux (
     $url             = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "${debian_url}/${distro}/dists/${rel_name}"
     $update_repo     = "${debian_url}/${distro}/dists/${rel_name}"
-    $mirror_url      = "${debian_url}"
     $splashurl       = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
@@ -581,7 +582,7 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
-    $mirror_url      = "http://http.kali.org"
+    $mirror_url      = "http.kali.org"
     $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = 'http://http.kali.org/kali/dists/kali-rolling'
     $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'

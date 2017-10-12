@@ -17,7 +17,7 @@ d-i keyboard-configuration/variant select English (US)
 # Setup Local Mirror
 #d-i mirror/protocol string ftp
 #d-i mirror/country string manual
-d-i mirror/http/hostname string mirrors.kernel.org
+d-i mirror/http/hostname string <%= @mirror_url %>
 d-i mirror/http/directory string /<%= @distro %>
 d-i mirror/http/proxy string http://<%= @fqdn %>:3128/
 # Partitioning
