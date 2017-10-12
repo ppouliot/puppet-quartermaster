@@ -45,7 +45,7 @@ if [ $? $test -eq 1 ]; then
 fi
 
 echo '### UPDATING AND INSTALLING NECESSARY PACKAGES ###'
-echo '*** PUPPET_PACKAGE: $puppet_package '***'
+echo '*** PUPPET_PACKAGE:' $puppet_package '***'
 apt-get update -y && apt-get install -y ruby ruby-dev $puppet_package
 
 
