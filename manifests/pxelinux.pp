@@ -541,7 +541,7 @@ define quartermaster::pxelinux (
       /(9)/   => 'stretch',
       /(10)/  => 'buster',
       /(11)/  => 'bullseye',
-      default          => "${name} is not an Debian release",
+      default => "${name} is not an Debian release",
     }
     case $release {
       '2.0','2.1','2.2','3','3.1':{
@@ -549,11 +549,14 @@ define quartermaster::pxelinux (
       }
       '4','5','6':{
         $debian_url = "http://archive.debian.org"
-        $mirror_url = "archive.debian.org"
+        $mirror_host = "mirrors.accretive-networks.net"
+        $mirror_path = "${distro}/archive-${distro}"
+
       }
       '7','8','9','10':{
         $debian_url = "http://ftp.debian.org"
-        $mirror_url = "ftp.debian.org"
+        $mirror_host = "ftp.debian.org"
+        $mirror_path = "${distro}/"
       }
       default:{
         warning("${name} isn't a debian release!")
