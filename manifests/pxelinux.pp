@@ -550,8 +550,8 @@ define quartermaster::pxelinux (
       }
       '4','5','6':{
         $debian_url = "http://archive.debian.org"
-        $mirror_host = "mirrors.accretive-networks.net"
-        $mirror_path = "${distro}/archive-${distro}"
+        $mirror_host = "archive.debian.org"
+        $mirror_path = "${distro}"
 
       }
       '7','8','9','10':{
