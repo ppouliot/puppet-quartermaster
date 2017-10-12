@@ -519,7 +519,7 @@ define quartermaster::pxelinux (
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash      = '.png'
     $mirror_host     = "archive.ubuntu.com"
-    $mirror_path     = "/${distro}"
+    $mirror_path     = "${distro}"
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
     $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
@@ -551,13 +551,13 @@ define quartermaster::pxelinux (
       '4','5','6':{
         $debian_url = "http://archive.debian.org"
         $mirror_host = "mirrors.accretive-networks.net"
-        $mirror_path = "/${distro}/archive-${distro}"
+        $mirror_path = "${distro}/archive-${distro}"
 
       }
       '7','8','9','10':{
         $debian_url = "http://ftp.debian.org"
         $mirror_host = "ftp.debian.org"
-        $mirror_path = "/${distro}"
+        $mirror_path = "${distro}"
       }
       default:{
         warning("${name} isn't a debian release!")
@@ -587,7 +587,7 @@ define quartermaster::pxelinux (
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $mirror_host      = "http.kali.org"
-    $mirror_path     = "/${distro}"
+    $mirror_path     = "${distro}"
     $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = 'http://http.kali.org/kali/dists/kali-rolling'
     $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'
