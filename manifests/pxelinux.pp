@@ -527,12 +527,31 @@ define quartermaster::pxelinux (
 
   if ( $distro == 'debian' ) {
     $rel_name = $release ? {
-      /(oldoldstable)/ => 'wheezy',
-      /(oldstable)/    => 'jessie',
-      /(stable)/       => 'stretch',
-      /(testing)/      => 'buster',
-      /(unstable)/     => 'sid',
+      /(2.0)/ => 'hamm',
+      /(2.1)/ => 'slink',
+      /(2.2)/ => 'potato',
+      /(3)/   => 'woody',
+      /(3.1)/ => 'sarge',
+      /(4)/   => 'etch',
+      /(5)/   => 'lenny',
+      /(6)/   => 'squeeze',
+      /(7)/   => 'wheezy',
+      /(8)/   => 'jessie',
+      /(9)/   => 'stretch',
+      /(10)/  => 'buster',
+      /(11)/  => 'bullseye',
       default          => "${name} is not an Debian release",
+    }
+    case $release {
+      '2.0','2.1','2.2','3','4','5','6':{
+        $debian_url = "http://archive.debian.org"
+      }
+      '6','7','8','9','10':{
+        $debian_url = "http://ftp.debian.org"
+      }
+      default:{
+        warning("${name} isn't a debian release!")
+      }
     }
     $autofile        = 'preseed'
     $linux_installer = 'd-i'
@@ -542,10 +561,10 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
-    $url             = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
-    $inst_repo       = "http://ftp.debian.org/${distro}/dists/${rel_name}"
-    $update_repo     = "http://ftp.debian.org/${distro}/dists/${rel_name}"
-    $splashurl       = "http://ftp.debian.org/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $url             = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
+    $inst_repo       = "${debian_url}/${distro}/dists/${rel_name}"
+    $update_repo     = "${debian_url}/${distro}/dists/${rel_name}"
+    $splashurl       = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
   }
   if ( $distro == 'kali' ) {
