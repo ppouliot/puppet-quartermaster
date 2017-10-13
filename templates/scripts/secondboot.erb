@@ -1,4 +1,6 @@
 #!/bin/sh
+LOGFILE='./secondboot.log'
+exec >> $LOGFILE 2>&1
 
 QUARTERMASTER=<%= @fqdn %>
 
