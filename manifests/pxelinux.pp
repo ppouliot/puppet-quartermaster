@@ -145,7 +145,7 @@ define quartermaster::pxelinux (
 
 
     if ! defined (vcsrepo["/srv/quartermaster/${distro}/kickstart/community"]) {
-      vcsrepo{"/srv/quartermater/${distro}kickstart/community":
+      vcsrepo{"/srv/quartermater/${distro}/kickstart/community":
         ensure   => 'latest',
         provider => 'git',
         source   => 'https://github.com/CentOS/Community-Kickstarts',
