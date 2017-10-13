@@ -17,7 +17,7 @@ then
   echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
 fi
 
-if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -lt 10 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -lt 1710 ];
+if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -lt 9 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -lt 1710 ];
 #if [ "$HOSTNAME" = "ubuntu" -o "$HOSTNAME" = "debian" -o "$HOSTNAME" = "kali" ];
 then
    #set hostname to mac address of eth0
