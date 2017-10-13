@@ -556,7 +556,7 @@ define quartermaster::pxelinux (
       }
       '7','8','9','10':{
         $debian_url = "http://ftp.debian.org"
-        $mirror_host = "mirrors.kernel.org"
+        $mirror_host = "ftp.debian.org"
         $mirror_path = "${distro}"
       }
       default:{
