@@ -1,15 +1,30 @@
 forge "http://forge.puppetlabs.com"
-mod "ajjahn/samba"
-mod 'ajjahn/samba'
-mod 'derdanne/nfs'
-mod 'dhollinger/autofs'
-mod 'lex/dnsmasq'
-mod 'puppet/staging'
-mod 'puppet/nginx'
-mod 'puppetlabs/concat'
-mod 'puppetlabs/apt'
-mod 'puppetlabs/tftp'
-mod 'puppetlabs/stdlib'
+
+# Misc Modules
+mod 'ajjahn/samba', :latest
+mod "derdanne/nfs", :latest
+
+# Changes to allow for proxydhcp
+mod "lex/dnsmasq",
+  :git    => 'https://github.com/ppouliot/puppet-dnsmasq',
+  :branch => 'master'
+
+# Voxpupuli Modules
+mod "puppet/autofs", :latest
+mod 'puppet/nginx', :latest
+mod "puppet/squid", :latest
+mod 'puppet/staging', :latest
+
+# Puppetlabs Modules
+mod 'puppetlabs/apt', :latest
+mod 'puppetlabs/concat', :latest
+mod 'puppetlabs/stdlib', :latest
+
+# Master branch accounts for systemd/upstart change in ubuntu
+mod "puppetlabs/tftp", # :latest
+  :git    => 'https://github.com/puppetlabs/puppetlabs-tftp',
+  :branch => 'master'
+
 mod "puppet/quartermaster", 
   :git    => 'https://github.com/ppouliot/puppet-quartermaster',
   :branch => 'master'
