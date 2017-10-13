@@ -19,6 +19,7 @@ mod 'puppet/staging', :latest
 mod 'puppetlabs/apt', :latest
 mod 'puppetlabs/concat', :latest
 mod 'puppetlabs/stdlib', :latest
+mod 'puppetlabs/vcsrepo', :latest
 
 # Master branch accounts for systemd/upstart change in ubuntu
 mod "puppetlabs/tftp", # :latest
