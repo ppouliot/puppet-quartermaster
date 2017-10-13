@@ -549,14 +549,14 @@ define quartermaster::pxelinux (
         warning("${name} is not currently a pxeable debian release!")
       }
       '5','6':{
-        $debian_url = "http://archive.debian.org"
-        $mirror_host = "archive.debian.org"
+        $debian_url = 'http://archive.debian.org'
+        $mirror_host = 'archive.debian.org'
         $mirror_path = "${distro}"
 
       }
       '7','8','9','10':{
-        $debian_url = "http://ftp.debian.org"
-        $mirror_host = "ftp.debian.org"
+        $debian_url = 'http://ftp.us.debian.org'
+        $mirror_host = 'ftp.us.debian.org'
         $mirror_path = "${distro}"
       }
       default:{
