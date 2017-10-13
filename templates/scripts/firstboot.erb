@@ -9,6 +9,7 @@ release_number=`lsb_release -r | awk '{print $2}'| tr -d '.'`
 
 echo "### RELEASE_NAME:" $release_name "RELEASE_NUMBER:" $release_number "###"
 
+sleep 20
 if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -ge 9 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -ge 1710 ];
 then
   ACTIVE_INTERFACE=`/sbin/route |grep default |awk '{ print $8 }'`
