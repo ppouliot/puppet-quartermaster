@@ -10,7 +10,7 @@ release_number=`lsb_release -r | awk '{print $2}'| tr -d '.'`
 echo "### RELEASE_NAME:" $release_name "RELEASE_NUMBER:" $release_number "###"
 
 sleep 20
-if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -ge 9 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -ge 1710 ];
+if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -ge 90 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -ge 1710 ];
 then
   ACTIVE_INTERFACE=`/sbin/route |grep default |awk '{ print $8 }'`
   NEWHOSTNAME=`/sbin/ifconfig | grep -3 $ACTIVE_INTERFACE | grep ether | tr -s " " | cut -d " " -f3 | /bin/sed -e "s/://g;"`
@@ -18,7 +18,7 @@ then
   echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
 fi
 
-if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -lt 9 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -lt 1710 ];
+if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -lt 90 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -lt 1710 ];
 #if [ "$HOSTNAME" = "ubuntu" -o "$HOSTNAME" = "debian" -o "$HOSTNAME" = "kali" ];
 then
    #set hostname to mac address of eth0
