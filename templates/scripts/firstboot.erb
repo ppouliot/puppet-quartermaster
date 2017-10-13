@@ -1,5 +1,5 @@
 #!/bin/sh
-LOGFILE='./firstboot.log'
+LOGFILE='/root/firstboot.log'
 exec >> $LOGFILE 2>&1
 
 QUARTERMASTER=<%= @fqdn %>
@@ -9,9 +9,9 @@ release_number=`lsb_release -r | awk '{print $2}'| tr -d '.'`
 
 echo "### RELEASE_NAME:" $release_name "RELEASE_NUMBER:" $release_number "###"
 
-if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -ge 10 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -ge 1710 ];
+if [ "$HOSTNAME" = "debian" ] && [ "$release_number" -ge 9 ] || [ "$HOSTNAME" = "ubuntu" ] && [ "$release_number" -ge 1710 ];
 then
-  ACTIVE_INTERFACE=`route |grep default |awk '{ print $8 }'`
+  ACTIVE_INTERFACE=`/sbin/route |grep default |awk '{ print $8 }'`
   NEWHOSTNAME=`/sbin/ifconfig | grep -3 $ACTIVE_INTERFACE | grep ether | tr -s " " | cut -d " " -f3 | /bin/sed -e "s/://g;"`
   echo $NEWHOSTNAME > /etc/hostname
   echo "### HOSTNAME:" $HOSTNAME "NEWHOSTNAME:" $NEWHOSTNAME "###"
