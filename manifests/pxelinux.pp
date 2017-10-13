@@ -142,15 +142,6 @@ define quartermaster::pxelinux (
     $update_repo     = "${centos_url}/updates/${p_arch}/"
     $splashurl       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
     $boot_iso_url  = "${centos_url}/os/${p_arch}/images/boot.iso"
-
-
-    if ! defined (vcsrepo["/srv/quartermaster/${distro}/kickstart/community"]) {
-      vcsrepo{"/srv/quartermater/${distro}/kickstart/community":
-        ensure   => 'latest',
-        provider => 'git',
-        source   => 'https://github.com/CentOS/Community-Kickstarts',
-      }
-    }
   }
       
   if ( $distro == 'fedora') {
