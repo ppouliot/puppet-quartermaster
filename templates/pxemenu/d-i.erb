@@ -21,7 +21,7 @@ LABEL <%= @name %>-hyper-v_vm-<%= @autofile %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en console-setup/layoutcode=en netcfg/choose_interface=eth1 netconfig/get_hostname=auto preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %>
 
-<% @distro == 'ubuntu' %>
+<% if @distro == 'ubuntu' %>
 LABEL <%= @name %>-dkirkland-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Dustin Kirkland Uinstall <%= @autofile %>  
         IPAPPEND 2
