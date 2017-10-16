@@ -57,7 +57,8 @@ puppetlabs-release-pc1
 %end
 
 %post --nochroot --log /mnt/sysimage/root/<%= @distro %>-copy-dhcp-lease.log
-@echo on
+set -x
+# @echo on
 echo "Copy Current Lease Information to New Installation"
 cp /var/lib/dhclient/* /mnt/sysimage/var/lib/dhclient/
 %end
