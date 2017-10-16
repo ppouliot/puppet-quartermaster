@@ -196,7 +196,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       ensure  => link,
       owner   => 'www-data',
       group   => 'www-data',
-#      mode    => '0644',
+      mode    => '0644',
       target  => "/srv/quartermaster/microsoft/mount/${name}",
       require =>  File[ "/srv/quartermaster/microsoft" ],
     }
