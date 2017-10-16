@@ -108,10 +108,10 @@ EPL7RELEASE=`/bin/cat /etc/redhat-release |/bin/awk '{print $4}'|/bin/sed -e "s/
 if [ "$HOSTNAME" = "centos" -o "$HOSTNAME" = "scientificlinux" -o "$HOSTNAME" = "oraclelinux" ]; then
   echo -n "Install Fedora EPL Repos"
   if [$EPL7RELEASE -ge "7.0" ]; then
-    /bin/rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/e/epel-release-7-9.noarch.rpm
+    /bin/rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
   fi
   if [$EPLRELEASE -ge "6.0" ]; then
-    /bin/rpm -ivh http://dl.fedoraproject.org/pub/epel/<%=@rel_major %>/<%= @p_arch %>/epel-release-6-8.noarch.rpm
+    /bin/rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
   fi
 fi
 %end
@@ -141,6 +141,7 @@ if [ -f /usr/bin/gem ]
   /usr/bin/gem install r10k hiera-eyaml
 fi
 %end
+
 %post --log /root/<%=@distro%>-puppet_service_configuration.log
 
 if [ -f /etc/sysconfig/puppet ]
@@ -156,16 +157,21 @@ server=<%= @puppetmaster %>
 EOF
 
 fi
+
 use_chkconfig=`ps -p 1 -o command | awk '{print $1}'|grep -c init`
 use_systemd=`ps -p 1 -o command | awk '{print $1}'|grep -c systemd`
+
 if [ $use_systemd -eq 0 ]
+  then
   systemctl enable puppet
 fi
 
 if [ $use_chkconfig -eq 0 ]
+  then
   chkconfig puppet on
 fi
 
 echo "Removing Old DHCP Lease Files"
 rm -rf /var/lib/dhclient/dhclient*.lease
+
 %end
