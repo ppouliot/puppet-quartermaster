@@ -319,6 +319,10 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
 #  }
 
+  file{"/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd":
+    ensure  => file,
+    content => template('quartermaster/winpe/startnet.cmd.erb'),
+  }
   exec{"${name}-boot.wim":
     command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/sources/boot.wim /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
     cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
