@@ -326,6 +326,14 @@ define quartermaster::windowsmedia( $activationkey ) {
     require => Exec["${name}-winpe-boot.sdi"],
     notify  => Exec["wimlib-imagex-unmount-${name}"],
   }
+  exec{"${name}-copy_winpe_fonts":
+    command => "/bin/cp -R /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/boot/fonts /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/fonts",
+    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/fonts",
+    require => Exec["${name}-winpe-boot.sdi"],
+    notify  => Exec["wimlib-imagex-unmount-${name}"],
+  }
+
   exec {"wimlib-imagex-unmount-${name}":
     command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
     cwd         => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
