@@ -342,17 +342,11 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
 #  }
 
-  exec{"${name}-boot.wim":
-    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/sources/boot.wim /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
-    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
-    creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
-    require => Exec["${name}-winpe-boot.sdi"],
-  }
   exec{"${name}-bcd":
     command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/boot/bcd /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/bcd",
     cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/bcd",
-    require => Exec["${name}-boot.wim"],
+    require => Exec["${name}-winpe-boot.sdi"],
   }
   exec{"${name}-copy_winpe_fonts":
     command   => "/bin/cp -R /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/boot/fonts /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/fonts",
@@ -391,8 +385,16 @@ define quartermaster::windowsmedia( $activationkey ) {
     refreshonly => true,
     require     => File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
     logoutput   => true,
+    notify      => Exec["${name}-boot.wim"],
   }
 
+  exec{"${name}-boot.wim":
+    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
+    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
+    refreshonly => true,
+    require => Exec["wimlib-imagex-unmount-${name}"],
+  }
   file { "/srv/quartermaster/microsoft/winpe/system/${name}.cmd":
     ensure  => file,
     mode    => $quartermaster::exe_mode,
