@@ -386,7 +386,7 @@ define quartermaster::windowsmedia( $activationkey ) {
   }
 
   exec {"wimlib-imagex-unmount-${name}":
-    command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
+    command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch} --commit",
     cwd         => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
     require     => File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
