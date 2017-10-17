@@ -65,16 +65,19 @@ class quartermaster::install (
   # https://code.google.com/p/logstalgia/
   # http://goaccess.prosoftcorp.com/
 
-  package{['logstalgia','goaccess']:
+  package{[
+    # https://code.google.com/p/logstalgia/
+    'logstalgia',
+    # http://goaccess.prosoftcorp.com/
+    'goaccess',
+    # Kickstart Validator
+    'pykickstart',
+    # Used for creating isos
+    'genisoimage',
+  ]:
     ensure  => latest,
     require => File['/srv/quartermaster/logs'],
   }
-
-  # Kickstart Validator
-  package{'pykickstart':
-    ensure => latest,
-  }
-  
   
   # Define dictory structure on the filestem for default locations of bits.
 
