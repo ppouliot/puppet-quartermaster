@@ -310,7 +310,6 @@ define quartermaster::windowsmedia( $activationkey ) {
     cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi",
     require => Exec["${name}-winpe-abortpxe.com"],
-    notify  => Exec["wimlib-imagex-unmount-${name}"],
   }
 #  staging::file{"${name}-winpe-boot.sdi":
 #    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/boot.sdi",
@@ -320,6 +319,13 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
 #  }
 
+  exec{"${name}-boot.wim":
+    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/sources/boot.wim /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
+    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
+    require => Exec["${name}-winpe-boot.sdi"],
+    notify  => Exec["wimlib-imagex-unmount-${name}"],
+  }
   exec {"wimlib-imagex-unmount-${name}":
     command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
     cwd         => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
