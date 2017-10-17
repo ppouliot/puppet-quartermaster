@@ -174,9 +174,9 @@ define quartermaster::windowsmedia( $activationkey ) {
   if ! defined (File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"]) {
     file { "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}":
       ensure  => directory,
-      recurse => true,
-      owner   => 'www-data',
-      group   => 'www-data',
+#      recurse => true,
+#      owner   => 'www-data',
+#      group   => 'www-data',
 #      mode    => '0644',
       require =>  File[ "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe"],
     }
@@ -194,8 +194,9 @@ define quartermaster::windowsmedia( $activationkey ) {
   if ! defined (File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}"]) {
     file { "/srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}":
       ensure  => link,
-      owner   => 'www-data',
-      group   => 'www-data',
+#      owner   => 'www-data',
+#      group   => 'www-data',
+#      mode    => '0644',
       target  => "/srv/quartermaster/microsoft/mount/${name}",
       require =>  File[ "/srv/quartermaster/microsoft" ],
     }
@@ -236,49 +237,71 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    }
 #  }
   exec {"wimlib-imagex-mount-${name}":
-    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt.${w_arch}",
+#    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 'Microsoft Windows PE (x64)' mnt.${w_arch}",
+    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 'Microsoft Windows Setup (x64)' mnt.${w_arch}",
     cwd         => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
     require     => [
       File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}"],
       Staging::File["${w_flavor}-winpe.wim"],
     ],
-#    require     => File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
-#                        "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
-#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+  #  require     => File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}",
+  #                      "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim"],
+  #  notify      => Exec["wimlib-imagex-unmount-${name}"],
     logoutput   => true,
   }
 
-  staging::file{"${name}-winpe-pxeboot.com":
-    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/pxeboot.com",
-    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com",
+  exec{"${name}-winpe-pxeboot.com":
+    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/pxeboot.com /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com",
+    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com",
+    require => Exec["wimlib-imagex-mount-${name}"],
+    logoutput   => true,
+#    notify  => Exec["wimlib-imagex-unmount-${name}"],
+  }
+#  staging::file{"${name}-winpe-pxeboot.com":
+#    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.com",
+#    source  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.com",
+#    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com",
 #    require => Exec["wimlib-imagex-mount-${name}"],
-    notify      => Exec["wimlib-imagex-unmount-${name}"],
-  }
-  staging::file{"${name}-winpe-pxeboot.0":
-    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/pxeboot.n12",
-    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0",
-    require => Staging::File["${name}-winpe-pxeboot.com"],
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
+  exec{"${name}-winpe-pxeboot.0":
+    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/pxeboot.n12 /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0",
+    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.com",
+    require => Exec["wimlib-imagex-mount-${name}"],
+    logoutput   => true,
+    notify  => Exec["wimlib-imagex-unmount-${name}"],
   }
-  staging::file{"${name}-winpe-bootmgr.exe":
-    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/bootmgr.exe",
-    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe",
-    require => Staging::File["${name}-winpe-pxeboot.0"],
+#  staging::file{"${name}-winpe-pxeboot.0":
+#    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.n12",
+#    source  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/pxeboot.n12",
+#    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/pxeboot.0",
+#    require => Staging::File["${name}-winpe-pxeboot.com"],
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
-  }
-  staging::file{"${name}-winpe-abortpxe.com":
-    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/abortpxe.com",
-    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/abortpxe.com",
-    require => Staging::File["${name}-winpe-bootmgr.exe"],
+#  }
+#  staging::file{"${name}-winpe-bootmgr.exe":
+#    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/bootmgr.exe",
+#    source  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/bootmgr.exe",
+#    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/bootmgr.exe",
+#    require => Staging::File["${name}-winpe-pxeboot.0"],
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
-  }
-  staging::file{"${name}-winpe-boot.sdi":
-    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/boot.sdi",
-    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi",
-    require => Staging::File["${name}-winpe-abortpxe.com"],
-    notify      => Exec["wimlib-imagex-unmount-${name}"],
-  }
+#  }
+#  staging::file{"${name}-winpe-abortpxe.com":
+#    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/abortpxe.com",
+#    source  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/abortpxe.com",
+#    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/abortpxe.com",
+#    require => Staging::File["${name}-winpe-bootmgr.exe"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
+#  staging::file{"${name}-winpe-boot.sdi":
+#    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/boot.sdi",
+#    source  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/boot.sdi",
+#    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi",
+#    require => Staging::File["${name}-winpe-abortpxe.com"],
+#    notify      => Exec["wimlib-imagex-unmount-${name}"],
+#  }
 
   exec {"wimlib-imagex-unmount-${name}":
     command     => "/usr/bin/wimlib-imagex unmount mnt.${w_arch}",
