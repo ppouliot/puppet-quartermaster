@@ -177,7 +177,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       recurse => true,
       owner   => 'www-data',
       group   => 'www-data',
-      mode    => '0644',
+#      mode    => '0644',
       require =>  File[ "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe"],
     }
   }
