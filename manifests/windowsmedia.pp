@@ -324,7 +324,12 @@ define quartermaster::windowsmedia( $activationkey ) {
     cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
     require => Exec["${name}-winpe-boot.sdi"],
-    notify  => Exec["wimlib-imagex-unmount-${name}"],
+  }
+  exec{"${name}-BCD":
+    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/boot/BCD /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/BCD",
+    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/BCD",
+    require => Exec["${name}-boot.wim"],
   }
   exec{"${name}-copy_winpe_fonts":
     command   => "/bin/cp -R /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/boot/fonts /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/fonts",
@@ -352,7 +357,7 @@ define quartermaster::windowsmedia( $activationkey ) {
       "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/fonts/segoen_slboot.ttf",
       "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/fonts/wlg4_boot.ttf",
     ],
-    require   => Exec["${name}-winpe-boot.sdi"],
+    require   => Exec["${name}-BCD"],
     notify    => Exec["wimlib-imagex-unmount-${name}"],
     logoutput => true,
   }
