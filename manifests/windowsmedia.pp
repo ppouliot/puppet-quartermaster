@@ -201,12 +201,17 @@ define quartermaster::windowsmedia( $activationkey ) {
       require =>  File[ "/srv/quartermaster/microsoft" ],
     }
   }
-
+  file{"/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd":
+    ensure  => file,
+    content => template('quartermaster/winpe/startnet.cmd.erb'),
+    require =>  File[ "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe"],
+  }
   staging::file{"${w_flavor}-winpe.wim":
     source  => "http://${::fqdn}/microsoft/mount/${name}/sources/boot.wim",
     target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/${w_arch}.wim",
-    require => File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe"],
-    notify  => Exec["wimlib-imagex-mount-${name}"],
+    require => File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd"],
+#    notify  => Exec["wimlib-imagex-mount-${name}"],
+    notify  => Exec["wimlib-imagex-delete-startnet.cmd-${name}"],
   }
 
 
@@ -236,9 +241,27 @@ define quartermaster::windowsmedia( $activationkey ) {
 #      require =>  File[ "/srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}"],
 #    }
 #  }
+  exec {"wimlib-imagex-delete-startnet.cmd-${name}":
+    command     => "/usr/bin/wimlib-imagex update ${w_arch}.wim 1 --command 'delete windows/system32/startnet.cmd'",
+    cwd         => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    refreshonly => true,
+    require     => Staging::File["${w_flavor}-winpe.wim"],
+    notify      => Exec["wimlib-imagex-replace-startnet.cmd-${name}"],
+    logoutput   => true,
+  }
+  exec {"wimlib-imagex-replace-startnet.cmd-${name}":
+    command     => "/usr/bin/wimlib-imagex update ${w_arch}.wim 1 --command 'add ./startnet.cmd windows/system32/startnet.cmd'",
+    cwd         => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
+    refreshonly => true,
+    require     => Exec["wimlib-imagex-delete-startnet.cmd-${name}"],
+    notify      => Exec["wimlib-imagex-mount-${name}"],
+    logoutput   => true,
+  }
+
   exec {"wimlib-imagex-mount-${name}":
 #    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 'Microsoft Windows PE (x64)' mnt.${w_arch}",
-    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 'Microsoft Windows Setup (x64)' mnt.${w_arch}",
+#    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 'Microsoft Windows Setup (x64)' mnt.${w_arch}",
+    command     => "/usr/bin/wimlib-imagex mount ${w_arch}.wim 1 mnt.${w_arch}",
     cwd         => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     refreshonly => true,
     require     => [
@@ -319,18 +342,6 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
 #  }
 
-  file{"/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd":
-    ensure  => file,
-    content => template('quartermaster/winpe/startnet.cmd.erb'),
-  }
-  exec{"${name}-startnet.cmd":
-    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/system32/startnet.cmd",
-    cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
-    require => [
-      Exec["${name}-winpe-boot.sdi"],
-      File["/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd"],
-    ],
-  }
   exec{"${name}-boot.wim":
     command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/sources/boot.wim /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.wim",
     cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
