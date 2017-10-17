@@ -324,7 +324,7 @@ define quartermaster::windowsmedia( $activationkey ) {
     content => template('quartermaster/winpe/startnet.cmd.erb'),
   }
   exec{"${name}-startnet.cmd":
-    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd /srv/quartermaster/microsoft/${w_distro}/${w_release}/windows/system32/startnet.cmd",
+    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/startnet.cmd /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/system32/startnet.cmd",
     cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     require => [
       Exec["${name}-winpe-boot.sdi"],
