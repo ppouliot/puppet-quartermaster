@@ -652,6 +652,9 @@ menu passwordrow 11
   tftp::file { 'pxelinux/libcom32.c32':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/lib/libcom32.c32",
   }
+  tftp::file { 'pxelinux/memdisk':
+    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/memdisk/memdisk",
+  }
 
   # Installl WimLib
   case $::osfamily {
