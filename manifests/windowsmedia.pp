@@ -274,8 +274,8 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
   }
   staging::file{"${name}-winpe-boot.sdi":
-    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/abortpxe.com",
-    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/abortpxe.com",
+    source  => "http://${::fqdn}/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/Windows/Boot/PXE/boot.sdi",
+    target  => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi",
     require => Staging::File["${name}-winpe-abortpxe.com"],
     notify      => Exec["wimlib-imagex-unmount-${name}"],
   }
