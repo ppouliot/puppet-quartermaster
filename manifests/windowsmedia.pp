@@ -306,7 +306,7 @@ define quartermaster::windowsmedia( $activationkey ) {
 #    notify      => Exec["wimlib-imagex-unmount-${name}"],
 #  }
   exec{"${name}-winpe-boot.sdi":
-    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/mnt.${w_arch}/windows/Boot/PXE/boot.sdi /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi",
+    command => "/bin/cp /srv/quartermaster/microsoft/${w_distro}/${w_release}/${w_arch}/boot/boot.sdi /srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi",
     cwd     => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe",
     creates => "/srv/quartermaster/microsoft/${w_distro}/${w_release}/pxe/Boot/boot.sdi",
     require => Exec["${name}-winpe-abortpxe.com"],
