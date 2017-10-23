@@ -85,3 +85,7 @@ write_files:
       mkdir -p /opt/bin
       curl -L `curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.assets[].browser_download_url | select(contains("Linux") and contains("x86_64"))'` > /opt/bin/docker-compose
       chmod +x /opt/bin/docker-compose
+      mkdir -p /opt/puppetlabs
+      docker run --name puppet-agent -v /opt/puppetlabs puppet/puppet-agent-alpine --version
+      docker run --volumes-from=puppet-agent `hostname` /opt/puppetlabs/bin/puppet --debug --trace --verbose --test --waitforcert 60 --server=<%= @puppetmaster %>
+ 
