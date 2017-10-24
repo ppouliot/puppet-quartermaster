@@ -3,7 +3,7 @@
 coreos:
   etcd2:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
-    discovery: "https://discovery.etcd.io/42af8a395def005a2b952b429de3417f"
+    discovery: "https://discovery.etcd.io/<token>"
     # multi-region and multi-cloud deployments need to use $public_ipv4
     advertise-client-urls: "http://$public_ipv4:2379"
     initial-advertise-peer-urls: "http://$private_ipv4:2380"
@@ -54,13 +54,13 @@ coreos:
       content: |
         [Unit]
         Description=Puppet Agent
-        After=install-docker-compose.service
-        Requires=install-docker-compose.service
+        After=docker.service
+        Requires=docker.service
         [Service]
         TimeoutStartSec=0
         ExecStartPre=/usr/bin/docker kill puppet-agent
         ExecStartPre=/usr/bin/docker rm puppet-agent
-        ExecStartPre=/usr/bin/docker puppet/puppet-agent
+        ExecStartPre=/usr/bin/docker pull puppet/puppet-agent
         ExecStart=/usr/bin/docker run --privileged --name puppet-agent --hostname %n --net=host -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent agent --verbose --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summarize
         [Install]
         WantedBy=multi-user.target
