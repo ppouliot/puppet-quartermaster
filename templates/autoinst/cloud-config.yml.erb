@@ -58,10 +58,10 @@ coreos:
         Requires=install-docker-compose.service
         [Service]
         TimeoutStartSec=0
-        ExecStartPre=/usr/bin/docker kill %n
-        ExecStartPre=/usr/bin/docker rm %n
-        ExecStartPre=/usr/bin/docker puppet/alpine:latest
-        ExecStart=ExecStart=/usr/bin/docker run --privileged --name puppet-agent --hostname %n --net=host -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent-alpine agent --verbose --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summarize
+        ExecStartPre=/usr/bin/docker kill puppet-agent
+        ExecStartPre=/usr/bin/docker rm puppet-agent
+        ExecStartPre=/usr/bin/docker puppet/puppet-agent
+        ExecStart=ExecStart=/usr/bin/docker run --privileged --name puppet-agent --hostname %n --net=host -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent agent --verbose --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summarize
         [Install]
         WantedBy=multi-user.target
 
