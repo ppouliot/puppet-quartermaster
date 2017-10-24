@@ -82,6 +82,7 @@ class quartermaster (
   $puppetmaster                     = undef,
   $use_local_proxy                  = undef,
   $vnc_passwd                       = 'letmein',
+  $etcd_token                       = '42af8a395def005a2b952b429de3417f'
 
 ) inherits quartermaster::params {
 
