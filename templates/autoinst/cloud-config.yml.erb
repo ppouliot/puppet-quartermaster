@@ -53,11 +53,16 @@ coreos:
       content: |
         [Unit]
         Description=Puppet Agent
+        After=docker-tcp.socket
+        Requires=docker-tcp.socket
         [Service]
-        Type=oneshot
+        TimeoutStartSec=0
         ExecStart=ExecStart=/usr/bin/docker run \
+        -rm \
+        --privileged \
         --name %n \
         --net=host \
+        -v /tmp:/tmp
         -v /media/staging:/opt/staging \
         -v /etc/systemd:/etc/systemd \
         -v /etc/puppet:/etc/puppet \
