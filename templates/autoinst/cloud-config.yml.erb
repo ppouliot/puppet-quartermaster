@@ -48,13 +48,14 @@ coreos:
         ExecStart=/bin/bash -ex /tmp/install-docker-compose.sh
         [Install]
         WantedBy=multi-user.target
+
     - name: "puppet-agent.service"
       command: "start"
       content: |
         [Unit]
         Description=Puppet Agent
-        After=docker-tcp.socket
-        Requires=docker-tcp.socket
+        After=install-docker-compose.service
+        Requires=install-docker-compose.service
         [Service]
         TimeoutStartSec=0
         ExecStartPre=/usr/bin/docker kill %n
