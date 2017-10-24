@@ -58,10 +58,7 @@ coreos:
         Requires=docker.service
         [Service]
         TimeoutStartSec=0
-        ExecStartPre=/usr/bin/docker kill puppet-agent
-        ExecStartPre=/usr/bin/docker rm puppet-agent
-        ExecStartPre=/usr/bin/docker pull puppet/puppet-agent
-        ExecStart=/usr/bin/docker run --privileged --name puppet-agent --hostname %n --net=host -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent agent --verbose --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summarize
+        ExecStart=/usr/bin/docker run --rm --privileged --name puppet-agent --hostname %n --net=host -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet puppet/puppet-agent agent --verbose --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summarize
         [Install]
         WantedBy=multi-user.target
 
