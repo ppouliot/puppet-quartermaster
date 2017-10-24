@@ -647,17 +647,17 @@ define quartermaster::pxelinux (
     
     # This adds scripts to deploy to the system after booting into coreos 
     # when finished it should reboot.
-    file {"/srv/quartermaster/${distro}/${autofile}/${release}.pxe_installer.sh":
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.pxe_installer.sh":
       ensure  => file,
       mode    => '0777',
       content => template('quartermaster/scripts/coreos.pxe_installer.sh.erb'),
     }
-    file {"/srv/quartermaster/${distro}/${autofile}/${release}.running_instance.sh":
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.running_instance.sh":
       ensure  => file,
       mode    => '0777',
       content => template('quartermaster/scripts/coreos.running_instance.sh.erb'),
     }
-    file {"/srv/quartermaster/${distro}/${autofile}/${release}.custom_ip_resolution.sh":
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.custom_ip_resolution.sh":
       ensure  => file,
       mode    => '0777',
       content => template('quartermaster/scripts/coreos.custom_ip_resolution.sh.erb'),
