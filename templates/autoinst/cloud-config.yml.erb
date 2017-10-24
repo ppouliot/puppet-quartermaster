@@ -61,7 +61,7 @@ coreos:
         ExecStartPre=/usr/bin/docker kill puppet-agent
         ExecStartPre=/usr/bin/docker rm puppet-agent
         ExecStartPre=/usr/bin/docker puppet/puppet-agent
-        ExecStart=ExecStart=/usr/bin/docker run --privileged --name puppet-agent --hostname %n --net=host -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent agent --verbose --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summarize
+        ExecStart=/usr/bin/docker run --privileged --name puppet-agent --hostname %n --net=host -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent agent --verbose --no-daemonize --logdest=console --server=<%= @puppetmaster %> --environment=production --summarize
         [Install]
         WantedBy=multi-user.target
 
