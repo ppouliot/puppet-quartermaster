@@ -50,27 +50,28 @@ coreos:
         WantedBy=multi-user.target
     - name: "puppet-agent.service"
       command: "start"
-      [Unit]
-      Description=Puppet Agent
-      [Service]
-      Type=oneshot
-      ExecStart=ExecStart=/usr/bin/docker run \
-      --name %n \
-      --net=host \
-      -v /media/staging:/opt/staging \
-      -v /etc/systemd:/etc/systemd \
-      -v /etc/puppet:/etc/puppet \
-      -v /var/lib/puppet:/var/lib/puppet \
-      -v /home/core:/home/core \
-      -v /etc/os-release:/etc/os-release:ro \
-      -v /etc/lsb-release:/etc/lsb-release:ro \
-      -v /etc/coreos:/etc/coreos:rw \
-      -v /run:/run:ro \
-      -v /usr/bin/systemctl:/usr/bin/systemctl:ro \
-      -v /lib64:/lib64:ro \
-      -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-      puppet/alpine:latest \
-      puppet agent --no-daemonize --logdest=console --server=<%= @puppetmaster %>    --environment=production
+      content: |
+        [Unit]
+        Description=Puppet Agent
+        [Service]
+        Type=oneshot
+        ExecStart=ExecStart=/usr/bin/docker run \
+        --name %n \
+        --net=host \
+        -v /media/staging:/opt/staging \
+        -v /etc/systemd:/etc/systemd \
+        -v /etc/puppet:/etc/puppet \
+        -v /var/lib/puppet:/var/lib/puppet \
+        -v /home/core:/home/core \
+        -v /etc/os-release:/etc/os-release:ro \
+        -v /etc/lsb-release:/etc/lsb-release:ro \
+        -v /etc/coreos:/etc/coreos:rw \
+        -v /run:/run:ro \
+        -v /usr/bin/systemctl:/usr/bin/systemctl:ro \
+        -v /lib64:/lib64:ro \
+        -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+        puppet/alpine:latest \
+        puppet agent --no-daemonize --logdest=console --server=<%= @puppetmaster %>    --environment=production
 
 ssh_authorized_keys:
   - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlZLcFVYcMbYkJ+pwSsTnfOfwmOLZe26J6PBHa/17ZuzBI563BWJfTybjgphVOJwQKAqN+cBfzHZ66PaQm0vqx2Efee1uGq/vd8cmAIyEqmZUnbkxPRQ3G7YLlAwqZalRo2TEglWhEK+O+7hycV3NhCKYpG/2DZwGbW97bKh01R3R0pt9PiSi570w4W4oeUxPioqR/dIJf+g4EnOCnPMvLAT6exGI9hcKCRH3604Qnh2z5rQ0aG4PYS8uCi5MS8AevuWxNg7OKE6e59XxDvruULq+4jerAls+HZVomZ2AQvbcabpqKFEKvVtE12k5uzAWelmZU49NCIHuUgrX5hm0X peter@hackintosh.local"
