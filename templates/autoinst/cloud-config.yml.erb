@@ -55,6 +55,28 @@ coreos:
         [Install]
         WantedBy=multi-user.target
 
+    - name: "install-java.service"
+      command: "start"
+      content: |
+        [Unit]
+        Description=Install Java Binaries
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/bash -ex /tmp/install-java.sh
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: "install-pypy.service"
+      command: "start"
+      content: |
+        [Unit]
+        Description=Install Java Binaries
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/bash -ex /tmp/install-pypy.sh
+        [Install]
+        WantedBy=multi-user.target
+
     - name: "puppet.service"
       command: "start"
       content: |
@@ -68,6 +90,8 @@ coreos:
         [Install]
         WantedBy=multi-user.target
 
+    # docker-volumes-netshare
+    # https://ender74.github.io/Sharing-Volumes-With-Docker-NFS/
     - name: "rpc-statd.service"
       command: "start"
       enable: true
@@ -106,6 +130,8 @@ users:
   - name: "jenkins"
     ssh_authorized_keys:
       - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCq1k6++HIrouWWMw/TevD4SaPcMoOHl5rNqGNZ5FghSJb8F7A7DiDhnU8MW8x5pClrQQyY6KTKUI7p1PZptuiNbhf7c2T0O+Rxf0PB0Pt8qZ5RK65rJOXBhPaYt7VBMM18fOrdojoj4kchdRfEYRny4xy3uj3qNwzUSdxRYWDi/q6IGl5wJjVN6O/cvSz/V6hVTi+Hcm+Luch1ZiWlXefuUbIwvBvgazCBx7fPeh4l1DBFtzAec3MUKY73PTcuHfvv/6Nwy4NtRRZAA45Mk6aGDoo1lMeJZUoyKw7ev6XRt9g30s7uqDNDXaieOJlhDCXdOo5cC9Sc4flLFtjk/UsZqjxNl5UALxIw4ZrZ1A/byKZ5gXQ3b6vTR17eu5dhZTClnGIgZZ3R4DNuaNUozlJwoviC8MHe8NIu6H6VseN70MMQX/xdYqDWM45AYo00N3kslndVvoWVGbVlc+0qSisKkJ1Q1ceMmPmsJBvUlcvI5WYFu0wncj1J2sV5uQIzzlGDb/WjthCXN8I+NS29xMi6hDewYrP9Z8+nrDHPpuMCEeQb6tT8fZbytVNRrravetzdqnFFX7qpIkY7UjfHVeDG53l2yknyJJOGr2QPuDwaQvEHmdlb1O2MHTOMFHnNhDQs3Tj8Nvl0BNZmB2N8RcyFny6x3C2+9VhkXAzvn+kitQ== hyper-v_ci@microsoft.com"
+    groups:
+      - docker
   - name: "git"
     ssh_authorized_keys:
       - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCq1k6++HIrouWWMw/TevD4SaPcMoOHl5rNqGNZ5FghSJb8F7A7DiDhnU8MW8x5pClrQQyY6KTKUI7p1PZptuiNbhf7c2T0O+Rxf0PB0Pt8qZ5RK65rJOXBhPaYt7VBMM18fOrdojoj4kchdRfEYRny4xy3uj3qNwzUSdxRYWDi/q6IGl5wJjVN6O/cvSz/V6hVTi+Hcm+Luch1ZiWlXefuUbIwvBvgazCBx7fPeh4l1DBFtzAec3MUKY73PTcuHfvv/6Nwy4NtRRZAA45Mk6aGDoo1lMeJZUoyKw7ev6XRt9g30s7uqDNDXaieOJlhDCXdOo5cC9Sc4flLFtjk/UsZqjxNl5UALxIw4ZrZ1A/byKZ5gXQ3b6vTR17eu5dhZTClnGIgZZ3R4DNuaNUozlJwoviC8MHe8NIu6H6VseN70MMQX/xdYqDWM45AYo00N3kslndVvoWVGbVlc+0qSisKkJ1Q1ceMmPmsJBvUlcvI5WYFu0wncj1J2sV5uQIzzlGDb/WjthCXN8I+NS29xMi6hDewYrP9Z8+nrDHPpuMCEeQb6tT8fZbytVNRrravetzdqnFFX7qpIkY7UjfHVeDG53l2yknyJJOGr2QPuDwaQvEHmdlb1O2MHTOMFHnNhDQs3Tj8Nvl0BNZmB2N8RcyFny6x3C2+9VhkXAzvn+kitQ== hyper-v_ci@microsoft.com"
@@ -127,6 +153,8 @@ write_files:
       fi
       curl -L `curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.assets[].browser_download_url | select(contains("Linux") and contains("x86_64"))'` > /opt/bin/docker-compose
       chmod ugo+x /opt/bin/docker-compose
+    # docker-volumes-netshare
+    # https://ender74.github.io/Sharing-Volumes-With-Docker-NFS/
   - path: "/etc/conf.d/nfs"
     permissions: '0644'
     content: |
@@ -149,3 +177,37 @@ write_files:
       fi
       wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v0.18/docker-volume-netshare_0.18_linux_amd64-bin
       chmod ugo+x  /opt/bin/docker-volume-netshare
+  - path: "/tmp/install-java.sh"
+    permissions: "0777"
+    owner: "core"
+    content: |
+      #!/usr/bin/env bash
+      if [ ! -d /opt/bin ];
+      then 
+        mkdir -p /opt/bin
+      fi
+
+      if [ ! -d /opt/bin/java ];
+      then 
+        mkdir -p /opt/bin/java
+      fi
+      curl -s -L https://javadl.oracle.com/webapps/download/AutoDL?BundleId=83376 | tar -C /opt/bin/java --strip=1 -zx
+      ssh-keyscan -H github.com > /home/jenkins/.ssh/known_hosts ) ;
+  - path: "/tmp/install-pypy.sh"
+    permissions: "0777"
+    owner: "core"
+    content: |
+      #!/usr/bin/env bash
+      PYPY='pypy-5.1.1-linux64'
+      if [ ! -d /opt/bin ];
+      then 
+        mkdir -p /opt/bin
+      fi
+      cd /opt/bin 
+      wget https://bitbucket.org/pypy/pypy/downloads/${PYPY}.tar.bz2 ;
+      tar -xjf ${PYPY}.tar.bz2 ;
+      mv ${PYPY} pypy
+      cd /opt/bin/pypy/bin
+      ln -s /lib64/libncurses.so.5.9 libtinfo.so.5
+      wget -nv -o /opt/bin/pypy/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
+      ./pypy get-pip.py
