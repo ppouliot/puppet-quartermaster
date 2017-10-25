@@ -44,14 +44,14 @@ coreos:
         ExecStart=/bin/bash -ex /tmp/install-docker-compose.sh
         [Install]
         WantedBy=multi-user.target
-    - name: "install-docker-nfs-netshare.service"
+    - name: "install-docker-volume-netshare.service"
       command: "start"
       content: |
         [Unit]
-        Description=Install Docker NFS NetShare
+        Description=Install Docker Volume NetShare
         [Service]
         Type=oneshot
-        ExecStart=/bin/bash -ex /tmp/install-docker-nfs-netshare.sh
+        ExecStart=/bin/bash -ex /tmp/install-docker-volume-netshare.sh
         [Install]
         WantedBy=multi-user.target
 
