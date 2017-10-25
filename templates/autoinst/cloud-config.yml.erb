@@ -69,6 +69,7 @@ coreos:
     - name: nfsd.service
       command: start
       enable: truestrong text
+
     - name: docker-volume-netshare.service
       command: start
       enable: true
@@ -77,7 +78,7 @@ coreos:
         Description=Enable Docker Volume Netshare Plugin for NFS
         Requires=docker.service
         [Service]
-        ExecStart=/home/core/bin/docker-volume-netshare nfs
+        ExecStart=/opt/bin/docker-volume-netshare nfs
         [Install]
         WantedBy=default.target
 
