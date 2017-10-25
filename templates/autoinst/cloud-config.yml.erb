@@ -229,3 +229,4 @@ write_files:
       ln -f -s /lib64/libncurses.so.5.9 libtinfo.so.5
       wget -nv -o /opt/${PYPY_VERSION}/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
       ./pypy get-pip.py
+      ln -s /opt/${PYPY_VERSION}/bin/pypy /opt/bin/pypy
