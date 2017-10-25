@@ -121,9 +121,12 @@ write_files:
     owner: "core"
     content: |
       #!/bin/bash
-      mkdir -p /opt/bin
+      if [ ! -d /opt/bin ];
+      then 
+        mkdir -p /opt/bin
+      fi
       curl -L `curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.assets[].browser_download_url | select(contains("Linux") and contains("x86_64"))'` > /opt/bin/docker-compose
-      chmod +x /opt/bin/docker-compose
+      chmod ugo+x /opt/bin/docker-compose
   - path: "/etc/conf.d/nfs"
     permissions: '0644'
     content: |
@@ -135,11 +138,14 @@ write_files:
     content: |
       Provisioned automically over pxe using the following cloud-config url 
       http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
-  - path: "/tmp/install-docker-nfs-netshare.sh"
+  - path: "/tmp/install-docker-volume-netshare.sh"
     permissions: "0777"
     owner: "core"
     content: |
       #!/usr/bin/env bash
-      mkdir -p /opt/bin
+      if [ ! -d /opt/bin ];
+      then 
+        mkdir -p /opt/bin
+      fi
       wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v0.18/docker-volume-netshare_0.18_linux_amd64-bin
       chmod ugo+x  /opt/bin/docker-volume-netshare
