@@ -234,5 +234,5 @@ write_files:
       chmod -R ugo+x /opt/pypy
       cd /opt/pypy/bin
       ln -f -s /lib64/libncurses.so.5.9 libtinfo.so.5
-      wget -nv -o /opt/$PYPY_VERSION/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
+      wget -nv -o /opt/pypy/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
       ./pypy ./get-pip.py
