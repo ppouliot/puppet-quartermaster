@@ -200,14 +200,13 @@ write_files:
       then 
         mkdir -p /opt/bin
       fi
-
-      if [ ! -d /opt/bin/java ];
-      then 
-        mkdir -p /opt/bin/java
-      fi
+      cd /opt
       curl -s -L https://javadl.oracle.com/webapps/download/AutoDL?BundleId=83376 | tar -C /opt/bin/java --strip=1 -zx
-      chmod -R ugo+x /opt/bin/java
+      chmod -R ugo+x /opt/java
+      ln -s /opt/java/bin/java /opt/bin/java
+      ln -s /opt/java/bin/javaws /opt/bin/javaws
       ssh-keyscan -H github.com > /home/jenkins/.ssh/known_hosts;
+
   - path: "/tmp/install-pypy.sh"
     permissions: "0777"
     owner: "core"
@@ -220,7 +219,7 @@ write_files:
       fi
       cd /opt 
       wget -nv https://bitbucket.org/pypy/pypy/downloads/${PYPY_VERSION}.tar.bz2 ;
-      tar -xjf ${PYPY}.tar.bz2 ;
+      tar -xjf ${PYPY_VERSION}.tar.bz2 ;
       # mv ${PYPY_VERSION} pypy
       rm -rf ${PYPY_VERSION}.tar.bz2
       chmod -R ugo+x ${PYPY_VERSION}
