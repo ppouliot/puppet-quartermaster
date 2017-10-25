@@ -20,10 +20,8 @@ coreos:
   units:
     - name: "etcd2.service"
       command: "start"
-
     - name: "fleet.service"
       command: "start"
-
     - name: "docker-tcp.socket"
       command: "start"
       content: |
@@ -78,8 +76,8 @@ coreos:
       command: "start"
       enable: truestrong text
 
-    - name: docker-volume-netshare.service
-      command: start
+    - name: "docker-volume-netshare.service"
+      command: "start"
       enable: true
       content: |
         [Unit]
@@ -131,7 +129,7 @@ write_files:
     content: |
       OPTS_RPC_MOUNTD=""
   - path: "/etc/exports"
-    permissions: '0644'
+    permissions: "0644"
     content: /exports/ *(rw,async,no_subtree_check,no_root_squash,fsid=0)
   - path: "/exports/README"
     content: |
