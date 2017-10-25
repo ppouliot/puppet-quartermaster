@@ -213,18 +213,19 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/env bash
-      PYPY='pypy2-v5.9.0-linux64'
+      PYPY_VERSION='pypy2-v5.9.0-linux64'
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
       fi
-      cd /opt/bin 
-      wget -nv https://bitbucket.org/pypy/pypy/downloads/${PYPY}.tar.bz2 ;
+      cd /opt 
+      wget -nv https://bitbucket.org/pypy/pypy/downloads/${PYPY_VERSION}.tar.bz2 ;
       tar -xjf ${PYPY}.tar.bz2 ;
-      mv ${PYPY} pypy
-      rm -rf ${PYPY}.tar.bz2
-      chmod -R ugo+x pypy
-      cd /opt/bin/pypy/bin
-      ln -s /lib64/libncurses.so.5.9 libtinfo.so.5
-      wget -nv -o /opt/bin/pypy/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
+      # mv ${PYPY_VERSION} pypy
+      rm -rf ${PYPY_VERSION}.tar.bz2
+      chmod -R ugo+x ${PYPY_VERSION}
+      ln -f -n -s ./${PYPY_VERSION} ./pypy
+      cd ${PYPY_VERSION}/bin
+      ln -f -s /lib64/libncurses.so.5.9 libtinfo.so.5
+      wget -nv -o /opt/${PYPY_VERSION}/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
       ./pypy get-pip.py
