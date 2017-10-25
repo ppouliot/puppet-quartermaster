@@ -198,13 +198,13 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/env bash
-      PYPY='pypy-5.1.1-linux64'
+      PYPY='pypy2-5.9.0-linux64'
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
       fi
       cd /opt/bin 
-      wget https://bitbucket.org/pypy/pypy/downloads/${PYPY}.tar.bz2 ;
+      wget -nv https://bitbucket.org/pypy/pypy/downloads/${PYPY}.tar.bz2 ;
       tar -xjf ${PYPY}.tar.bz2 ;
       mv ${PYPY} pypy
       cd /opt/bin/pypy/bin
