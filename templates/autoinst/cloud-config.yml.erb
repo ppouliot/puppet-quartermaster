@@ -205,11 +205,11 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/env bash
-      if [ ! -d /opt/bin ];
+      if [ ! -d /opt/java ];
       then 
-        mkdir -p /opt/bin
+        mkdir -p /opt/java
       fi
-      cd /opt
+      cd /opt/java
       curl -s -L https://javadl.oracle.com/webapps/download/AutoDL?BundleId=83376 | tar -C /opt/java --strip=1 -zx
       chmod -R ugo+x /opt/java
       ln -s /opt/java/bin/java /opt/bin/java
