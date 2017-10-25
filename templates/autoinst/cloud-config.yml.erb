@@ -218,14 +218,14 @@ write_files:
         mkdir -p /opt/bin
       fi
       cd /opt 
-      wget -nv https://bitbucket.org/pypy/pypy/downloads/${PYPY_VERSION}.tar.bz2 ;
-      tar -xjf ${PYPY_VERSION}.tar.bz2 ;
+      wget -nv https://bitbucket.org/pypy/pypy/downloads/$PYPY_VERSION.tar.bz2 ;
+      tar -xjf $PYPY_VERSION.tar.bz2 ;
       # mv ${PYPY_VERSION} pypy
-      rm -rf ${PYPY_VERSION}.tar.bz2
-      chmod -R ugo+x ${PYPY_VERSION}
-      ln -f -n -s ./${PYPY_VERSION} ./pypy
-      cd ${PYPY_VERSION}/bin
+      rm -rf $PYPY_VERSION.tar.bz2
+      chmod -R ugo+x $PYPY_VERSION
+      ln -f -n -s ./$PYPY_VERSION ./pypy
+      cd $PYPY_VERSION/bin
       ln -f -s /lib64/libncurses.so.5.9 libtinfo.so.5
-      wget -nv -o /opt/${PYPY_VERSION}/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
+      wget -nv -o /opt/$PYPY_VERSION/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
       ./pypy get-pip.py
-      ln -s /opt/${PYPY_VERSION}/bin/pypy /opt/bin/pypy
+      ln -s /opt/$PYPY_VERSION/bin/pypy /opt/bin/pypy
