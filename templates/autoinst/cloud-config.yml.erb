@@ -70,15 +70,15 @@ coreos:
 
     - name: "rpc-statd.service"
       command: "start"
-      enable: "true"
+      enable: true
 
     - name: "nfsd.service"
       command: "start"
-      enable: "truestrong text"
+      enable: true
 
     - name: "docker-volume-netshare.service"
       command: "start"
-      enable: "true"
+      enable: true
       content: |
         [Unit]
         Description=Enable Docker Volume Netshare Plugin for NFS
