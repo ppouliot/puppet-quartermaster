@@ -1,24 +1,37 @@
 #cloud-config
 
 coreos:
-  etcd2:
+#  etcd2:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
-    discovery: "https://discovery.etcd.io/<token>"
+#    discovery: "https://discovery.etcd.io/<token>"
     # multi-region and multi-cloud deployments need to use $public_ipv4
-    advertise-client-urls: "http://$public_ipv4:2379"
-    initial-advertise-peer-urls: "http://$private_ipv4:2380"
+#    advertise-client-urls: "http://$public_ipv4:2379"
+#    initial-advertise-peer-urls: "http://$private_ipv4:2380"
     # listen on both the official ports and the legacy ports
     # legacy ports can be omitted if your application doesn't depend on them
-    listen-client-urls: "http://0.0.0.0:2379,http://0.0.0.0:4001"
-    listen-peer-urls: "http://$private_ipv4:2380,http://$private_ipv4:7001"
+#    listen-client-urls: "http://0.0.0.0:2379,http://0.0.0.0:4001"
+#    listen-peer-urls: "http://$private_ipv4:2380,http://$private_ipv4:7001"
+
+
+  etcd:
+    version: 3.2.0
+    name: q1
+    data_dir: /var/lib/etcd
+    listen_client_urls:          https://0.0.0.0:2379
+    advertise_client_urls:       https://{PUBLIC_IPV4}:2379
+    listen_peer_urls:            https://{PRIVATE_IPV4}:2380
+    initial_advertise_peer_urls: https://{PRIVATE_IPV4}:2380
+    initial_cluster:             q1=https://{PRIVATE_IPV4}:2380
+    initial_cluster_token:       %H
+    initial_cluster_state:       new 
 
   fleet:
-    public-ip: $public_ipv4
+    public-ip: {PUBLIC_IPV4}
   # uncomment for azure.
   # metadata: region=us-east
 
   units:
-    - name: "etcd2.service"
+    - name: "etcd-member.service"
       command: "start"
     - name: "fleet.service"
       command: "start"
