@@ -193,6 +193,7 @@ write_files:
       fi
       curl -s -L https://javadl.oracle.com/webapps/download/AutoDL?BundleId=83376 | tar -C /opt/bin/java --strip=1 -zx
       ssh-keyscan -H github.com > /home/jenkins/.ssh/known_hosts;
+      chown ugo+x /opt/bin/java
   - path: "/tmp/install-pypy.sh"
     permissions: "0777"
     owner: "core"
@@ -207,6 +208,8 @@ write_files:
       wget -nv https://bitbucket.org/pypy/pypy/downloads/${PYPY}.tar.bz2 ;
       tar -xjf ${PYPY}.tar.bz2 ;
       mv ${PYPY} pypy
+      rm -rf ${PYPY}.tar.bz2
+      chown ugo+x pypy
       cd /opt/bin/pypy/bin
       ln -s /lib64/libncurses.so.5.9 libtinfo.so.5
       wget -nv -o /opt/bin/pypy/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
