@@ -165,7 +165,7 @@ write_files:
     permissions: "0777"
     owner: "core"
     content: |
-      #!/bin/bash
+      #!/usr/bin/bash
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
@@ -192,7 +192,7 @@ write_files:
     permissions: "0777"
     owner: "core"
     content: |
-      #!/usr/bin/env bash
+      #!/usr/bin/bash
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
@@ -220,13 +220,13 @@ write_files:
     permissions: "0777"
     owner: "core"
     content: |
-      #!/usr/bin/env bash
+      #!/usr/bin/bash
       PYPY_VERSION='pypy2-v5.9.0-linux64'
       if [ ! -d /opt/bin ];
-      then 
+      then
         mkdir -p /opt/bin
       fi
-      cd /opt 
+      cd /opt
       wget -nv https://bitbucket.org/pypy/pypy/downloads/$PYPY_VERSION.tar.bz2 ;
       tar -xjf $PYPY_VERSION.tar.bz2 ;
       mv $PYPY_VERSION pypy
@@ -234,5 +234,10 @@ write_files:
       chmod -R ugo+x /opt/pypy
       cd /opt/pypy/bin
       ln -f -s /lib64/libncurses.so.5.9 libtinfo.so.5
-      wget -nv -o /opt/pypy/bin/get-pip.py https://bootstrap.pypa.io/get-pip.py
-      ./pypy ./get-pip.py
+      wget https://bootstrap.pypa.io/get-pip.py ;
+      /opt/pypy/bin/pypy /opt/pypy/bin/get-pip.py ;
+      ln -f -s /opt/pypy/bin/pypy /opt/bin/python
+      ln -f -s /opt/pypy/bin/pip /opt/bin/pip
+      ln -f -s /opt/pypy/bin/easy_install /opt/bin/easy_install
+      /opt/bin/pip install docker-py
+
