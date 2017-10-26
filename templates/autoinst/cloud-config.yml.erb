@@ -1,16 +1,16 @@
 #cloud-config
 
 coreos:
-  etcd2:
+#  etcd2:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
-    discovery: "https://discovery.etcd.io/new"
+#    discovery: "https://discovery.etcd.io/new"
     # multi-region and multi-cloud deployments need to use $public_ipv4
-    advertise-client-urls: "http://$private_ipv4:2379,http://$private_ipv4:4001"
-    initial-advertise-peer-urls: "http://$private_ipv4:2380"
+#    advertise-client-urls: "http://$private_ipv4:2379,http://$private_ipv4:4001"
+#    initial-advertise-peer-urls: "http://$private_ipv4:2380"
     # listen on both the official ports and the legacy ports
     # legacy ports can be omitted if your application doesn't depend on them
-    listen-client-urls: "http://0.0.0.0:2379,http://0.0.0.0:4001"
-    listen-peer-urls: "http://$private_ipv4:2380,http://$private_ipv4:7001"
+#    listen-client-urls: "http://0.0.0.0:2379,http://0.0.0.0:4001"
+#    listen-peer-urls: "http://$private_ipv4:2380,http://$private_ipv4:7001"
 
 
   fleet:
@@ -22,8 +22,8 @@ coreos:
 #    interface: $private_ipv4
 
   units:
-    - name: "etcd2.service"
-      command: "start"
+#    - name: "etcd2.service"
+#      command: "start"
 
     - name: "fleet.service"
       command: "start"
@@ -70,11 +70,22 @@ coreos:
         [Install]
         WantedBy=multi-user.target
 
+    - name: "install-etcd3.service"
+      command: "start"
+      content: |
+        [Unit]
+        Description=Install etcd3 binaries to /opt
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/bash -ex /tmp/install-etcd3.sh
+        [Install]
+        WantedBy=multi-user.target
+
     - name: "install-java.service"
       command: "start"
       content: |
         [Unit]
-        Description=Install Java Binaries
+        Description=Install Java Binaries to /opt
         [Service]
         Type=oneshot
         ExecStart=/bin/bash -ex /tmp/install-java.sh
@@ -85,7 +96,7 @@ coreos:
       command: "start"
       content: |
         [Unit]
-        Description=Install Java Binaries
+        Description=Install PyPy Binaries to /opt
         [Service]
         Type=oneshot
         ExecStart=/bin/bash -ex /tmp/install-pypy.sh
@@ -199,6 +210,19 @@ write_files:
       fi
       wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v0.18/docker-volume-netshare_0.18_linux_amd64-bin
       chmod ugo+x  /opt/bin/docker-volume-netshare
+
+  - path: "/tmp/install-etcd3.sh"
+    permissions: "0777"
+    owner: "core"
+    content: |
+      #!/usr/bin/bash
+      if [ ! -d /opt/bin ];
+      then 
+        mkdir -p /opt/bin
+      fi
+      wget -nv -O /opt/etcd-v3.2.9-linux-amd64.tar.gz https://github.com/coreos/etcd/releases/download/v3.2.9/etcd-v3.2.9-linux-amd64.tar.gz
+      tar -xvzf etcd-v3.2.9-linux-amd64.tar.gz
+      #chmod ugo+x  /opt/bin/docker-volume-netshare
 
   - path: "/tmp/install-java.sh"
     permissions: "0777"
