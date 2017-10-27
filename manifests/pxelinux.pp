@@ -667,7 +667,7 @@ define quartermaster::pxelinux (
 
   if ( $distro == 'rancheros' ) {
     case $release {
-    ~/([0-9]+).([0-9]+).([0-9])/:{
+   "~/([0-9]+).([0-9]+).([0-9])/":{
         warning("rancheros ${release} for ${p_arch} will be activated")
       }
       default:{
