@@ -209,11 +209,13 @@ write_files:
       LOGFILE='/home/core/.install-docker-volume-netshare.log'
       exec >> $LOGFILE 2>&1
 
+      $DOCKER_VOLUME_NETSHARE_VERSION=0.34
+
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
       fi
-      wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v0.18/docker-volume-netshare_0.18_linux_amd64-bin
+      wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v$DOCKER_VOLUME_NETSHARE_VERSION/docker-volume-netshare_$DOCKER_VOLUME_NETSHARE_VERSION_linux_amd64-bin
       chmod ugo+x  /opt/bin/docker-volume-netshare
 
   - path: "/tmp/install-etcd3.sh"
@@ -224,14 +226,17 @@ write_files:
       LOGFILE='/home/core/.install-etd3.log'
       exec >> $LOGFILE 2>&1
 
+      ETCD3_VERSION=v3.2.9
+
       if [ ! -d /opt/bin ];
       then
         mkdir -p /opt/bin
       fi
       cd /opt
-      wget -nv -O etcd-v3.2.9-linux-amd64.tar.gz https://github.com/coreos/etcd/releases/download/v3.2.9/etcd-v3.2.9-linux-amd64.tar.gz
-      tar -xvzf etcd-v3.2.9-linux-amd64.tar.gz
-      mv etcd-v3.2.9-linux-amd64 etcd3
+      wget -nv -O etcd-$ETCD3_VERSION-linux-amd64.tar.gz https://github.com/coreos/etcd/releases/download/$ETCD3_VERSION/etcd-$ETCD3_VERSION-linux-amd64.tar.gz
+      tar -xvzf etcd-$ETCD3_VERSION-linux-amd64.tar.gz
+      mv etcd-$ETCD3_VERSION-linux-amd64 etcd3
+      rm -rf etcd-$ETCD3_VERSION-linux-amd64.tar.gz
       chmod ugo+x  /opt/etcd3/etcd
       chmod ugo+x  /opt/etcd3/etcdctl
       ln -s /opt/etcd3/etcd /opt/bin/etcd
@@ -267,6 +272,7 @@ write_files:
       exec >> $LOGFILE 2>&1
 
       PYPY_VERSION='pypy2-v5.9.0-linux64'
+
       if [ ! -d /opt/bin ];
       then
         mkdir -p /opt/bin
