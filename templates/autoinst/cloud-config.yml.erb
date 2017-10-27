@@ -177,9 +177,8 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
-      LOGFILE='/home/core/.install-docker-compose.log"
+      LOGFILE='/home/core/.install-docker-compose.log'
       exec >> $LOGFILE 2>&1
-
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
@@ -207,7 +206,7 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
-      LOGFILE='/home/core/.install-docker-volume-netshare.log"
+      LOGFILE='/home/core/.install-docker-volume-netshare.log'
       exec >> $LOGFILE 2>&1
 
       if [ ! -d /opt/bin ];
@@ -222,7 +221,7 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
-      LOGFILE='/home/core/.install-etd3.log"
+      LOGFILE='/home/core/.install-etd3.log'
       exec >> $LOGFILE 2>&1
 
       if [ ! -d /opt/bin ];
@@ -245,7 +244,7 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/env bash
-      LOGFILE='/home/core/.install-java.log"
+      LOGFILE='/home/core/.install-java.log'
       exec >> $LOGFILE 2>&1
 
       if [ ! -d /opt/java ];
@@ -264,7 +263,7 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
-      LOGFILE='/home/core/.install-pypy.log"
+      LOGFILE='/home/core/.install-pypy.log'
       exec >> $LOGFILE 2>&1
 
       PYPY_VERSION='pypy2-v5.9.0-linux64'
@@ -286,4 +285,3 @@ write_files:
       ln -f -s /opt/pypy/bin/pip /opt/bin/pip
       ln -f -s /opt/pypy/bin/easy_install /opt/bin/easy_install
       /opt/bin/pip install docker-py
-
