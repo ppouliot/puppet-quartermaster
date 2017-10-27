@@ -667,7 +667,7 @@ define quartermaster::pxelinux (
 
   if ( $distro == 'rancheros' ) {
     case $release {
-   "/([0-9]).([0-9]).([0-9])/":{
+      /([0-9]).([0-9]).([0-9])/:{
         warning("rancheros ${release} for ${p_arch} will be activated")
       }
       default:{
@@ -686,12 +686,11 @@ define quartermaster::pxelinux (
     $linux_installer = 'coreos-install'
     $pxekernel      = 'vmlinuz'
     $initrd          = 'initrd'
-    $src_initrd      = "${initrd}-v$(release}"
+    $src_initrd      = "${initrd}-v${release}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.img"
     $url             = "https://github.com/rancher/os/releases/download/v{release}/"
     $inst_repo       = "https://github.com/rancher/os/releases/download/v{release}/"
-    $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current"
     $boot_iso_url    = "https://github.com/rancher/os/releases/download/v{release}/rancheros.iso"
   }
 
