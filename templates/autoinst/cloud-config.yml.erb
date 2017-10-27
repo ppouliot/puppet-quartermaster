@@ -255,7 +255,17 @@ write_files:
         mkdir -p /opt/java
       fi
       cd /opt/java
-      curl -s -L https://javadl.oracle.com/webapps/download/AutoDL?BundleId=83376 | tar -C /opt/java --strip=1 -zx
+      ## Latest JDK9 version is JDK9.0.1 released on 17th Oct, 2017.
+      BASE_URL_9=http://download.oracle.com/otn-pub/java/jdk/9.0.1+11/jdk-9.0.1_
+
+      declare -a PLATFORMS=("linux-x64_bin.tar.gz")
+      # declare -a PLATFORMS=("linux-x64_bin.rpm" "linux-x64_bin.tar.gz" "osx-x64_bin.dmg" "windows-x64_bin.exe" "solaris-sparcv9_bin.tar.gz" "doc-all.zip")
+
+      for platform in "${PLATFORMS[@]}"
+      do
+      # wget -c --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" "${BASE_URL_9}${platform}"
+        curl -C - -LR#OH "Cookie: oraclelicense=accept-securebackup-cookie" -k "${BASE_URL_9}${platform}" | tar -C /opt/java --strip=1 -zx
+      done
       chmod -R ugo+x /opt/java
       ln -s /opt/java/bin/java /opt/bin/java
       ln -s /opt/java/bin/javaws /opt/bin/javaws
