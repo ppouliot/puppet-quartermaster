@@ -209,13 +209,11 @@ write_files:
       LOGFILE='/home/core/.install-docker-volume-netshare.log'
       exec >> $LOGFILE 2>&1
 
-      DOCKER_VOLUME_NETSHARE_VERSION='0.34'
-
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
       fi
-      wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v$DOCKER_VOLUME_NETSHARE_VERSION/docker-volume-netshare_$DOCKER_VOLUME_NETSHARE_VERSION_linux_amd64-bin
+      wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v0.34/docker-volume-netshare_0.34_linux_amd64-bin
       chmod ugo+x  /opt/bin/docker-volume-netshare
 
   - path: "/tmp/install-etcd3.sh"
