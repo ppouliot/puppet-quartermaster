@@ -209,7 +209,7 @@ write_files:
       LOGFILE='/home/core/.install-docker-volume-netshare.log'
       exec >> $LOGFILE 2>&1
 
-      $DOCKER_VOLUME_NETSHARE_VERSION=0.34
+      DOCKER_VOLUME_NETSHARE_VERSION='0.34'
 
       if [ ! -d /opt/bin ];
       then 
@@ -226,7 +226,7 @@ write_files:
       LOGFILE='/home/core/.install-etd3.log'
       exec >> $LOGFILE 2>&1
 
-      ETCD3_VERSION=v3.2.9
+      ETCD3_VERSION='v3.2.9'
 
       if [ ! -d /opt/bin ];
       then
