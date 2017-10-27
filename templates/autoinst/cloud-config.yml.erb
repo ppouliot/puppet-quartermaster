@@ -177,6 +177,9 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
+      LOGFILE='/home/core/.install-docker-compose.log"
+      exec >> $LOGFILE 2>&1
+
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
@@ -204,6 +207,9 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
+      LOGFILE='/home/core/.install-docker-volume-netshare.log"
+      exec >> $LOGFILE 2>&1
+
       if [ ! -d /opt/bin ];
       then 
         mkdir -p /opt/bin
@@ -216,12 +222,22 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
+      LOGFILE='/home/core/.install-etd3.log"
+      exec >> $LOGFILE 2>&1
+
       if [ ! -d /opt/bin ];
-      then 
+      then
         mkdir -p /opt/bin
       fi
-      wget -nv -O /opt/etcd-v3.2.9-linux-amd64.tar.gz https://github.com/coreos/etcd/releases/download/v3.2.9/etcd-v3.2.9-linux-amd64.tar.gz
+      cd /opt
+      wget -nv -O etcd-v3.2.9-linux-amd64.tar.gz https://github.com/coreos/etcd/releases/download/v3.2.9/etcd-v3.2.9-linux-amd64.tar.gz
       tar -xvzf etcd-v3.2.9-linux-amd64.tar.gz
+      mv etcd-v3.2.9-linux-amd64 etcd3
+      chmod ugo+x  /opt/etcd3/etcd
+      chmod ugo+x  /opt/etcd3/etcdctl
+      ln -s /opt/etcd3/etcd /opt/bin/etcd
+      ln -s /opt/etcd3/etcdctl /opt/bin/etcdctl
+
       #chmod ugo+x  /opt/bin/docker-volume-netshare
 
   - path: "/tmp/install-java.sh"
@@ -229,6 +245,9 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/env bash
+      LOGFILE='/home/core/.install-java.log"
+      exec >> $LOGFILE 2>&1
+
       if [ ! -d /opt/java ];
       then 
         mkdir -p /opt/java
@@ -245,6 +264,9 @@ write_files:
     owner: "core"
     content: |
       #!/usr/bin/bash
+      LOGFILE='/home/core/.install-pypy.log"
+      exec >> $LOGFILE 2>&1
+
       PYPY_VERSION='pypy2-v5.9.0-linux64'
       if [ ! -d /opt/bin ];
       then
