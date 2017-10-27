@@ -656,6 +656,12 @@ menu passwordrow 11
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/memdisk/memdisk",
   }
 
+  # get the ipxe iso
+  # 
+  staging::file{'ipxe.iso':
+    source => 'http://boot.ipxe.org/ipxe.iso',
+  }
+
   # Installl WimLib
   case $::osfamily {
     'Debian':{

@@ -665,6 +665,36 @@ define quartermaster::pxelinux (
 
   }
 
+  if ( $distro == 'rancheros' ) {
+    case $release {
+    ~/([0-9]+).([0-9]+).([0-9])/:{
+        warning("rancheros ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${name} is not a valid rancheros release! Valid release are stable, beta  or alpha.")
+      }
+    }
+    case $p_arch {
+      'amd64','arm64':{
+        warning("rancher ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${p_arch} is not a valid processor architecture for coreos, valid processor arch are amd64 and arm64.")
+      }
+    }
+    $autofile        = 'cloud-config.yml'
+    $linux_installer = 'coreos-install'
+    $pxekernel      = 'vmlinuz'
+    $initrd          = 'initrd'
+    $src_initrd      = "${initrd}-v$(release}"
+    $target_kernel   = "${rel_number}"
+    $target_initrd   = "${rel_number}.img"
+    $url             = "https://github.com/rancher/os/releases/download/v{release}/"
+    $inst_repo       = "https://github.com/rancher/os/releases/download/v{release}/"
+    $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current"
+    $boot_iso_url    = "https://github.com/rancher/os/releases/download/v{release}/rancheros.iso"
+  }
+
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppet.com/dists/${rel_name}",
 # These are for puppet 3.x packages
