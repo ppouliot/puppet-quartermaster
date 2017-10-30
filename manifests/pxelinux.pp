@@ -683,7 +683,7 @@ define quartermaster::pxelinux (
       }
     }
     $autofile        = 'cloud-config.yml'
-    $linux_installer = 'coreos-install'
+    $linux_installer = 'ros'
     $pxekernel      = 'vmlinuz'
     $initrd          = 'initrd'
     $src_initrd      = "${initrd}-v${release}"
