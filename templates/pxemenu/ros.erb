@@ -2,7 +2,7 @@ TITLE RancherOS
 LABEL <%= @name %>
         MENU LABEL (<%= @release %>-<%= @p_arch %>): RancherOS ^Manual Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> quiet rancher.password=<%= @distro %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> quiet rancher.autologin=tty1 rancher.password=<%= @distro %>
 
 LABEL <%= @name %>-<%= @autofile %>-install
         MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Installation 
