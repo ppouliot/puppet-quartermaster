@@ -1,7 +1,4 @@
 #cloud-config
-<% if @distro == 'rancheros' %>
-rancher:
-<% end %>
 <% if @distro == 'coreos' %>
 coreos:
 #  etcd2:
@@ -14,7 +11,6 @@ coreos:
     # legacy ports can be omitted if your application doesn't depend on them
 #    listen-client-urls: "http://0.0.0.0:2379,http://0.0.0.0:4001"
 #    listen-peer-urls: "http://$private_ipv4:2380,http://$private_ipv4:7001"
-
   fleet:
     public-ip: $private_ipv4
   # uncomment for azure.
@@ -22,7 +18,6 @@ coreos:
 
 #  flannel:
 #    interface: $private_ipv4
-
   units:
 #    - name: "etcd2.service"
 #      command: "start"
@@ -37,7 +32,6 @@ coreos:
 #        content: |
 #          [Service]
 #          ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "10.1.0.0/16" }'
-
     - name: "docker-tcp.socket"
       command: "start"
       content: |
@@ -141,7 +135,17 @@ coreos:
         WantedBy=default.target
 
 <% end %>
-
+<% if @distro == 'rancheros' %>
+rancher:
+  state:
+    dev: LABEL=RANCHER_STATE
+  services_include:
+    ubuntu-console: true
+  network:
+    interfaces:
+      eth0:
+        dhcp: true
+<% end %>
 ssh_authorized_keys:
   - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlZLcFVYcMbYkJ+pwSsTnfOfwmOLZe26J6PBHa/17ZuzBI563BWJfTybjgphVOJwQKAqN+cBfzHZ66PaQm0vqx2Efee1uGq/vd8cmAIyEqmZUnbkxPRQ3G7YLlAwqZalRo2TEglWhEK+O+7hycV3NhCKYpG/2DZwGbW97bKh01R3R0pt9PiSi570w4W4oeUxPioqR/dIJf+g4EnOCnPMvLAT6exGI9hcKCRH3604Qnh2z5rQ0aG4PYS8uCi5MS8AevuWxNg7OKE6e59XxDvruULq+4jerAls+HZVomZ2AQvbcabpqKFEKvVtE12k5uzAWelmZU49NCIHuUgrX5hm0X peter@hackintosh.local"
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKetw3EOkjAc3+QuDbumo1GovGzCZbQ7McDDFPyis779 peter@quartermaster"
@@ -156,7 +160,6 @@ users:
   - name: "rancher"
 <% end %>
 #   password_hash: <%= @distro %>
-
     ssh_authorized_keys:
       - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlZLcFVYcMbYkJ+pwSsTnfOfwmOLZe26J6PBHa/17ZuzBI563BWJfTybjgphVOJwQKAqN+cBfzHZ66PaQm0vqx2Efee1uGq/vd8cmAIyEqmZUnbkxPRQ3G7YLlAwqZalRo2TEglWhEK+O+7hycV3NhCKYpG/2DZwGbW97bKh01R3R0pt9PiSi570w4W4oeUxPioqR/dIJf+g4EnOCnPMvLAT6exGI9hcKCRH3604Qnh2z5rQ0aG4PYS8uCi5MS8AevuWxNg7OKE6e59XxDvruULq+4jerAls+HZVomZ2AQvbcabpqKFEKvVtE12k5uzAWelmZU49NCIHuUgrX5hm0X peter@hackintosh.local"
       - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKetw3EOkjAc3+QuDbumo1GovGzCZbQ7McDDFPyis779 peter@quartermaster"
@@ -310,3 +313,25 @@ write_files:
       /opt/bin/python --version
       /opt/bin/pip --version
       /opt/bin/easy_install --version
+
+<% if @distro == 'rancheros' %>
+write_files:
+  - path: /var/lib/rancher/conf/cloud-config.yml
+    permissions: "0644"
+    owner: root
+    content: |
+      #cloud-config
+      ssh_authorized_keys:
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlZLcFVYcMbYkJ+pwSsTnfOfwmOLZe26J6PBHa/17ZuzBI563BWJfTybjgphVOJwQKAqN+cBfzHZ66PaQm0vqx2Efee1uGq/vd8cmAIyEqmZUnbkxPRQ3G7YLlAwqZalRo2TEglWhEK+O+7hycV3NhCKYpG/2DZwGbW97bKh01R3R0pt9PiSi570w4W4oeUxPioqR/dIJf+g4EnOCnPMvLAT6exGI9hcKCRH3604Qnh2z5rQ0aG4PYS8uCi5MS8AevuWxNg7OKE6e59XxDvruULq+4jerAls+HZVomZ2AQvbcabpqKFEKvVtE12k5uzAWelmZU49NCIHuUgrX5hm0X peter@hackintosh.local"
+        - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKetw3EOkjAc3+QuDbumo1GovGzCZbQ7McDDFPyis779 peter@quartermaster"
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCq1k6++HIrouWWMw/TevD4SaPcMoOHl5rNqGNZ5FghSJb8F7A7DiDhnU8MW8x5pClrQQyY6KTKUI7p1PZptuiNbhf7c2T0O+Rxf0PB0Pt8qZ5RK65rJOXBhPaYt7VBMM18fOrdojoj4kchdRfEYRny4xy3uj3qNwzUSdxRYWDi/q6IGl5wJjVN6O/cvSz/V6hVTi+Hcm+Luch1ZiWlXefuUbIwvBvgazCBx7fPeh4l1DBFtzAec3MUKY73PTcuHfvv/6Nwy4NtRRZAA45Mk6aGDoo1lMeJZUoyKw7ev6XRt9g30s7uqDNDXaieOJlhDCXdOo5cC9Sc4flLFtjk/UsZqjxNl5UALxIw4ZrZ1A/byKZ5gXQ3b6vTR17eu5dhZTClnGIgZZ3R4DNuaNUozlJwoviC8MHe8NIu6H6VseN70MMQX/xdYqDWM45AYo00N3kslndVvoWVGbVlc+0qSisKkJ1Q1ceMmPmsJBvUlcvI5WYFu0wncj1J2sV5uQIzzlGDb/WjthCXN8I+NS29xMi6hDewYrP9Z8+nrDHPpuMCEeQb6tT8fZbytVNRrravetzdqnFFX7qpIkY7UjfHVeDG53l2yknyJJOGr2QPuDwaQvEHmdlb1O2MHTOMFHnNhDQs3Tj8Nvl0BNZmB2N8RcyFny6x3C2+9VhkXAzvn+kitQ== hyper-v_ci@microsoft.com"
+      rancher:
+        state:
+          dev: LABEL=RANCHER_STATE
+        services_include:
+          ubuntu-console: true
+        network:
+          interfaces:
+            eth0:
+              dhcp: true
+<% end %>
