@@ -274,7 +274,7 @@ write_files:
       unzip consul_${CONSUL_VERSION}_linux_amd64.zip
       rm -rf consul_${CONSUL_VERSION}_linux_amd64.zip
       chmod ugo+x  /opt/bin/consul
-      /opt/bin/consul--version
+      /opt/bin/consul --version
 
   - path: "/tmp/install-java.sh"
     permissions: "0777"
