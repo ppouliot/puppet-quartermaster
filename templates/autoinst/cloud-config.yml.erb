@@ -77,6 +77,17 @@ coreos:
         [Install]
         WantedBy=multi-user.target
 
+    - name: "install-consul.service"
+      command: "start"
+      content: |
+        [Unit]
+        Description=Install consul binaries to /opt
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/bash -ex /tmp/install-consul.sh
+        [Install]
+        WantedBy=multi-user.target
+
     - name: "install-java.service"
       command: "start"
       content: |
