@@ -196,6 +196,7 @@ write_files:
       fi
       curl -L `curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.assets[].browser_download_url | select(contains("Linux") and contains("x86_64"))'` > /opt/bin/docker-compose
       chmod ugo+x /opt/bin/docker-compose
+      /opt/bin/docker-compose --version
 
     # docker-volumes-netshare
     # https://ender74.github.io/Sharing-Volumes-With-Docker-NFS/
@@ -226,6 +227,7 @@ write_files:
       fi
       wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v0.34/docker-volume-netshare_0.34_linux_amd64-bin
       chmod ugo+x  /opt/bin/docker-volume-netshare
+      /opt/bin/docker-volume-netshare version
 
   - path: "/tmp/install-etcd3.sh"
     permissions: "0777"
@@ -252,8 +254,6 @@ write_files:
       ln -s /opt/etcd3/etcdctl /opt/bin/etcdctl
       /opt/bin/etcd --version
       /opt/bin/etcdctl --version
-
-      #chmod ugo+x  /opt/bin/docker-volume-netshare
 
   - path: "/tmp/install-consul.sh"
     permissions: "0777"
