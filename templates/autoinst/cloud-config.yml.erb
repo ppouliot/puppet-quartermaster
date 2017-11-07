@@ -88,6 +88,17 @@ coreos:
         [Install]
         WantedBy=multi-user.target
 
+    - name: "install-vault.service"
+      command: "start"
+      content: |
+        [Unit]
+        Description=Install vault binaries to /opt
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/bash -ex /tmp/install-vault.sh
+        [Install]
+        WantedBy=multi-user.target
+
     - name: "install-java.service"
       command: "start"
       content: |
@@ -286,6 +297,28 @@ write_files:
       rm -rf consul_${CONSUL_VERSION}_linux_amd64.zip
       chmod ugo+x  /opt/bin/consul
       /opt/bin/consul --version
+
+  - path: "/tmp/install-vault.sh"
+    permissions: "0777"
+    owner: "core"
+    content: |
+      #!/usr/bin/bash
+      LOGFILE='/home/core/.install-vault.log'
+      exec >> $LOGFILE 2>&1
+
+      VAULT_VERSION='0.8.3'
+
+      if [ ! -d /opt/bin ];
+      then
+        mkdir -p /opt/bin
+      fi
+      cd /opt/bin
+      wget -nv -O consul_${CONSUL_VERSION}_linux_amd64.zip https://releases.hashicorp.com/vault/$VAULT_VERSION/vault_${VAULT_VERSION}_linux_amd64.zip?_ga=2.251505030.1404993183.1509994438-1186437665.1509994438
+
+      unzip vault_${VAULT_VERSION}_linux_amd64.zip
+      rm -rf vault_${VAULT_VERSION}_linux_amd64.zip
+      chmod ugo+x  /opt/bin/vault
+      /opt/bin/vault --version
 
   - path: "/tmp/install-java.sh"
     permissions: "0777"
