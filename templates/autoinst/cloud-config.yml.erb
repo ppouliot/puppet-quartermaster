@@ -313,7 +313,7 @@ write_files:
         mkdir -p /opt/bin
       fi
       cd /opt/bin
-      wget -nv -O consul_${CONSUL_VERSION}_linux_amd64.zip https://releases.hashicorp.com/vault/$VAULT_VERSION/vault_${VAULT_VERSION}_linux_amd64.zip?_ga=2.251505030.1404993183.1509994438-1186437665.1509994438
+      wget -nv -O vault_${VAULT_VERSION}_linux_amd64.zip https://releases.hashicorp.com/vault/$VAULT_VERSION/vault_${VAULT_VERSION}_linux_amd64.zip?_ga=2.251505030.1404993183.1509994438-1186437665.1509994438
 
       unzip vault_${VAULT_VERSION}_linux_amd64.zip
       rm -rf vault_${VAULT_VERSION}_linux_amd64.zip
