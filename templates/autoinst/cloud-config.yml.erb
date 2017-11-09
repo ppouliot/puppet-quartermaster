@@ -81,7 +81,7 @@ coreos:
       command: "start"
       content: |
         [Unit]
-        Description=Install consul binaries to /opt
+        Description=Install consul binaries to /opt/bin
         [Service]
         Type=oneshot
         ExecStart=/bin/bash -ex /tmp/install-consul.sh
@@ -92,10 +92,21 @@ coreos:
       command: "start"
       content: |
         [Unit]
-        Description=Install vault binaries to /opt
+        Description=Install vault binaries to /opt/bin
         [Service]
         Type=oneshot
         ExecStart=/bin/bash -ex /tmp/install-vault.sh
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: "install-calico.service"
+      command: "start"
+      content: |
+        [Unit]
+        Description=Install calicoctl binaries to /opt/bin
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/bash -ex /tmp/install-calico.sh
         [Install]
         WantedBy=multi-user.target
 
@@ -319,6 +330,27 @@ write_files:
       rm -rf vault_${VAULT_VERSION}_linux_amd64.zip
       chmod ugo+x  /opt/bin/vault
       /opt/bin/vault --version
+
+  - path: "/tmp/install-calico.sh"
+    permissions: "0777"
+    owner: "core"
+    content: |
+      #!/usr/bin/bash
+      LOGFILE='/home/core/.install-calico.log'
+      exec >> $LOGFILE 2>&1
+
+      CALICO_VERSION='1.6.1'
+
+      if [ ! -d /opt/bin ];
+      then
+        mkdir -p /opt/bin
+      fi
+      cd /opt/bin
+      wget -nv -O calicoctl https://github.com/projectcalico/calicoctl/releases/download/v${CALICO_VERSION}/calicoctl
+      chmod ugo+x  /opt/bin/calicoctl
+      /opt/bin/calicoctl --version
+
+  - path: "/tmp/install-java.sh"
 
   - path: "/tmp/install-java.sh"
     permissions: "0777"
