@@ -26,6 +26,9 @@
 #  [* dban_version *]
 #  Version of DBAN to download and use.  Defaults to 2.2.8
 #
+#  [* matchbox_version *]
+#  Version of Matchbox to download and use.  Defaults to 0.6.1
+#
 #  [* enable_poap *]
 #  This is currently experimental.  As of now it gathers and deploys scripts
 #  for Cisco's Power On Auto Provisioning for Nexus platform switches.
@@ -64,6 +67,8 @@ class quartermaster (
   $syslinux_version                 = '6.03',
   $dban_enable                      = undef,
   $dban_version                     = '2.3.0',
+  $matchbox_enable                  = undef,
+  $matchbox_version                 = '0.6.1',
   $proxydhcp_subnets                = [],
 
 #  $linux                            = hiera('linux',{}),
