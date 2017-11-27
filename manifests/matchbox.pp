@@ -1,7 +1,9 @@
 # == Define: quartermaster::matchbox
 # Adds CoreOS Matchbox as part of the CoreOS deployment infrastructure
 #
-class quartermaster::matchbox (){
+class quartermaster::matchbox (
+  $matchbox_enable = $quartermaster::matchbox_enable,
+){
 
   validate_bool( $quartermaster::matchbox_enable )
   validate_string( $quartermaster::matchbox_version )
