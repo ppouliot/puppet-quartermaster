@@ -74,6 +74,8 @@ class quartermaster::install (
     'pykickstart',
     # Used for creating isos
     'genisoimage',
+    # Unzip
+    'unzip',
   ]:
     ensure  => latest,
     require => File['/srv/quartermaster/logs'],
