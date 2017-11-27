@@ -18,7 +18,9 @@ class quartermaster::matchbox (
       '/var/lib/matchbox/assets',
       '/var/lib/matchbox/cloud',
       '/var/lib/matchbox/ignition',
-      '/var/lib/matchbox/profile',
+      '/var/lib/matchbox/profiles',
+      '/var/lib/matchbox/generic',
+      '/var/lib/matchbox/groups',
       '/etc/matchbox',
     ]:
       ensure => directory,
@@ -8919,6 +8921,14 @@ class quartermaster::matchbox (
       user        => 'root',
     } ->
 
+    file{ '/root/.terraformrc':
+      ensure => file,
+      content => '#
+providers {
+  matchbox = "/usr/local/go/bin/terraform-provider-matchbox"
+}
+',
+    }
     concat::fragment{'default_matchbox':
       target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
       content => template('quartermaster/pxemenu/matchbox.erb'),
