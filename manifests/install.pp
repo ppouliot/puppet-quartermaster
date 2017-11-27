@@ -660,6 +660,18 @@ menu passwordrow 11
   # 
   staging::file{'ipxe.iso':
     source => 'http://boot.ipxe.org/ipxe.iso',
+    target => '/srv/quartermaster/iso/ipxe.iso',
+  }
+
+  autofs::mount{'quartermaster-iso':
+    mount       => '/srv/quartermaster/mnt',
+    mapfile     => '/etc/auto.quartermaster-iso',
+    mapcontents => [
+      '* -fstype=iso9660,loop :/srv/quartermaster/iso/&',
+    ],
+      '* -fstype=iso9660,loop :/srv/quartermaster/iso/&',
+    options     => '--timeout=10',
+    order       => 01,
   }
 
   # Installl WimLib
