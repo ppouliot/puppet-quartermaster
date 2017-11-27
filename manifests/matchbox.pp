@@ -122,8 +122,22 @@ class quartermaster::matchbox (){
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/openssl.conf",
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/README.md",
       ],
+    } ->
+    file{'/usr/local/bin/matchbox':
+      ensure => file,
+      source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/matchbox",
+      mode   => '0777',
+    } ->
+    file{'/usr/local/bin/get-coreos':
+      ensure => file,
+      source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/get-coreos",
+      mode   => '0777',
+    } ->
+    file{'/etc/systemd/system/matchbox.service':
+      ensure => file,
+      source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/contrib/systemd/matchbox-local.service",
+      mode   => '0777',
     }
-
   }
 
 }
