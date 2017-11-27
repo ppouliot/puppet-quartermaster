@@ -147,6 +147,7 @@ class quartermaster::matchbox (
     staging::deploy{"go":
       source => "https://redirector.gvt1.com/edgedl/go/go${quartermaster::go_version}.linux-amd64.tar.gz",
       target => '/usr/local',
+      require => Package['unzip'],
     }
 
     concat::fragment{'default_matchbox':
