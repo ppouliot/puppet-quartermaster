@@ -8,7 +8,8 @@ class quartermaster::matchbox (){
 
   if $quartermaster::matchbox_enable == true {
     user { 'matchbox':
-      ensure  => 'present',
+      ensure     => 'present',
+      managehome => true,
     } ->
     file{[
       '/var/lib/matchbox',
