@@ -144,7 +144,7 @@ class quartermaster::matchbox (
       source => "https://releases.hashicorp.com/terraform/${quartermaster::terraform_version}/terraform_${quartermaster::terraform_version}_linux_amd64.zip",
       target => '/usr/local/bin',
     } ->
-    staging::deploy{"go-${quartermaster::go_version}":
+    staging::deploy{"go":
       source => "https://redirector.gvt1.com/edgedl/go/go${quartermaster::go_version}.linux-amd64.tar.gz",
       target => '/usr/local',
     }
