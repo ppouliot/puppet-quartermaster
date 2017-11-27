@@ -666,10 +666,7 @@ menu passwordrow 11
   autofs::mount{'quartermaster-iso':
     mount       => '/srv/quartermaster/mnt',
     mapfile     => '/etc/auto.quartermaster-iso',
-    mapcontents => [
-      '* -fstype=iso9660,loop :/srv/quartermaster/iso/&',
-    ],
-      '* -fstype=iso9660,loop :/srv/quartermaster/iso/&',
+    mapcontents => '* -fstype=iso9660,loop :/srv/quartermaster/iso/&',
     options     => '--timeout=10',
     order       => 01,
   }
