@@ -8894,12 +8894,15 @@ class quartermaster::matchbox (
       ],
     } ->
 
+    file_line{'/usr/local/go/bin added to Path':
+      ensure   => present,
+      path     => '/etc/environment',
+      lineh    => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin"',
+      match    => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
+    } ->
+
     exec{'go-get-terraform-provider-matchbox':
       command   => '/usr/local/go/bin/go get github.com/coreos/terraform-provider-matchbox'
-      path      => [
-        "${::path}",
-        '/usr/local/go/bin',
-      ],
       creates   => '/usr/local/bin/terraform-provider-matchbox',
       cwd       => '/usr/local/go'
       logoutput => true,
