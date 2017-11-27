@@ -8908,7 +8908,7 @@ class quartermaster::matchbox (
       environment => [ 
         'GOPATH=/usr/local/go/bin',
         'GOROOT=/usr/local/go',
-      ]:
+      ],
       command     => '/usr/local/go/bin/go get github.com/coreos/terraform-provider-matchbox',
       creates     => '/usr/local/bin/terraform-provider-matchbox',
       cwd         => '/usr/local/go',
