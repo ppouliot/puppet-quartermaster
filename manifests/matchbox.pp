@@ -139,7 +139,16 @@ class quartermaster::matchbox (
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/contrib/systemd/matchbox-local.service",
       mode   => '0777',
+    } ->
+    staging::deploy{"terraform_${quartermaster::terraform_version}_linux_amd64.zip":
+      source => "https://releases.hashicorp.com/terraform/${quartermaster::terraform_version}/terraform_${quartermaster::terraform_version}_linux_amd64.zip",
+      target => '/usr/local/bin',
+    } ->
+    staging::deploy{"go-${quartermaster::go_version}":
+      source => "https://redirector.gvt1.com/edgedl/go/go${quartermaster::go_version}.linux-amd64.tar.gz",
+      target => '/usr/local',
     }
+
     concat::fragment{'default_matchbox':
       target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
       content => template('quartermaster/pxemenu/matchbox.erb'),

@@ -69,6 +69,8 @@ class quartermaster (
   $dban_version                     = '2.3.0',
   $matchbox_enable                  = undef,
   $matchbox_version                 = '0.6.1',
+  $go_version                       = '1.9.2',
+  $terraform_version                = '0.11.0',
   $proxydhcp_subnets                = [],
 
 #  $linux                            = hiera('linux',{}),
