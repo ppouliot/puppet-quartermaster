@@ -8905,12 +8905,16 @@ class quartermaster::matchbox (
     } ->
 
     exec{'go-get-terraform-provider-matchbox':
-      environment => 'GOPATH=/usr/local/go',
+      environment => [ 
+        'GOPATH=/usr/local/go/bin',
+        'GOROOT=/usr/local/go',
+      ]:
       command     => '/usr/local/go/bin/go get github.com/coreos/terraform-provider-matchbox',
       creates     => '/usr/local/bin/terraform-provider-matchbox',
       cwd         => '/usr/local/go',
       logoutput   => true,
       timeout     => '0',
+      user        => 'root',
     } ->
 
     concat::fragment{'default_matchbox':
