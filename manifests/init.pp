@@ -110,6 +110,11 @@ class quartermaster (
     class{'::quartermaster::dban':}     
     contain quartermaster::dban
   }
+  if $matchbox_enable == true {
+    class{'::quartermaster::matchbox':}     
+    contain quartermaster::matchbox
+  }
+
 
 #if $linux {
 #  create_resources( quartermaster::pxe,$linux)
