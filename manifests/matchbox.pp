@@ -8890,7 +8890,7 @@ class quartermaster::matchbox (
       '/usr/local/go/test/writebarrier.go',
       '/usr/local/go/test/zerodivide.go',
       '/usr/local/go/VERSION',
-      ]:
+      ],
     } ->
 
     concat::fragment{'default_matchbox':
