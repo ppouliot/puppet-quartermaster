@@ -7,12 +7,22 @@ class quartermaster::matchbox (){
   validate_string( $quartermaster::matchbox_version )
 
   if $quartermaster::matchbox_enable == true {
-    file{'/srv/quartermaster/matchbox':
+    user { 'matchbox':
+      ensure  => 'present',
+    } ->
+    file{[
+      '/var/lib/matchbox',
+      '/var/lib/matchbox/assets',
+      '/etc/matchbox',
+    ]:
       ensure => directory,
+      owner  => 'matchbox',
+      group  => 'matchbox',
+
     }  -> 
     staging::deploy{"matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz":
       source => "https://github.com/coreos/matchbox/releases/download/v${quartermaster::matchbox_version}/matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz",
-      target => '/srv/quartermaster/matchbox',
+      target => '/home/matchbox',
     }
 
   }
