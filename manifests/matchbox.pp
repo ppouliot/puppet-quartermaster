@@ -8928,6 +8928,10 @@ providers {
   matchbox = "/usr/local/go/bin/terraform-provider-matchbox"
 }
 ',
+    } ->
+    service{'matchbox':
+      enable => true,
+      ensure => 'running',
     }
     concat::fragment{'default_matchbox':
       target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
