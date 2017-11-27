@@ -673,6 +673,17 @@ menu passwordrow 11
     order       => 01,
   }
 
+  staging::file{"ipxe.krn":
+    source  => "http://${fqdn}/mnt/ipxe.iso/ipxe.krn",
+    target  => '/srv/quartermaster/tftpboot/pxelinux/ipxe.krn',
+    owner   => $::tftp::username,
+    group   => $::tftp::username,
+    require => [
+      Autofs::Mount['quartermaster-iso'],
+      Staging::File['ipxe.iso'],
+    ],
+  }
+
   # Installl WimLib
   case $::osfamily {
     'Debian':{
