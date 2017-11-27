@@ -8894,6 +8894,15 @@ class quartermaster::matchbox (
       ],
     } ->
 
+    exec{'go-get-terraform-provider-matchbox':
+      command   => '/usr/local/go/bin/go get github.com/coreos/terraform-provider-matchbox'
+      path      => "${::path}:/usr/local/go/bin",
+      creates   => '/usr/local/bin/terraform-provider-matchbox',
+      cwd       => '/usr/local/go'
+      logoutput => true,
+      timeout   => '0',
+    } ->
+
     concat::fragment{'default_matchbox':
       target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
       content => template('quartermaster/pxemenu/matchbox.erb'),
