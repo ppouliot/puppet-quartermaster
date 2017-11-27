@@ -8902,7 +8902,7 @@ class quartermaster::matchbox (
     } ->
 
     exec{'go-get-terraform-provider-matchbox':
-      command   => '/usr/local/go/bin/go get github.com/coreos/terraform-provider-matchbox'
+      command   => '/usr/local/go/bin/go get github.com/coreos/terraform-provider-matchbox',
       creates   => '/usr/local/bin/terraform-provider-matchbox',
       cwd       => '/usr/local/go'
       logoutput => true,
