@@ -18,6 +18,11 @@ LABEL <%= @name %>-<%= @autofile %>-running-instance
         MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> ^Running Instance
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.running_instance.sh
-
+<% @matchbox_enable %>
+LABEL <%= @name %>-ipxe-matchbox
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): ^Matchbox iPXE
+        KERNEL ipxe.lkrn
+        APPEND dhcp && chain http://<%= @fqdn %>:8080/boot.ipxe
+<% end %>
 
 
