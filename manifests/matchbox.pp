@@ -140,6 +140,11 @@ class quartermaster::matchbox (
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/contrib/systemd/matchbox-local.service",
       mode   => '0777',
     }
+    concat::fragment{'default_matchbox':
+      target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
+      content => template('quartermaster/pxemenu/matchbox.erb'),
+      order   => 02,
+    }
   }
 
 }

@@ -1,0 +1,4 @@
+LABEL matchbox-ipxe
+        MENU LABEL CoreOS ^Matchbox iPXE Provisioner
+        KERNEL ipxe.krn
+        APPEND dhcp && chain http://<%= @fqdn %>:8080/boot.ipxe
