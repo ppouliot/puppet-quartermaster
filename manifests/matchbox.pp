@@ -16,6 +16,9 @@ class quartermaster::matchbox (
     file{[
       '/var/lib/matchbox',
       '/var/lib/matchbox/assets',
+      '/var/lib/matchbox/cloud',
+      '/var/lib/matchbox/ignition',
+      '/var/lib/matchbox/profile',
       '/etc/matchbox',
     ]:
       ensure => directory,
@@ -8897,7 +8900,7 @@ class quartermaster::matchbox (
     file_line{'/usr/local/go/bin added to Path':
       ensure   => present,
       path     => '/etc/environment',
-      lineh    => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin"',
+      line     => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin"',
       match    => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
     } ->
 
