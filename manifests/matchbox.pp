@@ -29,9 +29,10 @@ class quartermaster::matchbox (
 
     }  -> 
     staging::deploy{"matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz":
-      source => "https://github.com/coreos/matchbox/releases/download/v${quartermaster::matchbox_version}/matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz",
-      target => '/home/matchbox',
-      creates => [
+      source   => "https://github.com/coreos/matchbox/releases/download/v${quartermaster::matchbox_version}/matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz",
+      target   => '/home/matchbox',
+      username => 'root',
+      creates  => [
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64",
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/CHANGES.md",
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/contrib",
@@ -8928,6 +8929,23 @@ providers {
   matchbox = "/usr/local/go/bin/terraform-provider-matchbox"
 }
 ',
+    } ->
+    exec{'certgen-for-matchbox-services':
+      environment => [
+        "SAN=DNS.1:matchbox.${::domain},IP.1=${::ipaddress}",
+      ],
+      command     => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/cert-gen',
+      cwd         => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/',
+      logoutput   => true,
+      timeout     => '0',
+      user        => 'root',
+      creates     => [
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/server.crt',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/server.key',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/client.crt',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/client.key',
+      ],
     } ->
     service{'matchbox':
       enable => true,
