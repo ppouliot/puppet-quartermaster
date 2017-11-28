@@ -42,6 +42,30 @@ class quartermaster::matchbox (
       group   => 'matchbox',
       source  => 'puppet:///modules/quartermaster/coreos/matchbox/groups',
     } ->
+    # matchbox groups/bootkube-install/install.json
+    file{ '/var/lib/matchbox/groups/bootkube-install/install.json':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/groups/bootkube-install/install.json.erb'),
+    } ->
+    # matchbox groups/etcd3-install/install.json
+    file{ '/var/lib/matchbox/groups/etcd3-install/install.json':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/groups/etcd3-install/install.json.erb'),
+    } ->
+    # matchbox groups/simple-install/install.json
+    file{ '/var/lib/matchbox/groups/simple-install/install.json':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/groups/simple-install/install.json.erb'),
+    } ->
     # matchbox profiles simple.json
     file{ '/var/lib/matchbox/profiles/simple.json':
       ensure  => file,
