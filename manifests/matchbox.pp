@@ -17,10 +17,11 @@ class quartermaster::matchbox (
       '/var/lib/matchbox',
       '/var/lib/matchbox/assets',
       '/var/lib/matchbox/cloud',
-      '/var/lib/matchbox/ignition',
+#      '/var/lib/matchbox/ignition',
       '/var/lib/matchbox/profiles',
       '/var/lib/matchbox/generic',
-      '/var/lib/matchbox/groups',
+#      '/var/lib/matchbox/groups',
+#      '/var/lib/matchbox/terraform',
       '/etc/matchbox',
     ]:
       ensure => directory,
@@ -28,48 +29,37 @@ class quartermaster::matchbox (
       group  => 'matchbox',
 
     }  -> 
-    file{'/var/lib/matchbox/ignition/format-disk.yaml.tmpl':
-      ensure => file,
-      owner  => 'matchbox',
-      group  => 'matchbox',
-      content => '# Managed by Puppet
----
-storage:
-  disks:
-    - device: /dev/sda
-      wipe_table: true
-      partitions:
-        - label: ROOT
-  filesystems:
-    - name: root
-      mount:
-        device: "/dev/sda1"
-        format: "ext4"
-        create:
-          force: true
-          options:
-            - "-LROOT"
-  files:
-    - filesystem: root
-      path: /home/core/bin
-      mode: 0644
-      user:
-        id: 500
-      group:
-        id: 500
-      contents:
-        inline: |
-          {{.example_contents}}
-{{ if index . "ssh_authorized_keys" }}
-passwd:
-  users:
-    - name: core
-      ssh_authorized_keys:
-        {{ range $element := .ssh_authorized_keys }}
-        - {{$element}}
-        {{end}}
-{{end}}
-',
+    # matchbox terraform
+    file{ '/var/lib/matchbox/terraform':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      source  => 'puppet://modules/quartermaster/coreos/matchbox/terraform',
+    } ->
+    # matchbox groups
+    file{ '/var/lib/matchbox/groups':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      source  => 'puppet://modules/quartermaster/coreos/matchbox/groups',
+    } ->
+    # matchbox profiles
+    file{ '/var/lib/matchbox/profiles':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      source  => 'puppet://modules/quartermaster/coreos/matchbox/profiles',
+    } ->
+    # matchbox ignition
+    file{ '/var/lib/matchbox/ignition':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      source  => 'puppet://modules/quartermaster/coreos/matchbox/ignition',
     } ->
     
     staging::deploy{"matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz":
