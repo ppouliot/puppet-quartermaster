@@ -35,7 +35,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      source  => 'puppet://modules/quartermaster/coreos/matchbox/terraform',
+      source  => 'puppet:///modules/quartermaster/coreos/matchbox/terraform',
     } ->
     # matchbox groups
     file{ '/var/lib/matchbox/groups':
@@ -43,7 +43,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      source  => 'puppet://modules/quartermaster/coreos/matchbox/groups',
+      source  => 'puppet:///modules/quartermaster/coreos/matchbox/groups',
     } ->
     # matchbox profiles
     file{ '/var/lib/matchbox/profiles':
@@ -51,7 +51,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      source  => 'puppet://modules/quartermaster/coreos/matchbox/profiles',
+      source  => 'puppet:///modules/quartermaster/coreos/matchbox/profiles',
     } ->
     # matchbox ignition
     file{ '/var/lib/matchbox/ignition':
@@ -59,7 +59,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      source  => 'puppet://modules/quartermaster/coreos/matchbox/ignition',
+      source  => 'puppet:///modules/quartermaster/coreos/matchbox/ignition',
     } ->
     
     staging::deploy{"matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz":
