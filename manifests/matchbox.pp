@@ -16,12 +16,9 @@ class quartermaster::matchbox (
     file{[
       '/var/lib/matchbox',
       '/var/lib/matchbox/assets',
+      '/var/lib/matchbox/profiles',
       '/var/lib/matchbox/cloud',
-#      '/var/lib/matchbox/ignition',
-#      '/var/lib/matchbox/profiles',
       '/var/lib/matchbox/generic',
-#      '/var/lib/matchbox/groups',
-#      '/var/lib/matchbox/terraform',
       '/etc/matchbox',
     ]:
       ensure => directory,
@@ -45,14 +42,77 @@ class quartermaster::matchbox (
       group   => 'matchbox',
       source  => 'puppet:///modules/quartermaster/coreos/matchbox/groups',
     } ->
-    # matchbox profiles
-    file{ '/var/lib/matchbox/profiles':
-      ensure  => directory,
+    # matchbox profiles simple.json
+    file{ '/var/lib/matchbox/profiles/simple.json':
+      ensure  => file,
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      source  => 'puppet:///modules/quartermaster/coreos/matchbox/profiles',
+      content => template('quartermaster/matchbox/profiles/simple.json.erb'),
     } ->
+    # matchbox profiles simple-install.json
+    file{ '/var/lib/matchbox/profiles/simple-install.json':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles/simple-install.json.erb'),
+    } ->
+
+    # matchbox profiles install-reboot.json
+    file{ '/var/lib/matchbox/profiles/install-reboot.json':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles/install-reboot.json.erb'),
+    } ->
+
+    # matchbox profiles grub.json
+    file{ '/var/lib/matchbox/profiles/grub.json':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles/grub.json.erb'),
+    } ->
+
+    # matchbox profiles etcd3.json
+    file{ '/var/lib/matchbox/profiles/etcd3.json':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles/etcd3.json.erb'),
+    } ->
+
+    # matchbox profiles etcd3-gateway.json
+    file{ '/var/lib/matchbox/profiles/etcd3.json':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles/etcd3-gateway.json.erb'),
+    } ->
+
+    # matchbox profiles bootkube-worker.json
+    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles/bootkube-worker.json.erb'),
+    } ->
+
+    # matchbox profiles bootkube-controller.json
+    file{ '/var/lib/matchbox/profiles/bootkube-controller.json':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles/bootkube-controller.json.erb'),
+    } ->
+
     # matchbox ignition
     file{ '/var/lib/matchbox/ignition':
       ensure  => directory,
