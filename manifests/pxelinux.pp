@@ -1019,13 +1019,15 @@ if $linux_installer == !('No Supported Linux Installer') {
       content => template("quartermaster/pxemenu/default2.erb"),
     }
   }
-  if ( $quartermaster::matchbox_enable ) {
-    notice("Matchbox is enabled")
-    if ( $distro == 'coreos') {
+  if ! defined (Concat::Fragment[matchbox-pxe-menu]) {
+    if ( $quartermaster::matchbox_enable ) {
       notice("Matchbox is enabled")
-      concat::fragment{'matchbox-pxe-menu':
-        target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu",
-        content => template('quartermaster/pxemenu/matchbox.erb'),
+      if ( $distro == 'coreos') {
+        notice("Matchbox is enabled")
+        concat::fragment{'matchbox-pxe-menu':
+          target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu",
+          content => template('quartermaster/pxemenu/matchbox.erb'),
+        }
       }
     }
   }
