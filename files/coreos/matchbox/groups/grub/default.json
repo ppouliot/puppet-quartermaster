@@ -1,0 +1,5 @@
+{
+  "id": "default",
+  "name": "GRUB CoreOS Container Linux alpha",
+  "profile": "grub"
+}
