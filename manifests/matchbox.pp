@@ -8954,7 +8954,7 @@ providers {
     if ( $distro == 'coreos') {
       concat::fragment{'default_matchbox':
 #       target  => "/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default",
-        target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu"
+        target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu",
         content => template('quartermaster/pxemenu/matchbox.erb'),
         order   => 02,
       }
