@@ -3,6 +3,8 @@
 #
 class quartermaster::matchbox (
   $matchbox_enable = $quartermaster::matchbox_enable,
+  $coreos_channel,
+  $coreos_release,
 ){
 
   validate_bool( $quartermaster::matchbox_enable )
