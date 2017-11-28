@@ -28,6 +28,50 @@ class quartermaster::matchbox (
       group  => 'matchbox',
 
     }  -> 
+    file{'/var/lib/matchbox/ignition/format-disk.yaml.tmpl':
+      ensure => file,
+      owner  => 'matchbox',
+      group  => 'matchbox',
+      content => '# Managed by Puppet
+---
+storage:
+  disks:
+    - device: /dev/sda
+      wipe_table: true
+      partitions:
+        - label: ROOT
+  filesystems:
+    - name: root
+      mount:
+        device: "/dev/sda1"
+        format: "ext4"
+        create:
+          force: true
+          options:
+            - "-LROOT"
+  files:
+    - filesystem: root
+      path: /home/core/bin
+      mode: 0644
+      user:
+        id: 500
+      group:
+        id: 500
+      contents:
+        inline: |
+          {{.example_contents}}
+{{ if index . "ssh_authorized_keys" }}
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        {{ range $element := .ssh_authorized_keys }}
+        - {{$element}}
+        {{end}}
+{{end}}
+',
+    } ->
+    
     staging::deploy{"matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz":
       source   => "https://github.com/coreos/matchbox/releases/download/v${quartermaster::matchbox_version}/matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz",
       target   => '/home/matchbox',

@@ -1,0 +1,12 @@
+
+{
+  "id": "install",
+  "name": "Simple CoreOS Container Linux Install",
+  "profile": "simple-install",
+  "metadata": {
+    "coreos_channel": "stable",
+    "coreos_version": "1520.8.0",
+    "ignition_endpoint": "http://matchbox.<%= @domain %>:8080/ignition",
+    "baseurl": "http://matchbox.<%= @domain %>:8080/assets/coreos"
+  }
+}
