@@ -9027,29 +9027,27 @@ class quartermaster::matchbox (
       '/usr/local/go/VERSION',
       ],
     } ->
-
+    # Add Go to System Path
     file_line{'/usr/local/go/bin added to Path':
       ensure   => present,
       path     => '/etc/environment',
       line     => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin"',
       match    => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
     } ->
-
+    # install the terraform matchbox provider
     exec{'go-get-terraform-provider-matchbox':
       environment => [ 
         'GOPATH=/opt/go',
         'GOBIN=/usr/local/go/bin',
-#        'GOROOT=/usr/local/go',
       ],
       command     => '/usr/local/go/bin/go get github.com/coreos/terraform-provider-matchbox',
       creates     => '/usr/local/bin/terraform-provider-matchbox',
       cwd         => '/usr/local/go',
       logoutput   => true,
       timeout     => '0',
-#      user        => 'matchbox',
       user        => 'root',
     } ->
-
+    # Add a .terraformrc for matchbox in /root
     file{ '/root/.terraformrc':
       ensure => file,
       content => '#
@@ -9058,6 +9056,7 @@ providers {
 }
 ',
     } ->
+    # Generate Certificates for FQDN and IP
     exec{'certgen-for-matchbox-services':
       environment => [
         "SAN=DNS.1:${::fqdn},IP.1:${::ipaddress}",
@@ -9108,7 +9107,7 @@ providers {
       ensure => file,
       source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
     } ->
-
+    # Start the Matchbox Service and Enable it
     service{'matchbox':
       enable => true,
       ensure => 'running',
