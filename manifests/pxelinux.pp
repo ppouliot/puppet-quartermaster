@@ -984,13 +984,15 @@ if $linux_installer == !('No Supported Linux Installer') {
   }
 
 
-#  Distro Kickstart/Preseed File
+  #  Distro Kickstart/Preseed File
   file { "${name}.${autofile}":
     ensure  => file,
     path    => "/srv/quartermaster/${distro}/${autofile}/${name}.${autofile}",
     content => template("quartermaster/autoinst/${autofile}.erb"),
     require => File[ "/srv/quartermaster/${distro}/${autofile}" ],
   }
+
+  # PXEMENU ( pxelinux/pxelinux.cfg/default ) 
   if ! defined (Concat::Fragment["${distro}.default_menu_entry"]) {
     concat::fragment { "${distro}.default_menu_entry":
       target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
@@ -998,6 +1000,7 @@ if $linux_installer == !('No Supported Linux Installer') {
       order   => 02,
     }
   }
+  # PXEMENU ( menu/distro.menu ) 
   if ! defined (Concat["/srv/quartermaster/tftpboot/menu/${distro}.menu"]) {
     concat { "/srv/quartermaster/tftpboot/menu/${distro}.menu":
     }
@@ -1014,6 +1017,13 @@ if $linux_installer == !('No Supported Linux Installer') {
       target  => "/srv/quartermaster/tftpboot/menu/${distro}.menu",
 #      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
       content => template("quartermaster/pxemenu/default2.erb"),
+    }
+  }
+  if ( $distro == 'coreos') and ( $quartermaster::matchbox_enable == 'true' ) {
+    concat::fragment{'matchbox-pxe-menu':
+      target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu",
+      content => template('quartermaster/pxemenu/matchbox.erb'),
+      order   => 99,
     }
   }
   tftp::file { "${distro}/menu/${name}.menu":
