@@ -87,7 +87,7 @@ class quartermaster::matchbox (
     } ->
 
     # matchbox profiles etcd3-gateway.json
-    file{ '/var/lib/matchbox/profiles/etcd3.json':
+    file{ '/var/lib/matchbox/profiles/etcd3-gateway.json':
       ensure  => file,
       recurse => true,
       owner   => 'matchbox',
