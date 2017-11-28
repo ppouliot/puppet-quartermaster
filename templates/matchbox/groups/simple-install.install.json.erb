@@ -6,7 +6,7 @@
   "metadata": {
     "coreos_channel": "stable",
     "coreos_version": "1520.8.0",
-    "ignition_endpoint": "http://matchbox.<%= @domain %>:8080/ignition",
-    "baseurl": "http://matchbox.<%= @domain %>:8080/assets/coreos"
+    "ignition_endpoint": "http://<%= @fqdn %>:8080/ignition",
+    "baseurl": "http://<%= @fqdn %>:8080/assets/coreos"
   }
 }

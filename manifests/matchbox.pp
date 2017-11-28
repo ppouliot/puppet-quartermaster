@@ -48,7 +48,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      content => template('quartermaster/matchbox/groups/bootkube-install/install.json.erb'),
+      content => template('quartermaster/matchbox/groups/bootkube-install.install.json.erb'),
     } ->
     # matchbox groups/etcd3-install/install.json
     file{ '/var/lib/matchbox/groups/etcd3-install/install.json':
@@ -56,7 +56,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      content => template('quartermaster/matchbox/groups/etcd3-install/install.json.erb'),
+      content => template('quartermaster/matchbox/groups/etcd3-install.install.json.erb'),
     } ->
     # matchbox groups/simple-install/install.json
     file{ '/var/lib/matchbox/groups/simple-install/install.json':
@@ -64,7 +64,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      content => template('quartermaster/matchbox/groups/simple-install/install.json.erb'),
+      content => template('quartermaster/matchbox/groups/simple-install.install.json.erb'),
     } ->
     # matchbox profiles simple.json
     file{ '/var/lib/matchbox/profiles/simple.json':
@@ -136,6 +136,24 @@ class quartermaster::matchbox (
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/bootkube-controller.json.erb'),
     } ->
+    # matchbox terraform/etcd3-install/terraform.tfvars
+    file{ '/var/lib/matchbox/terraform/etcd3-install/terraform.tfvars':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/terraform/etcd3-install.terraform.tfvars.erb'),
+    } ->
+
+    # matchbox terraform/simple-install/terraform.tfvars
+    file{ '/var/lib/matchbox/terraform/simple-install/terraform.tfvars':
+      ensure  => file,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/terraform/simple-install.terraform.tfvars.erb'),
+    } ->
+
 
     # matchbox ignition
     file{ '/var/lib/matchbox/ignition':
@@ -9050,7 +9068,7 @@ providers {
     } ->
     exec{'certgen-for-matchbox-services':
       environment => [
-        "SAN=DNS.1:matchbox.${::domain},IP.1=${::ipaddress}",
+        "SAN=DNS.1:${::fqdn},IP.1:${::ipaddress}",
       ],
       command     => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/cert-gen',
       cwd         => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/',
