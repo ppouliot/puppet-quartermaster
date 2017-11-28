@@ -18,7 +18,7 @@ class quartermaster::matchbox (
       '/var/lib/matchbox/assets',
       '/var/lib/matchbox/cloud',
 #      '/var/lib/matchbox/ignition',
-      '/var/lib/matchbox/profiles',
+#      '/var/lib/matchbox/profiles',
       '/var/lib/matchbox/generic',
 #      '/var/lib/matchbox/groups',
 #      '/var/lib/matchbox/terraform',
