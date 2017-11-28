@@ -27,6 +27,11 @@ class quartermaster::matchbox (
 
     }  -> 
     # matchbox terraform
+    file{'/root/.matchbox':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+    } ->
     file{ '/var/lib/matchbox/terraform':
       ensure  => directory,
       recurse => true,
@@ -9076,13 +9081,47 @@ providers {
       timeout     => '0',
       user        => 'root',
       creates     => [
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/certs',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/crl',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/newcerts',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/serial',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/index.txt',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/index.txt.attr',
       '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
+      '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.key',
       '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/server.crt',
       '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/server.key',
       '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/client.crt',
       '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/client.key',
       ],
     } ->
+    # Generated Certs to /etc ca.crt server.crt server.key
+    file{'/etc/matchbox/ca.crt':
+      ensure => file,
+      source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
+    } ->
+    file{'/etc/matchbox/server.crt':
+      ensure => file,
+      source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/server.crt',
+    } ->
+    file{'/etc/matchbox/server.key':
+      ensure => file,
+      source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/server.key',
+    } ->
+    # Add client Certs to /root/.matchbox
+    file{'/root/.matchbox/client.key':
+      ensure => file,
+      source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/client.key',
+    } ->
+    file{'/root/.matchbox/client.crt':
+      ensure => file,
+      source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/client.crt',
+    } ->
+    file{'/root/.matchbox/ca.crt':
+      ensure => file,
+      source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
+    } ->
+
     service{'matchbox':
       enable => true,
       ensure => 'running',
