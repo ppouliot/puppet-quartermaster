@@ -49,24 +49,21 @@ class quartermaster::matchbox (
     } ->
     # matchbox groups/bootkube-install/install.json
     file{ '/var/lib/matchbox/groups/bootkube-install/install.json':
-      ensure  => directory,
-      recurse => true,
+      ensure  => file,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/groups/bootkube-install.install.json.erb'),
     } ->
     # matchbox groups/etcd3-install/install.json
     file{ '/var/lib/matchbox/groups/etcd3-install/install.json':
-      ensure  => directory,
-      recurse => true,
+      ensure  => file,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/groups/etcd3-install.install.json.erb'),
     } ->
     # matchbox groups/simple-install/install.json
     file{ '/var/lib/matchbox/groups/simple-install/install.json':
-      ensure  => directory,
-      recurse => true,
+      ensure  => file,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/groups/simple-install.install.json.erb'),
@@ -74,7 +71,6 @@ class quartermaster::matchbox (
     # matchbox profiles simple.json
     file{ '/var/lib/matchbox/profiles/simple.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/simple.json.erb'),
@@ -82,7 +78,6 @@ class quartermaster::matchbox (
     # matchbox profiles simple-install.json
     file{ '/var/lib/matchbox/profiles/simple-install.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/simple-install.json.erb'),
@@ -91,7 +86,6 @@ class quartermaster::matchbox (
     # matchbox profiles install-reboot.json
     file{ '/var/lib/matchbox/profiles/install-reboot.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/install-reboot.json.erb'),
@@ -100,7 +94,6 @@ class quartermaster::matchbox (
     # matchbox profiles grub.json
     file{ '/var/lib/matchbox/profiles/grub.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/grub.json.erb'),
@@ -109,7 +102,6 @@ class quartermaster::matchbox (
     # matchbox profiles etcd3.json
     file{ '/var/lib/matchbox/profiles/etcd3.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/etcd3.json.erb'),
@@ -118,7 +110,6 @@ class quartermaster::matchbox (
     # matchbox profiles etcd3-gateway.json
     file{ '/var/lib/matchbox/profiles/etcd3-gateway.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/etcd3-gateway.json.erb'),
@@ -127,7 +118,6 @@ class quartermaster::matchbox (
     # matchbox profiles bootkube-worker.json
     file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/bootkube-worker.json.erb'),
@@ -136,7 +126,6 @@ class quartermaster::matchbox (
     # matchbox profiles bootkube-controller.json
     file{ '/var/lib/matchbox/profiles/bootkube-controller.json':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/profiles/bootkube-controller.json.erb'),
@@ -144,7 +133,6 @@ class quartermaster::matchbox (
     # matchbox terraform/etcd3-install/terraform.tfvars
     file{ '/var/lib/matchbox/terraform/etcd3-install/terraform.tfvars':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/terraform/etcd3-install.terraform.tfvars.erb'),
@@ -153,7 +141,6 @@ class quartermaster::matchbox (
     # matchbox terraform/simple-install/terraform.tfvars
     file{ '/var/lib/matchbox/terraform/simple-install/terraform.tfvars':
       ensure  => file,
-      recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/terraform/simple-install.terraform.tfvars.erb'),
