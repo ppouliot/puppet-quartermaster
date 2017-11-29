@@ -767,6 +767,37 @@ define quartermaster::pxelinux (
         group   => 'matchbox',
         content => template('quartermaster/matchbox/groups/etcd3/node3.json.erb'),
       }
+      file{ "/var/lib/matchbox/examples/${release}/groups/etcd3-install/gateway.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/etcd3-install/gateway.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/groups/etcd3-install/node1.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/etcd3-install/node1.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/groups/etcd3-install/node2.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/etcd3-install/node2.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/groups/etcd3-install/node3.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/etcd3-install/node3.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/groups/etcd3-install/install.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/etcd3-install/install.json.erb'),
+      }
+      # matchbox profiles grub.json
       # matchbox profiles grub.json
       # matchbox profiles grub.json
       # matchbox profiles grub.json

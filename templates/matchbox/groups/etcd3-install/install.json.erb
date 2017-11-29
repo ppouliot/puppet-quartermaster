@@ -1,0 +1,14 @@
+# Puppet Managed
+# etcd3-install
+# <%= @release %>
+{
+  "id": "coreos-install",
+  "name": "CoreOS Container Linux Install",
+  "profile": "install-reboot",
+  "metadata": {
+    "coreos_channel": "<%= @coreos_channel %>",
+    "coreos_version": "<%= @coreos_version %>",
+    "ignition_endpoint": "http://<%= @fqdn %>:8080/ignition",
+    "baseurl": "http://<%= @fqdn %>:8080/assets/coreos"
+  }
+}

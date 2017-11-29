@@ -1,0 +1,10 @@
+# Puppet Managed
+# <%= @release %>
+{
+  "id": "default",
+  "name": "default",
+  "profile": "etcd3-gateway",
+  "metadata": {
+    "etcd_endpoints": "node1.<%= @fqdn %>:2379,node2.<%= @fqdn %>:2379,node3.<%= @fqdn %>:2379"
+  }
+}
