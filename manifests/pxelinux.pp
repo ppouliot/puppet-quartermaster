@@ -702,6 +702,36 @@ define quartermaster::pxelinux (
         content => template('quartermaster/matchbox/groups.etcd3-install.json.erb'),
       }
 
+      file{[
+        "/var/lib/matchbox/examples/${release}",
+        "/var/lib/matchbox/examples/${release}/groups",
+        "/var/lib/matchbox/examples/${release}/groups/simple",
+        "/var/lib/matchbox/examples/${release}/groups/simple-install",
+        "/var/lib/matchbox/examples/${release}/groups/etcd3",
+        "/var/lib/matchbox/examples/${release}/groups/etcd3-install",
+        "/var/lib/matchbox/examples/${release}/groups/grub",
+        "/var/lib/matchbox/examples/${release}/groups/bootkube",
+        "/var/lib/matchbox/examples/${release}/groups/bootkube-install",
+        "/var/lib/matchbox/examples/${release}/profiles",
+        "/var/lib/matchbox/examples/${release}/ignition",
+      ]:
+        ensure  => directory,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+      }
+      file{ "/var/lib/matchbox/examples/${release}/groups/grub/default.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/grub/default.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/groups/simple/default.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/simple/default.json.erb'),
+      }
+      # matchbox profiles grub.json
       notice("matchbox/profiles/${release}.json")
       file{ "/var/lib/matchbox/profiles/${release}.json":
         ensure  => file,
@@ -710,7 +740,7 @@ define quartermaster::pxelinux (
         content => template('quartermaster/matchbox/profiles.channel.json.erb'),
       }
       # matchbox profiles grub.json
-      file{ "/var/lib/matchbox/profiles/grub-${release}.json":
+      file{ "/var/lib/matchbox/examples/${release}/profiles/grub-${release}.json":
         ensure  => file,
         owner   => 'matchbox',
         group   => 'matchbox',
