@@ -9107,7 +9107,7 @@ providers {
       ensure => file,
       source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
     } ->
-    if ($::operatingsystem == 'ubuntu') and ($::release == '14.04'){
+    if ( $facts[os][distro][id] == 'Ubuntu' ) and ( $facts[os][distro][release][major] == '14.04'){
       file{'/etc/init/matchbox.conf':
         ensure => file,
         source  => 'puppet:///modules/quartermaster/coreos/matchbox/upstart.matchbox.conf'
