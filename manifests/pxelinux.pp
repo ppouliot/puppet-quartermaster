@@ -291,7 +291,7 @@ define quartermaster::pxelinux (
     $splash_url      = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader/back.jpg"
     $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
     $boot_iso_url    = "${opensuse_url}/${release}/iso"
-    # This adds scripts to deploy to the system after booting into coreos 
+    # This adds scripts to deploy to the system after booting into OpenSuse
     # when finished it should reboot.
     file {"/srv/quartermaster/${distro}/${autofile}/kernelbuilder.${name}.${autofile}":
       ensure  => file,
@@ -681,7 +681,7 @@ define quartermaster::pxelinux (
         content => template('quartermaster/matchbox/groups/channel-install.json.erb'),
       }
       notice("matchbox/profiles/${release}-install.json")
-      file{ '/var/lib/matchbox/profiles/simple-install.json':
+      file{ "/var/lib/matchbox/profiles/${release}-install.json":
         ensure  => file,
         owner   => 'matchbox',
         group   => 'matchbox',
