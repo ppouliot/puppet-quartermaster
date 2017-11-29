@@ -9068,7 +9068,7 @@ providers {
     file{'/root/.matchbox/ca.crt':
       ensure => file,
       source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
-    } ->
+    }
     if ( $facts[os][distro][id] == 'Ubuntu' ) and ( $facts[os][distro][release][major] == '14.04'){
       file{'/etc/init/matchbox.conf':
         ensure => file,
