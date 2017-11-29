@@ -618,7 +618,6 @@ define quartermaster::pxelinux (
   }
   if ( $distro == 'coreos' ) {
     case $release {
-       $coreos_channel = $release
       'stable':{
         warning("coreos ${release} for ${p_arch} will be activated")
         $coreos_version = '1520.8.0'
