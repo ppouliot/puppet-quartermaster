@@ -701,7 +701,7 @@ define quartermaster::pxelinux (
         group   => 'matchbox',
         content => template('quartermaster/matchbox/groups.etcd3-install.json.erb'),
       }
-
+      # Begin Examples
       file{[
         "/var/lib/matchbox/examples/${release}",
         "/var/lib/matchbox/examples/${release}/groups",
@@ -838,6 +838,36 @@ define quartermaster::pxelinux (
         owner   => 'matchbox',
         group   => 'matchbox',
         content => template('quartermaster/matchbox/groups/bootkube-install/install.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/profiles/simple.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles/simple.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/profiles/simple-install.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles/simple-install.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/profiles/grub.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles/grub.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/profiles/etcd3.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles/etcd3.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/profiles/etcd3-install.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles/etcd3-install.json.erb'),
       }
       # matchbox profiles grub.json
       notice("matchbox/profiles/${release}.json")

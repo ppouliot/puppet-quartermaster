@@ -1,9 +1,11 @@
+# Puppet Managed
+# File: <%= @title %>
 {
   "id": "simple-install",
-  "name": "Simple CoreOS Container Linux Alpha Install",
+  "name": "Simple CoreOS <%= @coreos_channel %> Install",
   "boot": {
-    "kernel": "/assets/coreos/1520.8.0/coreos_production_pxe.vmlinuz",
-    "initrd": ["/assets/coreos/1520.8.0/coreos_production_pxe_image.cpio.gz"],
+    "kernel": "/assets/coreos/<%= @coreos_version %>/coreos_production_pxe.vmlinuz",
+    "initrd": ["/assets/coreos/<%= @coreos_version %>/coreos_production_pxe_image.cpio.gz"],
     "args": [
       "initrd=coreos_production_pxe_image.cpio.gz",
       "coreos.config.url=http://<%= @fqdn %>:8080/ignition?uuid=${uuid}&mac=${mac:hexhyp}",
