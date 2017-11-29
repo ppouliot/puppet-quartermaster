@@ -4,8 +4,8 @@
   "id": "grub-<%= @coreos_channel %>",
   "name": "CoreOS Container Linux via GRUB2",
   "boot": {
-    "kernel": "(http;<%= @fqdn %>:8080)/assets/coreos/<%= @coreos-version %>/coreos_production_pxe.vmlinuz",
-    "initrd": ["(http;<%= @fqdn %>:8080)/assets/coreos/<%= @coreos-version%>/coreos_production_pxe_image.cpio.gz"],
+    "kernel": "(http;<%= @fqdn %>:8080)/assets/coreos/<%= @coreos_version %>/coreos_production_pxe.vmlinuz",
+    "initrd": ["(http;<%= @fqdn %>:8080)/assets/coreos/<%= @coreos_version %>/coreos_production_pxe_image.cpio.gz"],
     "args": [
       "coreos.config.url=http://<%= @fqdn %>:8080/ignition",
       "coreos.first_boot=yes",
