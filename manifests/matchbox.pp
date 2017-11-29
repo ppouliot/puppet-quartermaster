@@ -74,7 +74,7 @@ class quartermaster::matchbox (
       ensure  => file,
       owner   => 'matchbox',
       group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles.defaul.json.erb'),
+      content => template('quartermaster/matchbox/profiles.default.json.erb'),
     } ->
 
 #    # matchbox profiles bootkube-worker.json
