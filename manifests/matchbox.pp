@@ -62,7 +62,7 @@ class quartermaster::matchbox (
       content => template('quartermaster/matchbox/groups/etcd3-install.json.erb'),
     } ->
     # matchbox groups/simple-install/install.json
-    file{ '/var/lib/matchbox/groups/simple-install.json':
+    file{ '/var/lib/matchbox/groups/install.json':
       ensure  => file,
       owner   => 'matchbox',
       group   => 'matchbox',

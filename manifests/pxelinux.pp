@@ -618,8 +618,18 @@ define quartermaster::pxelinux (
   }
   if ( $distro == 'coreos' ) {
     case $release {
-      'stable','beta','alpha':{
+       $coreos_channel = $release
+      'stable':{
         warning("coreos ${release} for ${p_arch} will be activated")
+        $coreos_version = '1520.8.0'
+      }
+      'beta':{
+        warning("coreos ${release} for ${p_arch} will be activated")
+        $coreos_version = '1576.2.0'
+      }
+      'alpha':{
+        warning("coreos ${release} for ${p_arch} will be activated")
+        $coreos_version = '1590.0.0'
       }
       default:{
         fail("${name} is not a valid coreos release! Valid release are stable, beta  or alpha.")
@@ -633,6 +643,7 @@ define quartermaster::pxelinux (
         fail("${p_arch} is not a valid processor architecture for coreos, valid processor arch are amd64 and arm64.")
       }
     }
+    $coreos_channel  = $release
     $autofile        = 'cloud-config.yml'
     $linux_installer = 'coreos-install'
     $pxekernel      = 'coreos_production_pxe.vmlinuz'
@@ -1027,6 +1038,13 @@ if $linux_installer == !('No Supported Linux Installer') {
         concat::fragment{'matchbox-pxe-menu':
           target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu",
           content => template('quartermaster/pxemenu/matchbox.erb'),
+        }
+        # matchbox groups/simple-install/${release}-install.json
+        file{ '/var/lib/matchbox/groups/${release}-install.json':
+          ensure  => file,
+          owner   => 'matchbox',
+          group   => 'matchbox',
+          content => template('quartermaster/matchbox/groups/channel-install.json.erb'),
         }
       }
     }

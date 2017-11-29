@@ -1,0 +1,12 @@
+# /var/lib/matchbox/groups/<%= @coreos_channel %>-install.json
+{
+  "id": "<%= @coreos_channel %>-install",
+  "name": "<%= @coreos_channel %> CoreOS Container Linux Install",
+  "profile": "<%= @coreos_channel %>-install",
+  "metadata": {
+    "coreos_channel": "<%= @coreos_channel %>",
+    "coreos_version": "<%= @coreos_version %>",
+    "ignition_endpoint": "http://<%= @fqdn %>:8080/ignition",
+    "baseurl": "http://<%= @fqdn %>:8080/assets/coreos"
+  }
+}
