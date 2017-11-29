@@ -15,6 +15,7 @@ class quartermaster::matchbox (
     } ->
     file{[
       '/var/lib/matchbox',
+      '/var/lib/matchbox/addons',
       '/var/lib/matchbox/assets',
       '/var/lib/matchbox/profiles',
       '/var/lib/matchbox/cloud',
@@ -32,6 +33,15 @@ class quartermaster::matchbox (
       owner  => 'root',
       group  => 'root',
     } ->
+    file{ '/var/lib/matchbox/addons':
+      ensure  => directory,
+      recurse => true,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      source  => 'puppet:///modules/quartermaster/coreos/matchbox/addons',
+    } ->
+    # matchbox groups
+    # matchbox groups
     file{ '/var/lib/matchbox/terraform':
       ensure  => directory,
       recurse => true,

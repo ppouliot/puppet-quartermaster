@@ -694,6 +694,14 @@ define quartermaster::pxelinux (
         group   => 'matchbox',
         content => template('quartermaster/matchbox/groups.channel.json.erb'),
       }
+      # matchbox groups etcd3-install.json
+      file{ "/var/lib/matchbox/groups/etcd3-${release}-install.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles.etcd3-install.json.erb'),
+      }
+
       notice("matchbox/profiles/${release}.json")
       file{ "/var/lib/matchbox/profiles/${release}.json":
         ensure  => file,
