@@ -724,6 +724,15 @@ define quartermaster::pxelinux (
         group   => 'matchbox',
         content => template('quartermaster/matchbox/profiles.etcd3-gateway.json.erb'),
       }
+
+     # profiles install-channel-reboot.json
+      file{ "/var/lib/matchbox/profiles/install-${release}-reboot.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles.install-channel.reboot.json.erb'),
+      }
+
     }
   }
 
