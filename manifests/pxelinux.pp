@@ -731,6 +731,18 @@ define quartermaster::pxelinux (
         group   => 'matchbox',
         content => template('quartermaster/matchbox/groups/simple/default.json.erb'),
       }
+      file{ "/var/lib/matchbox/examples/${release}/groups/simple-install/simple.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/simple-install/simple.json.erb'),
+      }
+      file{ "/var/lib/matchbox/examples/${release}/groups/simple-install/install.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/simple-install/install.json.erb'),
+      }
       # matchbox profiles grub.json
       notice("matchbox/profiles/${release}.json")
       file{ "/var/lib/matchbox/profiles/${release}.json":
