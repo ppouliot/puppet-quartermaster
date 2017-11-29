@@ -863,11 +863,11 @@ define quartermaster::pxelinux (
         group   => 'matchbox',
         content => template('quartermaster/matchbox/profiles/etcd3.json.erb'),
       }
-      file{ "/var/lib/matchbox/examples/${release}/profiles/etcd3-install.json":
+      file{ "/var/lib/matchbox/examples/${release}/profiles/etcd3-gateway.json":
         ensure  => file,
         owner   => 'matchbox',
         group   => 'matchbox',
-        content => template('quartermaster/matchbox/profiles/etcd3-install.json.erb'),
+        content => template('quartermaster/matchbox/profiles/etcd3-gateway.json.erb'),
       }
       # matchbox profiles grub.json
       notice("matchbox/profiles/${release}.json")
