@@ -672,6 +672,15 @@ define quartermaster::pxelinux (
       mode    => '0777',
       content => template('quartermaster/scripts/coreos.custom_ip_resolution.sh.erb'),
     }
+    if ( $quartermaster::matchbox_enable ) {
+      notice("matchbox/groups/${release}-install.json")
+      file{ "/var/lib/matchbox/groups/${release}-install.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups/channel-install.json.erb'),
+      }
+    }
 
   }
 
@@ -1037,13 +1046,6 @@ if $linux_installer == !('No Supported Linux Installer') {
         concat::fragment{'matchbox-pxe-menu':
           target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu",
           content => template('quartermaster/pxemenu/matchbox.erb'),
-        }
-        # matchbox groups/simple-install/${release}-install.json
-        file{ "/var/lib/matchbox/groups/${release}-install.json":
-          ensure  => file,
-          owner   => 'matchbox',
-          group   => 'matchbox',
-          content => template('quartermaster/matchbox/groups/channel-install.json.erb'),
         }
       }
     }
