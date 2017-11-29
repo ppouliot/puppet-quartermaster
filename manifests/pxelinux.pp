@@ -699,7 +699,7 @@ define quartermaster::pxelinux (
         ensure  => file,
         owner   => 'matchbox',
         group   => 'matchbox',
-        content => template('quartermaster/matchbox/profiles.etcd3-install.json.erb'),
+        content => template('quartermaster/matchbox/groups.etcd3-install.json.erb'),
       }
 
       notice("matchbox/profiles/${release}.json")
