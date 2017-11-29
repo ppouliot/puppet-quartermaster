@@ -730,7 +730,7 @@ define quartermaster::pxelinux (
         ensure  => file,
         owner   => 'matchbox',
         group   => 'matchbox',
-        content => template('quartermaster/matchbox/profiles.install-channel.reboot.json.erb'),
+        content => template('quartermaster/matchbox/profiles.install-channel-reboot.json.erb'),
       }
 
     }
