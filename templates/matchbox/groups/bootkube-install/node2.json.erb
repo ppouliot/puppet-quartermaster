@@ -1,0 +1,19 @@
+# Puppet Managed
+#  
+{
+  "id": "node2",
+  "name": "Worker Node",
+  "profile": "bootkube-worker",
+  "selector": {
+    "mac": "52:54:00:b2:2f:86"
+    "os": "installed"
+  },
+  "metadata": {
+    "domain_name": "node2.<%= @domain %>",
+    "k8s_dns_service_ip": "10.3.0.10",
+    "pxe": "true",
+    "ssh_authorized_keys": [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlZLcFVYcMbYkJ+pwSsTnfOfwmOLZe26J6PBHa/17ZuzBI563BWJfTybjgphVOJwQKAqN+cBfzHZ66PaQm0vqx2Efee1uGq/vd8cmAIyEqmZUnbkxPRQ3G7YLlAwqZalRo2TEglWhEK+O+7hycV3NhCKYpG/2DZwGbW97bKh01R3R0pt9PiSi570w4W4oeUxPioqR/dIJf+g4EnOCnPMvLAT6exGI9hcKCRH3604Qnh2z5rQ0aG4PYS8uCi5MS8AevuWxNg7OKE6e59XxDvruULq+4jerAls+HZVomZ2AQvbcabpqKFEKvVtE12k5uzAWelmZU49NCIHuUgrX5hm0X peter@hackintosh.local"
+    ]
+  }
+}
