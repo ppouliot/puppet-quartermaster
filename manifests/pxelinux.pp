@@ -713,11 +713,18 @@ define quartermaster::pxelinux (
         "/var/lib/matchbox/examples/${release}/groups/bootkube",
         "/var/lib/matchbox/examples/${release}/groups/bootkube-install",
         "/var/lib/matchbox/examples/${release}/profiles",
-        "/var/lib/matchbox/examples/${release}/ignition",
+#        "/var/lib/matchbox/examples/${release}/ignition",
       ]:
         ensure  => directory,
         owner   => 'matchbox',
         group   => 'matchbox',
+      }
+      file{ "/var/lib/matchbox/examples/${release}/ignition":
+        ensure  => directory,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        recurse => true,
+        source  => 'puppet:///modules/quartermaster/coreos/matchbox/ignition',
       }
       file{ "/var/lib/matchbox/examples/${release}/groups/grub/default.json":
         ensure  => file,
