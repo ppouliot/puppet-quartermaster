@@ -15,6 +15,7 @@ class quartermaster::matchbox (
     } ->
     file{[
       '/var/lib/matchbox',
+      '/var/lib/matchbox/examples',
       '/var/lib/matchbox/assets',
       '/var/lib/matchbox/profiles',
       '/var/lib/matchbox/cloud',
