@@ -9107,6 +9107,12 @@ providers {
       ensure => file,
       source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
     } ->
+    if ($::operatingsystem == 'ubuntu') and ($::release == '14.04'){
+      file{'/etc/init/matchbox.conf':
+        ensure => file,
+        source  => 'puppet:///modules/quartermaster/coreos/matchbox/upstart.matchbox.conf'
+      } 
+    } ->
     # Start the Matchbox Service and Enable it
     service{'matchbox':
       enable => true,
