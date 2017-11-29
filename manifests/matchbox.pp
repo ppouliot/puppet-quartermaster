@@ -68,68 +68,30 @@ class quartermaster::matchbox (
       group   => 'matchbox',
       content => template('quartermaster/matchbox/groups/simple-install.json.erb'),
     } ->
-    # matchbox profiles simple.json
-    file{ '/var/lib/matchbox/profiles/simple.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/simple.json.erb'),
-    } ->
-    # matchbox profiles simple-install.json
-    file{ '/var/lib/matchbox/profiles/simple-install.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/simple-install.json.erb'),
-    } ->
 
-    # matchbox profiles install-reboot.json
-    file{ '/var/lib/matchbox/profiles/install-reboot.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/install-reboot.json.erb'),
-    } ->
+#    # matchbox profiles install-reboot.json
+#    file{ '/var/lib/matchbox/profiles/install-reboot.json':
+#      ensure  => file,
+#      owner   => 'matchbox',
+#      group   => 'matchbox',
+#      content => template('quartermaster/matchbox/profiles/install-reboot.json.erb'),
+#    } ->
 
-    # matchbox profiles grub.json
-    file{ '/var/lib/matchbox/profiles/grub.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/grub.json.erb'),
-    } ->
+#    # matchbox profiles bootkube-worker.json
+#    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
+#      ensure  => file,
+#      owner   => 'matchbox',
+#      group   => 'matchbox',
+#      content => template('quartermaster/matchbox/profiles/bootkube-worker.json.erb'),
+#    } ->
 
-    # matchbox profiles etcd3.json
-    file{ '/var/lib/matchbox/profiles/etcd3.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/etcd3.json.erb'),
-    } ->
-
-    # matchbox profiles etcd3-gateway.json
-    file{ '/var/lib/matchbox/profiles/etcd3-gateway.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/etcd3-gateway.json.erb'),
-    } ->
-
-    # matchbox profiles bootkube-worker.json
-    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/bootkube-worker.json.erb'),
-    } ->
-
-    # matchbox profiles bootkube-controller.json
-    file{ '/var/lib/matchbox/profiles/bootkube-controller.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles/bootkube-controller.json.erb'),
-    } ->
+#    # matchbox profiles bootkube-controller.json
+#    file{ '/var/lib/matchbox/profiles/bootkube-controller.json':
+#      ensure  => file,
+#      owner   => 'matchbox',
+#      group   => 'matchbox',
+#      content => template('quartermaster/matchbox/profiles/bootkube-controller.json.erb'),
+#    } ->
     # matchbox terraform/etcd3-install/terraform.tfvars
     file{ '/var/lib/matchbox/terraform/etcd3-install/terraform.tfvars':
       ensure  => file,

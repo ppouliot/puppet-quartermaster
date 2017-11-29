@@ -1,0 +1,18 @@
+# Puppet Managed
+# File: <%= @title %>
+{
+  "id": "grub-<%= @coreos_channel %>",
+  "name": "CoreOS Container Linux via GRUB2",
+  "boot": {
+    "kernel": "(http;<%= @fqdn %>:8080)/assets/coreos/<%= @coreos-version %>/coreos_production_pxe.vmlinuz",
+    "initrd": ["(http;<%= @fqdn %>:8080)/assets/coreos/<%= @coreos-version%>/coreos_production_pxe_image.cpio.gz"],
+    "args": [
+      "coreos.config.url=http://<%= @fqdn %>:8080/ignition",
+      "coreos.first_boot=yes",
+      "console=tty0",
+      "console=ttyS0",
+      "coreos.autologin"
+    ]
+  },
+  "ignition_id": "ssh.yaml"
+}
