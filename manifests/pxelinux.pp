@@ -1039,7 +1039,7 @@ if $linux_installer == !('No Supported Linux Installer') {
           content => template('quartermaster/pxemenu/matchbox.erb'),
         }
         # matchbox groups/simple-install/${release}-install.json
-        file{ '/var/lib/matchbox/groups/${release}-install.json':
+        file{ "/var/lib/matchbox/groups/${release}-install.json":
           ensure  => file,
           owner   => 'matchbox',
           group   => 'matchbox',
