@@ -680,6 +680,13 @@ define quartermaster::pxelinux (
         group   => 'matchbox',
         content => template('quartermaster/matchbox/groups/channel-install.json.erb'),
       }
+      notice("matchbox/profiles/${release}-install.json")
+      file{ '/var/lib/matchbox/profiles/simple-install.json':
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles/channel-install.json.erb'),
+      }
     }
 
   }
