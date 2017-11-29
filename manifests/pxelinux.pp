@@ -678,17 +678,30 @@ define quartermaster::pxelinux (
         ensure  => file,
         owner   => 'matchbox',
         group   => 'matchbox',
-        content => template('quartermaster/matchbox/groups/channel-install.json.erb'),
+        content => template('quartermaster/matchbox/groups.channel-install.json.erb'),
       }
       notice("matchbox/profiles/${release}-install.json")
       file{ "/var/lib/matchbox/profiles/${release}-install.json":
         ensure  => file,
         owner   => 'matchbox',
         group   => 'matchbox',
-        content => template('quartermaster/matchbox/profiles/channel-install.json.erb'),
+        content => template('quartermaster/matchbox/profiles.channel-install.json.erb'),
+      }
+      notice("matchbox/groups/${release}.json")
+      file{ "/var/lib/matchbox/groups/${release}.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/groups.channel.json.erb'),
+      }
+      notice("matchbox/profiles/${release}.json")
+      file{ "/var/lib/matchbox/profiles/${release}.json":
+        ensure  => file,
+        owner   => 'matchbox',
+        group   => 'matchbox',
+        content => template('quartermaster/matchbox/profiles.channel.json.erb'),
       }
     }
-
   }
 
   if ( $distro == 'rancheros' ) {
