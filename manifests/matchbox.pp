@@ -9074,7 +9074,7 @@ providers {
         ensure => file,
         source  => 'puppet:///modules/quartermaster/coreos/matchbox/upstart.matchbox.conf'
       } 
-    } ->
+    }
     # Start the Matchbox Service and Enable it
     service{'matchbox':
       enable => true,
