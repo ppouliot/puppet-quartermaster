@@ -69,13 +69,13 @@ class quartermaster::matchbox (
 #      content => template('quartermaster/matchbox/groups/simple-install.json.erb'),
 #    } ->
 
-#    # matchbox profiles install-reboot.json
-#    file{ '/var/lib/matchbox/profiles/install-reboot.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/profiles/install-reboot.json.erb'),
-#    } ->
+    # matchbox profiles install-reboot.json
+    file{ '/var/lib/matchbox/profiles/default.json':
+      ensure  => file,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/profiles.defaul.json.erb'),
+    } ->
 
 #    # matchbox profiles bootkube-worker.json
 #    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
