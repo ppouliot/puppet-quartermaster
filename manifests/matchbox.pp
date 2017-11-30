@@ -9080,6 +9080,9 @@ providers {
       source => '/home/matchbox/matchbox-v0.6.1-linux-amd64/scripts/tls/ca.crt',
     }
     if ( $facts[os][distro][id] == 'Ubuntu' ) and ( $facts[os][distro][release][major] == '14.04'){
+      package{'systemd':
+        ensure => latest
+      } ->
       file{'/etc/init/matchbox.conf':
         ensure => file,
         source  => 'puppet:///modules/quartermaster/coreos/matchbox/upstart.matchbox.conf'
