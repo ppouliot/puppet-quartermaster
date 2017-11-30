@@ -691,33 +691,6 @@ define quartermaster::pxelinux (
         ],
         require   => File['/var/lib/matchbox/assets'],
       }
-      file{ "/var/lib/matchbox/groups/${release}-install.json":
-        ensure  => file,
-        owner   => 'matchbox',
-        group   => 'matchbox',
-        content => template('quartermaster/matchbox/groups.channel-install.json.erb'),
-      }
-      notice("matchbox/profiles/${release}-install.json")
-      file{ "/var/lib/matchbox/profiles/${release}-install.json":
-        ensure  => file,
-        owner   => 'matchbox',
-        group   => 'matchbox',
-        content => template('quartermaster/matchbox/profiles.channel-install.json.erb'),
-      }
-      notice("matchbox/groups/${release}.json")
-      file{ "/var/lib/matchbox/groups/${release}.json":
-        ensure  => file,
-        owner   => 'matchbox',
-        group   => 'matchbox',
-        content => template('quartermaster/matchbox/groups.channel.json.erb'),
-      }
-      # matchbox groups etcd3-install.json
-      file{ "/var/lib/matchbox/groups/etcd3-${release}-install.json":
-        ensure  => file,
-        owner   => 'matchbox',
-        group   => 'matchbox',
-        content => template('quartermaster/matchbox/groups.etcd3-install.json.erb'),
-      }
       # Begin Examples
       file{[
         "/var/lib/matchbox/examples/${coreos_version}",
