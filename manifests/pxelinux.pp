@@ -679,6 +679,18 @@ define quartermaster::pxelinux (
         logoutput => true,
         timeout   => 0,
         user      => 'root',
+        creates   => [
+        "/var/lib/matchbox/assets/coreos",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}/CoreOS_Image_Signing_Key.asc",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_image.bin.bz2",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_image.bin.bz2.sig",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_pxe_image.cpio.gz",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_pxe_image.cpio.gz.sig",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_pxe.vmlinuz",
+        "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_pxe.vmlinuz.sig",
+        ],
+        requires  => File['/var/lib/matchbox/assets'],
       }
       file{ "/var/lib/matchbox/groups/${release}-install.json":
         ensure  => file,
