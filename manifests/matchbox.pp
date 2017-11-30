@@ -79,13 +79,15 @@ class quartermaster::matchbox (
 #      content => template('quartermaster/matchbox/groups/simple-install.json.erb'),
 #    } ->
 
-    # matchbox profiles install-reboot.json
-#    file{ '/var/lib/matchbox/profiles/default.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/profiles.default.json.erb'),
-#    } ->
+
+    # /var/lib/matchbox/groups/default.json
+    # Contains Default SSH Key to use for provisioning 
+    file{ '/var/lib/matchbox/groups/default.json':
+      ensure  => file,
+      owner   => 'matchbox',
+      group   => 'matchbox',
+      content => template('quartermaster/matchbox/groups/default.json.erb'),
+    } ->
 
 #    # matchbox profiles bootkube-worker.json
 #    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
