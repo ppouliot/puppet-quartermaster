@@ -680,7 +680,6 @@ define quartermaster::pxelinux (
         timeout   => 0,
         user      => 'root',
         creates   => [
-        "/var/lib/matchbox/assets/coreos",
         "/var/lib/matchbox/assets/coreos/${coreos_version}",
         "/var/lib/matchbox/assets/coreos/${coreos_version}/CoreOS_Image_Signing_Key.asc",
         "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_image.bin.bz2",
