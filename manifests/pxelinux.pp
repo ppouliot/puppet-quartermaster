@@ -674,6 +674,11 @@ define quartermaster::pxelinux (
     }
     if ( $quartermaster::matchbox_enable ) {
       notice("matchbox/groups/${release}-install.json")
+      exec{"matchbox_get-coreos_${coreos_channel}-${coreos_version}":
+        command => "/usr/local/bin/get-coreos ${coreos_channel} ${coreos_version} /var/lib/matchbox/assets",
+        logoutput => true,
+        timeout   => 0,
+      }
       file{ "/var/lib/matchbox/groups/${release}-install.json":
         ensure  => file,
         owner   => 'matchbox',
