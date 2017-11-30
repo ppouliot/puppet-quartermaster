@@ -76,6 +76,7 @@ class quartermaster::install (
     'genisoimage',
     # Unzip
     'unzip',
+    'curl',
   ]:
     ensure  => latest,
     require => File['/srv/quartermaster/logs'],
