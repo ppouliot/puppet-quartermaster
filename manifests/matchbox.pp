@@ -21,6 +21,7 @@ class quartermaster::matchbox (
       '/var/lib/matchbox/cloud',
       '/var/lib/matchbox/generic',
       '/etc/matchbox',
+      '/etc/systemd/system/matchbox.service.d',
     ]:
       ensure => directory,
       owner  => 'matchbox',
@@ -40,7 +41,6 @@ class quartermaster::matchbox (
       group   => 'matchbox',
       source  => 'puppet:///modules/quartermaster/coreos/matchbox/addons',
     } ->
-    # matchbox groups
     # matchbox groups
     file{ '/var/lib/matchbox/terraform':
       ensure  => directory,
@@ -82,12 +82,12 @@ class quartermaster::matchbox (
 
     # /var/lib/matchbox/groups/default.json
     # Contains Default SSH Key to use for provisioning 
-    file{ '/var/lib/matchbox/groups/default.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/groups/default.json.erb'),
-    } ->
+#    file{ '/var/lib/matchbox/groups/default.json':
+#      ensure  => file,
+#      owner   => 'matchbox',
+#      group   => 'matchbox',
+#      content => template('quartermaster/matchbox/groups/default.json.erb'),
+#    } ->
 
 #    # matchbox profiles bootkube-worker.json
 #    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
@@ -247,6 +247,16 @@ class quartermaster::matchbox (
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/contrib/systemd/matchbox-local.service",
       mode   => '0777',
+    } ->
+    file{'/etc/systemd/system/matchbox.service.d/override.conf':
+      ensure => file,
+      mode   => '0777',
+      content => '#Puppet Managed
+ # /etc/systemd/system/matchbox.service.d/override.conf
+[Service]
+Environment="MATCHBOX_RPC_ADDRESS=0.0.0.0:8081"
+Environment="MATCHBOX_LOG_LEVEL=debug"
+',
     } ->
     staging::deploy{"terraform_${quartermaster::terraform_version}_linux_amd64.zip":
       source  => "https://releases.hashicorp.com/terraform/${quartermaster::terraform_version}/terraform_${quartermaster::terraform_version}_linux_amd64.zip",
@@ -9024,7 +9034,7 @@ class quartermaster::matchbox (
     # Add a .terraformrc for matchbox in /root
     file{ '/root/.terraformrc':
       ensure => file,
-      content => '#
+      content => '# Puppet Managed
 providers {
   matchbox = "/usr/local/go/bin/terraform-provider-matchbox"
 }
