@@ -55,7 +55,7 @@ class quartermaster::matchbox (
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
-      source  => 'puppet:///modules/quartermaster/coreos/matchbox/groups',
+#      source  => 'puppet:///modules/quartermaster/coreos/matchbox/groups',
     } ->
     # matchbox groups/bootkube-install/install.json
 #    file{ '/var/lib/matchbox/groups/bootkube-install.json':
@@ -80,12 +80,12 @@ class quartermaster::matchbox (
 #    } ->
 
     # matchbox profiles install-reboot.json
-    file{ '/var/lib/matchbox/profiles/default.json':
-      ensure  => file,
-      owner   => 'matchbox',
-      group   => 'matchbox',
-      content => template('quartermaster/matchbox/profiles.default.json.erb'),
-    } ->
+#    file{ '/var/lib/matchbox/profiles/default.json':
+#      ensure  => file,
+#      owner   => 'matchbox',
+#      group   => 'matchbox',
+#      content => template('quartermaster/matchbox/profiles.default.json.erb'),
+#    } ->
 
 #    # matchbox profiles bootkube-worker.json
 #    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
