@@ -690,7 +690,7 @@ define quartermaster::pxelinux (
         "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_pxe.vmlinuz",
         "/var/lib/matchbox/assets/coreos/${coreos_version}/coreos_production_pxe.vmlinuz.sig",
         ],
-        requires  => File['/var/lib/matchbox/assets'],
+        require   => File['/var/lib/matchbox/assets'],
       }
       file{ "/var/lib/matchbox/groups/${release}-install.json":
         ensure  => file,
