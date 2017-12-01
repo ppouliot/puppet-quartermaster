@@ -7,17 +7,17 @@ LABEL <%= @name %>
 LABEL <%= @name %>-<%= @autofile %>-install
         MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.pxe_installer.sh
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rancher.autologin=tty1 rancher.password=<%distro %> rancher.cloud_init.datasources=[url:http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.pxe_installer.sh]
 
 LABEL <%= @name %>-<%= @autofile %>-cloud-config-only
         MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> Cloud-config ^Only
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rancher.autologin=tty1 rancher.password=<%distro %> rancher.cloud_init.datasources=[url:http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>]
 
 LABEL <%= @name %>-<%= @autofile %>-running-instance
         MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> ^Running Instance
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.running_instance.sh
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rancher.autologin=tty1 rancher.password=<%distro %> rancher.cloud_init.datasources=[url:http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.running_instance.sh]
 
 
 
