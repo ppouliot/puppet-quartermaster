@@ -217,7 +217,12 @@ write_files:
 
   - path: "/tmp/install-docker-compose.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/bash
       LOGFILE='/home/core/.install-docker-compose.log'
@@ -247,7 +252,12 @@ write_files:
 
   - path: "/tmp/install-docker-volume-netshare.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/bash
       LOGFILE='/home/core/.install-docker-volume-netshare.log'
@@ -263,7 +273,12 @@ write_files:
 
   - path: "/tmp/install-etcd3.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/bash
       LOGFILE='/home/core/.install-etd3.log'
@@ -289,7 +304,12 @@ write_files:
 
   - path: "/tmp/install-consul.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/bash
       LOGFILE='/home/core/.install-consul.log'
@@ -310,7 +330,12 @@ write_files:
 
   - path: "/tmp/install-vault.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/bash
       LOGFILE='/home/core/.install-vault.log'
@@ -332,7 +357,12 @@ write_files:
 
   - path: "/tmp/install-calico.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/bash
       LOGFILE='/home/core/.install-calico.log'
@@ -351,7 +381,12 @@ write_files:
 
   - path: "/tmp/install-java.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/env bash
       LOGFILE='/home/core/.install-java.log'
@@ -379,7 +414,12 @@ write_files:
 
   - path: "/tmp/install-pypy.sh"
     permissions: "0777"
+<% if @distro == 'coreos' %>
     owner: "core"
+<% end %>
+<% if @distro == 'rancheros' %>
+    owner: "rancher"
+<% end %>
     content: |
       #!/usr/bin/bash
       LOGFILE='/home/core/.install-pypy.log'
