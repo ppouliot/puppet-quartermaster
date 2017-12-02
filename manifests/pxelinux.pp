@@ -975,9 +975,9 @@ define quartermaster::pxelinux (
     $src_initrd      = "${initrd}-v${release}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.img"
-    $url             = "https://github.com/rancher/os/releases/download/v${release}"
-    $inst_repo       = "https://github.com/rancher/os/releases/download/v${release}"
-    $boot_iso_url    = "https://github.com/rancher/os/releases/download/v${release}/rancheros.iso"
+    $url             = "https://releases.rancher.com/os/v${release}"
+    $inst_repo       = "https://releases.rancher.com/os/v${release}"
+    $boot_iso_url    = "https://releases.rancher.com/os/v${release}/rancheros.iso"
   }
 
   $puppetlabs_repo = $distro ? {
