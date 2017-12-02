@@ -955,6 +955,11 @@ define quartermaster::pxelinux (
     case $release {
       /([0-9]).([0-9]).([0-9])/:{
         warning("rancheros ${release} for ${p_arch} will be activated")
+        $rancheros_releae = "v${release}",
+      }
+      'latest':{
+        warning("rancheros ${release} for ${p_arch} will be activated")
+        $rancheros_releae = ${release},
       }
       default:{
         fail("${name} is not a valid rancheros release! Valid release are stable, beta  or alpha.")
@@ -975,9 +980,9 @@ define quartermaster::pxelinux (
     $src_initrd      = "${initrd}-v${release}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.img"
-    $url             = "https://releases.rancher.com/os/v${release}"
-    $inst_repo       = "https://releases.rancher.com/os/v${release}"
-    $boot_iso_url    = "https://releases.rancher.com/os/v${release}/rancheros.iso"
+    $url             = "https://releases.rancher.com/os/${rancheros_release}"
+    $inst_repo       = "https://releases.rancher.com/os/${rancheros_release}"
+    $boot_iso_url    = "https://releases.rancher.com/os/${rancheros_release}/rancheros.iso"
   }
 
   $puppetlabs_repo = $distro ? {
