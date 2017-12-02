@@ -955,11 +955,11 @@ define quartermaster::pxelinux (
     case $release {
       /([0-9]).([0-9]).([0-9])/:{
         warning("rancheros ${release} for ${p_arch} will be activated")
-        $rancheros_releae = "v${release}",
+        $rancheros_releae = "v${release}"
       }
       'latest':{
         warning("rancheros ${release} for ${p_arch} will be activated")
-        $rancheros_releae = ${release},
+        $rancheros_releae = "${release}"
       }
       default:{
         fail("${name} is not a valid rancheros release! Valid release are stable, beta  or alpha.")
