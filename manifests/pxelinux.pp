@@ -977,7 +977,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'ros'
     $pxekernel      = 'vmlinuz'
     $initrd          = 'initrd'
-    $src_initrd      = "${initrd}-v${release}"
+    $src_initrd      = "${initrd}-${rancheros_release}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.img"
     $url             = "https://releases.rancher.com/os/${rancheros_release}"
