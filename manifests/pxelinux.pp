@@ -955,11 +955,13 @@ define quartermaster::pxelinux (
     case $release {
       /([0-9]).([0-9]).([0-9])/:{
         warning("rancheros ${release} for ${p_arch} will be activated")
-        $rancheros_releae = "v${release}"
+        $rancheros_release = "v${release}"
+        $src_initrd      = "${initrd}-${rancheros_release}"
       }
       'latest':{
         warning("rancheros ${release} for ${p_arch} will be activated")
-        $rancheros_releae = "${release}"
+        $rancheros_release = 'latest'
+        $src_initrd      = 'initrd'
       }
       default:{
         fail("${name} is not a valid rancheros release! Valid release are stable, beta  or alpha.")
@@ -975,9 +977,8 @@ define quartermaster::pxelinux (
     }
     $autofile        = 'cloud-config.yml'
     $linux_installer = 'ros'
-    $pxekernel      = 'vmlinuz'
+    $pxekernel       = 'vmlinuz'
     $initrd          = 'initrd'
-    $src_initrd      = "${initrd}-${rancheros_release}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.img"
     $url             = "https://releases.rancher.com/os/${rancheros_release}"
