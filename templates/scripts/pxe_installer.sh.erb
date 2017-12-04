@@ -12,8 +12,15 @@ sudo hostnamectl set-hostname $NEWHOSTNAME
 
 # Download cloud-config
 curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
+<% if @distro == 'coreos' %>
+curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
 sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autofile %>
-sed -i "/ discovery: \"https://discovery.etcd.io/<token>\"/c\ $DISCOVERY" ./<%= @name %>.<%= @autofile %>
+<% end %>
+<% if @distro == 'rancheros' %>
+wget http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
+sed -i "/hostname: rancheros/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autofile %>
+<% end %>
+#sed -i "/ discovery: \"https://discovery.etcd.io/<token>\"/c\ $DISCOVERY" ./<%= @name %>.<%= @autofile %>
 
 
 # Run install 
@@ -26,7 +33,12 @@ then
   done
  # Zero MBR
   sudo dd if=/dev/zero of=/dev/vda bs=512 count=1
+<% if @distro == 'coreos' %>
   sudo coreos-install -d /dev/vda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
+<% end %>
+<% if @distro == 'rancheros' %>
+  sudo ros-install -d /dev/vda -c <%= @name %>.<%= @autofile %> -f
+<% end %>
 fi
 
 
@@ -38,7 +50,12 @@ then
   done
   # Zero MBR
   sudo dd if=/dev/zero of=/dev/sda bs=512 count=1
+<% if @distro == 'coreos' %>
   sudo coreos-install -d /dev/sda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
+<% end %>
+<% if @distro == 'rancheros' %>
+  sudo ros-install -d /dev/vda -c <%= @name %>.<%= @autofile %> -f
+<% end %>
 fi
 
 # Reboot 
