@@ -11,7 +11,6 @@ sudo hostname -s $NEWHOSTNAME
 sudo hostnamectl set-hostname $NEWHOSTNAME
 
 # Download cloud-config
-curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
 <% if @distro == 'coreos' %>
 curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
 sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autofile %>
