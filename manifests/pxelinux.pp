@@ -990,16 +990,16 @@ define quartermaster::pxelinux (
       mode    => '0777',
       content => template('quartermaster/scripts/pxe_installer.sh.erb'),
     }
-#    file {"/srv/quartermaster/${distro}/${autofile}/${name}.running_instance.sh":
-#      ensure  => file,
-#      mode    => '0777',
-#      content => template('quartermaster/scripts/coreos.running_instance.sh.erb'),
-#    }
-#    file {"/srv/quartermaster/${distro}/${autofile}/${name}.custom_ip_resolution.sh":
-#      ensure  => file,
-#      mode    => '0777',
-#      content => template('quartermaster/scripts/coreos.custom_ip_resolution.sh.erb'),
-#    }
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.running_instance.sh":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/scripts/running_instance.sh.erb'),
+    }
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.custom_ip_resolution.sh":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/scripts/coreos.custom_ip_resolution.sh.erb'),
+    }
   }
 
   $puppetlabs_repo = $distro ? {
