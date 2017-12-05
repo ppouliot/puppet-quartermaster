@@ -956,7 +956,7 @@ define quartermaster::pxelinux (
       /([0-9]).([0-9]).([0-9])/:{
         warning("rancheros ${release} for ${p_arch} will be activated")
         $rancheros_release = "v${release}"
-        $src_initrd      = "${initrd}-${rancheros_release}"
+        $src_initrd      = "initrd-${rancheros_release}"
       }
       'latest':{
         warning("rancheros ${release} for ${p_arch} will be activated")
