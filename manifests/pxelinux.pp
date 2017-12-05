@@ -665,7 +665,7 @@ define quartermaster::pxelinux (
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.running_instance.sh":
       ensure  => file,
       mode    => '0777',
-      content => template('quartermaster/scripts/coreos.running_instance.sh.erb'),
+      content => template('quartermaster/scripts/running_instance.sh.erb'),
     }
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.custom_ip_resolution.sh":
       ensure  => file,
