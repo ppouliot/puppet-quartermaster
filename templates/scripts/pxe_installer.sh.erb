@@ -1,6 +1,12 @@
 #!/bin/bash
+<% if @distro == 'coreos' %>
 ACTIVE_INTERFACE=`/usr/bin/ip route get 1 | /usr/bin/tr -s " " | /usr/bin/cut -d " " -f5`
 NEWHOSTNAME=`/usr/bin/ifconfig $ACTIVE_INTERFACE | /usr/bin/grep "ether" | /usr/bin/tr -s " " | /usr/bin/cut -d " " -f3 | /usr/bin/sed -e "s/://g;"`
+<% end %>
+<% if @distro == 'rancheros' %>
+ACTIVE_INTERFACE=`/sbin/ip route get 1 | /bin/tr -s " " | /bin/cut -d " " -f5`
+NEWHOSTNAME=`/sbin/ifconfig $ACTIVE_INTERFACE | /bin/grep "HWaddr" | /bin/tr -s " " | /bin/cut -d " " -f5  | /bin/tr '[:upper:]' '[:lower:]' | /bin/sed -e "s/://g;"`
+<% end %>
 DISCOVERY=`curl -w "\n" 'https://discovery.etcd.io/new?size=8'`
 
 echo $ACTIVE_INTERFACE
