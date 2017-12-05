@@ -30,6 +30,7 @@ sed -i "/hostname: rancheros/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autof
 
 # Run install 
 
+<% if @distro == 'coreos' %>
 if [ -e "/dev/vda" ]
 then
   for v_partition in $(sudo parted -s /dev/vda print|awk '/^ / {print $1}')
@@ -38,12 +39,7 @@ then
   done
  # Zero MBR
   sudo dd if=/dev/zero of=/dev/vda bs=512 count=1
-<% if @distro == 'coreos' %>
   sudo coreos-install -d /dev/vda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
-<% end %>
-<% if @distro == 'rancheros' %>
-  sudo ros-install -d /dev/vda -c <%= @name %>.<%= @autofile %> -f
-<% end %>
 fi
 
 
@@ -55,13 +51,16 @@ then
   done
   # Zero MBR
   sudo dd if=/dev/zero of=/dev/sda bs=512 count=1
-<% if @distro == 'coreos' %>
   sudo coreos-install -d /dev/sda -C <%= @release %> -c <%= @name %>.<%= @autofile %>
-<% end %>
-<% if @distro == 'rancheros' %>
-  sudo ros-install -d /dev/vda -c <%= @name %>.<%= @autofile %> -f
-<% end %>
 fi
 
 # Reboot 
 sudo reboot
+<% end %>
+<% if @distro == 'rancheros' %>
+NSTALL_DISK="/dev/vda"
+if ! fdisk -l $INSTALL_DISK; then
+	INSTALL_DISK="/dev/sda"
+fi
+sudo ros-install -c ./<%= @name %>.<%= @autofile %> -d $INSTALL_DISK -f
+<% end %>
