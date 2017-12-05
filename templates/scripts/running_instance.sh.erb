@@ -20,7 +20,7 @@ curl -O http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @au
 sed -i "/hostname: coreos/c\hostname: $NEWHOSTNAME" ./<%= @name %>.<%= @autofile %>
 # apply cloud config
 sudo coreos-cloudinit -validate --from-file ./<%= @name %>.<%= @autofile %>
-sudo coreos-cloudinit --from-file ./<%= @name %>.<%= @autofile %>`
+sudo coreos-cloudinit --from-file ./<%= @name %>.<%= @autofile %>
 <% end %>
 <% if @distro == 'rancheros' %>
 wget http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %>
