@@ -58,7 +58,7 @@ fi
 sudo reboot
 <% end %>
 <% if @distro == 'rancheros' %>
-NSTALL_DISK="/dev/vda"
+INSTALL_DISK="/dev/vda"
 if ! fdisk -l $INSTALL_DISK; then
 	INSTALL_DISK="/dev/sda"
 fi
