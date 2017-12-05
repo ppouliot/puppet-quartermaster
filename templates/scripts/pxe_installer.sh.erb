@@ -62,5 +62,5 @@ INSTALL_DISK="/dev/vda"
 if ! fdisk -l $INSTALL_DISK; then
 	INSTALL_DISK="/dev/sda"
 fi
-sudo ros-install -c ./<%= @name %>.<%= @autofile %> -d $INSTALL_DISK -f
+sudo ros install -c ./<%= @name %>.<%= @autofile %> -d $INSTALL_DISK -f
 <% end %>
