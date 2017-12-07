@@ -460,14 +460,6 @@ write_files:
     content: |
       #!/bin/bash
       wait-for-docker
-      /tmp/install-calico.sh
-      /tmp/install-consul.sh
-      /tmp/install-docker-compose.sh
-      /tmp/install-docker-volume-netshare.sh
-      /tmp/install-etcd3.sh
-      /tmp/install-java.sh
-      /tmp/install-pypy.sh
-      /tmp/install-vault.sh
       docker run --rm --privileged --name puppet --hostname %H -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent agent --verbose --debug --trace --logdest=console --no-daemonize --server=<%= @puppetmaster %> --environment=production --waitforcert=60 --summarize
       
   - path: /var/lib/rancher/conf/cloud-config.yml
