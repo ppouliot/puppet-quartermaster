@@ -233,7 +233,8 @@ write_files:
       fi
       curl -L `curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.assets[].browser_download_url | select(contains("Linux") and contains("x86_64"))'` > /opt/bin/docker-compose
       chmod ugo+x /opt/bin/docker-compose
-      /opt/bin/docker-compose --version
+      ln -s /opt/bin/docker-compose /usr/local/bin/docker-compose
+      /usr/local/bin/docker-compose --version
 
     # docker-volumes-netshare
     # https://ender74.github.io/Sharing-Volumes-With-Docker-NFS/
@@ -269,7 +270,8 @@ write_files:
       fi
       wget -nv -O /opt/bin/docker-volume-netshare https://github.com/ContainX/docker-volume-netshare/releases/download/v0.34/docker-volume-netshare_0.34_linux_amd64-bin
       chmod ugo+x  /opt/bin/docker-volume-netshare
-      /opt/bin/docker-volume-netshare version
+      ln -s /opt/bin/docker-volume-netshare /usr/local/bin/docker-volume-netshare
+      /usr/local/bin/docker-volume-netshare version
 
   - path: "/tmp/install-etcd3.sh"
     permissions: "0777"
@@ -452,6 +454,22 @@ write_files:
       /usr/local/bin/easy_install --version
 
 <% if @distro == 'rancheros' %>
+  - path: /etc/rc.local
+    permissions: "0755"
+    owner: root
+    content: |
+      #!/bin/bash
+      wait-for-docker
+      /tmp/install-calico.sh
+      /tmp/install-consul.sh
+      /tmp/install-docker-compose.sh
+      /tmp/install-docker-volume-netshare.sh
+      /tmp/install-etcd3.sh
+      /tmp/install-java.sh
+      /tmp/install-pypy.sh
+      /tmp/install-vault.sh
+      docker run --rm --privileged --name puppet --hostname %H -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 puppet/puppet-agent agent --verbose --debug --trace --logdest=console --no-daemonize --server=<%= @puppetmaster %> --environment=production --waitforcert=60 --summarize
+      
   - path: /var/lib/rancher/conf/cloud-config.yml
     permissions: "0644"
     owner: root
