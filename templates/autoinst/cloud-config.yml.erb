@@ -224,8 +224,8 @@ write_files:
     owner: "rancher"
 <% end %>
     content: |
-      #!/usr/bin/bash
-      LOGFILE='/home/core/.install-docker-compose.log'
+      #!/usr/bin/env bash
+      LOGFILE='/opt/install-docker-compose.log'
       exec >> $LOGFILE 2>&1
       if [ ! -d /opt/bin ];
       then 
@@ -259,8 +259,8 @@ write_files:
     owner: "rancher"
 <% end %>
     content: |
-      #!/usr/bin/bash
-      LOGFILE='/home/core/.install-docker-volume-netshare.log'
+      #!/usr/bin/env bash
+      LOGFILE='/opt/install-docker-volume-netshare.log'
       exec >> $LOGFILE 2>&1
 
       if [ ! -d /opt/bin ];
@@ -280,8 +280,8 @@ write_files:
     owner: "rancher"
 <% end %>
     content: |
-      #!/usr/bin/bash
-      LOGFILE='/home/core/.install-etd3.log'
+      #!/usr/bin/env bash
+      LOGFILE='/opt/install-etd3.log'
       exec >> $LOGFILE 2>&1
 
       ETCD3_VERSION='v3.2.9'
@@ -297,10 +297,10 @@ write_files:
       rm -rf etcd-$ETCD3_VERSION-linux-amd64.tar.gz
       chmod ugo+x  /opt/etcd3/etcd
       chmod ugo+x  /opt/etcd3/etcdctl
-      ln -s /opt/etcd3/etcd /opt/bin/etcd
-      ln -s /opt/etcd3/etcdctl /opt/bin/etcdctl
-      /opt/bin/etcd --version
-      /opt/bin/etcdctl --version
+      ln -s /opt/etcd3/etcd /usr/local/bin/etcd
+      ln -s /opt/etcd3/etcdctl /usr/local/bin/etcdctl
+      /usr/local/bin/etcd --version
+      /usr/local/bin/etcdctl --version
 
   - path: "/tmp/install-consul.sh"
     permissions: "0777"
@@ -311,22 +311,23 @@ write_files:
     owner: "rancher"
 <% end %>
     content: |
-      #!/usr/bin/bash
-      LOGFILE='/home/core/.install-consul.log'
+      #!/usr/bin/env bash
+      LOGFILE='/opt/install-consul.log'
       exec >> $LOGFILE 2>&1
 
-      CONSUL_VERSION='1.0.0'
+      CONSUL_VERSION='1.0.1'
 
       if [ ! -d /opt/bin ];
       then
         mkdir -p /opt/bin
       fi
       cd /opt/bin
-      wget -nv -O consul_${CONSUL_VERSION}_linux_amd64.zip https://releases.hashicorp.com/consul/$CONSUL_VERSION/consul_${CONSUL_VERSION}_linux_amd64.zip?_ga=2.124386186.1037281031.1509713616-48523246.1509552239 
+      wget -nv -O consul_${CONSUL_VERSION}_linux_amd64.zip https://releases.hashicorp.com/consul/$CONSUL_VERSION/consul_${CONSUL_VERSION}_linux_amd64.zip
       unzip consul_${CONSUL_VERSION}_linux_amd64.zip
       rm -rf consul_${CONSUL_VERSION}_linux_amd64.zip
       chmod ugo+x  /opt/bin/consul
-      /opt/bin/consul --version
+      ln -s /opt/bin/consul /usr/local/bin/consul
+      /usr/local/bin/consul --version
 
   - path: "/tmp/install-vault.sh"
     permissions: "0777"
@@ -337,23 +338,24 @@ write_files:
     owner: "rancher"
 <% end %>
     content: |
-      #!/usr/bin/bash
-      LOGFILE='/home/core/.install-vault.log'
+      #!/usr/bin/env bash
+      LOGFILE='/opt/install-vault.log'
       exec >> $LOGFILE 2>&1
 
-      VAULT_VERSION='0.8.3'
+      VAULT_VERSION='0.9.0'
 
       if [ ! -d /opt/bin ];
       then
         mkdir -p /opt/bin
       fi
       cd /opt/bin
-      wget -nv -O vault_${VAULT_VERSION}_linux_amd64.zip https://releases.hashicorp.com/vault/$VAULT_VERSION/vault_${VAULT_VERSION}_linux_amd64.zip?_ga=2.251505030.1404993183.1509994438-1186437665.1509994438
+      wget -nv -O vault_${VAULT_VERSION}_linux_amd64.zip https://releases.hashicorp.com/vault/$VAULT_VERSION/vault_${VAULT_VERSION}_linux_amd64.zip
 
       unzip vault_${VAULT_VERSION}_linux_amd64.zip
       rm -rf vault_${VAULT_VERSION}_linux_amd64.zip
       chmod ugo+x  /opt/bin/vault
-      /opt/bin/vault --version
+      ln -s /opt/bin/vault /usr/local/bin/vault
+      /usr/local/bin/vault --version
 
   - path: "/tmp/install-calico.sh"
     permissions: "0777"
@@ -364,11 +366,11 @@ write_files:
     owner: "rancher"
 <% end %>
     content: |
-      #!/usr/bin/bash
-      LOGFILE='/home/core/.install-calico.log'
+      #!/usr/bin/env bash
+      LOGFILE='/opt/install-calico.log'
       exec >> $LOGFILE 2>&1
 
-      CALICO_VERSION='1.6.1'
+      CALICO_VERSION='1.6.2'
 
       if [ ! -d /opt/bin ];
       then
@@ -377,7 +379,8 @@ write_files:
       cd /opt/bin
       wget -nv -O calicoctl https://github.com/projectcalico/calicoctl/releases/download/v${CALICO_VERSION}/calicoctl
       chmod ugo+x  /opt/bin/calicoctl
-      /opt/bin/calicoctl --version
+      ln -s /opt/bin/calicoctl /usr/local/bin/calicoctl
+      /usr/local/bin/calicoctl --version
 
   - path: "/tmp/install-java.sh"
     permissions: "0777"
@@ -389,7 +392,7 @@ write_files:
 <% end %>
     content: |
       #!/usr/bin/env bash
-      LOGFILE='/home/core/.install-java.log'
+      LOGFILE='/opt/install-java.log'
       exec >> $LOGFILE 2>&1
 
       if [ ! -d /opt/java ];
@@ -407,8 +410,8 @@ write_files:
         curl -C - -LR#H "Cookie: oraclelicense=accept-securebackup-cookie" -k "${BASE_URL_9}${platform}" | tar -C /opt/java --strip=1 -zx
       done
       chmod -R ugo+x /opt/java
-      ln -s /opt/java/bin/java /opt/bin/java
-      ln -s /opt/java/bin/javaws /opt/bin/javaws
+      ln -s /opt/java/bin/java /usr/local/bin/java
+      ln -s /opt/java/bin/javaws /usr/local/bin/javaws
       /opt/bin/java -version
       ssh-keyscan -H github.com > /home/jenkins/.ssh/known_hosts;
 
@@ -421,8 +424,8 @@ write_files:
     owner: "rancher"
 <% end %>
     content: |
-      #!/usr/bin/bash
-      LOGFILE='/home/core/.install-pypy.log'
+      #!/usr/bin/env bash
+      LOGFILE='/opt/install-pypy.log'
       exec >> $LOGFILE 2>&1
 
       PYPY_VERSION='pypy2-v5.9.0-linux64'
@@ -441,12 +444,12 @@ write_files:
       ln -f -s /lib64/libncurses.so.5.9 libtinfo.so.5
       wget https://bootstrap.pypa.io/get-pip.py ;
       /opt/pypy/bin/pypy /opt/pypy/bin/get-pip.py ;
-      ln -f -s /opt/pypy/bin/pypy /opt/bin/python
-      ln -f -s /opt/pypy/bin/pip /opt/bin/pip
-      ln -f -s /opt/pypy/bin/easy_install /opt/bin/easy_install
-      /opt/bin/python --version
-      /opt/bin/pip --version
-      /opt/bin/easy_install --version
+      ln -f -s /opt/pypy/bin/pypy /usr/local/bin/python
+      ln -f -s /opt/pypy/bin/pip /usr/local/bin/pip
+      ln -f -s /opt/pypy/bin/easy_install /usr/local/bin/easy_install
+      /usr/local/bin/python --version
+      /usr/local/bin/pip --version
+      /usr/local/bin/easy_install --version
 
 <% if @distro == 'rancheros' %>
   - path: /var/lib/rancher/conf/cloud-config.yml
