@@ -956,7 +956,8 @@ define quartermaster::pxelinux (
       /([0-9]).([0-9]).([0-9])/:{
         warning("rancheros ${release} for ${p_arch} will be activated")
         $rancheros_release = "v${release}"
-        $src_initrd      = "initrd-${rancheros_release}"
+#        $src_initrd      = "initrd-${rancheros_release}"
+        $src_initrd      = "initrd"
       }
       'latest':{
         warning("rancheros ${release} for ${p_arch} will be activated")
@@ -981,8 +982,10 @@ define quartermaster::pxelinux (
     $initrd          = 'initrd'
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}.img"
-    $url             = "https://releases.rancher.com/os/${rancheros_release}"
-    $inst_repo       = "https://releases.rancher.com/os/${rancheros_release}"
+#    $url             = "https://releases.rancher.com/os/${rancheros_release}"
+     $url            = "https://github.com/rancher/os/releases/download/${rancheros_release}"
+     $inst_repo      = "https://github.com/rancher/os/releases/download/${rancheros_release}"
+#    $inst_repo       = "https://releases.rancher.com/os/${rancheros_release}"
     $boot_iso_url    = "https://releases.rancher.com/os/${rancheros_release}/rancheros.iso"
 
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.pxe_installer.sh":
