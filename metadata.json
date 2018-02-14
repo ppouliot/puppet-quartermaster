@@ -15,7 +15,7 @@
       "name": "derdanne/nfs",
       "version_requirement": ">= 1.0.2"
     },{
-      "name": "dhollinger/autofs",
+      "name": "puppet/autofs",
       "version_requirement": ">= 1.4.4"
     },{
       "name": "lex/dnsmasq",

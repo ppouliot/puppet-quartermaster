@@ -12,4 +12,4 @@ RUN \
     && ls data/nodes && echo $HOSTNAME \
     && puppet module list \
     && puppet module list --tree \
-    &&  puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/ipam/examples/init.pp
+    &&  puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/quartermaster/examples/init.pp
