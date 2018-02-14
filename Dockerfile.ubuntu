@@ -1,4 +1,4 @@
-FROM puppet/puppet-agent
+FROM puppet/puppet-agent-ubuntu
 MAINTAINER peter@pouliot.net
 COPY Puppetfile /etc/puppetlabs/code/environments/production/Puppetfile
 COPY files/hiera /etc/puppetlabs/code/environments/production/data

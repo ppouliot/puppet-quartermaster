@@ -1,0 +1,29 @@
+version: '3'
+services:
+  quartermaster:
+    image: "${USERNAME}/${IMAGE}:${VERSION}"
+    container_name: quartermaster
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  quartermaster-ubuntu:
+    image: "${USERNAME}/${IMAGE}-ubuntu:${VERSION}"
+    container_name: quartermaster
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu
+
+  quartermaster-debian:
+    image: "${USERNAME}/${IMAGE}-debian:${VERSION}"
+    container_name: quartermaster
+    build:
+      context: .
+      dockerfile: Dockerfile.debian
+
+  quartermaster-centos:
+    image: "${USERNAME}/${IMAGE}-centos:${VERSION}"
+    container_name: quartermaster
+    build:
+      context: .
+      dockerfile: Dockerfile.centos
