@@ -36,6 +36,9 @@
       "name": "puppetlabs/apt",
       "version_requirement": ">= 2.3.0"
     },{
+      "name": "puppetlabs/dummy_service",
+      "version_requirement": ">= 0.2.0"
+    },{
       "name": "puppetlabs/tftp",
       "version_requirement": ">= 0.2.3"
     }

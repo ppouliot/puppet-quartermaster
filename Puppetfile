@@ -18,7 +18,7 @@ mod 'puppet/staging', :latest
 # Puppetlabs Modules
 mod 'puppetlabs/apt', :latest
 mod 'puppetlabs/concat', :latest
-mod 'puppetlabs/dummy', :latest
+mod 'puppetlabs/dummy_service', :latest
 mod 'puppetlabs/stdlib', :latest
 mod 'puppetlabs/vcsrepo', :latest
 mod 'puppetlabs/xinetd', :latest

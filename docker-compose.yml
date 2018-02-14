@@ -14,12 +14,12 @@ services:
       context: .
       dockerfile: Dockerfile.ubuntu
 
-  quartermaster-debian:
-    image: "${USERNAME}/${IMAGE}-debian:${VERSION}"
-    container_name: quartermaster
-    build:
-      context: .
-      dockerfile: Dockerfile.debian
+#  quartermaster-debian:
+#    image: "${USERNAME}/${IMAGE}-debian:${VERSION}"
+#    container_name: quartermaster
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.debian
 
   quartermaster-centos:
     image: "${USERNAME}/${IMAGE}-centos:${VERSION}"
