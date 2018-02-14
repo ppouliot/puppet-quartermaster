@@ -3,7 +3,7 @@ set -ex
 # docker hub username
 USERNAME=ppouliot
 # image name
-IMAGE=puppet-ipam
+IMAGE=puppet-quartermaster
 VERSION=`cat VERSION`
 export USERNAME
 export IMAGE
