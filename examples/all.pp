@@ -2,7 +2,7 @@ if $virtual == 'docker' {
   include dummy_service
 }
 
-node /quartermaster.*/ {
+# node /quartermaster.*/ {
 #  include munki
 
   class{'quartermaster':
@@ -80,4 +80,4 @@ node /quartermaster.*/ {
   quartermaster::pxelinux{'opensuse-42.2-x86_64':}
   quartermaster::pxelinux{'opensuse-42.3-x86_64':}
   quartermaster::windowsmedia{'en_microsoft_hyper-v_server_2016_x64_dvd_9347277.iso': activationkey => undef, }
-}
+# }

@@ -8,7 +8,10 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /tmp
 
   quartermaster-ubuntu:
     image: "${USERNAME}/${IMAGE}-ubuntu:${VERSION}"
@@ -17,7 +20,11 @@ services:
       context: .
       dockerfile: Dockerfile.ubuntu
     volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /tmp
+
 
 #  quartermaster-debian:
 #    image: "${USERNAME}/${IMAGE}-debian:${VERSION}"
@@ -26,7 +33,10 @@ services:
 #      context: .
 #      dockerfile: Dockerfile.debian
 #    volumes:
-#      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+#      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+#    tmpfs:
+#      - /run
+#      - /tmp
 
   quartermaster-centos:
     image: "${USERNAME}/${IMAGE}-centos:${VERSION}"
@@ -35,4 +45,8 @@ services:
       context: .
       dockerfile: Dockerfile.centos
     volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /tmp
+

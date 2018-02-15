@@ -11,6 +11,8 @@ RUN \
     && cp data/quartermaster.yaml data/nodes/`facter | grep fqdn | awk '{print $3}'| sed -e 's/\"//g'| awk -F. '{print $1}'`.yaml \
     && ls data/nodes && echo $HOSTNAME \
     && puppet module list \
-    && puppet module list --tree \
-    &&  puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/quartermaster/examples/init.pp \
+    && puppet module list --tree 
+RUN \
+    puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/quartermaster/examples/init.pp \
     &&  puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/quartermaster/examples/all.pp
+EXPOSE [ 80 ]
