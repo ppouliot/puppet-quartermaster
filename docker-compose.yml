@@ -1,3 +1,4 @@
+---
 version: '3'
 services:
   quartermaster:
@@ -6,6 +7,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
   quartermaster-ubuntu:
     image: "${USERNAME}/${IMAGE}-ubuntu:${VERSION}"
@@ -13,6 +16,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.ubuntu
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
 #  quartermaster-debian:
 #    image: "${USERNAME}/${IMAGE}-debian:${VERSION}"
@@ -20,6 +25,8 @@ services:
 #    build:
 #      context: .
 #      dockerfile: Dockerfile.debian
+#    volumes:
+#      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
   quartermaster-centos:
     image: "${USERNAME}/${IMAGE}-centos:${VERSION}"
@@ -27,3 +34,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.centos
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
