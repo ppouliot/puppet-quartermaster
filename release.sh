@@ -17,7 +17,7 @@ sed -i '' 's/^.*\"version\"\:.*/\"version\"\:\ \"'"$VERSION"'\",/' metadata.json
 
 # run build
 
-./build.sh
+./build.sh -d
 # tag it
 git add -A
 git commit -m "version $VERSION"
