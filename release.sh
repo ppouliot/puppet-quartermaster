@@ -24,12 +24,13 @@ git commit -m "version $VERSION"
 git tag -a "$VERSION" -m "version $VERSION"
 git push
 git push --tags
-docker tag $USERNAME/$IMAGE  $USERNAME/$IMAGE-centos $USERNAME/$IMAGE-debian $USERNAME/$IMAGE-debian
+docker tag $USERNAME/$IMAGE:latest \
+$USERNAME/$IMAGE:$VERSION \
 $USERNAME/$IMAGE-ubuntu \
 $USERNAME/$IMAGE-ubuntu:$VERSION 
 
 # push it
-docker push $USERNAME/$IMAGE:latest
-docker push $USERNAME/$IMAGE-centos:latest
-#docker push $USERNAME/$IMAGE-debian:latest
-docker push $USERNAME/$IMAGE-ubuntu:latest
+docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
+# docker push $USERNAME/$IMAGE-centos:latest $USERNAME:$IMAGE-centos:$VERSION
+# docker push $USERNAME/$IMAGE-debian:latest $USERNAME:$IMAGE-debian:$VERSION
+docker push $USERNAME/$IMAGE-ubuntu:latest $USERNAME:$IMAGE-ubuntu:$VERSION
