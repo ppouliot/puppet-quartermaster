@@ -1,0 +1,61 @@
+<?php 
+date_default_timezone_set('America/Chicago');
+//header ( "Content-type: text/plain" );
+//if you no mac or webview is set then it is probably a webbrowser
+if (!isset($_GET['MAC']) ) {
+   $mac = $_GET['MAC'];
+          ?><table style="border:5px dotted red" width=800><tr><td>
+            This was not started as an iPXE script. There is a logic in the script you can't see.<br>
+            </td></tr></table>
+            <pre><?
+}
+echo "#!gpxe\n";
+echo "imgfree\n";
+
+foreach($_GET as $k=>$v){
+ $$k=$v;
+ #echo "echo $k=$v\n"; #uncomment to debug
+}
+
+$logfile = 'bootlog.csv';
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$skipfile = "skipmaclog.txt";
+if ($skipfile) { $skipmac = file($skipfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES); }
+if (in_array($MAC, $skipmac)) {
+  echo "echo not logged.\n";
+  echo "chain http://".$_SERVER['SERVER_NAME']."/boot/menu.php?MANUFACTURER=\${manufacturer}&PRODUCT=\${product}&SERIAL=\${serial}&MAC=\${netX/mac}&ASSET=\${asset}&HOSTNAME=\${hostname}&USER-CLASS=\${user-class}&UUID=\${uuid}&DHCP-SERVER=\${dhcp-server}&NEXT-SERVER=\${next-server}&FILENAME=\${filename}&ROOT-PATH=\${root-path}&IQN=\${initiator-iqn}\n";
+  break;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) {
+ $serverproto = "https://";
+} else {
+	$serverproto = "http://";
+}
+
+$ipaddress = $_SERVER['REMOTE_ADDR'];
+$servername = $_SERVER['SERVER_NAME'];
+$port = $_SERVER['SERVER_PORT'];
+$page = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['PHP_SELF']}";  
+$page .= (!empty($_SERVER['QUERY_STRING'])) ? "?{$_SERVER['QUERY_STRING']}" : "";  
+$referrer = $_SERVER['HTTP_REFERER'];
+$useragent = $_SERVER['HTTP_USER_AGENT']; 
+$remotehost = @getHostByAddr($ipaddress);  
+$datetime = mktime(); 
+$logline = $datetime . '|' . $serverproto . '|' . $servername . '|' . $port . '|' . $page . '|' . $referrer . '|' . $useragent . '|' . $MANUFACTURER . '|' . $PRODUCT . '|' . $SERIAL . '|' . $ARCH . '|' . $remotehost . '|'. $ipaddress . '|' . $MAC . '|' . $UUID . "\n"; 
+//echo "echo $datetime . '|' . $serverproto . '|' . $servername . '|' . $port . '|' . $page . '|' . $referrer . '|' . $useragent . '|' . $MANUFACTURER . '|' . $PRODUCT . '|' . $SERIAL . '|' . $ARCH . '|' . $remotehost . '|'. $ipaddress . '|' . $MAC . '|' . $UUID . "\n"";
+
+if (!$handle = fopen($logfile, 'a+')) { 
+    die("Failed to open log file"); 
+} 
+if (fwrite($handle, $logline) === FALSE) { 
+    die("Failed to write to log file"); 
+} 
+fclose($handle); 
+echo "echo logged.\n";
+echo "chain http://".$_SERVER['SERVER_NAME']."/boot/menu.php?MANUFACTURER=\${manufacturer}&PRODUCT=\${product}&SERIAL=\${serial}&MAC=\${netX/mac}&ASSET=\${asset}&HOSTNAME=\${hostname}&USER-CLASS=\${user-class}&UUID=\${uuid}&DHCP-SERVER=\${dhcp-server}&NEXT-SERVER=\${next-server}&FILENAME=\${filename}&ROOT-PATH=\${root-path}&IQN=\${initiator-iqn}\n";
+
+?>

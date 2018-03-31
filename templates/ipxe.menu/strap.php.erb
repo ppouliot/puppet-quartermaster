@@ -1,0 +1,7 @@
+<?php  
+header ( "Content-type: text/plain" ); 
+echo "#!ipxe \n"; 
+echo "imgfree\n"; 
+echo "cpuid --ext 29 && set arch x64 || set arch x86\n"; 
+echo "chain http://".$_SERVER['SERVER_NAME']."/boot/log.php?MANUFACTURER=\${manufacturer}&PRODUCT=\${product}&SERIAL=\${serial}&MAC=\${netX/mac}&ASSET=\${asset}&ARCH=\${arch}&HOSTNAME=\${hostname}&USER-CLASS=\${user-class}&UUID=\${uuid}&DHCP-SERVER=\${dhcp-server}&NEXT-SERVER=\${next-server}&FILENAME=\${filename}&ROOT-PATH=\${root-path}&IQN=\${initiator-iqn}\n"; 
+?>

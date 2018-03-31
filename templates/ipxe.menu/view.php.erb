@@ -1,0 +1,60 @@
+<?php  
+ini_set('display_errors', 1); 
+date_default_timezone_set('America/Chicago'); 
+$logfile = 'bootlog.csv';  
+
+if (file_exists($logfile)) {  
+    $handle = fopen($logfile, "r");  
+    $log = fread($handle, filesize($logfile));  
+    fclose($handle);  
+} else {  
+    die ("The log file doesn't exist!");  
+}   
+
+$log = explode("\n", trim($log));   
+for ($i = 0; $i < count($log); $i++) {  
+    $log[$i] = trim($log[$i]);  
+    $log[$i] = explode('|', $log[$i]);  
+}   
+
+echo count($log) . " have hit this file."; 
+
+echo '<table border="1">';  
+echo '<th>Date</th>';  
+//echo '<th>Proto</th>';  
+//echo '<th>Server</th>';  
+//echo '<th>Port</th>';  
+//echo '<th>Page</th>'; 
+//echo '<th>Referrer</th>';  
+//echo '<th>Useragent</th>';  
+echo '<th>Manufacturer</th>'; 
+echo '<th>Product</th>'; 
+echo '<th>Service Tag</th>'; 
+echo '<th>Arch</th>'; 
+echo '<th>Remote Hostname</th>';  
+echo '<th>IP Address</th>';  
+echo '<th>MAC Address</th>';  
+echo '<th>UUID</th>'; 
+
+foreach ($log as $logline) {  
+    echo '<tr>';  
+    echo '<td nowrap>' . date('d/m/Y H:i:s', $logline['0']) . '</td>';  
+    //echo '<td nowrap>' . $logline['1'] . '</td>';  
+    //echo '<td nowrap>' . $logline['2'] . '</td>';  
+    //echo '<td nowrap>' . $logline['3'] . '</td>';  
+    //echo '<td nowrap>' . $logline['4'] . '</td>';  
+    //echo '<td nowrap>' . $logline['5'] . '</td>';  
+    //echo '<td nowrap>' . $logline['6'] . '</td>';  
+    echo '<td nowrap>' . $logline['7'] . '</td>';  
+    echo '<td nowrap>' . $logline['8'] . '</td>';  
+    echo '<td nowrap>' . $logline['9'] . '</td>';  
+    echo '<td nowrap>' . $logline['10'] . '</td>';  
+    echo '<td nowrap>' . $logline['11'] . '</td>';  
+    echo '<td nowrap>' . $logline['12'] . '</td>';  
+    echo '<td nowrap>' . urldecode($logline['13']) . '</td>';  
+    echo '<td nowrap>' . $logline['14'] . '</td>';  
+    echo '</tr>';  
+}  
+echo '</table>';   
+
+?>

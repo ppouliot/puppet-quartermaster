@@ -1,0 +1,433 @@
+<?php
+ini_set('display_errors', 1);
+date_default_timezone_set('America/Chicago');
+
+foreach($_GET as $k=>$v){ $$k=$v; }
+
+//there is probably a better way of doing this
+
+// if you have mac and no webview then it is probably the nic
+if (isset($_GET['MAC']) && !isset($_GET['webview'])) {
+   $mac = $_GET['MAC'];
+   //header ( "Content-type: text/plain" );
+   }
+
+//if you no mac or webview is set then it is probably a webbrowser
+if (!isset($_GET['MAC']) || isset($_GET['webview'])) {
+   $mac = $_GET['MAC'];
+          ?>
+             <table style="border:5px dotted red" width=800><tr><td>
+             This was not started as an iPXE script. There is a decision in the script to decide if it knows who you are.<br>
+             <p><form method="get">
+             Select an option to display a different case:
+             <select name="MAC" onchange="this.form.submit()"">
+             <option value="">Select...</option>
+             <option value="">default</option>
+             <option value="00:15:5d:7a:b3:1d">iscsimenu</option>
+             <option value="00:15:5d:7a:b3:1a">test vm</option>
+             <option value="00:15:5d:7a:b3:20">windows7iscsi</option>
+             <option value="00:15:5d:7a:b3:1f">windows8iscsi</option>
+             <option value="00:e0:b8:xx:xx:xx">all dell mac addresses</option>
+             </select>
+             <input type="hidden" name="webview" value="true">
+             </form></p><a href=/boot/menu.phps>View the source to this page.</a>
+             </td></tr></table>
+           <?
+           echo "<pre>\n";
+   }
+
+//setup ipxe
+ipxeheader();
+
+switch ($mac) {
+       //xp64 vm
+       case "00:15:5d:7a:b3:1d":
+            echo "shell\n";
+            break;
+       //test vm
+      case "00:15:5d:7a:b3:1a":
+            //iscsiboot("xp","86","","0x80");
+            wds();
+            break;
+       //windows7iscsi
+       case "00:15:5d:7a:b3:20":
+            iscsi7();
+            break;
+       //windows8iscsi
+       case "00:15:5d:7a:b3:1f":
+            iscsi8();
+            break;
+       //sample (ie all dell macs)
+       case "00:e0:b8:xx:xx:xx":
+            wds();
+            break;
+       default:
+            welcome();
+            break;
+       }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//    BEGIN MENU FUNCTIONS
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+function welcome() {
+  echo "#######################################################################################\n";
+  echo ":welsome\n";
+  echo "menu BOOTSKY iPXE Boot menu\n";
+  gap();
+  gap();
+  gap();
+  gap();
+  echo "item --gap --    Please wait...      \n";
+  gap();
+  echo "item exitpxe		Continue booting\n";
+  echo "item menu		     Choose iPXE boot menu.\n";
+  gap();
+  gap();
+  gap();
+  disclaimer();
+  menuprompt("exitpxe",3);
+  echo "\n";
+  exitpxe();
+  echo "\n";
+  menu();
+}
+
+function menu() {
+echo "#######################################################################################\n";
+echo ":menu\n";
+echo "menu BOOTSKY iPXE Boot menu\n";
+gap();
+echo "item --gap --		Deployment\n";
+echo "item wds			Windows Deployment Server\n";
+gap();
+echo "item --gap --		Other\n";
+echo "item workingmenu	Verified Menu\n";
+echo "item testingmenu	Testing Menu\n";
+echo "item iscsimenu	iSCSI Menu\n";
+gap();
+echo "item --gap -- 	Local Boot Devices\n";
+echo "item exitpxe		Exit to next boot device\n";
+echo "item localboot_0x80		Try to force boot from hard drive\n";
+echo "item localboot_0x81		Try to force boot from cdrom\n";
+echo "item reboot		Reset the computer\n";
+gap();
+echo "item shell		iPXE Shell\n";
+menuprompt("shell",99);
+
+echo "\n";
+reboot();
+echo "\n";
+localboot("0x80");
+echo "\n";
+localboot("0x81");
+echo "\n";
+wds();
+
+//includes other menus
+echo "\n";
+workingmenu();
+echo "\n";
+testingmenu();
+echo "\n";
+iscsimenu();
+
+echo "\n";
+shell();
+echo "\n";
+exitpxe();
+}
+
+function workingmenu() {
+echo "#######################################################################################\n";
+echo ":workingmenu\n";
+menutitle();
+echo "item --gap --	Tools\n";
+echo "item winpe	Windows Pre-execution Environment\n";
+echo "item hdt		Hardware Detection Tool (HDT)\n";
+echo "item ubcda	Ultimate Boot CD (load from apache)\n";
+echo "item ubcdiis	Ultimate Boot CD (load from iis - works?)\n";
+echo "item --gap -- \n";
+echo "item --gap --	Live Distro\n";
+echo "item xpud	xPUD (xpud-0.9.2.iso)\n";
+echo "item --gap -- \n";
+echo "item --gap --	Remote targets\n";
+echo "item ritboot	rit.edu clone of boot.kernel.org\n";
+echo "item netboott	netboot.me (http)\n";
+menuprompt("reboot",99);
+echo "\n";
+winpe();
+echo "\n";
+sanboot("hdt"       ,"","\${files-server}","/boot/img/"                   ,"hdt-0.5.2.iso");
+echo "\n";
+sanboot("ubcda"     ,"","\${linux-server}","/"                            ,"ubcd520.iso");
+sanboot("ubcdiis"   ,"","\${files-server}","/boot/img/"                   ,"ubcd520.iso");
+echo "\n";
+sanboot("xpud"      ,"","\${files-server}","/shares/linux/_live/"         ,"xpud-0.9.2.iso");
+echo "\n";
+ritboot();
+echo "\n";
+netboott();
+}
+
+function testingmenu() {
+echo "#######################################################################################\n";
+echo ":testingmenu\n";
+menutitle();
+echo "item --gap --	Targets that are being Tested\n";
+echo "item android	Android iso\n";
+echo "item ubuntu	Ubuntu Desktop 12.10 iso (wait for it)\n";
+echo "item chrome	chrome os";
+echo "item dos		DOS (ISO)\n";
+echo "item tails    Tails (tails-i386-0.15.iso)\n";
+echo "item puppy    Puppy (puppy-4.2.1-k2.6.25.16-seamonkey.iso)\n";
+echo "item --gap -- \n";
+echo "item --gap --	Remote Targets\n";
+echo "item netbooti	netboot.me (iso from install)\n";
+menuprompt("reboot",99);
+echo "\n";
+sanboot("android"   ,"","\${files-server}","/shares/Linux/Google/Android/","android-x86-vm-20120130.iso");
+echo "\n";
+sanboot("ubuntu","--drive 0x80 --no-describe","\${files-server}","/shares/Linux/Ubuntu/","ubuntu-12.10-desktop-amd64.iso");
+echo "\n";
+sanboot("chrome","--drive 0x80 --no-describe","\${files-server}","/shares/Linux/google/chromium_os/","chrome_os.img");
+echo "\n";
+sanboot("dos"       ,"","\${linux-server}","/"                            ,"winme_bootdisk.iso");
+echo "\n";
+sanboot("tails"     ,"","\${files-server}","/shares/linux/_other/tails/"  ,"tails-i386-0.15.iso");
+echo "\n";
+sanboot("puppy"     ,"","\${files-server}","/shares/linux/_mini/"         ,"puppy-4.2.1-k2.6.25.16-seamonkey.iso");
+echo "\n";
+sanboot("netbooti"  ,"","\${files-server}","/boot/img/"                   ,"netbootme.iso");
+}
+
+function iscsimenu() {
+  echo "#######################################################################################\n";
+  echo ":iscsimenu\n";
+  menutitle();
+  echo "item --gap --		          iSCSI Targets\n";
+  echo "item iscsiboot_xp86             iscsi Windows XP x86\n";
+  echo "item iscsiboot_xp64	          iscsi Windows XP x64\n";
+  gap();
+  echo "item iscsiboot_win7x64		iscsi Windows 7  x64\n";
+  gap();
+  echo "item iscsiboot_win8x64		iscsi Windows 8  x64\n";
+  gap();
+  echo "item iscsiboot_dc2012core		iscsi 2012 Data Center Core (pw: Psychology06)\n";
+  menuprompt("reboot",99);
+  echo "\n";
+  iscsiboot("win7","x64","","0x80");
+  echo "\n";
+  iscsiboot("win8","x64","","0x80");
+  echo "\n";
+  iscsiboot("xp","86","","0x80");
+  echo "\n";
+  iscsiboot("xp","64","","0x80");
+  echo "\n";
+  iscsiboot("dc","2012","core","0x80");
+  echo "\n";
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//    END MENU FUNCTIONS - BEGIN ACTIONS
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+function winpe() {
+  if ($arch == 'x64') { $arch = 'amd64'; }
+  echo ":winpe\n";
+  echo "kernel winpe/wimboot\n";
+  echo "initrd winpe/\${arch}/media/bootmgr        bootmgr\n";
+  echo "initrd winpe/\${arch}/media/boot/bcd       BCD\n";
+  echo "initrd winpe/\${arch}/media/boot/boot.sdi  boot.sdi\n";
+  echo "initrd winpe/\${arch}/winpe.wim            boot.wim\n";
+  echo "boot\n";
+  }
+
+function wds() {
+  echo ":wds\n";
+  echo "imgfree\n";
+  echo "set next-server \${files-server}\n";
+  echo "set filename boot/x86/wdsnbp.com\n";
+  echo "autoboot\n";
+  pause();
+  echo "goto menu\n";
+  }
+/////////////////////////////////////////////////////////////////
+//call function with 0x80 or 0x81 or 0x90 or 0x91
+function localboot($drive) {
+         echo ":localboot_".$drive."\n";
+         echo "sanboot --no-describe --drive ".$drive."\n";
+         echo "goto menu\n";
+}
+/////////////////////////////////////////////////////////////////
+// function call example iscsiboot("xp","86","")
+// the menu entry would be iscsiboot_xp86
+//
+// function call example iscsiboot("8","x64","test")
+// the menu entry would be iscsiboot_7x64test
+//
+function iscsiboot($os,$ver,$id,$drive) {
+  echo ":iscsiboot_".$os.$ver.$id."\n";
+  mountiscsi($os.$ver.$id,$drive);
+  echo "sanboot --drive ".$drive."\n";
+  echo "exit\n";
+  }
+/////////////////////////////////////////////////////////////////
+// function call example iscsiboot("xp","86","")
+function mountiscsi($fname,$drive) {
+  //echo ":mountiscsi\n";
+  echo "set keep-san 1\n";
+  echo "set initiator-iqn ".$fname."\n";
+  echo "set root-path iscsi:\${files-server}::::".$fname."\n";
+  echo "sanhook --drive ".$drive." \${root-path} && echo mounted || goto error\n";
+  }
+
+function mountiso($fname) {
+  //echo ":mountiso\n";
+  switch ($fname) {
+       case "xp":
+            echo "sanhook --drive 0x81 http://\${files-server}/shares/microsoft/os/xp/en_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-73974.iso && echo mounted || echo failed\n";
+            break;
+       case "xp64":
+            echo "sanhook --drive 0x81 http://\${files-server}/shares/microsoft/os/xp/en_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-73974.iso && echo mounted || echo failed\n";
+            break;
+       case "win7x86":
+            echo "sanhook --drive 0x81 http://\${files-server}/shares/microsoft/os/7/en_windows_7_enterprise_with_sp1_x86_dvd_u_677710.iso && echo mounted || echo failed\n";
+            break;
+       case "win7x64":
+            echo "sanhook --drive 0x81 http://\${files-server}/shares/microsoft/os/7/en_windows_7_enterprise_with_sp1_x64_dvd_u_677651.iso && echo mounted || echo failed\n";
+            break;
+       case "win8x86":
+            echo "sanhook --drive 0x81 http://\${files-server}/shares/microsoft/os/7/en_windows_8_enterprise_x86_dvd_917587.iso && echo mounted || echo failed\n";
+            break;
+       case "win8x64":
+            echo "sanhook --drive 0x81 http://\${files-server}/shares/microsoft/os/7/en_windows_8_enterprise_x64_dvd_917522.iso && echo mounted || echo failed\n";
+            break;
+       default:
+            echo "shell";
+            break;
+       }
+  }
+
+////////////////////////////////////////////////////////////////
+function sanboot($section,$options,$server,$dir,$filename) {
+  echo ":".$section."\n";
+  echo "imgfree\n";
+  echo "sanboot ".$options." http://".$server.$dir.$filename."\n";
+  echo "goto menu\n";
+}
+////////////////////////////////////////////////////////////////
+
+function netboott() {
+  echo ":netboott\n";
+  echo "imgfree\n";
+  echo "set next-server 78.46.210.145\n";
+  echo "set filename netbootme.kpxe\n";
+  echo "chain http://\${files-server}/boot/netbootme.kpxe\n";
+  echo "goto menu\n";
+  }
+
+function ritboot() {
+  echo ":ritboot\n";
+  echo "set 209:string pxelinux.cfg/default\n";
+  echo "set 210:string http://boot.rit.edu/bko/\n";
+  echo "chain http://boot.rit.edu/bko/pxelinux.0\n";
+  }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//    COMMON FUNCTIONS
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function ipxeheader() {
+  echo "#!ipxe\n";
+  echo "#\n";
+  echo "# This script created by skyman@iastate.edu\n";
+  echo "#\n";
+  echo "#######################################################################################\n";
+  echo "set files-server 192.168.122.235\n";
+  echo "set linux-server 192.168.142.236\n";
+  //echo "set cls:hex 1b:5b:32:4a\n";
+  echo "set esc:hex 1b                                # ANSI escape character      - \"^[\"\n";
+  echo "set cls \${esc:string}[2J                      # ANSI clear screen sequence - \"^[[2J\"\n";
+}
+
+function menutitle() {
+echo "menu Skyman's Network Boot iPXE menu\n";
+echo "item --gap --	Back\n";
+echo "item menu		Root Menu\n";
+echo "item --gap -- \n";
+}
+
+function menuprompt($default_choice,$num) {
+echo "choose --default ".$default_choice." --timeout ".($num*1000)." target && goto \${target} || goto error\n";
+}
+
+function disclaimer() {
+echo "item --gap -- 	\n";
+echo "item --gap -- 	Note:  All Testing has been done under Windows 8 Hyper-V.\n";
+echo "item --gap -- 	Real hardware or other VMS may perform differently.\n";
+echo "item --gap -- 	** If you have any questions email me: skyman@iastate.edu **\n";
+}
+
+function reboot() {
+  echo ":reboot\n";
+  echo "imgfree\n";
+  clearscreen();
+  echo "reboot\n";
+  }
+
+function error() {
+  echo ":error\n";
+  echo "echo something bad happened.\n";
+  echo "shell\n";
+  }
+
+function pause() {
+  echo "prompt Press any key to continue\n";
+}
+
+function gap() {
+  echo "item --gap --\n";
+}
+
+function clearscreen() {
+  echo "echo \${cls}\n";
+}
+
+function shell() {
+  echo ":shell\n";
+  clearscreen();
+  echo "echo \n";
+  echo "echo \n";
+  echo "echo mac...............: \${mac}\n";
+  echo "echo ip................: \${ip}\n";
+  echo "echo netmask...........: \${netmask}\n";
+  echo "echo gateway...........: \${gateway}\n";
+  echo "echo dns...............: \${dns}\n";
+  echo "echo domain............: \${domain}\n";
+  echo "echo dhcp-server.......: \${dhcp-server}\n";
+  echo "echo syslog............: \${syslog}\n";
+  echo "echo filename..........: \${filename}\n";
+  echo "echo next-server.......: \${next-server}\n";
+  echo "echo hostname..........: \${hostname}\n";
+  echo "echo uuid..............: \${uuid}\n";
+  echo "echo serial............: \${serial}\n";
+  echo "echo \n";
+  echo "shell\n";
+  }
+
+function exitpxe() {
+  echo ":exitpxe\n";
+  clearscreen();
+  echo "exit\n";
+  }
+
+////////////////////////////////////////////////////////////////
+?>

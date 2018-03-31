@@ -1,0 +1,23 @@
+
+#!ipxe
+# 
+# This file gets compiled into undionly.kpxe
+################################################################
+:vars
+set next-server <%= @ipaddress %>
+cpuid --ext 29 && set arch amd64 || set arch x86
+:netconfig
+dhcp net0 || goto ipxeshell
+:prompt
+prompt --key 0x02 --timeout 3000 Press Ctrl-B for the iPXE command line... && goto ipxeshell ||
+#
+# We call strap so we can escape out of logging for some computers
+chain http://${next-server}/boot/strap.php && goto exit ||
+echo
+echo Failed to boot to: http://${next-server}/boot/strap.php
+echo 
+echo Type help for commands.
+:ipxeshell
+shell
+:exit
+exit

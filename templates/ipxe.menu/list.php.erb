@@ -1,0 +1,20 @@
+<?php
+echo "#!ipxe\n:start\necho Boot menu\nmenu Selection\n";
+$directory = new RecursiveDirectoryIterator("/srv/quartermaster/iso/");
+$display = Array ( 'iso' );
+$count = 0;
+foreach(new RecursiveIteratorIterator($directory) as $file)
+{
+    if (in_array(strtolower(array_pop(explode('.', $file))), $display))
+        echo "item ". $count . " " . array_pop(explode("/", $file))  . "\n";
+        $count += 1;
+}
+echo "choose os && goto \${os}\n";
+$count = 0;
+foreach(new RecursiveIteratorIterator($directory) as $file)
+{
+    if (in_array(strtolower(array_pop(explode('.', $file))), $display))
+        echo ":". $count ."\nsanboot http://debian" . substr($file,8) . "\ngoto start\n";
+        $count += 1;
+}
+?>
