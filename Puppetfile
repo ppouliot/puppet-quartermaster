@@ -10,7 +10,7 @@ mod "lex/dnsmasq",
   :branch => 'master'
 
 # Voxpupuli Modules
-mod "puppet/autofs", :latest
+mod "puppet/autofs", 'v4.3.0' #:latest
 mod 'puppet/nginx', :latest
 mod "puppet/squid", :latest
 mod 'puppet/staging', :latest
