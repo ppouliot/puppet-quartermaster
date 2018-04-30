@@ -1,23 +1,31 @@
 ---
-:backends:
-  - 'eyaml'
-#  - 'yaml'
-:hierarchy:
-  - "%{clientcert}"
-  - "%{fqdn}"
-  - "%{calling_module}"
-  - common
+version: 5
+defaults:  # Used for any hierarchy level that omits these keys.
+  datadir: data         # This path is relative to hiera.yaml's directory.
+  data_hash: yaml_data  # Use the built-in YAML backend.
 
-#:yaml:
-# datadir is empty here, so hiera uses its defaults:
-# - /var/lib/hiera on *nix
-# - %CommonAppData%\PuppetLabs\hiera\var on Windows
-# When specifying a datadir, make sure the directory exists.
-#  :datadir: '/etc/puppet/hiera/%{environment}'
-#  :datadir: '/etc/puppet/hiera'
-:eyaml:
-#  :datadir: '/etc/puppet/hiera/%{environment}'
-  :datadir: '/etc/puppet/hiera'
-  :extension: "yaml"
-  :pkcs7_private_key: /etc/puppet/secure/keys/private_key.pkcs7.pem
-  :pkcs7_public_key: /etc/puppet/secure/keys/public_key.pkcs7.pem
+hierarchy:
+  - name: "Per-node data"                   # Unique human-readable name.
+    path: "nodes/%{trusted.certname}.yaml"  # File path, relative to datadir.
+                                   # ^^^ IMPORTANT: include the file extension!
+
+  - name: "Per-datacenter business group data" # Uses custom facts.
+    path: "location/%{facts.whereami}/%{facts.group}.yaml"
+
+  - name: "Global business group data"
+    path: "groups/%{facts.group}.yaml"
+
+  - name: "Per-datacenter secret data (encrypted)"
+    lookup_key: eyaml_lookup_key   # Uses non-default backend.
+    path: "secrets/%{facts.whereami}.eyaml"
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem
+      pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem
+  - name: "Is-Virtual Facts"
+    path: "virt/%{facts.virtual}.yaml"
+
+  - name: "Per-OS defaults"
+    path: "os/%{facts.os.name}.yaml"
+
+  - name: "Common data"
+    path: "common.yaml"

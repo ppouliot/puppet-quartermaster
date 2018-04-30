@@ -1,7 +1,15 @@
 FROM puppet/puppet-agent
 MAINTAINER peter@pouliot.net
+RUN mkdir -p /etc/puppetlabs/code/modules/quartermaster
+COPY . /etc/puppetlabs/code/modules/quartermaster
+
 COPY Puppetfile /etc/puppetlabs/code/environments/production/Puppetfile
 COPY files/hiera /etc/puppetlabs/code/environments/production/data
+COPY files/hiera/hiera.yaml /etc/puppetlabs/code/environments/production/hiera.yaml
+COPY files/hiera/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml
+COPY Dockerfile Dockerfile
+COPY VERSION VERSION
+
 RUN \
     apt-get update -y && apt-get install git software-properties-common -y \
     && gem install r10k \
