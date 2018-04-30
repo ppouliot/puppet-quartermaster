@@ -669,16 +669,6 @@ menu passwordrow 11
     target => '/srv/quartermaster/iso/ipxe.iso',
   }
 
-  autofs::mount{'quartermaster-iso':
-    mount       => '/srv/quartermaster/mnt',
-    mapfile     => '/etc/auto.quartermaster-iso',
-    mapcontents => [
-      '* -fstype=iso9660,loop :/srv/quartermaster/iso/&',
-    ],
-    options     => '--timeout=10',
-    order       => 01,
-  }
-
   staging::file{"ipxe.krn":
     source  => "http://${fqdn}/mnt/ipxe.iso/ipxe.krn",
     target  => '/srv/quartermaster/tftpboot/pxelinux/ipxe.krn',
@@ -724,6 +714,9 @@ menu passwordrow 11
     content => template('quartermaster/pxemenu/winpe.erb'),
     require => Tftp::File['pxelinux/pxelinux.cfg']
   }
+
+# Refactore Needed
+#
   include autofs
   autofs::mount{'*':
     mount       => '/srv/quartermaster/microsoft/mount',
@@ -731,6 +724,16 @@ menu passwordrow 11
     mapcontents => [
       '* -fstype=udf,loop :/srv/quartermaster/microsoft/iso/&',
       '* -fstype=iso9660,loop :/srv/quartermaster/microsoft/iso/&',
+    ],
+    options     => '--timeout=10',
+    order       => 01,
+  }
+
+  autofs::mount{'quartermaster-iso':
+    mount       => '/srv/quartermaster/mnt',
+    mapfile     => '/etc/auto.quartermaster-iso',
+    mapcontents => [
+      '* -fstype=iso9660,loop :/srv/quartermaster/iso/&',
     ],
     options     => '--timeout=10',
     order       => 01,
@@ -763,6 +766,7 @@ menu passwordrow 11
     nfs_v4_client  => false,
     nfs_v4_idmap_domain  => '.local',
   }
+
   nfs::server::export{'/srv/quartermaster':
     ensure  => 'mounted',
     clients => '*(ro,sync)',
