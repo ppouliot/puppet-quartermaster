@@ -1199,7 +1199,6 @@ if $linux_installer == !('No Supported Linux Installer') {
       order       => 01,
     }
   }
-
   if ! defined (File["/srv/quartermaster/${distro}/mnt"]) {
     file { "/srv/quartermaster/${distro}/mnt":
       ensure  => directory,

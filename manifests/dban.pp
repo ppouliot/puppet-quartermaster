@@ -34,7 +34,6 @@ class quartermaster::dban {
       options     => '--timeout=10',
       order       => 01,
     } ->
-
     staging::file{"dban-${quartermaster::dban_version}_i586.iso":
       source  => "http://sourceforge.net/projects/dban/files/dban/dban-${quartermaster::dban_version}/dban-${quartermaster::dban_version}_i586.iso/download",
       target  => "/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso",
