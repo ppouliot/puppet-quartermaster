@@ -58,20 +58,6 @@ define quartermaster::pxelinux (
     warning("${distro} ${release} does not have major and minor point releases for ${name}.")
   }
 
-  notice($_dot_bootsplash)
-  notice($autofile)
-  notice($linux_installer)
-  notice($pxekernel)
-  notice($initrd)
-  notice($target_initrd)
-  notice($url)
-  notice($inst_repo)
-  notice($update_repo)
-  notice($splashurl)
-  notice($boot_iso_url)
-  notice($boot_iso_name)
-  notice($rel_name)
-
   if ( $distro == 'centos') {
     case $release {
       '2.1','3.1','3.3','3.4','3.5','3.6','3.7','3.8','3.9',
@@ -183,7 +169,7 @@ define quartermaster::pxelinux (
         $ks_option         = 'inst.ks'
         $url_option        = 'url'
       }
-      '25','26','27','28':{
+      '25','26','27':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
         #$fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
         $fedora_url = 'http://mirrors.mit.edu/fedora/linux/releases'
@@ -1016,6 +1002,20 @@ define quartermaster::pxelinux (
     default                                              => 'No PuppetLabs Repo',
   }
   notice(puppetlabs_repo)
+  notice($_dot_bootsplash)
+  notice($autofile)
+  notice($linux_installer)
+  notice($pxekernel)
+  notice($initrd)
+  notice($target_initrd)
+  notice($url)
+  notice($inst_repo)
+  notice($update_repo)
+  notice($splashurl)
+  notice($boot_iso_url)
+  notice($boot_iso_name)
+  notice($rel_name)
+
 
 # Retrieve installation kernel file if supported
   case $url {

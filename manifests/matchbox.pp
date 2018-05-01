@@ -246,11 +246,11 @@ class quartermaster::matchbox (
     file{'/etc/systemd/system/matchbox.service':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/contrib/systemd/matchbox-local.service",
-      mode   => '0777',
+      mode   => '0644',
     } ->
     file{'/etc/systemd/system/matchbox.service.d/override.conf':
       ensure => file,
-      mode   => '0777',
+      mode   => '0644',
       content => '#Puppet Managed
  # /etc/systemd/system/matchbox.service.d/override.conf
 [Service]

@@ -16,7 +16,6 @@ if $virtual == 'docker' {
   quartermaster::pxelinux{'fedora-25-x86_64':}
   quartermaster::pxelinux{'fedora-26-x86_64':}
   quartermaster::pxelinux{'fedora-27-x86_64':}
-  quartermaster::pxelinux{'fedora-28-x86_64':}
   # Ubuntu
   quartermaster::pxelinux{'ubuntu-12.04-amd64':}
   quartermaster::pxelinux{'ubuntu-12.04-i386':}
@@ -76,7 +75,6 @@ if $virtual == 'docker' {
   quartermaster::pxelinux{'rancheros-1.1.1-amd64':}
   quartermaster::pxelinux{'rancheros-1.2.0-amd64':}
   quartermaster::pxelinux{'rancheros-1.3.0-amd64':}
-  quartermaster::pxelinux{'rancheros-latest-amd64':}
 # OpenSuse
   quartermaster::pxelinux{'opensuse-13.2-x86_64':}
   quartermaster::pxelinux{'opensuse-42.2-x86_64':}
