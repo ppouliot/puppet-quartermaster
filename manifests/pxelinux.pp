@@ -127,7 +127,7 @@ define quartermaster::pxelinux (
     $inst_repo       = "${centos_url}/os/${p_arch}/"
     $update_repo     = "${centos_url}/updates/${p_arch}/"
     $splashurl       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
-    $boot_iso_url  = "${centos_url}/os/${p_arch}/images/boot.iso"
+    $boot_iso_url    = "${centos_url}/os/${p_arch}/images/boot.iso"
   }
       
   if ( $distro == 'fedora') {
@@ -394,11 +394,6 @@ define quartermaster::pxelinux (
       default:{
         warning("${name} isn't a oraclelinux release!")
       }
-#      default:{
-#        warning("Oracle Linux ${release} is using the default name for the final boot.iso")
-#        $boot_iso_url    = "https://mirrors.kernel.org/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
-#       $boot_iso_url    = "http://ftp5.gwdg.de/pub/linux/oracle/OL${rel_major}/${_U}${rel_minor}/${p_arch}/${p_arch}-boot.iso"
-#      }
     }
     notice($_U)
     $autofile        = 'kickstart'
@@ -431,6 +426,7 @@ define quartermaster::pxelinux (
     $update_repo     = 'Update ISO or Mirror Required'
     $splashurl       = 'ISO Required for Splash'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $boot_iso_name   = 'Not Required'
     $ks_option       = 'ks'
     $url_option      = 'url'
   }
@@ -448,6 +444,7 @@ define quartermaster::pxelinux (
     $update_repo     = 'Update ISO or Mirror Required'
     $splashurl       = 'ISO Required for Splash'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $boot_iso_name   = 'Not Required'
   }
   if ( $distro == 'sled' ) {
     $autofile        = 'autoyast'
@@ -463,6 +460,7 @@ define quartermaster::pxelinux (
     $update_repo     = 'Update ISO or Mirror Required'
     $splashurl       = 'ISO Required for Splash'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $boot_iso_name   = 'Not Required'
   }
   if ( $distro == 'windows' ) {
     $autofile = 'unattend.xml'
@@ -511,6 +509,7 @@ define quartermaster::pxelinux (
     $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
     $splashurl       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $boot_iso_name   = 'Not Required'
   }
 
   if ( $distro == 'debian' ) {
@@ -562,6 +561,7 @@ define quartermaster::pxelinux (
     $update_repo     = "${debian_url}/${distro}/dists/${rel_name}"
     $splashurl       = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $boot_iso_name   = 'Not Required'
   }
   if ( $distro == 'kali' ) {
     $autofile        = 'preseed'
@@ -579,6 +579,7 @@ define quartermaster::pxelinux (
     $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'
     $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $boot_iso_name   = 'Not Required'
   }
   if ( $distro == 'archlinux' ){
     case $release {

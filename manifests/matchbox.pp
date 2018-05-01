@@ -9102,8 +9102,9 @@ providers {
     }
     # Start the Matchbox Service and Enable it
     service{'matchbox':
-      enable => true,
-      ensure => 'running',
+      enable  => true,
+      ensure  => 'running',
+      require => Exec['certgen-for-matchbox-services'],
     }
   }
 }

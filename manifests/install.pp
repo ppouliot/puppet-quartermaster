@@ -632,37 +632,47 @@ menu passwordrow 11
     target  => '/tmp',
     creates => "/tmp/syslinux-${quartermaster::syslinux_version}",
   } ->
+
   # Move extracted files into position into TFTPDir
   tftp::file {'pxelinux/pxelinux.0':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/pxelinux.0",
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/pxelinux.0",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   } ->
 
   tftp::file { 'pxelinux/gpxelinux0':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/gpxe/gpxelinux.0",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   } ->
 
   tftp::file { 'pxelinux/isolinux.bin':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/isolinux.bin",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   } ->
 
   tftp::file { 'pxelinux/menu.c32':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/menu/menu.c32",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   } ->
 
   tftp::file { 'pxelinux/ldlinux.c32':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/elflink/ldlinux/ldlinux.c32",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   } ->
   tftp::file { 'pxelinux/libutil.c32':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/libutil/libutil.c32",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   } ->
   tftp::file { 'pxelinux/chain.c32':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/chain/chain.c32",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   } ->
   tftp::file { 'pxelinux/libcom32.c32':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/lib/libcom32.c32",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   }
   tftp::file { 'pxelinux/memdisk':
     source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/memdisk/memdisk",
+    require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   }
 
   # get the ipxe iso
