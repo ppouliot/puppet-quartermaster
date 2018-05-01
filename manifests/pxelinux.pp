@@ -183,7 +183,7 @@ define quartermaster::pxelinux (
         $ks_option         = 'inst.ks'
         $url_option        = 'url'
       }
-      '25','26','27':{
+      '25','26','27','28':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
         #$fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
         $fedora_url = 'http://mirrors.mit.edu/fedora/linux/releases'
@@ -394,7 +394,7 @@ define quartermaster::pxelinux (
         $url_option        = 'inst.repo'
       }
 
-      '7.1','7.2','7.3','7.4':{
+      '7.1','7.2','7.3','7.4','7.5':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
@@ -499,10 +499,11 @@ define quartermaster::pxelinux (
       /(16.10)/     => 'yakkety',
       /(17.04)/     => 'zesty',
       /(17.10)/     => 'artful',
+      /(18.04)/     => 'bionic',
       default       => "${name} is not an Ubuntu release",
     }
     case $release {
-      '12.04','14,04','15.04','16.04','16.10','17.04','17.10':{
+      '12.04','14,04','15.04','16.04','17.10','18.04':{
         warning("Ubuntu ${release} is an active release")
       }
       default:{

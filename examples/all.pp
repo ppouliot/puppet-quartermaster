@@ -16,6 +16,7 @@ if $virtual == 'docker' {
   quartermaster::pxelinux{'fedora-25-x86_64':}
   quartermaster::pxelinux{'fedora-26-x86_64':}
   quartermaster::pxelinux{'fedora-27-x86_64':}
+  quartermaster::pxelinux{'fedora-28-x86_64':}
   # Ubuntu
   quartermaster::pxelinux{'ubuntu-12.04-amd64':}
   quartermaster::pxelinux{'ubuntu-12.04-i386':}
@@ -23,12 +24,10 @@ if $virtual == 'docker' {
   quartermaster::pxelinux{'ubuntu-14.04-i386':}
   quartermaster::pxelinux{'ubuntu-16.04-amd64':}
   quartermaster::pxelinux{'ubuntu-16.04-i386':}
-  quartermaster::pxelinux{'ubuntu-16.10-amd64':}
-  quartermaster::pxelinux{'ubuntu-16.10-i386':}
-  quartermaster::pxelinux{'ubuntu-17.04-amd64':}
-  quartermaster::pxelinux{'ubuntu-17.04-i386':}
   quartermaster::pxelinux{'ubuntu-17.10-amd64':}
   quartermaster::pxelinux{'ubuntu-17.10-i386':}
+  quartermaster::pxelinux{'ubuntu-18.04-i386':}
+  quartermaster::pxelinux{'ubuntu-18.04-amd64':}
   # Centos
   quartermaster::pxelinux{'centos-6.8-i386':}
   quartermaster::pxelinux{'centos-6.8-x86_64':}
@@ -56,6 +55,7 @@ if $virtual == 'docker' {
   # Oracle Linux
   quartermaster::pxelinux{'oraclelinux-7.3-x86_64':}
   quartermaster::pxelinux{'oraclelinux-7.4-x86_64':}
+  quartermaster::pxelinux{'oraclelinux-7.5-x86_64':}
   # Debian
   quartermaster::pxelinux{'debian-5-i386':}
   quartermaster::pxelinux{'debian-5-amd64':}
@@ -74,6 +74,8 @@ if $virtual == 'docker' {
 # RancherOS
   quartermaster::pxelinux{'rancheros-1.1.0-amd64':}
   quartermaster::pxelinux{'rancheros-1.1.1-amd64':}
+  quartermaster::pxelinux{'rancheros-1.2.0-amd64':}
+  quartermaster::pxelinux{'rancheros-1.3.0-amd64':}
   quartermaster::pxelinux{'rancheros-latest-amd64':}
 # OpenSuse
   quartermaster::pxelinux{'opensuse-13.2-x86_64':}

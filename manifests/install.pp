@@ -44,6 +44,7 @@ class quartermaster::install (
       fancyindex_exact_size => off,
       fancyindex_footer     => '.README.html',
     },
+    require               => File['/srv/quartermaster']
   }
   nginx::resource::location{'/':
     ensure   => present,
@@ -51,6 +52,7 @@ class quartermaster::install (
     # nginx module  0.5.0
     # vhost   => $::fqdn,
     server   => $::fqdn,
+    require  => File['/srv/quartermaster']
   }
   nginx::resource::location{'/status':
     ensure      => present,
@@ -59,6 +61,7 @@ class quartermaster::install (
     server      => $::fqdn,
     www_root    => '/srv/quartermaster',
     stub_status => true,
+    require     => File['/srv/quartermaster']
   }
 
   # Log Visualization Tools
@@ -120,7 +123,6 @@ class quartermaster::install (
     owner   => $::tftp::username,
     group   => $::tftp::username,
     recurse => true,
-    require => Class['tftp'],
   } ->
   ## .README.html (FILE) /srv/quartermaster/distro/.README.html
   file{[
@@ -420,6 +422,7 @@ nameserver 4.2.2.2
     directory => '/srv/quartermaster/tftpboot',
     inetd     => false,
     options   => '-vvvvs -c -m /etc/tftpd.rules',
+    require   => File['/srv/quartermaster/tftpboot'],
   }
 
   # additional tftp directories
