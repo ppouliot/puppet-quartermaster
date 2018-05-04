@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--memory", "2048"]
     v.linked_clone = true
+  }
   config.puppet_install.puppet_version = :latest
   config.vm.provision "shell", inline: "/opt/puppetlabs/puppet/bin/gem install r10k hiera-eyaml"
   config.vm.provision "shell", inline: "apt-get update -y && apt-get -y install rsync curl wget git"
@@ -29,14 +30,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: "cd /etc/puppetlabs/code/environments/production && /opt/puppetlabs/puppet/bin/r10k puppetfile install --verbose DEBUG2"
   config.vm.provision "shell", inline: "/opt/puppetlabs/bin/puppet module list --tree"
   config.vm.provision "shell", inline: "/opt/puppetlabs/bin/puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/modules:/etc/puppetlabs/code/environments/production/modules:/etc/puppetlabs/code/modules /etc/puppetlabs/code/modules/quartermaster/examples/all.pp"
-# Advanced Puppet Example
-#config.vm.provision :shell, :privileged => false do |shell|
-#  shell.inline = "puppet apply --debug --modulepath '/vagrant/#{ENV.fetch('MODULES_PATH', 'modules')}' --detailed-exitcodes '/vagrant/#{ENV.fetch('MANIFESTS_PATH', 'manifests')}/#{ENV.fetch('MANIFEST_FILE', 'site.pp')}'"
-#end
-
-  end
   config.vm.define "quartermaster" do |v|
-#   v.vm.box = "ubuntu/xenial64"
     v.vm.hostname = "quartermaster.contoso.ltd"
     v.vm.network "private_network", ip: "192.168.0.22"
   end
