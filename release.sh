@@ -2,7 +2,7 @@
 # docker hub username
 USERNAME=ppouliot
 # image name
-IMAGE=puppet-ipam
+IMAGE=puppet-quartermaster
 
 # Ensure the repo is up to date
 git pull
@@ -25,11 +25,5 @@ git tag -a "$VERSION" -m "version $VERSION"
 git push
 git push --tags
 docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
-docker tag $USERNAME/$IMAGE-ubuntu:latest $USERNAME/$IMAGE-ubuntu:$version
 # push it
-docker push $USERNAME/$IMAGE:latest
-docker push $USERNAME/$IMAGE:$version
-# docker push $USERNAME/$IMAGE-centos:latest $USERNAME:$IMAGE-centos:$VERSION
-# docker push $USERNAME/$IMAGE-debian:latest $USERNAME:$IMAGE-debian:$VERSION
-docker push $USERNAME/$IMAGE-ubuntu:latest 
-docker push $USERNAME:$IMAGE-ubuntu:$VERSION
+docker push $USERNAME/$IMAGE
