@@ -39,10 +39,8 @@ class quartermaster::dban {
       target  => "/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso",
       require =>  File["/srv/quartermaster/dban/iso"],
     } ->
-
     tftp::file {'dban/dban.bzi':
       source  => "/srv/quartermaster/dban/mnt/${quartermaster::dban_version}/dban.bzi",
-#      require => Staging::File["dban-${quartermaster::dban_version}_i586.iso"],
     } ->
     tftp::file {'dban/warning.txt':
       source  => "/srv/quartermaster/dban/mnt/${quartermaster::dban_version}/warning.txt",
@@ -55,7 +53,7 @@ class quartermaster::dban {
     } ->
     tftp::file {'dban/raid.txt':
       source  => "/srv/quartermaster/dban/mnt/${quartermaster::dban_version}/raid.txt",
-    }
+    } ->
     tftp::file {'menu/dban.menu':
       source  => "/srv/quartermaster/dban/mnt/${quartermaster::dban_version}/isolinux.cfg",
     } ->

@@ -52,8 +52,10 @@ if $virtual == 'docker' {
   quartermaster::pxelinux{'scientificlinux-7.3-x86_64':}
   quartermaster::pxelinux{'scientificlinux-7.4-x86_64':}
   # Oracle Linux
-  quartermaster::pxelinux{'oraclelinux-7.3-x86_64':}
-  quartermaster::pxelinux{'oraclelinux-7.4-x86_64':}
+  quartermaster::pxelinux{'oraclelinux-6.9-i386':}
+  quartermaster::pxelinux{'oraclelinux-6.9-x86_64':}
+#  quartermaster::pxelinux{'oraclelinux-7.3-x86_64':}
+#  quartermaster::pxelinux{'oraclelinux-7.4-x86_64':}
   quartermaster::pxelinux{'oraclelinux-7.5-x86_64':}
   # Debian
   quartermaster::pxelinux{'debian-5-i386':}
@@ -79,5 +81,5 @@ if $virtual == 'docker' {
   quartermaster::pxelinux{'opensuse-13.2-x86_64':}
   quartermaster::pxelinux{'opensuse-42.2-x86_64':}
   quartermaster::pxelinux{'opensuse-42.3-x86_64':}
-  quartermaster::windowsmedia{'en_microsoft_hyper-v_server_2016_x64_dvd_9347277.iso': activationkey => undef, }
+#  quartermaster::windowsmedia{'en_microsoft_hyper-v_server_2016_x64_dvd_9347277.iso': activationkey => undef, }
 # }

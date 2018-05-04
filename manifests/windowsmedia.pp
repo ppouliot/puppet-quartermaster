@@ -129,8 +129,22 @@ define quartermaster::windowsmedia( $activationkey ) {
   notify {"${name}: WINDOWS FLAVOR: ${w_flavor}":}
   notify {"${name}: WINDOWS MEDIA IMAGE NAME: ${w_media_image_name}":}
 
+  case $w_media_image_name {
+    'hyper-v-2012-amd64':{
+      $iso_media_download_url = 'http://care.dlservice.microsoft.com/dl/download/3/4/7/347A95F0-A63C-492F-BE43-F376AE30C9FE/9200.16384.WIN8_RTM.120725-1247_X64FRE_SERVERHYPERCORE_EN-US-HRM_SHV_X64FRE_EN-US_DV5.ISO'
+    }
+    'hyper-v-2012r2-amd64':{
+      $iso_media_download_url = 'http://care.dlservice.microsoft.com/dl/download/F/7/D/F7DF966B-5C40-4674-9A32-D83D869A3244/9600.16384.WINBLUE_RTM.130821-1623_X64FRE_SERVERHYPERCORE_EN-US-IRM_SHV_X64FRE_EN-US_DV5.ISO'
 
-
+    }
+    'hyper-v-2016-amd64':{
+      $iso_media_download_url = 'http://care.dlservice.microsoft.com/dl/download/E/4/E/E4EFC175-3D2D-49A6-B6D9-1B389887F764/14393.0.160916-1106.RS1_REFRESH_SERVERHYPERCORE_OEM_X64FRE_EN-US.ISO'
+    }
+    default:{
+      warning("No installation media iso for ${w_media_image_name}")
+    }
+  } 
+  
   if ! defined (File["/srv/quartermaster/microsoft/${w_distro}"]) {
     file { "/srv/quartermaster/microsoft/${w_distro}":
       ensure  => directory,
