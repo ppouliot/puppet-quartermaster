@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--memory", "2048"]
     v.linked_clone = true
-  }
+  end
   config.puppet_install.puppet_version = :latest
   config.vm.provision "shell", inline: "/opt/puppetlabs/puppet/bin/gem install r10k hiera-eyaml"
   config.vm.provision "shell", inline: "apt-get update -y && apt-get -y install rsync curl wget git"
