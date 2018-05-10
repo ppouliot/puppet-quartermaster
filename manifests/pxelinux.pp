@@ -127,7 +127,9 @@ define quartermaster::pxelinux (
     $inst_repo       = "${centos_url}/os/${p_arch}/"
     $update_repo     = "${centos_url}/updates/${p_arch}/"
     $splashurl       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
-    $boot_iso_url    = "${centos_url}/os/${p_arch}/images/boot.iso"
+    $boot_iso_url    = "${centos_url}/os/${p_arch}/images/${boot_iso_name}"
+    $boot_iso_name   = "boot.iso"
+    $mini_iso_name   = "boot.iso"
   }
       
   if ( $distro == 'fedora') {
@@ -197,6 +199,8 @@ define quartermaster::pxelinux (
     $inst_repo       = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os"
     $update_repo     = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os"
     $boot_iso_url    = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/boot.iso"
+    $boot_iso_name   = "boot.iso"
+    $mini_iso_name   = "boot.iso"
     $splashurl       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
   }
   if ( $distro == 'scientificlinux'){
@@ -241,7 +245,9 @@ define quartermaster::pxelinux (
     $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
     $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
-    $boot_iso_url    = "${scientificlinux_url}/images/boot.iso"
+    $boot_iso_url    = "${scientificlinux_url}/images/${boot_iso_name}"
+    $boot_iso_name   = "boot.iso"
+    $mini_iso_name   = "boot.iso"
   }
 
   if ( $distro == 'opensuse') {
@@ -275,8 +281,10 @@ define quartermaster::pxelinux (
     $inst_repo       = "${opensuse_url}/${release}/repo/oss"
     $update_repo     = "${opensuse_url}/${release}/repo/non-oss/suse"
     $splash_url      = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader/back.jpg"
-    $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
     $boot_iso_url    = "${opensuse_url}/${release}/iso"
+    $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
+    $mini_iso_name   = undef
+
     # This adds scripts to deploy to the system after booting into OpenSuse
     # when finished it should reboot.
     file {"/srv/quartermaster/${distro}/${autofile}/kernelbuilder.${name}.${autofile}":
@@ -291,33 +299,12 @@ define quartermaster::pxelinux (
   
   # Begin tests for dealing with OracleLinux Repos
   if ( $distro == 'oraclelinux' ) {
-    # Character Adjustment for Releases between 6 and 7
-#    case $rel_major {
-#      '6':{
-#        $_U                = 'U'
-#        $vnc_option        = 'vnc'
-#        $vnc_option_passwd = 'vncpasswd'
-#        $ks_option         = 'ks'
-#        $url_option        = 'url'
-#
-#      }
-#      '7':{
-#        $_U                = 'u'
-#        $vnc_option        = 'inst.vnc'
-#        $vnc_option_passwd = 'inst.vncpasswd'
-#        $ks_option         = 'inst.ks'
-#        $url_option        = 'inst.repo'
-#      }
-#      default:{
-#        notice("${name} does not need the _U variable!")
-#      }
-#    }
-#    notice($_U)
     case $release {
       '4.4','4.5','4.6','4.7','4.8':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = undef
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -329,6 +316,7 @@ define quartermaster::pxelinux (
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/GA/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = undef
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -340,6 +328,7 @@ define quartermaster::pxelinux (
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = undef
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -351,6 +340,7 @@ define quartermaster::pxelinux (
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/GA/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = undef
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -360,8 +350,9 @@ define quartermaster::pxelinux (
 
       '6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','6.9':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
-        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = "${p_arch}-boot.iso"
         $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -373,6 +364,7 @@ define quartermaster::pxelinux (
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/GA/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = "${p_arch}-boot.iso"
         $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
@@ -380,10 +372,11 @@ define quartermaster::pxelinux (
         $url_option        = 'inst.repo'
       }
 
-      '7.1','7.2','7.3','7.4','7.5':{
+      '7.1','7.2','7.3','7.4':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
-        $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = undef
         $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
@@ -391,6 +384,17 @@ define quartermaster::pxelinux (
         $url_option        = 'inst.repo'
       }
 
+      '7.5':{
+        warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
+        $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
+        $mini_iso_name     = "${p_arch}-boot.iso"
+        $_U                = 'u'
+        $vnc_option        = 'inst.vnc'
+        $vnc_option_passwd = 'inst.vncpasswd'
+        $ks_option         = 'inst.ks'
+        $url_option        = 'inst.repo'
+      }
       default:{
         warning("${name} isn't a oraclelinux release!")
       }
@@ -461,6 +465,7 @@ define quartermaster::pxelinux (
     $splashurl       = 'ISO Required for Splash'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'Not Required'
   }
   if ( $distro == 'windows' ) {
     $autofile = 'unattend.xml'
@@ -510,6 +515,7 @@ define quartermaster::pxelinux (
     $splashurl       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'mini.iso'
   }
 
   if ( $distro == 'debian' ) {
@@ -562,6 +568,7 @@ define quartermaster::pxelinux (
     $splashurl       = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'Not Required'
   }
   if ( $distro == 'kali' ) {
     $autofile        = 'preseed'
@@ -580,6 +587,7 @@ define quartermaster::pxelinux (
     $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'Not Required'
   }
   if ( $distro == 'archlinux' ){
     case $release {
@@ -603,6 +611,8 @@ define quartermaster::pxelinux (
     $update_repo     = "http://mirrors.kernel.org/archlinux/core/os/${p_arch}/$rel_name/arch/${p_arch}/airootfs.sfs"
     $splashurl       = "http://mirrors.kernel.org/archlinux/iso/$rel_name/arch/${p_arch}/airootfs.sfs"
     $boot_iso_url    = "http://mirrors.kernel.org/archlinux/iso/$rel_name/archlinux-${rel_name}-dual.iso"
+    $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'Not Required'
   }
   if ( $distro == 'coreos' ) {
     case $release {
@@ -641,7 +651,8 @@ define quartermaster::pxelinux (
     $url             = "https://${release}.release.core-os.net/${p_arch}-usr/current"
     $inst_repo       = "https://${release}.release.core-os.net/${p_arch}-usr/current"
     $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
-
+    $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'Not Required'
     
     # This adds scripts to deploy to the system after booting into coreos 
     # when finished it should reboot.
@@ -974,7 +985,9 @@ define quartermaster::pxelinux (
      $url            = "https://github.com/rancher/os/releases/download/${rancheros_release}"
      $inst_repo      = "https://github.com/rancher/os/releases/download/${rancheros_release}"
 #    $inst_repo       = "https://releases.rancher.com/os/${rancheros_release}"
-    $boot_iso_url    = "https://releases.rancher.com/os/${rancheros_release}/rancheros.iso"
+    $boot_iso_url    = "https://releases.rancher.com/os/${rancheros_release}/${boot_iso_name}"
+    $boot_iso_name   = 'rancheros.iso'
+    $mini_iso_name   = 'Not Required'
 
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.pxe_installer.sh":
       ensure  => file,

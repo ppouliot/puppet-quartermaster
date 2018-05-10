@@ -62,40 +62,41 @@
 # }
 #
 class quartermaster (
-  $preferred_nameserver             = undef,
-  $syslinux_url                     = 'http://www.kernel.org/pub/linux/utils/boot/syslinux',
-  $syslinux_version                 = '6.03',
-  $dban_enable                      = undef,
-  $dban_version                     = '2.3.0',
-  $matchbox_enable                  = undef,
-  $matchbox_version                 = '0.6.1',
-  $go_version                       = '1.9.2',
-  $terraform_version                = '0.11.0',
-  $proxydhcp_subnets                = [],
+  Optional[String] $preferred_nameserver             = undef,
+  String $syslinux_url                               = 'http://www.kernel.org/pub/linux/utils/boot/syslinux',
+  String $syslinux_version                           = '6.03',
+  Optional[Boolean] $dban_enable                     = undef,
+  Optional[String] $dban_version                     = '2.3.0',
+  Optional[Boolean] $matchbox_enable                 = undef,
+  Optional[String] $matchbox_version                 = '0.6.1',
+  Optional[String] $go_version                       = '1.9.2',
+  Optional[String] $terraform_version                = '0.11.0',
 
-#  $linux                            = hiera('linux',{}),
-#  $windows                          = hiera('windows',{}),
+  $proxydhcp_subnets                                 = [],
 
-  $enable_poap                      = undef,
-  $enable_hp_spp                    = undef,
-  $hp_spp_iso_complete_url_location = 'ftp://ftp.hp.com/pub/softlib2/software1/cd-generic/p67859018/v108240/SPP2015040.2015_0407.5.iso',
-  $hp_spp_iso_name                  = 'SPP2015040.2015_0407.5.iso',
-  $jenkins_swarm_version_to_use      = '3.3',
-  $default_pxeboot_option           = 'menu.c32',
-  $pxe_menu_timeout                 = '10',
-  $pxe_menu_total_timeout           = '120',
-  $pxe_menu_allow_user_arguments    = '0',
-  $pxe_menu_default_graphics        = '../pxelinux/pxelinux.cfg/graphics.cfg',
-  $puppetmaster                     = undef,
-  $use_local_proxy                  = undef,
-  $vnc_passwd                       = 'letmein',
-  $etcd_token                       = '42af8a395def005a2b952b429de3417f'
+  Optional[Boolean] $enable_poap                     = undef,
+  Optional[Boolean] $enable_hp_spp                   = undef,
+  Optional[String] $hp_spp_iso_complete_url_location = 'ftp://ftp.hp.com/pub/softlib2/software1/cd-generic/p67859018/v108240/SPP2015040.2015_0407.5.iso',
+  Optional[String] $hp_spp_iso_name                  = 'SPP2015040.2015_0407.5.iso',
+  Optional[String] $jenkins_swarm_version_to_use     = '3.3',
+  String $default_pxeboot_option                     = 'menu.c32',
+  String $pxe_menu_timeout                           = '10',
+  String $pxe_menu_total_timeout                     = '120',
+  String $pxe_menu_allow_user_arguments              = '0',
+  String $pxe_menu_default_graphics                  = '../pxelinux/pxelinux.cfg/graphics.cfg',
+  Optional[String] $puppetmaster                     = undef,
+  Optional[String] $use_local_proxy                  = undef,
+  String $vnc_passwd                                 = 'letmein',
+  Optional[String] $etcd_token                       = '42af8a395def005a2b952b429de3417f'
 
 ) inherits quartermaster::params {
 
-  validate_string($::osfamily, '^(Debian|RedHat)$', 'This module only works on Debian and Red Hat based systems.')
-  #validate_bool( $dban_enable )
-  validate_string( $dban_version )
+  if $::osfamily {
+    assert_type(Pattern[/(^Debian|RedHat)$/], $::osfamily) |$a, $b| {
+      fail translate(('This Module only works on Debian and RedHat like systems.'))
+    }
+  }
+
 
   class{'::quartermaster::install': } ->
   class{'::quartermaster::configure': }     
