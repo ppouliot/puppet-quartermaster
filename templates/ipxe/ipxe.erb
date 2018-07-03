@@ -1,0 +1,5 @@
+#!ipxe
+
+set base-url <%= @url %>
+kernel ${base-url}/<%= @pxekernel %>
+initrd ${base-url}/<%= @src_initrd %>

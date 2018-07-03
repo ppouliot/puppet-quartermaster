@@ -1,0 +1,56 @@
+#!ipxe
+
+set menu-timeout 5000
+set submenu-timeout ${menu-timeout}
+isset ${menu-default} || set menu-default exit
+
+# Figure out if client is 64-bit capable
+cpuid --ext 29 && set arch x64 || set arch x86
+cpuid --ext 29 && set arch amd64 || set arch i386
+
+###################### MAIN MENU ####################################
+
+:start
+menu iPXE boot menu for ${initiator-iqn}
+item --gap --             ------------------------- Operating systems ------------------------------
+<%= @operating_systems_ipxe_menu %>
+item --gap --             ------------------------- Tools and utilities ----------------------------
+<%= @tools_utilities_ipxe_menu %>
+item --gap --             ------------------------- Advanced options -------------------------------
+item --key c config       Configure settings
+item shell                Drop to iPXE shell
+item reboot               Reboot computer
+item
+item --key x exit         Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+:cancel
+echo You cancelled the menu, dropping you to a shell
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+exit
+
+:config
+config
+goto start
+
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
