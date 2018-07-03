@@ -40,7 +40,7 @@ define quartermaster::pxelinux (
     notice($distro)
     notice($release)
     notice($p_arch)
-    validate_string($distro, '^(debian|centos|fedora|kali|scientificlinux|opensuse|oraclelinux|ubuntu)$', 'The currently supported values for distro are debian, centos, fedora, kali, oraclelinux, scientificlinux, opensuse',)
+    validate_string($distro, '^(devuan|debian|centos|fedora|kali|scientificlinux|opensuse|oraclelinux|ubuntu)$', 'The currently supported values for distro are devuan, debian, centos, fedora, kali, oraclelinux, scientificlinux, opensuse',)
     validate_string($p_arch, '^(i386|i586|i686|x86_65|amd64)$', 'The currently supported values for pocessor architecture  are i386,i586,i686,x86_64,amd64',)
   } else {
     fail('You must put your entry in format "<Distro>-<Release>-<Processor Arch>" like "centos-7-x86_64" or "ubuntu-14.04-amd64"')
@@ -517,7 +517,39 @@ define quartermaster::pxelinux (
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'mini.iso'
   }
-
+  if ( $distro == 'devuan' ) {
+    $rel_name = $release ? {
+      /(1.0)/   => 'jessie',
+      /(2.0)/   => 'ascii',
+      /(3.0)/   => 'beowulf',
+      default   => "${name} is not an Devuan release",
+    }
+    case $release {
+      '1.0','2.0':{
+        $devuan_url  = 'http://pkgmaster.devuan.org'
+        $mirror_host = 'pkgmaster.devuan.org'
+        $mirror_path = $distro
+      }
+      default:{
+        warning("${name} isn't a devuan release!")
+      }
+    }
+    $autofile        = 'preseed'
+    $linux_installer = 'd-i'
+    $pxekernel       = 'linux'
+    $initrd          = '.gz'
+    $src_initrd      = "initrd${initrd}"
+    $target_kernel   = $rel_number
+    $target_initrd   = "${rel_number}${initrd}"
+    $_dot_bootsplash = '.png'
+    $url             = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
+    $inst_repo       = "${devuan_url}/${distro}/dists/${rel_name}"
+    $update_repo     = "${devuan_url}/${distro}/dists/${rel_name}"
+    $splashurl       = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $boot_iso_url    = 'No mini.iso or boot.iso to download'
+    $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'Not Required'
+  }
   if ( $distro == 'debian' ) {
     $rel_name = $release ? {
       /(2.0)/ => 'hamm',
