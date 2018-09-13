@@ -37,6 +37,7 @@ class{'quartermaster':
   quartermaster::pxelinux{'fedora-25-i386':}
   quartermaster::pxelinux{'fedora-26-i386':}
   quartermaster::pxelinux{'fedora-27-i386':}
+  quartermaster::pxelinux{'fedora-28-i386':}
   # Fedora
   # x86_64
   quartermaster::pxelinux{'fedora-1-x86_64':}
@@ -66,6 +67,7 @@ class{'quartermaster':
   quartermaster::pxelinux{'fedora-25-x86_64':}
   quartermaster::pxelinux{'fedora-26-x86_64':}
   quartermaster::pxelinux{'fedora-27-x86_64':}
+  quartermaster::pxelinux{'fedora-28-x86_64':}
   # Ubuntu
   quartermaster::pxelinux{'ubuntu-12.04-amd64':}
   quartermaster::pxelinux{'ubuntu-12.04-i386':}
@@ -169,6 +171,11 @@ class{'quartermaster':
   quartermaster::pxelinux{'coreos-stable-amd64':}
   quartermaster::pxelinux{'coreos-beta-amd64':}
   quartermaster::pxelinux{'coreos-alpha-amd64':}
+  # Flatcar Linux
+  quartermaster::pxelinux{'flatcar-stable-amd64':}
+  quartermaster::pxelinux{'flatcar-beta-amd64':}
+  quartermaster::pxelinux{'flatcar-alpha-amd64':}
+  # Scientific
   # Scientific
   # i386
   quartermaster::pxelinux{'scientificlinux-5.0-i386':}
