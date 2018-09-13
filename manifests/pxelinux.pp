@@ -171,7 +171,7 @@ define quartermaster::pxelinux (
         $ks_option         = 'inst.ks'
         $url_option        = 'url'
       }
-      '25','26','27':{
+      '25','26','27','28':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
         #$fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
         $fedora_url = 'http://mirrors.mit.edu/fedora/linux/releases'
