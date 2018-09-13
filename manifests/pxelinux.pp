@@ -40,7 +40,7 @@ define quartermaster::pxelinux (
     notice($distro)
     notice($release)
     notice($p_arch)
-    validate_string($distro, '^(devuan|debian|centos|fedora|kali|scientificlinux|opensuse|oraclelinux|ubuntu)$', 'The currently supported values for distro are devuan, debian, centos, fedora, kali, oraclelinux, scientificlinux, opensuse',)
+    validate_string($distro, '^(devuan|debian|centos|coreos|flatcar|rancheros|fedora|kali|scientificlinux|opensuse|oraclelinux|ubuntu)$', 'The currently supported values for distro are devuan, debian, centos, coreos, flatcar, rancheros, fedora, kali, oraclelinux, scientificlinux, opensuse',)
     validate_string($p_arch, '^(i386|i586|i686|x86_65|amd64)$', 'The currently supported values for pocessor architecture  are i386,i586,i686,x86_64,amd64',)
   } else {
     fail('You must put your entry in format "<Distro>-<Release>-<Processor Arch>" like "centos-7-x86_64" or "ubuntu-14.04-amd64"')
@@ -646,6 +646,65 @@ define quartermaster::pxelinux (
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
   }
+  if ( $distro == 'flatcar' ) {
+    case $release {
+      'stable':{
+        warning("flatcar ${release} for ${p_arch} will be activated")
+        $flatcar_version = '1800.7.0'
+      }
+      'beta':{
+        warning("flatcar ${release} for ${p_arch} will be activated")
+        $flatcar_version = '1855.3.0'
+      }
+      'alpha':{
+        warning("flatcar ${release} for ${p_arch} will be activated")
+        $flatcar_version = '1883.0.0'
+      }
+      default:{
+        fail("${name} is not a valid flatcar release! Valid release are stable, beta  or alpha.")
+      }
+    }
+    case $p_arch {
+      'amd64','arm64':{ 
+        warning("flatcar ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${p_arch} is not a valid processor architecture for flatcar, valid processor arch are amd64 and arm64.")
+      }
+    }
+    $flatcar_channel  = $release
+    $autofile        = 'cloud-config.yml'
+    $linux_installer = 'flatcar-install'
+    $pxekernel      = 'flatcar_production_pxe.vmlinuz'
+    $initrd          = 'cpio.gz'
+    $src_initrd      = "flatcar_production_pxe_image.${initrd}"
+    $target_kernel   = "${release}_production.vmlinuz"
+    $target_initrd   = "${release}_production.${initrd}"
+    $url             = "https://${release}.release.flatcar-linux.net/${p_arch}-usr/${flatcar_version}"
+    $inst_repo       = "https://${release}.release.flatcar-linux.net/${p_arch}-usr/${flatcar_version}"
+    $boot_iso_url    = "https://${release}.release.flatcar-linux.net/${p_arch}-usr/${flatcar_version}/flatcar_production_iso_image.iso"
+    $boot_iso_name   = 'Not Required'
+    $mini_iso_name   = 'Not Required'
+
+    # This adds scripts to deploy to the system after booting into flatcar
+    # when finished it should reboot.
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.pxe_installer.sh":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/scripts/pxe_installer.sh.erb'),
+    }
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.running_instance.sh":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/scripts/running_instance.sh.erb'),
+    }
+    file {"/srv/quartermaster/${distro}/${autofile}/${name}.custom_ip_resolution.sh":
+      ensure  => file,
+      mode    => '0777',
+      content => template('quartermaster/scripts/flatcar.custom_ip_resolution.sh.erb'),
+    }
+  }
+
   if ( $distro == 'coreos' ) {
     case $release {
       'stable':{
