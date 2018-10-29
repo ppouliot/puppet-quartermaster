@@ -18,7 +18,7 @@ class quartermaster::install (
     'Debian':{
       class{'::nginx':
         package_name => 'nginx-extras',
-        http_config_prepend => {
+        http_cfg_prepend => {
           load_module         => '/usr/share/nginx/modules/ngx_http_fancyindex_module.so',
         },
       }
