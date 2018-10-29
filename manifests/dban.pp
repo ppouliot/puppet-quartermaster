@@ -112,4 +112,5 @@ class quartermaster::dban {
   }
 
 }
-Class['quartermaster::config'] -> Class['quartermaster::dban']
+
+# Class['quartermaster::config'] -> Class['quartermaster::dban']
