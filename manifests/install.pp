@@ -369,8 +369,8 @@ nameserver 4.2.2.2
   dnsmasq::dhcp{'ProxyDHCP-PXE':
     dhcp_start => "${::ipaddress},proxy",
     dhcp_end   => $::netmask,
-    lease_time => '',
-    netmask    => '',
+#    lease_time => '',
+#    netmask    => '',
   }
   dnsmasq::dhcpoption{'vendor_pxeclient':
     option  => 'vendor:PXEClient',
