@@ -17,10 +17,8 @@ class quartermaster::install (
   case $::osfamily {
     'Debian':{
       class{'::nginx':
-        package_name => 'nginx-extras',
-        http_cfg_prepend => {
-          load_module         => '/usr/share/nginx/modules/ngx_http_fancyindex_module.so',
-        },
+        package_name    => 'nginx-extras',
+        dynamic_modules => ['/usr/share/nginx/modules/ngx_http_fancyindex_module.so',],
       }
     }
     'RedHat':{
