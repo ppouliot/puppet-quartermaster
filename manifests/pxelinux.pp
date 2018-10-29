@@ -95,7 +95,7 @@ define quartermaster::pxelinux (
         $ks_option         = 'ks'
         $url_option        = 'url'
       }
-      '7.0.1406','7.1.1503','7.2.1511','7.3.1611':{
+      '7.0.1406','7.1.1503','7.2.1511','7.3.1611','7.4.1708':{
         $centos_url = "http://vault.centos.org/centos/${release}"
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
@@ -103,7 +103,7 @@ define quartermaster::pxelinux (
         $ks_option         = 'ks'
         $url_option        = 'inst.repo'
       }
-      '7.4.1708':{
+      '7.5.1804':{
         $centos_url = "http://mirror.centos.org/centos/${release}"
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
@@ -760,7 +760,7 @@ define quartermaster::pxelinux (
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.custom_ip_resolution.sh":
       ensure  => file,
       mode    => '0777',
-      content => template('quartermaster/scripts/coreos.custom_ip_resolution.sh.erb'),
+      content => template('quartermaster/scripts/custom_ip_resolution.sh.erb'),
     }
     if ( $quartermaster::matchbox_enable ) {
       notice("matchbox/groups/${release}-install.json")
