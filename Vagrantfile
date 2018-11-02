@@ -32,7 +32,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: "/opt/puppetlabs/bin/puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/modules:/etc/puppetlabs/code/environments/production/modules:/etc/puppetlabs/code/modules /etc/puppetlabs/code/modules/quartermaster/examples/all.pp"
   config.vm.define "quartermaster" do |v|
     v.vm.hostname = "quartermaster.contoso.ltd"
-    v.vm.network "private_network", ip: "192.168.0.22"
   end
 
 end
