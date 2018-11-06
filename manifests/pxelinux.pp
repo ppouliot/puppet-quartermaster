@@ -674,7 +674,7 @@ define quartermaster::pxelinux (
     }
     $flatcar_channel  = $release
     $autofile        = 'cloud-config.yml'
-    $linux_installer = 'flatcar-install'
+    $linux_installer = 'container-linux-install'
     $pxekernel      = 'flatcar_production_pxe.vmlinuz'
     $initrd          = 'cpio.gz'
     $src_initrd      = "flatcar_production_pxe_image.${initrd}"
@@ -733,7 +733,7 @@ define quartermaster::pxelinux (
     }
     $coreos_channel  = $release
     $autofile        = 'cloud-config.yml'
-    $linux_installer = 'coreos-install'
+    $linux_installer = 'container-linux-install'
     $pxekernel      = 'coreos_production_pxe.vmlinuz'
     $initrd          = 'cpio.gz'
     $src_initrd      = "coreos_production_pxe_image.${initrd}"

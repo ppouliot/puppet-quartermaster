@@ -1,6 +1,6 @@
-TITLE CoreOS
+TITLE <%= @distro.capitalize %>
 LABEL <%= @name %>
-        MENU LABEL (<%= @release %>-<%= @p_arch %>): CoreOS ^Manual Installation 
+        MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @distro.capitalize %> ^Manual Installation 
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rootfstype=btrfs coreos.autologin
 
