@@ -334,6 +334,9 @@ nameserver 4.2.2.2
   # proxydhcp server for nextserver and bootfile 
   # dhcp options
   class {'dnsmasq': 
+    config_hash => {
+      content => template('quartermaster/dnsmasq.conf.erb'),
+    },
     purge_config_dir => true,
   }
 # lex/dnsmasq --config 
