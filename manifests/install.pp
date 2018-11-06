@@ -335,7 +335,9 @@ nameserver 4.2.2.2
   # dhcp options
   class {'dnsmasq': 
     configs_hash => {
-      content => template('quartermaster/dnsmasq.conf.erb'),
+      'quartermaster-cfg' => {
+        content => template('quartermaster/dnsmasq.conf.erb'),
+      },
     },
     purge_config_dir => true,
   }
