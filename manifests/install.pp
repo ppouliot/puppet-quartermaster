@@ -328,22 +328,28 @@ nameserver 4.2.2.2
 ",
   }
   
+
+ 
   # Install dnsmasq and configure a dns cache and 
   # proxydhcp server for nextserver and bootfile 
   # dhcp options
-
-  class { 'dnsmasq':
+  class {'dnsmasq': 
+    purge_config_dir => true,
+  }
+# lex/dnsmasq --config 
+#
+#  class { 'dnsmasq':
 #  Begin Disable DNS Cache
-    port              => 0,
-    expand_hosts      => false,
-    bogus_priv        => false,
-    no_negcache       => false,
-    domain_needed     => false,
-    strict_order      => false,
-    no_resolv         => true,
-    no_hosts          => true,
-    reload_resolvconf => false,
-    cache_size        => '0',
+#    port              => 0,
+#    expand_hosts      => false,
+#    bogus_priv        => false,
+#    no_negcache       => false,
+#    domain_needed     => false,
+#    strict_order      => false,
+#    no_resolv         => true,
+#    no_hosts          => true,
+#    reload_resolvconf => false,
+#    cache_size        => '0',
 #  End Disable DNS Cache
 #  Begin Enable DNS Cache
 #    interface         => 'lo',
@@ -359,26 +365,26 @@ nameserver 4.2.2.2
 #    restart           => true,
 #  End Enable DNS Cache
 #    resolv_file       => '/etc/resolv.conf.dnsmasq',
-    config_hash       => {
+#    config_hash       => {
 #      'log-facility' => '/var/log/quartermaster/dnsmasq.log',
-      'log-queries'  => true,
-      'log-dhcp'     => true,
-      'no-poll'      => true,
-    },
-  }
-  dnsmasq::dhcp{'ProxyDHCP-PXE':
-    dhcp_start => "${::ipaddress},proxy",
-    dhcp_end   => $::netmask,
-    lease_time => '',
-    netmask    => '',
-  }
-  dnsmasq::dhcpoption{'vendor_pxeclient':
-    option  => 'vendor:PXEClient',
-    content => '6,2b',
-  }
-  dnsmasq::pxe_service{'Quartermaster PXE Provisioning':
-    content => 'pxelinux/pxelinux',
-  }
+#      'log-queries'  => true,
+#      'log-dhcp'     => true,
+#      'no-poll'      => true,
+#    },
+#  }
+#  dnsmasq::dhcp{'ProxyDHCP-PXE':
+#    dhcp_start => "${::ipaddress},proxy",
+#    dhcp_end   => $::netmask,
+#    lease_time => '',
+#    netmask    => '',
+#  }
+#  dnsmasq::dhcpoption{'vendor_pxeclient':
+#    option  => 'vendor:PXEClient',
+#    content => '6,2b',
+#  }
+#  dnsmasq::pxe_service{'Quartermaster PXE Provisioning':
+#    content => 'pxelinux/pxelinux',
+#  }
 #  dnsmasq::dhcpboot{'proxydhcp':
 #    file => 'pxelinux/pxelinux.0',
 #    tag  => 'p1p0',
