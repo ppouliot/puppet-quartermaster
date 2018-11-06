@@ -79,16 +79,8 @@ define quartermaster::pxelinux (
         $ks_option         = 'ks'
         $url_option        = 'url'
       }
-      '6.8':{
+      '6.8','6.9':{
         $centos_url = "http://vault.centos.org/centos/${release}"
-        $_dot_bootsplash = '.png'
-        $vnc_option        = 'inst.vnc'
-        $vnc_option_passwd = 'inst.vncpasswd'
-        $ks_option         = 'ks'
-        $url_option        = 'url'
-      }
-      '6.9':{
-        $centos_url = "http://mirror.centos.org/centos/${release}"
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
