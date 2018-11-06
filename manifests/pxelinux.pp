@@ -701,7 +701,7 @@ define quartermaster::pxelinux (
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.custom_ip_resolution.sh":
       ensure  => file,
       mode    => '0777',
-      content => template('quartermaster/scripts/flatcar.custom_ip_resolution.sh.erb'),
+      content => template('quartermaster/scripts/custom_ip_resolution.sh.erb'),
     }
   }
 
