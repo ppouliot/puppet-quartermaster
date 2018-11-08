@@ -3,15 +3,25 @@ LABEL <%= @name %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @url_option %>=<%= @inst_repo %>
 
+LABEL <%= @name %>-serial
+        MENU LABEL <%= @release %> <%= @p_arch %>: ^Serial
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @url_option %>=<%= @inst_repo %> console=ttyS0,115200n9 serial
+
 LABEL <%= @name %>-manual-vnc
         MENU LABEL <%= @release %> <%= @p_arch %>: ^VNC Activeated Manual Installation
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @url_option %>=<%= @inst_repo %> <%= @vnc_option %> <%= @vnc_option_passwd %>=<%= @vnc_passwd %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @url_option %>=<%= @inst_repo %> <%= @vnc_option %> <%= @vnc_option_passwd %>=<%= @vnc_passwd %> 
 
 LABEL <%= @name %>-<%= @autofile %>
         MENU LABEL <%= @release %> <%= @p_arch %>: Minimal ^<%= @autofile.capitalize %> Installation
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
 	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @ks_option %>=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> <%= @url_option %>=<%= @inst_repo %>
+
+LABEL <%= @name %>-<%= @autofile %>-serial
+        MENU LABEL <%= @release %> <%= @p_arch %>: Minimal <%= @autofile.capitalize %> Installation over Serial ^Console
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+	APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <%= @ks_option %>=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> <%= @url_option %>=<%= @inst_repo %> console=ttyS0,115200n9 serial
 
 LABEL <%= @name %>-hyper-v_vm-<%= @autofile %>
         MENU LABEL <%= @release %> <%= @p_arch %>: ^Hyper-V VM (LIS Enabled) <%= @autofile %>
@@ -22,4 +32,9 @@ LABEL <%= @name %>-rescue
         MENU LABEL <%= @release %> <%= @p_arch %>: ^Rescue
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <% @url_option %>=<%= @inst_repo %>
+
+LABEL <%= @name %>-rescue-serial
+        MENU LABEL <%= @release %> <%= @p_arch %>: Rescue ^over Serial Console
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> <% @url_option %>=<%= @inst_repo %> console=ttyS0,115200n9 serial
 

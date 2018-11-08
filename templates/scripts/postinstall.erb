@@ -7,6 +7,9 @@ echo "### Install Fisrtboot Script to /root ###"
 wget http://<%= @fqdn %>/bin/firstboot -O /root/firstboot
 chmod +x /root/firstboot
 
+echo "### start serial console ###"
+ln -s /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@ttyS0.service 
+
 use_upstart=`ps -p 1 -o command | awk '{print $1}'|grep -c init`
 use_systemd=`ps -p 1 -o command | awk '{print $1}'|grep -c systemd`
 
