@@ -8,7 +8,7 @@ LABEL <%= @name %>-serial
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): Manual Installation over Serial Console
         IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=low video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> console=ttyS0,115200n9 serial
+        APPEND priority=low video=vesa:ywrap,mtrr vga=none locale=en_US lang=en keymap=us console-setup/layoutcode=en initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> console=ttyS0,115200n9 serial
 
 LABEL <%= @name %>-network-console
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): Manual Installation over ^Network Console
@@ -26,7 +26,7 @@ LABEL <%= @name %>-<%= @autofile %>-serial
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Minimal <%= @autofile.capitalize %> Install over Serial Console
         IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=critical video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> console=ttyS0,115200n9 serial
+        APPEND priority=critical video=vesa:ywrap,mtrr vga=none locale=en_US lang=en keymap=us console-setup/layoutcode=en netconfig/get_hostname=auto netconfig/choose_interface=auto netconfig/link_wait_timeout=60 netconfig/dhcp_timeout=120 preseed/url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> console=ttyS0,115200n9 serial
 
 LABEL <%= @name %>-hyper-v_vm-<%= @autofile %>
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Hyper-V VM (LIS Enabled) <%= @autofile %>
@@ -51,7 +51,7 @@ LABEL <%= @name %>-rescue-serial
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Rescue Boot over Serial Console
         IPAPPEND 2
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
-        APPEND priority=low video=vesa:ywrap,mtrr vga=788 locale=en_US lang=en keymap=us console-setup/layoutcode=en rescue/enable=true initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> console=ttyS0,115200n9 serial
+        APPEND priority=low video=vesa:ywrap,mtrr vga=none locale=en_US lang=en keymap=us console-setup/layoutcode=en rescue/enable=true initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> console=ttyS0,115200n9 serial
 
 LABEL <%= @name %>-rescue-network-console
         MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): ^Network Console Rescue
