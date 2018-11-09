@@ -7,7 +7,7 @@ LABEL <%= @name %>
 LABEL <%= @name %>-serial
         MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @distro.capitalize %> ^Manual Installation over Serial Console
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rootfstype=btrfs coreos.autologin kernel_args=console="ttyS0,115200n9
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> rootfstype=btrfs coreos.autologin console="ttyS0,115200n9"
 
 LABEL <%= @name %>-<%= @autofile %>-install
         MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Installation 
@@ -17,7 +17,7 @@ LABEL <%= @name %>-<%= @autofile %>-install
 LABEL <%= @name %>-<%= @autofile %>-install-serial
         MENU LABEL (<%= @release %>-<%= @p_arch %>): ^<%= @autofile.capitalize %> Installation over Serial Console
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
-        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.pxe_installer.sh kernel_args=console="ttyS0,115200n9
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> cloud-config-url=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.pxe_installer.sh console="ttyS0,115200n9"
 
 LABEL <%= @name %>-<%= @autofile %>-cloud-config-only
         MENU LABEL (<%= @release %>-<%= @p_arch %>): <%= @autofile.capitalize %> Cloud-config ^Only
