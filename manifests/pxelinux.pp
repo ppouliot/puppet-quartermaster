@@ -1090,6 +1090,7 @@ define quartermaster::pxelinux (
     }
   }
   if ( $distro == 'reactos' ) {
+  # https://www.reactos.org/wiki/Building_PXE-ready_ReactOS#The_QEMU_way
     case $release {
       /([0-9]).([0-9]).([0-9])/:{
         warning("reactos ${release} for ${p_arch} will be activated")
