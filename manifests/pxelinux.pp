@@ -376,7 +376,7 @@ define quartermaster::pxelinux (
         $url_option        = 'inst.repo'
       }
 
-      '7.5':{
+      '7.5','7.6':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
@@ -1088,6 +1088,37 @@ define quartermaster::pxelinux (
       content => template('quartermaster/scripts/custom_ip_resolution.sh.erb'),
     }
   }
+  if ( $distro == 'reactos' ) {
+    case $release {
+      /([0-9]).([0-9]).([0-9])/:{
+        warning("reactos ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${name} is not a valid ReactOS release!")
+      }
+    }
+    case $p_arch {
+      'amd64','i386':{
+        warning("ReactOS ${release} for ${p_arch} will be activated")
+      }
+      default:{
+        fail("${p_arch} is not a valid processor architecture for ReactOS, valid processor arch are amd64 and i386.")
+      }
+    }
+    $autofile        = 'Not Required'
+    $linux_installer = 'ReactOS'
+    $pxekernel       = "ReactOS-${release}-iso.zip"
+    $initrd          = "ReactOS-${release}-live.zip"
+    $target_kernel   = "ReactOS-${rel_number}-boot.iso"
+    $target_initrd   = "ReactOS-${rel_number}-live.iso"
+    $url             = 'ISO Required instead of URL'
+#   $url             = "https://github.com/reactos/reactos/releases/download/${release}-release/
+    $inst_repo       = "https://github.com/reactos/reactos/releases/download/${release}-release/
+    $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/
+    $boot_iso_name   = 'ReactOS-${release}-iso.zip'
+    $mini_iso_name   = 'Not Required'
+    $unzip_iso       = 'true'
+  }
 
   $puppetlabs_repo = $distro ? {
     /(ubuntu|debian)/                                    => "http://apt.puppet.com/dists/${rel_name}",
@@ -1112,6 +1143,7 @@ define quartermaster::pxelinux (
   notice($boot_iso_url)
   notice($boot_iso_name)
   notice($rel_name)
+  notice($unzip)
 
 
 # Retrieve installation kernel file if supported
