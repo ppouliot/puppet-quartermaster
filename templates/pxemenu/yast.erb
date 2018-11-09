@@ -3,6 +3,11 @@ LABEL <%= @name %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
+LABEL <%= @name %>-serial
+	MENU LABEL <%= @release %> <%= @p_arch %>: Manual Serial Console
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %> console=ttyS0,115200n9 textmode=1
+
 LABEL <%= @name %>-manual-vnc
 	MENU LABEL <%= @release %> <%= @p_arch %>: ^VNC activated Manual install
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
@@ -13,12 +18,15 @@ LABEL <%= @name %>-<%= @autofile %>
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND autoyast=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
+LABEL <%= @name %>-<%= @autofile %>-serial
+	MENU LABEL <%= @release %> <%= @p_arch %>: Minimal ^<%= @autofile.capitalize %> Installation over Serial 
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND autoyast=http://<%= @fqdn %>/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %> console=ttyS0,115200n9 textmode=1
+
 LABEL <%= @name %>-hyper-v_vm-<%= @autofile %>
         MENU LABEL <%= @release %> <%= @p_arch %>: Hyper-V VM (LIS Enabled) <%= @autofile %> PXE via Emulated NIC install over Enlightened NIC
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @target_kernel %>
         APPEND autoyast=http://<%= @fqdn %>/install/<%= @distro %>/<%= @autofile %>/<%= @name %>.<%= @autofile %> initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
-
-
 
 LABEL <%= @name %>-<%= @autofile %>-Kernelbuilder
 	MENU LABEL <%= @release %> <%= @p_arch %>: ^Kernelbuilder <%= @autofile.capitalize %> Installation
@@ -30,3 +38,7 @@ LABEL <%= @name %>-rescue
         KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
         APPEND rescue=1 initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %>
 
+LABEL <%= @name %>-rescue-serial
+	MENU LABEL <%= @release %> <%= @p_arch %>: ^Rescue  Serial Console
+        KERNEL ../<%= @distro %>/<%= @p_arch %>/<%= @rel_number %>
+        APPEND rescue=1 initrd=../<%= @distro %>/<%= @p_arch %>/<%= @target_initrd %> install=<%= @inst_repo %> console=ttyS0,115200n9 textmode=1
