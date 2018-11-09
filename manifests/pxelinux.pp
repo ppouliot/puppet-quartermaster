@@ -534,10 +534,10 @@ define quartermaster::pxelinux (
     $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
-    $url             = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
+    $url             = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = "${devuan_url}/${distro}/dists/${rel_name}"
     $update_repo     = "${devuan_url}/${distro}/dists/${rel_name}"
-    $splashurl       = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $splashurl       = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
