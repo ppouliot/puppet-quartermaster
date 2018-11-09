@@ -328,6 +328,8 @@ class{'quartermaster':
   quartermaster::pxelinux{'rancheros-1.2.0-amd64':}
   quartermaster::pxelinux{'rancheros-1.3.0-amd64':}
   quartermaster::pxelinux{'rancheros-1.4.0-amd64':}
+  quartermaster::pxelinux{'rancheros-1.4.1-amd64':}
+  quartermaster::pxelinux{'rancheros-1.4.2-amd64':}
 # OpenSuse
   quartermaster::pxelinux{'opensuse-13.2-x86_64':}
   quartermaster::pxelinux{'opensuse-42.2-x86_64':}
