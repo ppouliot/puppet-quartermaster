@@ -213,7 +213,7 @@ define quartermaster::pxelinux (
         $ks_option           = 'ks'
         $url_option          = 'url'
       }
-      '7.0','7.1','7.2','7.3','7.4':{
+      '7.0','7.1','7.2','7.3','7.4','7.5':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.png'
         $vnc_option          = 'inst.vnc'
@@ -481,10 +481,11 @@ define quartermaster::pxelinux (
       /(17.04)/     => 'zesty',
       /(17.10)/     => 'artful',
       /(18.04)/     => 'bionic',
+      /(18.10)/     => 'cosmic',
       default       => "${name} is not an Ubuntu release",
     }
     case $release {
-      '12.04','14,04','15.04','16.04','17.10','18.04':{
+      '12.04','14,04','15.04','16.04','18.04','18.10':{
         warning("Ubuntu ${release} is an active release")
       }
       default:{
