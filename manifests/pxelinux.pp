@@ -1169,7 +1169,7 @@ define quartermaster::pxelinux (
           # before next retry (--waitretry=1), wait a max of 20 seconds if no data is recieved and try again (--read-timeout=20)
           # wait max 15 sec before initial connect times out ( --timeout=15) and retry inifinite times ( -t 0)
           wget_option => '-c -4 --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0',
-          notify  => Service['autofs','tftpd-hpa'], 
+          notify  => Service['autofs'], 
           require =>[
             Tftp::File["${distro}/${p_arch}"],
             File["/srv/quartermaster/${distro}/ISO"],
@@ -1185,7 +1185,7 @@ define quartermaster::pxelinux (
             owner   => $::tftp::username,
             group   => $::tftp::username,
             require => [
-              Service['autofs','tftpd-hpa'], 
+              Service['autofs'], 
               Autofs::Mount["${distro}"],
               Staging::File["${name}-boot.iso"],
             ],
@@ -1478,5 +1478,6 @@ if $linux_installer == !('No Supported Linux Installer') {
   }
   tftp::file { "${distro}/menu/${name}.menu":
     content => template("quartermaster/pxemenu/${linux_installer}.erb"),
+    notify  => Service['tftpd-hpa'],
   }
 }
