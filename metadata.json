@@ -1,47 +1,57 @@
-{  
+{
   "name": "ppouliot-quartermaster",
-"version": "2.0.8",
-  "source": "git://github.com/ppouliot/puppet-quartermaster",
+  "version": "2.0.8",
   "author": "Peter J. Pouliot",
-  "license": "Apache 2.0",
   "summary": "Dynamic Pxe infrastructure",
-  "description": "Creates a dynamic pxe infrastructure for operating system deployments",
+  "license": "Apache 2.0",
+  "source": "git://github.com/ppouliot/puppet-quartermaster",
   "project_page": "https://github.com/ppouliot/puppet-quartermaster",
   "dependencies": [
     {
       "name": "ajjahn/samba",
       "version_requirement": ">= 0.5.0"
-    },{
+    },
+    {
       "name": "derdanne/nfs",
       "version_requirement": ">= 1.0.2"
-    },{
+    },
+    {
       "name": "puppet/autofs",
       "version_requirement": ">= 1.4.4"
-    },{
+    },
+    {
       "name": "lex/dnsmasq",
       "version_requirement": ">= 2.6.1"
-    },{
+    },
+    {
       "name": "puppet/staging",
       "version_requirement": ">= 2.1.0"
-    },{
+    },
+    {
       "name": "puppet/nginx",
       "version_requirement": ">= 0.6.0"
-    },{
+    },
+    {
       "name": "puppet/squid",
       "version_requirement": ">= 0.6.0"
-    },{
+    },
+    {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.13.1"
-    },{
+    },
+    {
       "name": "puppetlabs/concat",
       "version_requirement": ">= 2.2.0"
-    },{
+    },
+    {
       "name": "puppetlabs/apt",
       "version_requirement": ">= 2.3.0"
-    },{
+    },
+    {
       "name": "puppetlabs/dummy_service",
       "version_requirement": ">= 0.2.0"
-    },{
+    },
+    {
       "name": "puppetlabs/tftp",
       "version_requirement": ">= 0.2.3"
     }
@@ -55,7 +65,8 @@
         "6",
         "7"
       ]
-    },{
+    },
+    {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "4",
@@ -63,7 +74,8 @@
         "6",
         "7"
       ]
-    },{
+    },
+    {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "4",
@@ -71,7 +83,8 @@
         "6",
         "7"
       ]
-    },{
+    },
+    {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "4",
@@ -79,13 +92,15 @@
         "6",
         "7"
       ]
-    },{
+    },
+    {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "6",
         "7"
       ]
-    },{
+    },
+    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "10.04",
@@ -107,5 +122,9 @@
       "name": "puppet",
       "version_requirement": ">=3.7.3 <4.8.1"
     }
-  ]
+  ],
+  "description": "Creates a dynamic pxe infrastructure for operating system deployments",
+  "pdk-version": "1.7.1",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
+  "template-ref": "1.7.1-0-g810b982"
 }
