@@ -26,9 +26,6 @@ class quartermaster::dban {
     ]:
       ensure => directory,
     } ->
-    Tftp::File{
-      require => Service['autofs'],
-    }
     autofs::mount{'dban':
       mount       => '/srv/quartermaster/dban/mnt',
       mapfile     => '/etc/auto.dban',
@@ -44,6 +41,7 @@ class quartermaster::dban {
     } ->
     tftp::file {'dban/dban.bzi':
       source  => "/srv/quartermaster/dban/mnt/${quartermaster::dban_version}/dban.bzi",
+      require => Service['autofs'],
     } ->
     tftp::file {'dban/warning.txt':
       source  => "/srv/quartermaster/dban/mnt/${quartermaster::dban_version}/warning.txt",
