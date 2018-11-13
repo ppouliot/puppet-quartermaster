@@ -68,9 +68,9 @@ class quartermaster (
   Optional[Boolean] $dban_enable                     = undef,
   Optional[String] $dban_version                     = '2.3.0',
   Optional[Boolean] $matchbox_enable                 = undef,
-  Optional[String] $matchbox_version                 = '0.6.1',
-  Optional[String] $go_version                       = '1.9.2',
-  Optional[String] $terraform_version                = '0.11.0',
+  Optional[String] $matchbox_version                 = '0.7.1',
+  Optional[String] $go_version                       = '1.11.2',
+  Optional[String] $terraform_version                = '0.11.10',
 
   $proxydhcp_subnets                                 = [],
 
