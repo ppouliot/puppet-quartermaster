@@ -1478,6 +1478,11 @@ if $linux_installer == !('No Supported Linux Installer') {
   }
   tftp::file { "${distro}/menu/${name}.menu":
     content => template("quartermaster/pxemenu/${linux_installer}.erb"),
-    notify  => Service['tftpd-hpa'],
   }
+  notify{"${name}-restart-tftp":
+    message => "Force restart of tftpd for ${name}",
+    notify => Service['tftpd-hpa'],
+  }
+
+
 }

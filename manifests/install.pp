@@ -367,13 +367,6 @@ nameserver 4.2.2.2
 
   ## TFTP Server Configuration
 
-  # Create the tftp remap file to allow us to boot
-  # Windows and linux installs
-
-  file { '/etc/tftpd.rules':
-    content => template('quartermaster/tftp-remap.erb'),
-  } ->
-
   # Tftp Server Install/Configuration
   class{ 'tftp':
     directory => '/srv/quartermaster/tftpboot',
@@ -393,6 +386,13 @@ nameserver 4.2.2.2
     ensure => directory,
     mode   => '0777',
   }
+  # Create the tftp remap file to allow us to boot
+  # Windows and linux installs
+  file { '/etc/tftpd.rules':
+    content => template('quartermaster/tftp-remap.erb'),
+    notify  => Service['tftpd-hpa'],
+  }
+
 
   $quartermaster_samba_interface = $::facts['networking']['primary']
   class{'samba::server':
