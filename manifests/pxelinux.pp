@@ -1229,6 +1229,7 @@ define quartermaster::pxelinux (
           target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
           owner   => $::tftp::username,
           group   => $::tftp::username,
+          notify  => Service['tftpd-hpa'],
           require =>  Tftp::File["${distro}/${p_arch}"],
         }
       }
