@@ -26,7 +26,9 @@ class quartermaster::dban {
     ]:
       ensure => directory,
     } ->
-
+    Tftp::File{
+      require => Service['autofs'],
+    }
     autofs::mount{'dban':
       mount       => '/srv/quartermaster/dban/mnt',
       mapfile     => '/etc/auto.dban',
@@ -38,6 +40,7 @@ class quartermaster::dban {
       source  => "http://sourceforge.net/projects/dban/files/dban/dban-${quartermaster::dban_version}/dban-${quartermaster::dban_version}_i586.iso/download",
       target  => "/srv/quartermaster/dban/iso/dban-${quartermaster::dban_version}_i586.iso",
       require =>  File["/srv/quartermaster/dban/iso"],
+      notify  => Service['autofs'],
     } ->
     tftp::file {'dban/dban.bzi':
       source  => "/srv/quartermaster/dban/mnt/${quartermaster::dban_version}/dban.bzi",

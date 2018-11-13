@@ -637,7 +637,8 @@ menu passwordrow 11
   staging::file{'ipxe.iso':
     source => 'http://boot.ipxe.org/ipxe.iso',
     target => '/srv/quartermaster/iso/ipxe.iso',
-  }
+    notify => Autofs::Mount['quartermaster-iso'],
+  } ->
 
   staging::file{"ipxe.krn":
     source  => "http://${fqdn}/mnt/ipxe.iso/ipxe.krn",
@@ -645,6 +646,7 @@ menu passwordrow 11
     owner   => $::tftp::username,
     group   => $::tftp::username,
     require => [
+      Service['autofs'],
       Autofs::Mount['quartermaster-iso'],
       Staging::File['ipxe.iso'],
     ],
