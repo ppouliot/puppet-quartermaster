@@ -24,6 +24,6 @@ no-poll
 #dhcp-range=172.20.230.92,proxy,255.255.255.192,,
 dhcp-range=<%= @network %>,proxy,<%= @netmask %>
 
-pxe-service=x86PC, "Quartermaster PXE Provisioning <%= @ipaddress %>", pxelinux/pxelinux
+pxe-service=x86PC, "Quartermaster PXE Provisioning <%= @ipaddress %>", pxelinux/pxelinux,<<%= @ipaddress %>
 dhcp-option=vendor:PXEClient,6,2b
 # Define Additional Subnets
