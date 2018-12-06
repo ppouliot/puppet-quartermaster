@@ -197,7 +197,7 @@ define quartermaster::pxelinux (
   }
   if ( $distro == 'scientificlinux'){
     case $release {
-      '4.0','4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9',
+      '40','41','42','43','44','45','46','47','48','49',
       '50','51','52','53','54','55','56','57','58','59','510','511':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/obsolete/${release}/${p_arch}"
         $_dot_bootsplash     = '.lss'
