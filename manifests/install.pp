@@ -655,10 +655,10 @@ menu passwordrow 11
   # Installl WimLib
   case $::osfamily {
     'Debian':{
-      package {'software-properties-common':
-        ensure => latest,
-      } -> 
-      apt::ppa{'ppa:nilarimogard/webupd8':}
+      ensure_packages(['software-properties-common'], {'ensure' => 'latest'})
+      apt::ppa{'ppa:nilarimogard/webupd8':
+        require => Package['software-properties-common'],
+      }
       $wimtool_repo = Apt::Ppa['ppa:nilarimogard/webupd8']
     }
     'RedHat':{
