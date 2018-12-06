@@ -46,3 +46,4 @@
   quartermaster::pxelinux{'centos-7.2.1511-x86_64':}
   quartermaster::pxelinux{'centos-7.3.1611-x86_64':}
   quartermaster::pxelinux{'centos-7.4.1708-x86_64':}
+  quartermaster::pxelinux{'centos-7.5.1804-x86_64':}

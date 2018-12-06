@@ -15,3 +15,6 @@
   quartermaster::pxelinux{'opensuse-13.2-x86_64':}
   quartermaster::pxelinux{'opensuse-42.2-x86_64':}
   quartermaster::pxelinux{'opensuse-42.3-x86_64':}
+  quartermaster::pxelinux{'opensuse-tumbleweed-x86_64':}
+  quartermaster::pxelinux{'opensuse-15.0-x86_64':}
+  quartermaster::pxelinux{'opensuse-15.1-x86_64':}
