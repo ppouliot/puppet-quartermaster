@@ -60,54 +60,68 @@ define quartermaster::pxelinux (
 
   if ( $distro == 'centos') {
     case $release {
-      '2.1','3.1','3.3','3.4','3.5','3.6','3.7','3.8','3.9',
+      '2.1':{
+        $centos_url        = "http://vault.centos.org/${release}"
+        $_dot_bootsplash   = '.lss'
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'url'
+        $url               = "${centos_url}/final/${p_arch}/isolinux"
+      }
+      '3.1','3.3','3.4','3.5','3.6','3.7','3.8','3.9',
       '4.0','4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9',
       '5.0','5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
-        $centos_url = "http://vault.centos.org/${release}"
-        $_dot_bootsplash = '.lss'
+        $centos_url        = "http://vault.centos.org/${release}"
+        $_dot_bootsplash   = '.lss'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'url'
-
+        $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7':{
-        $centos_url = "http://vault.centos.org/${release}"
-        $_dot_bootsplash = '.jpg'
+        $centos_url        = "http://vault.centos.org/${release}"
+        $_dot_bootsplash   = '.jpg'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'url'
+        $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
       }
       '6.8','6.9':{
-        $centos_url = "http://vault.centos.org/centos/${release}"
-        $_dot_bootsplash = '.png'
+        $centos_url        = "http://vault.centos.org/centos/${release}"
+        $_dot_bootsplash   = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'url'
+        $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
       }
       '7.0.1406','7.1.1503','7.2.1511','7.3.1611','7.4.1708':{
-        $centos_url = "http://vault.centos.org/centos/${release}"
-        $_dot_bootsplash = '.png'
+        $centos_url        = "http://vault.centos.org/centos/${release}"
+        $_dot_bootsplash   = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'inst.repo'
+        $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
       }
       '7.5.1804':{
-        $centos_url = "http://mirror.centos.org/centos/${release}"
-        $_dot_bootsplash = '.png'
+        $centos_url        = "http://mirror.centos.org/centos/${release}"
+        $_dot_bootsplash   = '.png'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'inst.repo'
+        $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
       }
       default:{
         warning("${name} is not a centos release")
       }
     }
     notice($centos_url)
+    notice($url)
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
@@ -115,7 +129,7 @@ define quartermaster::pxelinux (
     $src_initrd      = "initrd${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
-    $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
+    #$url             = "${centos_url}/os/${p_arch}/images/pxeboot"
     $inst_repo       = "${centos_url}/os/${p_arch}/"
     $update_repo     = "${centos_url}/updates/${p_arch}/"
     $splashurl       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
