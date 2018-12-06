@@ -1,0 +1,34 @@
+ # Scientific
+  # i386
+  quartermaster::pxelinux{'scientificlinux-4.0-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.1-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.2-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.3-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.4-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.5-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.6-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.7-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.8-i386':}
+  quartermaster::pxelinux{'scientificlinux-4.9-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.0-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.1-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.2-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.3-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.4-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.5-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.6-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.7-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.8-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.9-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.10-i386':}
+  quartermaster::pxelinux{'scientificlinux-5.11-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.0-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.1-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.2-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.3-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.4-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.5-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.6-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.7-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.8-i386':}
+  quartermaster::pxelinux{'scientificlinux-6.9-i386':}
