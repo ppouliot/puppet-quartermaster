@@ -274,7 +274,6 @@ define quartermaster::pxelinux (
       }
     }
     notice($scientificlinux_url)
-    notice{$url)
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
