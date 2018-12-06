@@ -68,6 +68,9 @@ define quartermaster::pxelinux (
         $ks_option         = 'ks'
         $url_option        = 'url'
         $url               = "${centos_url}/final/${p_arch}/isolinux"
+        if $p_arch == 'x86_64' {
+          failure('Centos 2.1 Doesn't support x86_64, please remove centos-2.1-x86_64 from your pxeboot options!')
+        }
       }
       '3.1','3.3','3.4','3.5','3.6','3.7','3.8','3.9',
       '4.0','4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9',
