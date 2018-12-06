@@ -234,42 +234,47 @@ define quartermaster::pxelinux (
   if ( $distro == 'scientificlinux'){
     case $release {
       '4.0','4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9':{
-        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/obsolete/${rel_number}/${p_arch}/SL"
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/obsolete/${rel_number}/${p_arch}"
         $_dot_bootsplash     = '.lss'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
         $ks_option           = 'ks'
         $url_option          = 'url'
+        $url                 = "${scientificlinux_url}/images/SL/pxeboot"
       }
       '5.0','5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11':{
-        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/obsolete/${rel_number}/${p_arch}/images"
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/obsolete/${rel_number}/${p_arch}"
         $_dot_bootsplash     = '.lss'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
         $ks_option           = 'ks'
         $url_option          = 'url'
+        $url                 = "${scientificlinux_url}/images/pxeboot"
       }
       '6.0','6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','6.9':{
-        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images"
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.jpg'
         $vnc_option          = 'vnc'
         $vnc_option_passwd   = 'vncpasswd'
         $ks_option           = 'ks'
         $url_option          = 'url'
+        $url                 = "${scientificlinux_url}/images/pxeboot"
       }
       '7.0','7.1','7.2','7.3','7.4','7.5':{
-        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os/images"
+        $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.png'
         $vnc_option          = 'inst.vnc'
         $vnc_option_passwd   = 'inst.vncpasswd'
         $ks_option           = 'inst.ks'
         $url_option          = 'url'
+        $url                 = "${scientificlinux_url}/images/pxeboot"
       }
       default:{
         warning("${name} isn't a scientificlinux release!")
       }
     }
     notice($scientificlinux_url)
+    notice{$url)
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
@@ -278,7 +283,6 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     #$url             = "${scientificlinux_url}/images/pxeboot"
-    $url             = "${scientificlinux_url}/pxeboot"
     $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
     $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
