@@ -153,7 +153,7 @@ define quartermaster::pxelinux (
         $ks_option         = 'ks'
         $url_option        = 'url'
       }
-      '22','23','24','25','26':{
+      '22','23','24','25':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
         $fedora_url        = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
         $fedora_flavor     = 'Server/'
@@ -180,17 +180,15 @@ define quartermaster::pxelinux (
       }
       '28','29':{
         if $p_arch == 'i386' { 
-          $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora-secondary/releases'
-          $fedora_flavor  = 'Workstation/'
+          $fedora_url = 'http://download-ib01.fedoraproject.org/pub/fedora-secondary/releases'
         }
         if $p_arch == 'x86_64' { 
-          $fedora_url = 'http://mirrors.mit.edu/fedora/linux/releases'
-          $fedora_flavor  = 'Server/'
+          $fedora_url = 'http://download-ib01.fedoraproject.org/pub/fedora/linux/releases'
         }
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
         #$fedora_url = 'http://download.fedoraproject.org/fedora/linux/releases'
         #$fedora_url = 'http://mirrors.mit.edu/fedora/linux/releases'
-        #$fedora_flavor  = 'Server/'
+        $fedora_flavor  = 'Server/'
 
         $_dot_bootsplash = '.png'
         $vnc_option        = 'inst.vnc'
