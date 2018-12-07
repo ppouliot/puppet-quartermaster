@@ -356,8 +356,9 @@ define quartermaster::pxelinux (
         $url_option        = 'url'
 
       }
-    default:{
+      default:{
         warning("${name} isn't a XCP-NG release!")
+      }
     }
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
