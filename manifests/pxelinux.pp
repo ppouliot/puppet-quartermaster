@@ -344,6 +344,35 @@ define quartermaster::pxelinux (
     fail("${distro} ${release} does not provide support for processor architecture i386")
   }
   
+  if ( $distro == 'xcpng' ) {
+    case $release {
+      '7.5','7.6':{
+        $boot_iso_name = "${distro}-${release}-netinstall.iso"
+        $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
+        $mini_iso_name     = undef
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'url'
+
+      }
+    default:{
+        warning("${name} isn't a XCP-NG release!")
+    }
+    $autofile        = 'kickstart'
+    $linux_installer = 'anaconda'
+    $pxekernel       = 'vmlinuz'
+    $initrd          = '.img'
+    $src_initrd      = "initrd${initrd}"
+    $target_kernel   = "${rel_number}"
+    $target_initrd   = "${rel_number}${initrd}"
+    $_dot_bootsplash = '.png'
+    $url             = 'ISO Required instead of URL'
+    $inst_repo       = "http://updates.xcp-ng.org/${rel_major}/${release}/base/${p_arch}"
+    $update_repo     = "http://updates.xcp-ng.org/${rel_major}/${release}/updates/${p_arch}"
+    $splash_url      = "http://updates.xcp-ng.org/${rel_major}/${release}/base/${p_arch}"
+    $logo_url        = 'https://xcp-ng.org/assets/img/smalllogo.png'
+  }
   # Begin tests for dealing with OracleLinux Repos
   if ( $distro == 'oraclelinux' ) {
     case $release {
