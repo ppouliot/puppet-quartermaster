@@ -357,7 +357,7 @@ define quartermaster::pxelinux (
       }
       '5.0':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
-        $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
+        $boot_iso_name = "Enterprise-R${rel_major}-GA-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/GA/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = undef
         $_U                = 'U'
