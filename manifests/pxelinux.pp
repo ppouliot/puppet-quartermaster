@@ -346,8 +346,8 @@ define quartermaster::pxelinux (
   
   if ( $distro == 'xcpng' ) {
     case $release {
-      '7.5','7.6':{
-        $boot_iso_name = "${distro}-${release}-netinstall.iso"
+      '7.4','7.4.1':{
+        $boot_iso_name = "${distro}-${release}.iso"
         $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
         $mini_iso_name     = undef
         $vnc_option        = 'vnc'
@@ -355,6 +355,15 @@ define quartermaster::pxelinux (
         $ks_option         = 'ks'
         $url_option        = 'url'
 
+      }
+      '7.5','7.6':{
+        $boot_iso_name = "${distro}-${release}.iso"
+        $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
+        $mini_iso_name = "${distro}-${release}-netinstall.iso"
+        $vnc_option        = 'vnc'
+        $vnc_option_passwd = 'vncpasswd'
+        $ks_option         = 'ks'
+        $url_option        = 'url'
       }
       default:{
         warning("${name} isn't a XCP-NG release!")
