@@ -135,7 +135,8 @@ define quartermaster::pxelinux (
     #$url             = "${centos_url}/os/${p_arch}/images/pxeboot"
     $inst_repo       = "${centos_url}/os/${p_arch}/"
     $update_repo     = "${centos_url}/updates/${p_arch}/"
-    $splashurl       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
+    $splash_url       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
+    $logo_url        = "https://www.centos.org/images/logo_small.png"
     $boot_iso_url    = "${centos_url}/os/${p_arch}/images/${boot_iso_name}"
     $boot_iso_name   = "boot.iso"
     $mini_iso_name   = "boot.iso"
@@ -232,7 +233,8 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/boot.iso"
     $boot_iso_name   = "boot.iso"
     $mini_iso_name   = "boot.iso"
-    $splashurl       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
+    $splash_url       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
+    $logo_url       = 'https://getfedora.org/static/images/fedora_infinity_140x140.png'
   }
   if ( $distro == 'scientificlinux'){
     case $release {
@@ -287,7 +289,8 @@ define quartermaster::pxelinux (
     #$url             = "${scientificlinux_url}/images/pxeboot"
     $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
-    $splashurl       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
+    $splash_url       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
+    $logo_url        = "http://ftp.scientificlinux.org/sl-banner.png"
     $boot_iso_url    = "${scientificlinux_url}/images/${boot_iso_name}"
     $boot_iso_name   = "boot.iso"
     $mini_iso_name   = "boot.iso"
@@ -311,7 +314,7 @@ define quartermaster::pxelinux (
         warning("${name} isn't a openSuSE release!")
       }
     }
-      notice($opensuse_url)
+    notice($opensuse_url)
     $autofile        = 'autoyast'
     $linux_installer = 'yast'
     $pxekernel       = 'linux'
@@ -324,6 +327,7 @@ define quartermaster::pxelinux (
     $inst_repo       = "${opensuse_url}/${release}/repo/oss"
     $update_repo     = "${opensuse_url}/${release}/repo/non-oss/suse"
     $splash_url      = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader/back.jpg"
+    $logo_url        = 'https://www.opensuse.org/build/images/opensuse-logo.png'
     $boot_iso_url    = "${opensuse_url}/${release}/iso"
     $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
     $mini_iso_name   = undef
@@ -457,7 +461,8 @@ define quartermaster::pxelinux (
     $inst_repo       = "http://${fqdn}/${distro}/mnt/${boot_iso_name}"
 #    $update_repo    = "http://yum.oracle.com/repo/OracleLinux/oracle/OL${rel_major}/latest/${p_arch}"
     $update_repo     = "http://public-yum.oracle.com/repo/oracle/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}"
-    $splashurl       = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
+    $splash_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
+    $logo_url        = 'http://public-yum.oracle.com/layout/i/Linux_Logo.jpg'
   }
   if ( $distro == 'redhat' ) {
     $autofile        = 'kickstart'
@@ -471,7 +476,8 @@ define quartermaster::pxelinux (
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
-    $splashurl       = 'ISO Required for Splash'
+    $splash_url      = 'ISO Required for Splash'
+    $logo_url        = 'https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $ks_option       = 'ks'
@@ -489,7 +495,8 @@ define quartermaster::pxelinux (
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
-    $splashurl       = 'ISO Required for Splash'
+    $splash_url      = 'ISO Required for Splash'
+    $logo_url        = 'https://www.suse.com/assets/img/fn-suse-ico.png'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
   }
@@ -505,7 +512,8 @@ define quartermaster::pxelinux (
     $url             = 'ISO Required instead of URL'
     $inst_repo       = 'Install ISO Required'
     $update_repo     = 'Update ISO or Mirror Required'
-    $splashurl       = 'ISO Required for Splash'
+    $splash_url       = 'ISO Required for Splash'
+    $logo_url        = 'https://www.suse.com/assets/img/fn-suse-ico.png'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
@@ -556,7 +564,8 @@ define quartermaster::pxelinux (
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
     $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
-    $splashurl       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $splash_url      = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $logo_url        = 'https://assets.ubuntu.com/v1/8aff3fa9-ubuntu-logo41.png'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'mini.iso'
@@ -589,7 +598,8 @@ define quartermaster::pxelinux (
     $url             = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = "${devuan_url}/${distro}/dists/${rel_name}"
     $update_repo     = "${devuan_url}/${distro}/dists/${rel_name}"
-    $splashurl       = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $splash_url      = "${devuan_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $logo_url        = 'https://devuan.org/ui/img/devuan-logo-purpy.png'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
@@ -641,7 +651,8 @@ define quartermaster::pxelinux (
     $url             = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "${debian_url}/${distro}/dists/${rel_name}"
     $update_repo     = "${debian_url}/${distro}/dists/${rel_name}"
-    $splashurl       = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $splash_url      = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $logo_url        = 'https://www.debian.org/Pics/openlogo-50.png'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
@@ -660,7 +671,8 @@ define quartermaster::pxelinux (
     $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = 'http://http.kali.org/kali/dists/kali-rolling'
     $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'
-    $splashurl       = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $splash_url      = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}/boot-screens/splash${_dot_bootsplash}"
+    $logo_url        = 'https://www.kali.org/wp-content/uploads/2015/09/kali-2.0-website-logo-300x90.png'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
@@ -685,7 +697,8 @@ define quartermaster::pxelinux (
     $url             = "http://mirrors.kernel.org/archlinux/iso/${release}/arch/boot/${p_arch}"
     $inst_repo       = "http://mirrors.kernel.org/archlinux/iso/${release}/arch/boot/initramfs_${p_arch}.${initrd}"
     $update_repo     = "http://mirrors.kernel.org/archlinux/core/os/${p_arch}/$rel_name/arch/${p_arch}/airootfs.sfs"
-    $splashurl       = "http://mirrors.kernel.org/archlinux/iso/$rel_name/arch/${p_arch}/airootfs.sfs"
+    $splash_url      = "http://mirrors.kernel.org/archlinux/iso/$rel_name/arch/${p_arch}/airootfs.sfs"
+    $logo_url        = 'https://www.archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png'
     $boot_iso_url    = "http://mirrors.kernel.org/archlinux/iso/$rel_name/archlinux-${rel_name}-dual.iso"
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
@@ -727,6 +740,8 @@ define quartermaster::pxelinux (
     $url             = "https://${release}.release.flatcar-linux.net/${p_arch}-usr/${flatcar_version}"
     $inst_repo       = "https://${release}.release.flatcar-linux.net/${p_arch}-usr/${flatcar_version}"
     $boot_iso_url    = "https://${release}.release.flatcar-linux.net/${p_arch}-usr/${flatcar_version}/flatcar_production_iso_image.iso"
+    $splash_url      = 'https://www.flatcar-linux.org/media/brand-logo.svg'
+    $logo_url        = 'https://www.flatcar-linux.org/media/brand-logo.svg'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
 
@@ -788,6 +803,8 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $splash_url      = 'https://coreos.com/assets/images/brand/coreos-wordmark-horiz-color-reverse.svg'
+    $logo_url        = 'https://coreos.com/assets/images/brand/coreos-wordmark-horiz-color-reverse.svg'
     
     # This adds scripts to deploy to the system after booting into coreos 
     # when finished it should reboot.
@@ -1123,6 +1140,8 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "https://releases.rancher.com/os/${rancheros_release}/${boot_iso_name}"
     $boot_iso_name   = 'rancheros.iso'
     $mini_iso_name   = 'Not Required'
+    $splash_url      = 'http://cdn.rancher.com/wp-content/uploads/2016/07/25205112/rancheros-logo-01.png'
+    $logo_url        = 'http://cdn.rancher.com/wp-content/uploads/2016/07/25205112/rancheros-logo-01.png'
 
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.pxe_installer.sh":
       ensure  => file,
@@ -1171,6 +1190,8 @@ define quartermaster::pxelinux (
     $boot_iso_name   = "ReactOS-${release}-iso.zip"
     $mini_iso_name   = 'Not Required'
     $unzip_iso       = 'true'
+    $splash_url      = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
+    $logo_url        = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
   }
 
   $puppetlabs_repo = $distro ? {
@@ -1192,7 +1213,8 @@ define quartermaster::pxelinux (
   notice($url)
   notice($inst_repo)
   notice($update_repo)
-  notice($splashurl)
+  notice($splash_url)
+  notice($logo_url)
   notice($boot_iso_url)
   notice($boot_iso_name)
   notice($rel_name)
@@ -1285,7 +1307,7 @@ define quartermaster::pxelinux (
       }
 #     if ! defined (Staging::File["dot_bootsplash-${name}"]){
 #       staging::file{"dot_bootsplash-${name}":
-#         source  => $splashurl,
+#         source  => $splash_url,
 #         target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${_dot_bootsplash}",
 #         require =>  Tftp::File["${distro}/graphics"],
 #       }
@@ -1295,7 +1317,7 @@ define quartermaster::pxelinux (
 
 #  if ! defined (Staging::File["_dot_bootsplash-${name}"]){
 #    staging::file{"_dot_bootsplash-${name}":
-#      source  => $splashurl,
+#      source  => $splash_url,
 #      target  => "/srv/quartermaster/tftpboot/${distro}/graphics/${name}${_dot_bootsplash}",
 #      require =>  Tftp::File["${distro}/graphics"],
 #    }
