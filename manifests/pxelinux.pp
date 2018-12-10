@@ -344,7 +344,7 @@ define quartermaster::pxelinux (
     fail("${distro} ${release} does not provide support for processor architecture i386")
   }
   
-  if ( $distro == 'xcpng' ) {
+  if ( $distro == 'xcp-ng' ) {
     case $release {
       '7.4','7.4.1':{
         $boot_iso_name = "${distro}-${release}.iso"
