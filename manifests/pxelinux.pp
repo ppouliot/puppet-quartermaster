@@ -449,7 +449,7 @@ define quartermaster::pxelinux (
       '7.0':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}U${rel_minor}/${p_arch}/${boot_iso_name}"
+        $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = "${p_arch}-boot.iso"
         $_U                = 'u'
         $vnc_option        = 'inst.vnc'
