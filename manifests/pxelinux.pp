@@ -728,7 +728,7 @@ define quartermaster::pxelinux (
     $linux_installer = 'archiso'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
-    $src_initrd      = "initrd${initrd}"
+    $src_initrd      = "archiso${initrd}"
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
