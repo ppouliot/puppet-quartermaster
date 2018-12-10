@@ -344,22 +344,21 @@ define quartermaster::pxelinux (
     fail("${distro} ${release} does not provide support for processor architecture i386")
   }
   
-  if ( $distro == 'xcp-ng' ) {
+  if ( $distro == 'xcpng' ) {
     case $release {
       '7.4','7.4.1':{
-        $boot_iso_name = "${distro}-${release}.iso"
+        $boot_iso_name = "xcp-ng-${release}.iso"
         $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
         $mini_iso_name     = undef
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
         $url_option        = 'url'
-
       }
       '7.5','7.6':{
-        $boot_iso_name = "${distro}-${release}.iso"
+        $boot_iso_name = "xcp-ng-${release}.iso"
         $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
-        $mini_iso_name = "${distro}-${release}-netinstall.iso"
+        $mini_iso_name = "xcp-ng-${release}-netinstall.iso"
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
