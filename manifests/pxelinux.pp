@@ -356,7 +356,7 @@ define quartermaster::pxelinux (
         $url_option        = 'url'
       }
       '7.5','7.6':{
-        $boot_iso_name = "xcp-ng-${release}.iso"
+        $boot_iso_name = "xcp-ng-${release}-netinstall.iso"
         $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
         $mini_iso_name = "xcp-ng-${release}-netinstall.iso"
         $vnc_option        = 'vnc'
