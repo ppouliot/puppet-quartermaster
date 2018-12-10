@@ -348,7 +348,7 @@ define quartermaster::pxelinux (
     case $release {
       '7.4','7.4.1':{
         $boot_iso_name = "xcp-ng-${release}.iso"
-        $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
+        $boot_iso_url    = "https://xcp-ng.org/${release}/${boot_iso_name}"
         $mini_iso_name     = undef
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
@@ -357,7 +357,7 @@ define quartermaster::pxelinux (
       }
       '7.5','7.6':{
         $boot_iso_name = "xcp-ng-${release}-netinstall.iso"
-        $boot_iso_url    = "http://xcp-ng.org/${release}/${boot_iso_name}"
+        $boot_iso_url    = "https://xcp-ng.org/${release}/${boot_iso_name}"
         $mini_iso_name = "xcp-ng-${release}-netinstall.iso"
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
