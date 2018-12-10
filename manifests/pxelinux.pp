@@ -724,7 +724,7 @@ define quartermaster::pxelinux (
         fail("${name} is not a valid Archlinux release! Try using 2016.12.01,2017.01.01,2017.02.01, or latest for your release vs. ${release} which you are curenntly using.")
       }
     }
-    $autofile        = 'archiso'
+    $autofile        = 'kickstart'
     $linux_installer = 'archiso'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
