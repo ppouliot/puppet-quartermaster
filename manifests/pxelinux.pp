@@ -733,8 +733,8 @@ define quartermaster::pxelinux (
     $target_kernel   = "${rel_number}"
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
-    $url             = "http://mirrors.kernel.org/archlinux/iso/${release}/arch/boot/${p_arch}"
-    $inst_repo       = "http://mirrors.kernel.org/archlinux/iso/${release}/arch/boot/initramfs_${p_arch}.${initrd}"
+    $url             = "http://archive.archlinux.org/iso/${release}/arch/boot/${p_arch}"
+    $inst_repo       = "http://archive.archlinux.org/iso/${release}/arch/boot/initramfs_${p_arch}.${initrd}"
     $update_repo     = "http://mirrors.kernel.org/archlinux/core/os/${p_arch}/$rel_name/arch/${p_arch}/airootfs.sfs"
     $splash_url      = "http://mirrors.kernel.org/archlinux/iso/$rel_name/arch/${p_arch}/airootfs.sfs"
     $logo_url        = 'https://www.archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png'
