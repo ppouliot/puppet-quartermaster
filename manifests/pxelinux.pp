@@ -717,7 +717,7 @@ define quartermaster::pxelinux (
   }
   if ( $distro == 'archlinux' ){
     case $release {
-      '20([0-9_]+)([0-9_]+).([0-9_]+)([0-9_]+).01','latest':{
+      '201(7[7-9]).(0[1-9]|1[0-8]).01','latest':{
 #     '2016.12.01','2017.01.01','2017.02.01','latest':{
         warning("Archlinux ${release} for ${p_arch} will be activated")
       }
