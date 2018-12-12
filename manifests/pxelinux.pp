@@ -1249,7 +1249,7 @@ define quartermaster::pxelinux (
     /(redhat|centos|scientificlinux|oraclelinux)/        => "http://yum.puppet.com/el/${rel_major}/PC1/${p_arch}",
     default                                              => 'No PuppetLabs Repo',
   }
-  notice(puppetlabs_repo)
+  notice($puppetlabs_repo)
   notice($_dot_bootsplash)
   notice($autofile)
   notice($linux_installer)
@@ -1270,18 +1270,9 @@ define quartermaster::pxelinux (
 # Retrieve installation kernel file if supported
   case $url {
     'ISO Required instead of URL':{
-#      if $boot_iso_name {
-#        warning("A specific boot_iso_name: ${boot_iso_name} exists for ${name}" )
-#        $final_boot_iso_name = $boot_iso_name
-#      } else {
-#        $final_boot_iso_name = "${release}-${p_arch}-boot.iso"
-#        $final_boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-#      }
-#      notice($final_boot_iso_name)
       if ! defined (Staging::File["${name}-boot.iso"]){
         staging::file{"${name}-boot.iso":
           source  => $boot_iso_url,
-#          target  => "/srv/quartermaster/${distro}/ISO/${final_boot_iso_name}",
           target  => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
           # Because we are grabbing ISOs here we may need more time when downloading depending on network connection
           # This wget_option will continue downloads (-c) use ipv4 (-4) retry refused connections and failed errors (--retry-connrefused ) then wait 1 sec
@@ -1298,7 +1289,6 @@ define quartermaster::pxelinux (
         # Retrieve installation kernel file if supported
         if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
           staging::file{"bootiso-${target_kernel}-${name}":
-#            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${pxekernel}",
             source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
             target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
             owner   => $::tftp::username,
@@ -1313,7 +1303,6 @@ define quartermaster::pxelinux (
         # Retrieve initrd file if supported
         if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
           staging::file{"bootiso-${target_initrd}-${name}":
-#            source  => "http://${fqdn}/${distro}/mnt/${final_boot_iso_name}/images/pxeboot/${src_initrd}",
             source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
             target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
             owner   => $::tftp::username,
