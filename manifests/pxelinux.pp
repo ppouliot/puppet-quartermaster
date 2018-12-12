@@ -1243,7 +1243,7 @@ define quartermaster::pxelinux (
       file { "/srv/quartermaster/tftpboot/${distro}/${arch}/${release}":
         ensure  => link,
         target  => "/srv/quartermaster/${distro}/mnt/${boot_iso_name}",
-        require =>  File[ "/srv/quartermaster/${distro}/ISO/${boot_iso_name}" ],
+        require => Archive["${name}-boot.iso.zip"],
       }
     }
 
