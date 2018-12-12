@@ -1272,16 +1272,11 @@ define quartermaster::pxelinux (
     'ISO Required instead of URL':{
       case $unzip_iso {
         'true':{
-          if ! defined (Staging::Deploy["${name}-boot.iso"]){
-            staging::deploy{"${name}-boot.iso":
+          if ! defined (Staging::Deploy["${name}-boot.iso.zip"]){
+            staging::deploy{"${name}-boot.iso.zip":
               source  => $boot_iso_url,
               target  => "/srv/quartermaster/${distro}/ISO",
               creates => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
-              # Because we are grabbing ISOs here we may need more time when downloading depending on network connection
-              # This wget_option will continue downloads (-c) use ipv4 (-4) retry refused connections and failed errors (--retry-connrefused ) then wait 1 sec
-              # before next retry (--waitretry=1), wait a max of 20 seconds if no data is recieved and try again (--read-timeout=20)
-              # wait max 15 sec before initial connect times out ( --timeout=15) and retry inifinite times ( -t 0)
-              wget_option => '-c -4 --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0',
               notify  => Service['autofs'], 
               require =>[
                 Tftp::File["${distro}/${p_arch}"],
@@ -1339,7 +1334,7 @@ define quartermaster::pxelinux (
       }
     }
     }
-    # End New Embedding for unzip_iso
+    } 
     'No URL Specified':{
       warning("No URL is specified for ${name}")
     }
