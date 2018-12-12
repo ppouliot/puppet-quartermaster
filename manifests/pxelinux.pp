@@ -1216,7 +1216,7 @@ define quartermaster::pxelinux (
         fail("${p_arch} is not a valid processor architecture for ReactOS, valid processor arch are amd64 and i386.")
       }
     }
-    $autofile        = 'Not Required'
+    $autofile        = 'unattend.inf'
     $linux_installer = 'ReactOS'
     $pxekernel       = "ReactOS-${release}-iso.zip"
     $initrd          = "ReactOS-${release}-live.zip"
