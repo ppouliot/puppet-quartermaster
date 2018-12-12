@@ -1225,8 +1225,9 @@ define quartermaster::pxelinux (
     $url             = 'ISO Required instead of URL'
 #   $url             = "https://github.com/reactos/reactos/releases/download/${release}-release/"
     $inst_repo       = "https://github.com/reactos/reactos/releases/download/${release}-release/"
-    $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/ReactOS-${release}-iso.zip"
-    $boot_iso_name   = "ReactOS-${release}-iso.zip"
+    $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/${archive_name}"
+    $boot_iso_name   = "ReactOS-${release}.iso"
+    $archive_name    = "ReactOS-${release}-iso.zip"
     $mini_iso_name   = 'Not Required'
     $unzip_iso       = 'true'
     $splash_url      = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
@@ -1238,6 +1239,15 @@ define quartermaster::pxelinux (
         content => template("quartermaster/reactos_freeldr.ini.erb"),
       }
     }
+    if ! defined (File["/srv/quartermaster/tftpboot/${distro}/${arch}/${release}"]) {
+      file { "/srv/quartermaster/tftpboot/${distro}/${arch}/${release}":
+        ensure  => link,
+        target  => "/srv/quartermaster/${distro}/mnt/${boot_iso_name}",
+        require =>  File[ "/srv/quartermaster/${distro}/ISO/${boot_iso_name}" ],
+      }
+    }
+
+
   }
 
   $puppetlabs_repo = $distro ? {
@@ -1272,17 +1282,24 @@ define quartermaster::pxelinux (
     'ISO Required instead of URL':{
       case $unzip_iso {
         'true':{
-          if ! defined (Staging::Deploy["${name}-boot.iso.zip"]){
-            staging::deploy{"${name}-boot.iso.zip":
+          if ! defined (Archive["${name}-boot.iso.zip"]){
+            archive{"${name}-boot.iso.zip":
+              path    => "/srv/quartermaster/${distro}/ISO/${archive_name}",
               source  => $boot_iso_url,
-              target  => "/srv/quartermaster/${distro}/ISO",
+              extract => true,
+              extract_path => "/srv/quartermaster/${distro}/ISO",
               creates => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
+              cleanup => true,
+          #if ! defined (Staging::Deploy["${name}-boot.iso.zip"]){
+          #  staging::deploy{"${name}-boot.iso.zip":
+          #    source  => $boot_iso_url,
+          #    target  => "/srv/quartermaster/${distro}/ISO",
+          #    creates => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
               notify  => Service['autofs'], 
               require =>[
                 Tftp::File["${distro}/${p_arch}"],
                 File["/srv/quartermaster/${distro}/ISO"],
               ],
-              timeout     => '0',
             }
           }
         }
