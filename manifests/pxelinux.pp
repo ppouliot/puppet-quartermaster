@@ -1239,8 +1239,8 @@ define quartermaster::pxelinux (
         content => template("quartermaster/reactos_freeldr.ini.erb"),
       }
     }
-    if ! defined (File["/srv/quartermaster/tftpboot/${distro}/${arch}/${release}"]) {
-      file { "/srv/quartermaster/tftpboot/${distro}/${arch}/${release}":
+    if ! defined (File["/srv/quartermaster/tftpboot/${distro}/${p_arch}/${release}"]) {
+      file { "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${release}":
         ensure  => link,
         target  => "/srv/quartermaster/${distro}/mnt/${boot_iso_name}",
         require => Archive["${name}-boot.iso.zip"],
