@@ -1272,7 +1272,7 @@ define quartermaster::pxelinux (
     'ISO Required instead of URL':{
       case $unzip_iso {
         'true':{
-          if ! defined (Staging::deploy["${name}-boot.iso"]){
+          if ! defined (Staging::Deploy["${name}-boot.iso"]){
             staging::deploy{"${name}-boot.iso":
               source  => $boot_iso_url,
               target  => "/srv/quartermaster/${distro}/ISO",
