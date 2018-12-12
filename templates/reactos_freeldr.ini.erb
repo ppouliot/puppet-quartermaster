@@ -1,0 +1,101 @@
+[FREELOADER]
+
+DefaultOS=LiveCD_Debug
+
+TimeOut=3
+
+
+
+[Display]
+
+TitleText=ReactOS LiveCD
+
+StatusBarColor=Cyan
+
+StatusBarTextColor=Black
+
+BackdropTextColor=White
+
+BackdropColor=Blue
+
+BackdropFillStyle=Medium
+
+TitleBoxTextColor=White
+
+TitleBoxColor=Red
+
+MessageBoxTextColor=White
+
+MessageBoxColor=Blue
+
+MenuTextColor=Gray
+
+MenuColor=Black
+
+TextColor=Gray
+
+SelectedTextColor=Black
+
+SelectedColor=Gray
+
+ShowTime=No
+
+MenuBox=No
+
+CenterMenu=No
+
+MinimalUI=Yes
+
+TimeText=Seconds until highlighted choice will be started automatically:
+
+
+
+[Operating Systems]
+
+LiveCD="LiveCD"
+
+LiveCD_Debug="LiveCD (Debug)"
+
+LiveCD_Screen="LiveCD (Screen)"
+
+Setup="BootCD"
+
+
+
+[LiveCD]
+
+BootType=Windows2003
+
+SystemPath=ramdisk(0)\reactos
+
+Options=/MININT /RDPATH=net(0)\ReactOS-LiveCD.iso /RDEXPORTASCD
+
+
+
+[LiveCD_Debug]
+
+BootType=Windows2003
+
+SystemPath=ramdisk(0)\reactos
+
+Options=/DEBUG /DEBUGPORT=COM1 /BAUDRATE=115200 /SOS /MININT /RDPATH=net(0)\ReactOS-LiveCD.iso /RDEXPORTASCD
+
+
+
+[LiveCD_Screen]
+
+BootType=Windows2003
+
+SystemPath=ramdisk(0)\reactos
+
+Options=/DEBUG /DEBUGPORT=SCREEN /SOS /MININT /RDPATH=net(0)\ReactOS-LiveCD.iso /RDEXPORTASCD
+
+
+
+[Setup]
+
+BootType=ReactOSSetup
+
+SystemPath=ramdisk(0)\
+
+Options=/RDPATH=net(0)\ReactOS-BootCD.iso /RDEXPORTASCD
