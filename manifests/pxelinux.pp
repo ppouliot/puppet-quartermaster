@@ -1231,6 +1231,13 @@ define quartermaster::pxelinux (
     $unzip_iso       = 'true'
     $splash_url      = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
     $logo_url        = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
+   
+    if ! defined (Tftp::File["${distro}/freeldr.ini"]){
+      tftp::file { "${distro}/freeldr.ini":
+        ensure  => file,
+        content => template("quartermaster/reactos_freeldr.ini.erb"),
+      }
+    }
   }
 
   $puppetlabs_repo = $distro ? {

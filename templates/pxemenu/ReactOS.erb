@@ -1,0 +1,4 @@
+LABEL <%= @name %>
+        MENU LABEL (<%= @rel_name %>-<%= @p_arch %>): Manual ^Installation
+        KERNEL ../pxelinux/chain.c32
+        APPEND reactos=../pxelinux/freeldr.sys seg=0x0F80 keeppxe
