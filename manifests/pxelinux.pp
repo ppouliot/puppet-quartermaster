@@ -1225,7 +1225,7 @@ define quartermaster::pxelinux (
     $url             = 'ISO Required instead of URL'
 #   $url             = "https://github.com/reactos/reactos/releases/download/${release}-release/"
     $inst_repo       = "https://github.com/reactos/reactos/releases/download/${release}-release/"
-    $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/${archive_name}"
+    $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/ReactOS-${release}-iso.zip"
     $boot_iso_name   = "ReactOS-${release}.iso"
     $archive_name    = "ReactOS-${release}-iso.zip"
     $mini_iso_name   = 'Not Required'
