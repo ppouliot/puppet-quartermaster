@@ -1290,11 +1290,6 @@ define quartermaster::pxelinux (
               extract_path => "/srv/quartermaster/${distro}/ISO",
               creates => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
               cleanup => true,
-          #if ! defined (Staging::Deploy["${name}-boot.iso.zip"]){
-          #  staging::deploy{"${name}-boot.iso.zip":
-          #    source  => $boot_iso_url,
-          #    target  => "/srv/quartermaster/${distro}/ISO",
-          #    creates => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
               notify  => Service['autofs'], 
               require =>[
                 Tftp::File["${distro}/${p_arch}"],
@@ -1304,53 +1299,53 @@ define quartermaster::pxelinux (
           }
         }
         default:{
-      if ! defined (Staging::File["${name}-boot.iso"]){
-        staging::file{"${name}-boot.iso":
-          source  => $boot_iso_url,
-          target  => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
-          # Because we are grabbing ISOs here we may need more time when downloading depending on network connection
-          # This wget_option will continue downloads (-c) use ipv4 (-4) retry refused connections and failed errors (--retry-connrefused ) then wait 1 sec
-          # before next retry (--waitretry=1), wait a max of 20 seconds if no data is recieved and try again (--read-timeout=20)
-          # wait max 15 sec before initial connect times out ( --timeout=15) and retry inifinite times ( -t 0)
-          wget_option => '-c -4 --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0',
-          notify  => Service['autofs'], 
-          require =>[
-            Tftp::File["${distro}/${p_arch}"],
-            File["/srv/quartermaster/${distro}/ISO"],
-          ],
-          timeout     => '0',
-        }
-        # Retrieve installation kernel file if supported
-        if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
-          staging::file{"bootiso-${target_kernel}-${name}":
-            source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
-            target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
-            owner   => $::tftp::username,
-            group   => $::tftp::username,
-            require => [
-              Service['autofs'], 
-              Autofs::Mount["${distro}"],
-              Staging::File["${name}-boot.iso"],
-            ],
-          }
-        }
-        # Retrieve initrd file if supported
-        if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
-          staging::file{"bootiso-${target_initrd}-${name}":
-            source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
-            target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
-            owner   => $::tftp::username,
-            group   => $::tftp::username,
-            require => [
-              Service['autofs'], 
-              Autofs::Mount["${distro}"],
-              Staging::File["${name}-boot.iso"],
-            ],
+          if ! defined (Staging::File["${name}-boot.iso"]){
+            staging::file{"${name}-boot.iso":
+              source  => $boot_iso_url,
+              target  => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
+              # Because we are grabbing ISOs here we may need more time when downloading depending on network connection
+              # This wget_option will continue downloads (-c) use ipv4 (-4) retry refused connections and failed errors (--retry-connrefused ) then wait 1 sec
+              # before next retry (--waitretry=1), wait a max of 20 seconds if no data is recieved and try again (--read-timeout=20)
+              # wait max 15 sec before initial connect times out ( --timeout=15) and retry inifinite times ( -t 0)
+              wget_option => '-c -4 --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0',
+              notify  => Service['autofs'], 
+              require =>[
+                Tftp::File["${distro}/${p_arch}"],
+                File["/srv/quartermaster/${distro}/ISO"],
+              ],
+              timeout     => '0',
+            }
+            # Retrieve installation kernel file if supported
+            if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
+              staging::file{"bootiso-${target_kernel}-${name}":
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
+                owner   => $::tftp::username,
+                group   => $::tftp::username,
+                require => [
+                  Service['autofs'], 
+                  Autofs::Mount["${distro}"],
+                  Staging::File["${name}-boot.iso"],
+                ],
+              }
+            }
+            # Retrieve initrd file if supported
+            if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
+              staging::file{"bootiso-${target_initrd}-${name}":
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
+                owner   => $::tftp::username,
+                group   => $::tftp::username,
+                require => [
+                  Service['autofs'], 
+                  Autofs::Mount["${distro}"],
+                  Staging::File["${name}-boot.iso"],
+                ],
+              }
+            }
           }
         }
       }
-    }
-    }
     } 
     'No URL Specified':{
       warning("No URL is specified for ${name}")

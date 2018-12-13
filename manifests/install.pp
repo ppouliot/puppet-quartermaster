@@ -687,8 +687,6 @@ menu passwordrow 11
     require => Tftp::File['pxelinux/pxelinux.cfg']
   }
 
-# Refactore Needed
-#
   include autofs
   autofs::mount{'*':
     mount       => '/srv/quartermaster/microsoft/mount',
