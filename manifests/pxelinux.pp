@@ -1220,10 +1220,9 @@ define quartermaster::pxelinux (
     $linux_installer = 'ReactOS'
     $pxekernel       = "freeldr.sys"
     $initrd          = "freeldr.ini"
-    $target_kernel   = "ReactOS-${rel_number}-boot.iso"
-    $target_initrd   = "ReactOS-${rel_number}-live.iso"
+    $target_kernel   = "freeldr.sys"
+    $target_initrd   = "freeldr.ini"
     $url             = 'ISO Required instead of URL'
-#   $url             = "https://github.com/reactos/reactos/releases/download/${release}-release/"
     $inst_repo       = "https://github.com/reactos/reactos/releases/download/${release}-release/"
     $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/ReactOS-${release}-iso.zip"
     $boot_iso_name   = "ReactOS-${release}.iso"
@@ -1297,7 +1296,7 @@ define quartermaster::pxelinux (
             # Retrieve installation kernel file if supported
             if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
               staging::file{"bootiso-${target_kernel}-${name}":
-                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/${pxekernel}",
                 target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
                 owner   => $::tftp::username,
                 group   => $::tftp::username,
@@ -1311,7 +1310,7 @@ define quartermaster::pxelinux (
             # Retrieve initrd file if supported
             if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
               staging::file{"bootiso-${target_initrd}-${name}":
-                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/${src_initrd}",
                 target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
                 owner   => $::tftp::username,
                 group   => $::tftp::username,
