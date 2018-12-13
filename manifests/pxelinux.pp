@@ -1218,8 +1218,8 @@ define quartermaster::pxelinux (
     }
     $autofile        = 'unattend.inf'
     $linux_installer = 'ReactOS'
-    $pxekernel       = "ReactOS-${release}-iso.zip"
-    $initrd          = "ReactOS-${release}-live.zip"
+    $pxekernel       = "freeldr.sys"
+    $initrd          = "freeldr.ini"
     $target_kernel   = "ReactOS-${rel_number}-boot.iso"
     $target_initrd   = "ReactOS-${rel_number}-live.iso"
     $url             = 'ISO Required instead of URL'
