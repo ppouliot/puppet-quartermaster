@@ -1246,8 +1246,6 @@ define quartermaster::pxelinux (
         require => Archive["${name}-boot.iso.zip"],
       }
     }
-
-
   }
 
   $puppetlabs_repo = $distro ? {
@@ -1295,6 +1293,34 @@ define quartermaster::pxelinux (
                 Tftp::File["${distro}/${p_arch}"],
                 File["/srv/quartermaster/${distro}/ISO"],
               ],
+            }
+            # Retrieve installation kernel file if supported
+            if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
+              staging::file{"bootiso-${target_kernel}-${name}":
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
+                owner   => $::tftp::username,
+                group   => $::tftp::username,
+                require => [
+                  Service['autofs'], 
+                  Autofs::Mount["${distro}"],
+                  Staging::File["${name}-boot.iso"],
+                ],
+              }
+            }
+            # Retrieve initrd file if supported
+            if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
+              staging::file{"bootiso-${target_initrd}-${name}":
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
+                owner   => $::tftp::username,
+                group   => $::tftp::username,
+                require => [
+                  Service['autofs'], 
+                  Autofs::Mount["${distro}"],
+                  Staging::File["${name}-boot.iso"],
+                ],
+              }
             }
           }
         }
