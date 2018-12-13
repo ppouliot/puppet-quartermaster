@@ -1293,34 +1293,6 @@ define quartermaster::pxelinux (
                 File["/srv/quartermaster/${distro}/ISO"],
               ],
             }
-            # Retrieve installation kernel file if supported
-            if ! defined (Staging::File["bootiso.zip-${pxekernel}-${name}"]){
-              staging::file{"bootiso.zip-${pxekernel}-${name}":
-                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/${pxekernel}",
-                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${pxekernel}",
-                owner   => $::tftp::username,
-                group   => $::tftp::username,
-                require => [
-                  Service['autofs'], 
-                  Autofs::Mount["${distro}"],
-                  Archive["${name}-boot.iso.zip"],
-                ],
-              }
-            }
-            # Retrieve initrd file if supported
-            if ! defined (Staging::File["bootiso.zip-${src_initrd}-${name}"]){
-              staging::file{"bootiso.zip-${src_initrd}-${name}":
-                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/${src_initrd}",
-                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${src_initrd}",
-                owner   => $::tftp::username,
-                group   => $::tftp::username,
-                require => [
-                  Service['autofs'], 
-                  Autofs::Mount["${distro}"],
-                  Archive["${name}-boot.iso.zip"],
-                ],
-              }
-            }
           }
         }
         default:{
