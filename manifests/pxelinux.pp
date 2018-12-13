@@ -1232,10 +1232,17 @@ define quartermaster::pxelinux (
     $splash_url      = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
     $logo_url        = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
    
-    if ! defined (Tftp::File["${distro}/freeldr.ini"]){
-      tftp::file { "${distro}/freeldr.ini":
+    if ! defined (Tftp::File["${distro}/${p_arch}/${src_initrd}"]){
+      tftp::file { "${distro}/${p_arch}/${src_initrd}":
         ensure  => file,
         content => template("quartermaster/reactos_freeldr.ini.erb"),
+      }
+    }
+    if ! defined (Tftp::File["${distro}/${p_arch}/${pxekernel}"]){
+      tftp::file { "${distro}/${p_arch}/${pxekernel}":
+        ensure  => file,
+        source  => "/srv/quartermaster/${distro}/mnt/${boot_iso_name}/loader/${pxekernel}",
+        require => Archive["${name}-boot.iso.zip"],
       }
     }
     if ! defined (File["/srv/quartermaster/tftpboot/${distro}/${p_arch}/${release}"]) {
