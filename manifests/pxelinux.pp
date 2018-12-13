@@ -1218,7 +1218,7 @@ define quartermaster::pxelinux (
     }
     $autofile        = 'unattend.inf'
     $linux_installer = 'ReactOS'
-    $pxekernel       = "freeldr.sys"
+    $pxekernel       = "ReactOS-${release}-iso.zip"
     $initrd          = "ReactOS-${release}-live.zip"
     $target_kernel   = "ReactOS-${rel_number}-boot.iso"
     $target_initrd   = "ReactOS-${rel_number}-live.iso"
@@ -1315,35 +1315,35 @@ define quartermaster::pxelinux (
               ],
               timeout     => '0',
             }
+            # Retrieve installation kernel file if supported
+            if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
+              staging::file{"bootiso-${target_kernel}-${name}":
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
+                owner   => $::tftp::username,
+                group   => $::tftp::username,
+                require => [
+                  Service['autofs'], 
+                  Autofs::Mount["${distro}"],
+                  Staging::File["${name}-boot.iso"],
+                ],
+              }
+            }
+            # Retrieve initrd file if supported
+            if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
+              staging::file{"bootiso-${target_initrd}-${name}":
+                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
+                owner   => $::tftp::username,
+                group   => $::tftp::username,
+                require => [
+                  Service['autofs'], 
+                  Autofs::Mount["${distro}"],
+                  Staging::File["${name}-boot.iso"],
+                ],
+              }
+            }
           }
-        }
-      }
-      # Retrieve installation kernel file if supported
-      if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
-        staging::file{"bootiso-${target_kernel}-${name}":
-          source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
-          target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
-          owner   => $::tftp::username,
-          group   => $::tftp::username,
-          require => [
-            Service['autofs'], 
-            Autofs::Mount["${distro}"],
-#           Staging::File["${name}-boot.iso"],
-          ],
-        }
-      }
-      # Retrieve initrd file if supported
-      if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
-        staging::file{"bootiso-${target_initrd}-${name}":
-          source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
-          target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
-          owner   => $::tftp::username,
-          group   => $::tftp::username,
-          require => [
-            Service['autofs'], 
-            Autofs::Mount["${distro}"],
- #          Staging::File["${name}-boot.iso"],
-          ],
         }
       }
     } 
