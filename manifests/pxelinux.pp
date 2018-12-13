@@ -1219,9 +1219,9 @@ define quartermaster::pxelinux (
     $autofile        = 'unattend.inf'
     $linux_installer = 'ReactOS'
     $pxekernel       = "freeldr.sys"
-    $initrd          = "freeldr.ini"
-    $target_kernel   = $pxekernel
-    $target_initrd   = $initrd
+    $src_initrd      = "freeldr.ini"
+    $target_kernel   =  undef
+    $target_initrd   =  undef
     $url             = 'ISO Required instead of URL'
     $inst_repo       = "https://github.com/reactos/reactos/releases/download/${release}-release/"
     $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/ReactOS-${release}-iso.zip"
@@ -1297,7 +1297,7 @@ define quartermaster::pxelinux (
             if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
               staging::file{"bootiso-${target_kernel}-${name}":
                 source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/${pxekernel}",
-                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${pxekernel}",
                 owner   => $::tftp::username,
                 group   => $::tftp::username,
                 require => [
@@ -1311,7 +1311,7 @@ define quartermaster::pxelinux (
             if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
               staging::file{"bootiso-${target_initrd}-${name}":
                 source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/${src_initrd}",
-                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
+                target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${src_initrd}",
                 owner   => $::tftp::username,
                 group   => $::tftp::username,
                 require => [
