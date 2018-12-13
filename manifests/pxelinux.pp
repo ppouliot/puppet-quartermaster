@@ -1304,7 +1304,7 @@ define quartermaster::pxelinux (
                 require => [
                   Service['autofs'], 
                   Autofs::Mount["${distro}"],
-                  Staging::File["${name}-boot.iso"],
+                  Archive["${name}-boot.iso.zip"],
                 ],
               }
             }
@@ -1318,7 +1318,7 @@ define quartermaster::pxelinux (
                 require => [
                   Service['autofs'], 
                   Autofs::Mount["${distro}"],
-                  Staging::File["${name}-boot.iso"],
+                  Archive["${name}-boot.iso.zip"],
                 ],
               }
             }
