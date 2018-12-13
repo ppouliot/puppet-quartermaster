@@ -1220,8 +1220,8 @@ define quartermaster::pxelinux (
     $linux_installer = 'ReactOS'
     $pxekernel       = "freeldr.sys"
     $initrd          = "freeldr.ini"
-    $target_kernel   = "freeldr.sys"
-    $target_initrd   = "freeldr.ini"
+    $target_kernel   = $pxekernel
+    $target_initrd   = $initrd
     $url             = 'ISO Required instead of URL'
     $inst_repo       = "https://github.com/reactos/reactos/releases/download/${release}-release/"
     $boot_iso_url    = "https://github.com/reactos/reactos/releases/download/${release}-release/ReactOS-${release}-iso.zip"
