@@ -3,11 +3,7 @@ forge "http://forge.puppetlabs.com"
 # Misc Modules
 mod 'ajjahn/samba', :latest
 mod "derdanne/nfs", :latest
-
-# Changes to allow for proxydhcp
-mod "lex/dnsmasq",
-  :git    => 'https://github.com/ppouliot/puppet-dnsmasq',
-  :branch => 'master'
+mod "saz/dnsmasq", :latest
 
 # Voxpupuli Modules
 mod "puppet/autofs", '4.3.0'
