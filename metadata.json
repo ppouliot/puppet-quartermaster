@@ -3,58 +3,22 @@
   "version": "2.0.8",
   "author": "Peter J. Pouliot",
   "summary": "Dynamic Pxe infrastructure",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "source": "git://github.com/ppouliot/puppet-quartermaster",
   "project_page": "https://github.com/ppouliot/puppet-quartermaster",
   "dependencies": [
-    {
-      "name": "ajjahn/samba",
-      "version_requirement": ">= 0.5.0"
-    },
-    {
-      "name": "derdanne/nfs",
-      "version_requirement": ">= 1.0.2"
-    },
-    {
-      "name": "puppet/autofs",
-      "version_requirement": ">= 1.4.4"
-    },
-    {
-      "name": "saz/dnsmasq",
-      "version_requirement": ">= 1.4.0"
-    },
-    {
-      "name": "puppet/staging",
-      "version_requirement": ">= 2.1.0"
-    },
-    {
-      "name": "puppet/nginx",
-      "version_requirement": ">= 0.6.0"
-    },
-    {
-      "name": "puppet/squid",
-      "version_requirement": ">= 0.6.0"
-    },
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.1"
-    },
-    {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0"
-    },
-    {
-      "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.3.0"
-    },
-    {
-      "name": "puppetlabs/dummy_service",
-      "version_requirement": ">= 0.2.0"
-    },
-    {
-      "name": "puppetlabs/tftp",
-      "version_requirement": ">= 0.2.3"
-    }
+    {"name": "ajjahn/samba","version_requirement":">= 0.5.0 < 1.0.0"},
+    {"name": "derdanne/nfs","version_requirement":">= 2.0.0 < 2.1.0"},
+    {"name": "puppet/autofs","version_requirement":">= 2.0.0 < 5.0.0"},
+    {"name": "saz/dnsmasq","version_requirement":">= 1.0.0 < 2.0.0"},
+    {"name": "puppet/staging","version_requirement":">= 1.0.0 < 3.3.0"},
+    {"name": "puppet/nginx","version_requirement":">= 0.5.0 < 1.0.0"},
+    {"name": "puppet/squid","version_requirement":">= 1.0.0 < 2.0.0"},
+    {"name": "puppetlabs/stdlib","version_requirement":">= 4.0.0 < 6.0.0"},
+    {"name": "puppetlabs/concat","version_requirement":">= 4.0.0 < 7.0.0"},
+    {"name": "puppetlabs/apt","version_requirement":">= 4.0.0 < 7.0.0"},
+    {"name": "puppetlabs/dummy_service","version_requirement": ">= 0.0.1 < 1.0.0"},
+    {"name": "puppetlabs/tftp","version_requirement":">= 0.5.0 < 2.0.0"}
   ],
   "operatingsystem_support": [
     {
@@ -115,12 +79,8 @@
   ],
   "requirements": [
     {
-      "name": "pe",
-      "version_requirement": "3.x"
-    },
-    {
       "name": "puppet",
-      "version_requirement": ">=3.7.3 <4.8.1"
+      "version_requirement": ">=3.0.0 <7.0.0"
     }
   ],
   "description": "Creates a dynamic pxe infrastructure for operating system deployments",
