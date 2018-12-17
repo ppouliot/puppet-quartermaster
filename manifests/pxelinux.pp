@@ -130,18 +130,18 @@ define quartermaster::pxelinux (
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     #$url             = "${centos_url}/os/${p_arch}/images/pxeboot"
     $inst_repo       = "${centos_url}/os/${p_arch}/"
     $update_repo     = "${centos_url}/updates/${p_arch}/"
     $splash_url       = "${centos_url}/isolinux/splash${_dot_bootsplash}"
-    $logo_url        = "https://www.centos.org/images/logo_small.png"
+    $logo_url        = 'https://www.centos.org/images/logo_small.png'
     $boot_iso_url    = "${centos_url}/os/${p_arch}/images/${boot_iso_name}"
-    $boot_iso_name   = "boot.iso"
-    $mini_iso_name   = "boot.iso"
+    $boot_iso_name   = 'boot.iso'
+    $mini_iso_name   = 'boot.iso'
   }
-      
+
   if ( $distro == 'fedora') {
     case $release {
       '2','3','4','5','6':{
@@ -183,10 +183,10 @@ define quartermaster::pxelinux (
       }
       '26','27':{
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
-        if $p_arch == 'i386' { 
+        if $p_arch == 'i386' {
           $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora-secondary/releases'
         }
-        if $p_arch == 'x86_64' { 
+        if $p_arch == 'x86_64' {
           $fedora_url = 'http://archives.fedoraproject.org/pub/archive/fedora/linux/releases'
         }
         $fedora_flavor     = 'Server/'
@@ -197,10 +197,10 @@ define quartermaster::pxelinux (
         $url_option        = 'url'
       }
       '28','29':{
-        if $p_arch == 'i386' { 
+        if $p_arch == 'i386' {
           $fedora_url = 'http://download-ib01.fedoraproject.org/pub/fedora-secondary/releases'
         }
-        if $p_arch == 'x86_64' { 
+        if $p_arch == 'x86_64' {
           $fedora_url = 'http://download-ib01.fedoraproject.org/pub/fedora/linux/releases'
         }
         # Currently http://download.fedoraproject.org redirects to a mirror using a mirror to satisify installations.
@@ -225,14 +225,14 @@ define quartermaster::pxelinux (
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $url             = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/pxeboot"
     $inst_repo       = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os"
     $update_repo     = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os"
     $boot_iso_url    = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/boot.iso"
-    $boot_iso_name   = "boot.iso"
-    $mini_iso_name   = "boot.iso"
+    $boot_iso_name   = 'boot.iso'
+    $mini_iso_name   = 'boot.iso'
     $splash_url       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
     $logo_url       = 'https://getfedora.org/static/images/fedora_infinity_140x140.png'
   }
@@ -284,16 +284,16 @@ define quartermaster::pxelinux (
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     #$url             = "${scientificlinux_url}/images/pxeboot"
     $inst_repo       = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
     $update_repo     = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/updates/security"
     $splash_url       = "${scientificlinux_url}/isolinux/splash${_dot_bootsplash}"
-    $logo_url        = "http://ftp.scientificlinux.org/sl-banner.png"
+    $logo_url        = 'http://ftp.scientificlinux.org/sl-banner.png'
     $boot_iso_url    = "${scientificlinux_url}/images/${boot_iso_name}"
-    $boot_iso_name   = "boot.iso"
-    $mini_iso_name   = "boot.iso"
+    $boot_iso_name   = 'boot.iso'
+    $mini_iso_name   = 'boot.iso'
   }
 
   if ( $distro == 'opensuse') {
@@ -320,7 +320,7 @@ define quartermaster::pxelinux (
     $pxekernel       = 'linux'
     $initrd          = undef
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash      = '.jpg'
     $url             = "${opensuse_url}/${release}/repo/oss/boot/${p_arch}/loader"
@@ -343,7 +343,7 @@ define quartermaster::pxelinux (
   if ($distro == /(centos|fedora|oraclelinux)/) and ( $release >= '7.0' ) and ( $p_arch == 'i386'){
     fail("${distro} ${release} does not provide support for processor architecture i386")
   }
-  
+
   if ( $distro == 'xcpng' ) {
     case $release {
       '7.4','7.4.1':{
@@ -373,7 +373,7 @@ define quartermaster::pxelinux (
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = 'ISO Required instead of URL'
@@ -390,7 +390,6 @@ define quartermaster::pxelinux (
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = undef
-        $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
@@ -402,7 +401,6 @@ define quartermaster::pxelinux (
         $boot_iso_name = "Enterprise-R${rel_major}-GA-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/GA/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = undef
-        $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
@@ -414,7 +412,6 @@ define quartermaster::pxelinux (
         $boot_iso_name = "Enterprise-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/EL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = undef
-        $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
@@ -426,7 +423,6 @@ define quartermaster::pxelinux (
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/GA/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = undef
-        $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
@@ -438,7 +434,6 @@ define quartermaster::pxelinux (
         $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/U${rel_minor}/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = "${p_arch}-boot.iso"
-        $_U                = 'U'
         $vnc_option        = 'vnc'
         $vnc_option_passwd = 'vncpasswd'
         $ks_option         = 'ks'
@@ -450,7 +445,6 @@ define quartermaster::pxelinux (
         $boot_iso_name = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url    = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = "${p_arch}-boot.iso"
-        $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
@@ -462,7 +456,6 @@ define quartermaster::pxelinux (
         $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = undef
-        $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
@@ -474,7 +467,6 @@ define quartermaster::pxelinux (
         $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
         $mini_iso_name     = "${p_arch}-boot.iso"
-        $_U                = 'u'
         $vnc_option        = 'inst.vnc'
         $vnc_option_passwd = 'inst.vncpasswd'
         $ks_option         = 'inst.ks'
@@ -484,20 +476,16 @@ define quartermaster::pxelinux (
         warning("${name} isn't a oraclelinux release!")
       }
     }
-    notice($_U)
     $autofile        = 'kickstart'
     $linux_installer = 'anaconda'
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = 'ISO Required instead of URL'
-#    $inst_repo      = "http://public-yum.oracle.com/repo/oracle/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}"
-#    $inst_repo      = "http://${fqdn}/${distro}/mnt/OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
-    $inst_repo       = "http://${fqdn}/${distro}/mnt/${boot_iso_name}"
-#    $update_repo    = "http://yum.oracle.com/repo/OracleLinux/oracle/OL${rel_major}/latest/${p_arch}"
+    $inst_repo       = "http://${::fqdn}/${distro}/mnt/${boot_iso_name}"
     $update_repo     = "http://public-yum.oracle.com/repo/oracle/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}"
     $splash_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
     $logo_url        = 'http://public-yum.oracle.com/layout/i/Linux_Logo.jpg'
@@ -508,7 +496,7 @@ define quartermaster::pxelinux (
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.jpg'
     $url             = 'ISO Required instead of URL'
@@ -527,7 +515,7 @@ define quartermaster::pxelinux (
     $pxekernel       = 'linux'
     $initrd          = undef
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash = '.jpg'
     $url             = 'ISO Required instead of URL'
@@ -544,7 +532,7 @@ define quartermaster::pxelinux (
     $pxekernel       = 'linux'
     $initrd          = undef
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}.gz"
     $_dot_bootsplash = '.jpg'
     $url             = 'ISO Required instead of URL'
@@ -594,11 +582,11 @@ define quartermaster::pxelinux (
     $pxekernel       = 'linux'
     $initrd          = '.gz'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
-    $_dot_bootsplash      = '.png'
-    $mirror_host     = "mirrors.kernel.org"
-    $mirror_path     = "${distro}"
+    $_dot_bootsplash = '.png'
+    $mirror_host     = 'mirrors.kernel.org'
+    $mirror_path     = $distro
     $url             = "http://archive.ubuntu.com/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
     $inst_repo       = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
     $update_repo     = "http://archive.ubuntu.com/${distro}/dists/${rel_name}"
@@ -666,13 +654,13 @@ define quartermaster::pxelinux (
       '5','6':{
         $debian_url = 'http://archive.debian.org'
         $mirror_host = 'archive.debian.org'
-        $mirror_path = "${distro}"
+        $mirror_path = $distro
 
       }
       '7','8','9','10':{
         $debian_url = 'http://http.us.debian.org'
         $mirror_host = 'http.us.debian.org'
-        $mirror_path = "${distro}"
+        $mirror_path = $distro
       }
       default:{
         warning("${name} isn't a debian release!")
@@ -683,7 +671,7 @@ define quartermaster::pxelinux (
     $pxekernel       = 'linux'
     $initrd          = '.gz'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = "${debian_url}/${distro}/dists/${rel_name}/main/installer-${p_arch}/current/images/netboot/${distro}-installer/${p_arch}"
@@ -701,11 +689,11 @@ define quartermaster::pxelinux (
     $pxekernel       = 'linux'
     $initrd          = '.gz'
     $src_initrd      = "initrd${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
-    $mirror_host      = "http.kali.org"
-    $mirror_path     = "${distro}"
+    $mirror_host     = 'http.kali.org'
+    $mirror_path     = $distro
     $url             = "http://http.kali.org/kali/dists/kali-rolling/main/installer-${p_arch}/current/images/netboot/debian-installer/${p_arch}"
     $inst_repo       = 'http://http.kali.org/kali/dists/kali-rolling'
     $update_repo     = 'http://http.kali.org/kali/dists/kali-rolling'
@@ -730,15 +718,15 @@ define quartermaster::pxelinux (
     $pxekernel       = 'vmlinuz'
     $initrd          = '.img'
     $src_initrd      = "archiso${initrd}"
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}${initrd}"
     $_dot_bootsplash = '.png'
     $url             = "http://archive.archlinux.org/iso/${release}/arch/boot/${p_arch}"
     $inst_repo       = "http://archive.archlinux.org/iso/${release}/arch/boot/initramfs_${p_arch}.${initrd}"
-    $update_repo     = "http://mirrors.kernel.org/archlinux/core/os/${p_arch}/$rel_name/arch/${p_arch}/airootfs.sfs"
-    $splash_url      = "http://mirrors.kernel.org/archlinux/iso/$rel_name/arch/${p_arch}/airootfs.sfs"
+    $update_repo     = "http://mirrors.kernel.org/archlinux/core/os/${p_arch}/${rel_name}/arch/${p_arch}/airootfs.sfs"
+    $splash_url      = "http://mirrors.kernel.org/archlinux/iso/${rel_name}/arch/${p_arch}/airootfs.sfs"
     $logo_url        = 'https://www.archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png'
-    $boot_iso_url    = "http://mirrors.kernel.org/archlinux/iso/$rel_name/archlinux-${rel_name}-dual.iso"
+    $boot_iso_url    = "http://mirrors.kernel.org/archlinux/iso/${rel_name}/archlinux-${rel_name}-dual.iso"
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
   }
@@ -761,7 +749,7 @@ define quartermaster::pxelinux (
       }
     }
     case $p_arch {
-      'amd64','arm64':{ 
+      'amd64','arm64':{
         warning("flatcar ${release} for ${p_arch} will be activated")
       }
       default:{
@@ -844,7 +832,7 @@ define quartermaster::pxelinux (
     $mini_iso_name   = 'Not Required'
     $splash_url      = 'https://coreos.com/assets/images/brand/coreos-wordmark-horiz-color-reverse.svg'
     $logo_url        = 'https://coreos.com/assets/images/brand/coreos-wordmark-horiz-color-reverse.svg'
-    
+
     # This adds scripts to deploy to the system after booting into coreos 
     # when finished it should reboot.
     file {"/srv/quartermaster/${distro}/${autofile}/${name}.pxe_installer.sh":
@@ -895,9 +883,9 @@ define quartermaster::pxelinux (
         "/var/lib/matchbox/examples/${coreos_version}/profiles",
 #        "/var/lib/matchbox/examples/${coreos_version}/ignition",
       ]:
-        ensure  => directory,
-        owner   => 'matchbox',
-        group   => 'matchbox',
+        ensure => directory,
+        owner  => 'matchbox',
+        group  => 'matchbox',
       }
       file{ "/var/lib/matchbox/examples/${coreos_version}/ignition":
         ensure  => directory,
@@ -1130,7 +1118,7 @@ define quartermaster::pxelinux (
 #        content => template('quartermaster/matchbox/profiles.etcd3-gateway.json.erb'),
 #      }
 
-     # profiles install-channel-reboot.json
+      # profiles install-channel-reboot.json
 #      file{ "/var/lib/matchbox/profiles/install-${release}-reboot.json":
 #        ensure  => file,
 #        owner   => 'matchbox',
@@ -1146,8 +1134,7 @@ define quartermaster::pxelinux (
       /([0-9]).([0-9]).([0-9])/:{
         warning("rancheros ${release} for ${p_arch} will be activated")
         $rancheros_release = "v${release}"
-#        $src_initrd      = "initrd-${rancheros_release}"
-        $src_initrd      = "initrd"
+        $src_initrd      = 'initrd'
       }
       'latest':{
         warning("rancheros ${release} for ${p_arch} will be activated")
@@ -1170,12 +1157,10 @@ define quartermaster::pxelinux (
     $linux_installer = 'ros'
     $pxekernel       = 'vmlinuz'
     $initrd          = 'initrd'
-    $target_kernel   = "${rel_number}"
+    $target_kernel   = $rel_number
     $target_initrd   = "${rel_number}.img"
-#    $url             = "https://releases.rancher.com/os/${rancheros_release}"
-     $url            = "https://github.com/rancher/os/releases/download/${rancheros_release}"
-     $inst_repo      = "https://github.com/rancher/os/releases/download/${rancheros_release}"
-#    $inst_repo       = "https://releases.rancher.com/os/${rancheros_release}"
+    $url             = "https://github.com/rancher/os/releases/download/${rancheros_release}"
+    $inst_repo       = "https://github.com/rancher/os/releases/download/${rancheros_release}"
     $boot_iso_url    = "https://releases.rancher.com/os/${rancheros_release}/${boot_iso_name}"
     $boot_iso_name   = 'rancheros.iso'
     $mini_iso_name   = 'Not Required'
@@ -1218,8 +1203,8 @@ define quartermaster::pxelinux (
     }
     $autofile        = 'unattend.inf'
     $linux_installer = 'ReactOS'
-    $pxekernel       = "freeldr.sys"
-    $src_initrd      = "freeldr.ini"
+    $pxekernel       = 'freeldr.sys'
+    $src_initrd      = 'freeldr.ini'
     $target_kernel   =  undef
     $target_initrd   =  undef
     $url             = 'ISO Required instead of URL'
@@ -1228,14 +1213,14 @@ define quartermaster::pxelinux (
     $boot_iso_name   = "ReactOS-${release}.iso"
     $archive_name    = "ReactOS-${release}-iso.zip"
     $mini_iso_name   = 'Not Required'
-    $unzip_iso       = 'true'
+    $unzip_iso       = true
     $splash_url      = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
     $logo_url        = 'https://www.reactos.org/sites/default/files/ReactOS_0.png'
-   
+
     if ! defined (Tftp::File["${distro}/${p_arch}/${src_initrd}"]){
       tftp::file { "${distro}/${p_arch}/${src_initrd}":
         ensure  => file,
-        content => template("quartermaster/reactos_freeldr.ini.erb"),
+        content => template('quartermaster/reactos_freeldr.ini.erb'),
       }
     }
     if ! defined (Tftp::File["${distro}/${p_arch}/${pxekernel}"]){
@@ -1285,17 +1270,17 @@ define quartermaster::pxelinux (
   case $url {
     'ISO Required instead of URL':{
       case $unzip_iso {
-        'true':{
+        true:{
           if ! defined (Archive["${name}-boot.iso.zip"]){
             archive{"${name}-boot.iso.zip":
-              path    => "/srv/quartermaster/${distro}/ISO/${archive_name}",
-              source  => $boot_iso_url,
-              extract => true,
+              path         => "/srv/quartermaster/${distro}/ISO/${archive_name}",
+              source       => $boot_iso_url,
+              extract      => true,
               extract_path => "/srv/quartermaster/${distro}/ISO",
-              creates => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
-              cleanup => true,
-              notify  => Service['autofs'], 
-              require =>[
+              creates      => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
+              cleanup      => true,
+              notify       => Service['autofs'],
+              require      =>[
                 Tftp::File["${distro}/${p_arch}"],
                 File["/srv/quartermaster/${distro}/ISO"],
               ],
@@ -1305,15 +1290,15 @@ define quartermaster::pxelinux (
         default:{
           if ! defined (Staging::File["${name}-boot.iso"]){
             staging::file{"${name}-boot.iso":
-              source  => $boot_iso_url,
-              target  => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
+              source      => $boot_iso_url,
+              target      => "/srv/quartermaster/${distro}/ISO/${boot_iso_name}",
               # Because we are grabbing ISOs here we may need more time when downloading depending on network connection
               # This wget_option will continue downloads (-c) use ipv4 (-4) retry refused connections and failed errors (--retry-connrefused ) then wait 1 sec
               # before next retry (--waitretry=1), wait a max of 20 seconds if no data is recieved and try again (--read-timeout=20)
               # wait max 15 sec before initial connect times out ( --timeout=15) and retry inifinite times ( -t 0)
               wget_option => '-c -4 --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0',
-              notify  => Service['autofs'], 
-              require =>[
+              notify      => Service['autofs'],
+              require     =>[
                 Tftp::File["${distro}/${p_arch}"],
                 File["/srv/quartermaster/${distro}/ISO"],
               ],
@@ -1322,13 +1307,13 @@ define quartermaster::pxelinux (
             # Retrieve installation kernel file if supported
             if ! defined (Staging::File["bootiso-${target_kernel}-${name}"]){
               staging::file{"bootiso-${target_kernel}-${name}":
-                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
+                source  => "http://${::fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${pxekernel}",
                 target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_kernel}",
                 owner   => $::tftp::username,
                 group   => $::tftp::username,
                 require => [
-                  Service['autofs'], 
-                  Autofs::Mount["${distro}"],
+                  Service['autofs'],
+                  Autofs::Mount[$distro],
                   Staging::File["${name}-boot.iso"],
                 ],
               }
@@ -1336,13 +1321,13 @@ define quartermaster::pxelinux (
             # Retrieve initrd file if supported
             if ! defined (Staging::File["bootiso-${target_initrd}-${name}"]){
               staging::file{"bootiso-${target_initrd}-${name}":
-                source  => "http://${fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
+                source  => "http://${::fqdn}/${distro}/mnt/${boot_iso_name}/images/pxeboot/${src_initrd}",
                 target  => "/srv/quartermaster/tftpboot/${distro}/${p_arch}/${target_initrd}",
                 owner   => $::tftp::username,
                 group   => $::tftp::username,
                 require => [
-                  Service['autofs'], 
-                  Autofs::Mount["${distro}"],
+                  Service['autofs'],
+                  Autofs::Mount[$distro],
                   Staging::File["${name}-boot.iso"],
                 ],
               }
@@ -1350,7 +1335,7 @@ define quartermaster::pxelinux (
           }
         }
       }
-    } 
+    }
     'No URL Specified':{
       warning("No URL is specified for ${name}")
     }
@@ -1436,8 +1421,8 @@ if $linux_installer == !('No Supported Linux Installer') {
 #################################################
 # Begin Creating Distro Specific HTTP Folder Tree 
 #################################################
-  
-  
+
+
   if ! defined (File["/srv/quartermaster/${distro}"]) {
     file { "/srv/quartermaster/${distro}":
       ensure  => directory,
@@ -1466,8 +1451,8 @@ if $linux_installer == !('No Supported Linux Installer') {
       require => File[ "/srv/quartermaster/${distro}" ],
     }
   }
-  if ! defined (Autofs::Mount["${distro}"]) {
-    autofs::mount{"${distro}":
+  if ! defined (Autofs::Mount[$distro]) {
+    autofs::mount{$distro:
       mount       => "/srv/quartermaster/${distro}/mnt",
       mapfile     => "/etc/auto.${distro}",
       mapcontents => [
@@ -1519,7 +1504,6 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}.default_README_footer"]) {
     concat::fragment { "${distro}.default_README_footer":
       target  => "/srv/quartermaster/${distro}/.README.html",
-#      content => template('quartermaster/README.html.footer.erb'),
       content => '</ul>
 </body>
 </html>',
@@ -1603,15 +1587,14 @@ if $linux_installer == !('No Supported Linux Installer') {
   if ! defined (Concat::Fragment["${distro}${name}.menu_item"]) {
     concat::fragment {"${distro}.${name}.menu_item":
       target  => "/srv/quartermaster/tftpboot/menu/${distro}.menu",
-#      content => template("quartermaster/pxemenu/${linux_installer}.erb"),
-      content => template("quartermaster/pxemenu/default2.erb"),
+      content => template('quartermaster/pxemenu/default2.erb'),
     }
   }
   if ! defined (Concat::Fragment[matchbox-pxe-menu]) {
     if ( $quartermaster::matchbox_enable ) {
-      notice("Matchbox is enabled")
+      notice('Matchbox is enabled')
       if ( $distro == 'coreos') {
-        notice("Matchbox is enabled")
+        notice('Matchbox is enabled')
         concat::fragment{'matchbox-pxe-menu':
           target  =>  "/srv/quartermaster/tftpboot/menu/${distro}.menu",
           content => template('quartermaster/pxemenu/matchbox.erb'),
@@ -1624,8 +1607,6 @@ if $linux_installer == !('No Supported Linux Installer') {
   }
   notify{"${name}-restart-tftp":
     message => "Force restart of tftpd for ${name}",
-    notify => Service['tftpd-hpa'],
+    notify  => Service['tftpd-hpa'],
   }
-
-
 }

@@ -98,23 +98,23 @@ class quartermaster (
   }
 
 
-  class{'::quartermaster::install': } ->
-  class{'::quartermaster::configure': }     
+  class{'::quartermaster::install': }
+->class{'::quartermaster::configure': }
 
   contain quartermaster::install
   contain quartermaster::configure
 
   if $enable_poap == true {
-    class{'::quartermaster::poap':}     
+    class{'::quartermaster::poap':}
     contain quartermaster::poap
   }
 
   if $dban_enable == true {
-    class{'::quartermaster::dban':}     
+    class{'::quartermaster::dban':}
     contain quartermaster::dban
   }
   if $matchbox_enable == true {
-    class{'::quartermaster::matchbox':}     
+    class{'::quartermaster::matchbox':}
     contain quartermaster::matchbox
   }
 

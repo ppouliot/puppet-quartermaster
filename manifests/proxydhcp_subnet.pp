@@ -6,8 +6,8 @@ define quartermaster::proxydhcp_subnet(
 
 # new format using saz/dnsmasq
 # #dhcp-range=172.20.230.92,proxy,255.255.255.192,,
-  dnsmasq::conf{"$name":
-    ensure => present,
+  dnsmasq::conf{$name:
+    ensure  => present,
     content => "dhcp-range=${network_ipaddr},proxy,${network_subnet_mask},1h",
   }
 # Old Format using lex/dnsmasq  

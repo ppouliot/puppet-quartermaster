@@ -1,3 +1,4 @@
+# Class quartermaster::dnsmasq
 class quartermaster::server::dnsmasq {
 
   # A file to use for name resolution
@@ -19,7 +20,7 @@ nameserver 4.2.2.2
   # proxydhcp server for nextserver and bootfile 
   # dhcp options
   class {'dnsmasq':
-    configs_hash => {
+    configs_hash     => {
       'quartermaster-cfg' => {
         content => template('quartermaster/dnsmasq.conf.erb'),
       },

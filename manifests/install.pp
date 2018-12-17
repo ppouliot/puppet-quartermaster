@@ -24,7 +24,7 @@ class quartermaster::install (
     'RedHat':{
       class{'::nginx':
       }
-    } 
+    }
     default:{
       class{'::nginx':
       }
@@ -37,28 +37,22 @@ class quartermaster::install (
     ensure               => present,
     www_root             => '/srv/quartermaster',
     use_default_location => false,
-    # nginx module = 0.5.0
-    #vhost_cfg_append     => {
-    server_cfg_append     => {
+    require              => File['/srv/quartermaster'],
+    server_cfg_append    => {
       autoindex             => on,
       fancyindex            => on,
       fancyindex_exact_size => off,
       fancyindex_footer     => '.README.html',
     },
-    require               => File['/srv/quartermaster']
   }
   nginx::resource::location{'/':
     ensure   => present,
     www_root => '/srv/quartermaster',
-    # nginx module  0.5.0
-    # vhost   => $::fqdn,
     server   => $::fqdn,
     require  => File['/srv/quartermaster']
   }
   nginx::resource::location{'/status':
     ensure      => present,
-    # nginx module  0.5.0
-    # vhost   => $::fqdn,
     server      => $::fqdn,
     www_root    => '/srv/quartermaster',
     stub_status => true,
@@ -85,7 +79,7 @@ class quartermaster::install (
     ensure  => latest,
     require => File['/srv/quartermaster/logs'],
   }
-  
+
   # Define dictory structure on the filestem for default locations of bits.
 
   file{[
@@ -117,16 +111,17 @@ class quartermaster::install (
     owner   => $::nginx::daemon_user,
     group   => $::nginx::daemon_user,
     recurse => true,
-  } ->
-  file{ '/srv/quartermaster/tftpboot':
+  }
+->file{ '/srv/quartermaster/tftpboot':
     ensure  => directory,
     mode    => '0777',
     owner   => $::tftp::username,
     group   => $::tftp::username,
     recurse => true,
-  } ->
+  }
+
   ## .README.html (FILE) /srv/quartermaster/distro/.README.html
-  file{[
+->file{[
     '/srv/quartermaster/.README.html',
     '/srv/quartermaster/bin/.README.html',
     '/srv/quartermaster/iso/.README.html',
@@ -243,31 +238,31 @@ for FRAGMENT in `ls $1`; do
      cat $1/$FRAGMENT >> $2
 done
 ',
-  } ->
+  }
 
   # Firstboot Script
   # This is script is added to the ubuntu/debian hosts via
   # the postinstall script. It will install configuration management
   # packages, the secondboot script, sets hostname and additional 
   # startup config then reboots.
-
-  file {'/srv/quartermaster/bin/firstboot':
+->file {'/srv/quartermaster/bin/firstboot':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/firstboot.erb'),
-  } ->
+  }
 
   # Secondboot Script
   # Executes configuration managment ( Puppet Currently )
-  file {'/srv/quartermaster/bin/secondboot':
+->file {'/srv/quartermaster/bin/secondboot':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/secondboot.erb'),
-  } ->
+  }
 
   # Postinstall Script
   # Installs the firstboot script and reboots the system
-  file {'/srv/quartermaster/bin/postinstall':
+
+->file {'/srv/quartermaster/bin/postinstall':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/postinstall.erb'),
@@ -276,38 +271,38 @@ done
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/winpe/menu/init.erb'),
-  } ->
-  file {'/srv/quartermaster/microsoft/winpe/system/menucheck.ps1':
+  }
+->file {'/srv/quartermaster/microsoft/winpe/system/menucheck.ps1':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/winpe/menu/menucheckps1.erb'),
-  } ->
-  file {'/srv/quartermaster/microsoft/winpe/system/puppet_log.ps1':
+  }
+->file {'/srv/quartermaster/microsoft/winpe/system/puppet_log.ps1':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/puppet_log.ps1.erb'),
-  } ->
-  file {'/srv/quartermaster/microsoft/winpe/system/firstboot.cmd':
+  }
+->file {'/srv/quartermaster/microsoft/winpe/system/firstboot.cmd':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/firstbootcmd.erb'),
-  } ->
-  file {'/srv/quartermaster/microsoft/winpe/system/secondboot.cmd':
+  }
+->file {'/srv/quartermaster/microsoft/winpe/system/secondboot.cmd':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/secondbootcmd.erb'),
-  }->
-  file {'/srv/quartermaster/microsoft/winpe/system/compute.cmd':
+  }
+->file {'/srv/quartermaster/microsoft/winpe/system/compute.cmd':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/computecmd.erb'),
-  }->
-  file {'/srv/quartermaster/microsoft/winpe/system/puppetinit.cmd':
+  }
+->file {'/srv/quartermaster/microsoft/winpe/system/puppetinit.cmd':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/puppetinitcmd.erb'),
-  } ->
-  file {'/srv/quartermaster/microsoft/winpe/system/rename.ps1':
+  }
+->file {'/srv/quartermaster/microsoft/winpe/system/rename.ps1':
     ensure  => file,
     mode    => '0777',
     content => template('quartermaster/scripts/rename.ps1.erb'),
@@ -327,14 +322,12 @@ nameserver 1.1.1.1
 nameserver 4.2.2.2
 ",
   }
-  
 
- 
   # Install dnsmasq and configure a dns cache and 
   # proxydhcp server for nextserver and bootfile 
   # dhcp options
-  class {'dnsmasq': 
-    configs_hash => {
+  class {'dnsmasq':
+    configs_hash     => {
       'quartermaster-cfg' => {
         content => template('quartermaster/dnsmasq.conf.erb'),
       },
@@ -548,7 +541,7 @@ nameserver 4.2.2.2
     file_line{'add_proxy_to_etc_environment':
       ensure => present,
       path   => '/etc/environment',
-      match   => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
+      match  => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
       line   => "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games\"
 http_proxy=http://${::ipaddress}:3128/
 ftp_proxy=http://${::ipaddress}:3128/
@@ -588,47 +581,43 @@ menu passwordrow 11
     source  => "${quartermaster::syslinux_url}/syslinux-${quartermaster::syslinux_version}.tar.gz",
     target  => '/tmp',
     creates => "/tmp/syslinux-${quartermaster::syslinux_version}",
-  } ->
+  }
 
   # Move extracted files into position into TFTPDir
-  tftp::file {'pxelinux/pxelinux.0':
+->tftp::file {'pxelinux/pxelinux.0':
     source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/pxelinux.0",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
-  } ->
-
-  tftp::file { 'pxelinux/gpxelinux0':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/gpxe/gpxelinux.0",
+  }
+->tftp::file { 'pxelinux/gpxelinux0':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/gpxe/gpxelinux.0",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
-  } ->
-
-  tftp::file { 'pxelinux/isolinux.bin':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/isolinux.bin",
+  }
+->tftp::file { 'pxelinux/isolinux.bin':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/core/isolinux.bin",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
-  } ->
-
-  tftp::file { 'pxelinux/menu.c32':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/menu/menu.c32",
+  }
+->tftp::file { 'pxelinux/menu.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/menu/menu.c32",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
-  } ->
-
-  tftp::file { 'pxelinux/ldlinux.c32':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/elflink/ldlinux/ldlinux.c32",
+  }
+->tftp::file { 'pxelinux/ldlinux.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/elflink/ldlinux/ldlinux.c32",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
-  } ->
-  tftp::file { 'pxelinux/libutil.c32':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/libutil/libutil.c32",
+  }
+->tftp::file { 'pxelinux/libutil.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/libutil/libutil.c32",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
-  } ->
-  tftp::file { 'pxelinux/chain.c32':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/chain/chain.c32",
+  }
+->tftp::file { 'pxelinux/chain.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/chain/chain.c32",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
-  } ->
-  tftp::file { 'pxelinux/libcom32.c32':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/lib/libcom32.c32",
+  }
+->tftp::file { 'pxelinux/libcom32.c32':
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/com32/lib/libcom32.c32",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   }
   tftp::file { 'pxelinux/memdisk':
-    source => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/memdisk/memdisk",
+    source  => "/tmp/syslinux-${quartermaster::syslinux_version}/bios/memdisk/memdisk",
     require => Staging::Deploy["syslinux-${quartermaster::syslinux_version}.tar.gz"],
   }
 
@@ -638,10 +627,9 @@ menu passwordrow 11
     source => 'http://boot.ipxe.org/ipxe.iso',
     target => '/srv/quartermaster/iso/ipxe.iso',
     notify => Autofs::Mount['quartermaster-iso'],
-  } ->
-
-  staging::file{"ipxe.krn":
-    source  => "http://${fqdn}/mnt/ipxe.iso/ipxe.krn",
+  }
+->staging::file{'ipxe.krn':
+    source  => "http://${::fqdn}/mnt/ipxe.iso/ipxe.krn",
     target  => '/srv/quartermaster/tftpboot/pxelinux/ipxe.krn',
     owner   => $::tftp::username,
     group   => $::tftp::username,
@@ -674,14 +662,12 @@ menu passwordrow 11
     default:{
       warn('Currently Unsupported OSFamily for this feature')
     }
-  } ->
-
-  package { 'wimtools':
+  }
+->package { 'wimtools':
     ensure  => latest,
     require => $wimtool_repo,
-  } ->
-
-  concat::fragment{'winpe_pxe_default_menu':
+  }
+->concat::fragment{'winpe_pxe_default_menu':
     target  => '/srv/quartermaster/tftpboot/pxelinux/pxelinux.cfg/default',
     content => template('quartermaster/pxemenu/winpe.erb'),
     require => Tftp::File['pxelinux/pxelinux.cfg']
@@ -732,9 +718,9 @@ menu passwordrow 11
   }
 
   class{'::nfs':
-    server_enabled => true,
-    nfs_v4_client  => false,
-    nfs_v4_idmap_domain  => '.local',
+    server_enabled      => true,
+    nfs_v4_client       => false,
+    nfs_v4_idmap_domain => '.local',
   }
 
   nfs::server::export{'/srv/quartermaster':

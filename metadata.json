@@ -20,8 +20,8 @@
       "version_requirement": ">= 1.4.4"
     },
     {
-      "name": "lex/dnsmasq",
-      "version_requirement": ">= 2.6.1"
+      "name": "saz/dnsmasq",
+      "version_requirement": ">= 1.4.0"
     },
     {
       "name": "puppet/staging",

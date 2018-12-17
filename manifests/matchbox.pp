@@ -12,8 +12,8 @@ class quartermaster::matchbox (
     user { 'matchbox':
       ensure     => 'present',
       managehome => true,
-    } ->
-    file{[
+    }
+->  file{[
       '/var/lib/matchbox',
       '/var/lib/matchbox/examples',
       '/var/lib/matchbox/assets',
@@ -27,110 +27,55 @@ class quartermaster::matchbox (
       owner  => 'matchbox',
       group  => 'matchbox',
 
-    }  -> 
+    }
     # matchbox terraform
-    file{'/root/.matchbox':
+->  file{'/root/.matchbox':
       ensure => directory,
       owner  => 'root',
       group  => 'root',
-    } ->
-    file{ '/var/lib/matchbox/addons':
+    }
+->  file{ '/var/lib/matchbox/addons':
       ensure  => directory,
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       source  => 'puppet:///modules/quartermaster/coreos/matchbox/addons',
-    } ->
-    # matchbox groups
-    file{ '/var/lib/matchbox/terraform':
+    }
+-> file{ '/var/lib/matchbox/terraform':
       ensure  => directory,
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       source  => 'puppet:///modules/quartermaster/coreos/matchbox/terraform',
-    } ->
-    # matchbox groups
-    file{ '/var/lib/matchbox/groups':
+    }
+->  file{ '/var/lib/matchbox/groups':
       ensure  => directory,
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
 #      source  => 'puppet:///modules/quartermaster/coreos/matchbox/groups',
-    } ->
-    # matchbox groups/bootkube-install/install.json
-#    file{ '/var/lib/matchbox/groups/bootkube-install.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/groups/bootkube-install.json.erb'),
-#    } ->
-    # matchbox groups/etcd3-install/install.json
-#    file{ '/var/lib/matchbox/groups/etcd3-install.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/groups/etcd3-install.json.erb'),
-#    } ->
-    # matchbox groups/simple-install/install.json
-#    file{ '/var/lib/matchbox/groups/install.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/groups/simple-install.json.erb'),
-#    } ->
-
-
-    # /var/lib/matchbox/groups/default.json
-    # Contains Default SSH Key to use for provisioning 
-#    file{ '/var/lib/matchbox/groups/default.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/groups/default.json.erb'),
-#    } ->
-
-#    # matchbox profiles bootkube-worker.json
-#    file{ '/var/lib/matchbox/profiles/bootkube-worker.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/profiles/bootkube-worker.json.erb'),
-#    } ->
-
-#    # matchbox profiles bootkube-controller.json
-#    file{ '/var/lib/matchbox/profiles/bootkube-controller.json':
-#      ensure  => file,
-#      owner   => 'matchbox',
-#      group   => 'matchbox',
-#      content => template('quartermaster/matchbox/profiles/bootkube-controller.json.erb'),
-#    } ->
-    # matchbox terraform/etcd3-install/terraform.tfvars
-    file{ '/var/lib/matchbox/terraform/etcd3-install/terraform.tfvars':
+    }
+->  file{ '/var/lib/matchbox/terraform/etcd3-install/terraform.tfvars':
       ensure  => file,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/terraform/etcd3-install.terraform.tfvars.erb'),
-    } ->
-
-    # matchbox terraform/simple-install/terraform.tfvars
-    file{ '/var/lib/matchbox/terraform/simple-install/terraform.tfvars':
+    }
+->  file{ '/var/lib/matchbox/terraform/simple-install/terraform.tfvars':
       ensure  => file,
       owner   => 'matchbox',
       group   => 'matchbox',
       content => template('quartermaster/matchbox/terraform/simple-install.terraform.tfvars.erb'),
-    } ->
-
-
+    }
     # matchbox ignition
-    file{ '/var/lib/matchbox/ignition':
+->  file{ '/var/lib/matchbox/ignition':
       ensure  => directory,
       recurse => true,
       owner   => 'matchbox',
       group   => 'matchbox',
       source  => 'puppet:///modules/quartermaster/coreos/matchbox/ignition',
-    } ->
-    
-    staging::deploy{"matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz":
+    }
+-> staging::deploy{"matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz":
       source   => "https://github.com/coreos/matchbox/releases/download/v${quartermaster::matchbox_version}/matchbox-v${quartermaster::matchbox_version}-linux-amd64.tar.gz",
       target   => '/home/matchbox',
       username => 'root',
@@ -232,38 +177,38 @@ class quartermaster::matchbox (
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/openssl.conf",
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/README.md",
       ],
-    } ->
-    file{'/usr/local/bin/matchbox':
+    }
+->  file{'/usr/local/bin/matchbox':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/matchbox",
       mode   => '0777',
-    } ->
-    file{'/usr/local/bin/get-coreos':
+    }
+->  file{'/usr/local/bin/get-coreos':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/get-coreos",
       mode   => '0777',
-    } ->
-    file{'/etc/systemd/system/matchbox.service':
+    }
+->  file{'/etc/systemd/system/matchbox.service':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/contrib/systemd/matchbox-local.service",
       mode   => '0644',
-    } ->
-    file{'/etc/systemd/system/matchbox.service.d/override.conf':
-      ensure => file,
-      mode   => '0644',
+    }
+->  file{'/etc/systemd/system/matchbox.service.d/override.conf':
+      ensure  => file,
+      mode    => '0644',
       content => '#Puppet Managed
  # /etc/systemd/system/matchbox.service.d/override.conf
 [Service]
 Environment="MATCHBOX_RPC_ADDRESS=0.0.0.0:8081"
 Environment="MATCHBOX_LOG_LEVEL=debug"
 ',
-    } ->
-    staging::deploy{"terraform_${quartermaster::terraform_version}_linux_amd64.zip":
+    }
+->  staging::deploy{"terraform_${quartermaster::terraform_version}_linux_amd64.zip":
       source  => "https://releases.hashicorp.com/terraform/${quartermaster::terraform_version}/terraform_${quartermaster::terraform_version}_linux_amd64.zip",
       target  => '/usr/local/bin',
       creates => '/usr/local/bin/terraform'
-    } ->
-    staging::deploy{"go${quartermaster::go_version}.linux-amd64.tar.gz":
+    }
+->  staging::deploy{"go${quartermaster::go_version}.linux-amd64.tar.gz":
       source  => "https://redirector.gvt1.com/edgedl/go/go${quartermaster::go_version}.linux-amd64.tar.gz",
       target  => '/usr/local',
       require => Package['unzip'],
@@ -9010,17 +8955,17 @@ Environment="MATCHBOX_LOG_LEVEL=debug"
       '/usr/local/go/test/zerodivide.go',
       '/usr/local/go/VERSION',
       ],
-    } ->
+    }
     # Add Go to System Path
-    file_line{'/usr/local/go/bin added to Path':
-      ensure   => present,
-      path     => '/etc/environment',
-      line     => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin"',
-      match    => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
-    } ->
+->  file_line{'/usr/local/go/bin added to Path':
+      ensure => present,
+      path   => '/etc/environment',
+      line   => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin"',
+      match  => 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"',
+    }
     # install the terraform matchbox provider
-    exec{'go-get-terraform-provider-matchbox':
-      environment => [ 
+->  exec{'go-get-terraform-provider-matchbox':
+      environment => [
         'GOPATH=/opt/go',
         'GOBIN=/usr/local/go/bin',
       ],
@@ -9030,18 +8975,19 @@ Environment="MATCHBOX_LOG_LEVEL=debug"
       logoutput   => true,
       timeout     => '0',
       user        => 'root',
-    } ->
+    }
     # Add a .terraformrc for matchbox in /root
-    file{ '/root/.terraformrc':
-      ensure => file,
+->  file{ '/root/.terraformrc':
+      ensure  => file,
       content => '# Puppet Managed
 providers {
   matchbox = "/usr/local/go/bin/terraform-provider-matchbox"
 }
 ',
-    } ->
+    }
+
     # Generate Certificates for FQDN and IP
-    exec{'certgen-for-matchbox-services':
+->  exec{'certgen-for-matchbox-services':
       environment => [
         "SAN=DNS.1:${::fqdn},IP.1:${::ipaddress}",
       ],
@@ -9064,46 +9010,47 @@ providers {
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/client.crt",
       "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/client.key",
       ],
-    } ->
+    }
     # Generated Certs to /etc ca.crt server.crt server.key
-    file{'/etc/matchbox/ca.crt':
+->  file{'/etc/matchbox/ca.crt':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/ca.crt",
-    } ->
-    file{'/etc/matchbox/server.crt':
+    }
+->  file{'/etc/matchbox/server.crt':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/server.crt",
-    } ->
-    file{'/etc/matchbox/server.key':
+    }
+->  file{'/etc/matchbox/server.key':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/server.key",
-    } ->
+    }
+
     # Add client Certs to /root/.matchbox
-    file{'/root/.matchbox/client.key':
+->  file{'/root/.matchbox/client.key':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/client.key",
-    } ->
-    file{'/root/.matchbox/client.crt':
+    }
+->  file{'/root/.matchbox/client.crt':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/client.crt",
-    } ->
-    file{'/root/.matchbox/ca.crt':
+    }
+->  file{'/root/.matchbox/ca.crt':
       ensure => file,
       source => "/home/matchbox/matchbox-v${quartermaster::matchbox_version}-linux-amd64/scripts/tls/ca.crt",
     }
     if ( $facts[os][distro][id] == 'Ubuntu' ) and ( $facts[os][distro][release][major] == '14.04'){
       package{'systemd':
         ensure => latest
-      } ->
-      file{'/etc/init/matchbox.conf':
+      }
+->    file{'/etc/init/matchbox.conf':
         ensure => file,
-        source  => 'puppet:///modules/quartermaster/coreos/matchbox/upstart.matchbox.conf'
-      } 
+        source => 'puppet:///modules/quartermaster/coreos/matchbox/upstart.matchbox.conf'
+      }
     }
     # Start the Matchbox Service and Enable it
     service{'matchbox':
-      enable  => true,
       ensure  => 'running',
+      enable  => true,
       require => Exec['certgen-for-matchbox-services'],
     }
   }
