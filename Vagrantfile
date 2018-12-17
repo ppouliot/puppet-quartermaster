@@ -14,7 +14,7 @@ end
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
-  config.disksize.size = '50GB'
+  config.disksize.size  = "50GB"
   config.vm.synced_folder ".", "/etc/puppetlabs/code/modules/quartermaster", :mount_options => ['dmode=775','fmode=777']
   config.vm.synced_folder "./files/hiera", "/etc/puppetlabs/code/environments/production/data", :mount_options => ['dmode=775','fmode=777']
   config.vm.provider "virtualbox" do |v|
