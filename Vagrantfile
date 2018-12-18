@@ -29,7 +29,7 @@ Vagrant.configure('2') do |config|
   config.vm.provision 'shell', inline: 'curl -o /etc/puppetlabs/puppet/hiera.yaml https://raw.githubusercontent.com/ppouliot/puppet-quartermaster/master/files/hiera/hiera.yaml'
   config.vm.provision 'shell', inline: 'cd /etc/puppetlabs/code/environments/production && /opt/puppetlabs/puppet/bin/r10k puppetfile install --verbose DEBUG2'
   config.vm.provision 'shell', inline: '/opt/puppetlabs/bin/puppet module list --tree'
-  config.vm.provision 'shell', inline: '/opt/puppetlabs/bin/puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/modules:/etc/puppetlabs/code/environments/production/modules:/etc/puppetlabs/code/modules /etc/puppetlabs/code/modules/quartermaster/examples/all.pp'
+  config.vm.provision 'shell', inline: '/opt/puppetlabs/bin/puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/modules:/etc/puppetlabs/code/environments/production/modules:/etc/puppetlabs/code/modules /etc/puppetlabs/code/modules/quartermaster/examples/light.pp'
   config.vm.define 'quartermaster' do |v|
     v.vm.hostname = 'quartermaster.contoso.ltd'
   end
