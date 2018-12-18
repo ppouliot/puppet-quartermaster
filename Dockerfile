@@ -22,5 +22,5 @@ RUN \
     && puppet module list --tree 
 RUN \
     puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/quartermaster/examples/init.pp \
-    &&  puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/quartermaster/examples/all.pp
+    &&  puppet apply --debug --trace --verbose --modulepath=/etc/puppetlabs/code/environments/production/modules /etc/puppetlabs/code/environments/production/modules/quartermaster/examples/light.pp
 EXPOSE 80
