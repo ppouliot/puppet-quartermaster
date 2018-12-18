@@ -12,6 +12,7 @@
     {"name": "puppet/autofs","version_requirement":">= 2.0.0 < 5.0.0"},
     {"name": "saz/dnsmasq","version_requirement":">= 1.0.0 < 2.0.0"},
     {"name": "puppet/staging","version_requirement":">= 1.0.0 < 3.3.0"},
+    {"name": "puppet/archive","version_requirement":">= 1.0.0 < 3.5.0"},
     {"name": "puppet/nginx","version_requirement":">= 0.5.0 < 1.0.0"},
     {"name": "puppet/squid","version_requirement":">= 1.0.0 < 2.0.0"},
     {"name": "puppetlabs/stdlib","version_requirement":">= 4.0.0 < 6.0.0"},
