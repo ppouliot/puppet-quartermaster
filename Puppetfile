@@ -17,6 +17,7 @@ mod 'puppetlabs/apt', :latest
 mod 'puppetlabs/concat', :latest
 mod 'puppetlabs/dummy_service', :latest
 mod 'puppetlabs/stdlib', :latest
+mod 'puppetlabs/translate', :latest
 mod 'puppetlabs/vcsrepo', :latest
 mod 'puppetlabs/xinetd', :latest
 
