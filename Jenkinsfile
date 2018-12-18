@@ -19,19 +19,7 @@ pipeline {
                 sh 'pdk validate'
             }
         }
-        stage ('Checkout and build puppet-quartermaster in Docker to validate code as well as changes across OSes.') {
-            when {
-              expression {
-                currentBuild.result == null || currentBuild.result == 'SUCCESS' 
-              }
-            }
-            steps {
-                dir("${env.WORKSPACE}") {
-                    sh './build.sh -d'
-                }
-            } 
-        }
-        stage ('Checkout and build puppet-quartermaster in Vagrant to assemble a functional IPAM cluster') {
+        stage ('Checkout and build puppet-quartermaster in Vagrant.') {
             when {
               expression {
                 currentBuild.result == null || currentBuild.result == 'SUCCESS' 
