@@ -121,7 +121,7 @@ class{'quartermaster':
   quartermaster::pxelinux{'centos-6.7-i386':}
   quartermaster::pxelinux{'centos-6.8-i386':}
   quartermaster::pxelinux{'centos-6.9-i386':}
-  quartermaster::pxelinux{'centos-2.1-x86_64':}
+  # Centos x86_64
   quartermaster::pxelinux{'centos-3.1-x86_64':}
   quartermaster::pxelinux{'centos-3.3-x86_64':}
   quartermaster::pxelinux{'centos-3.4-x86_64':}
