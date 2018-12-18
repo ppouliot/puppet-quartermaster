@@ -10,6 +10,7 @@ mod "puppet/autofs", '4.3.0'
 mod 'puppet/nginx', :latest
 mod "puppet/squid", :latest
 mod 'puppet/staging', :latest
+mod 'puppet/archive', :latest
 
 # Puppetlabs Modules
 mod 'puppetlabs/apt', :latest
