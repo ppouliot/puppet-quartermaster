@@ -140,6 +140,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "${centos_url}/os/${p_arch}/images/${boot_iso_name}"
     $boot_iso_name   = 'boot.iso'
     $mini_iso_name   = 'boot.iso'
+    $unzip_iso       = false
   }
 
   if ( $distro == 'fedora') {
@@ -233,8 +234,9 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "${fedora_url}/${release}/${fedora_flavor}${p_arch}/os/images/boot.iso"
     $boot_iso_name   = 'boot.iso'
     $mini_iso_name   = 'boot.iso'
-    $splash_url       = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
-    $logo_url       = 'https://getfedora.org/static/images/fedora_infinity_140x140.png'
+    $splash_url      = "${fedora_url}/isolinux/splash${_dot_bootsplash}"
+    $logo_url        = 'https://getfedora.org/static/images/fedora_infinity_140x140.png'
+    $unzip_iso       = false
   }
   if ( $distro == 'scientificlinux'){
     case $release {
@@ -294,6 +296,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "${scientificlinux_url}/images/${boot_iso_name}"
     $boot_iso_name   = 'boot.iso'
     $mini_iso_name   = 'boot.iso'
+    $unzip_iso       = false
   }
 
   if ( $distro == 'opensuse') {
@@ -331,6 +334,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "${opensuse_url}/${release}/iso"
     $boot_iso_name   = "openSUSE-${release}-net-${p_arch}.iso"
     $mini_iso_name   = undef
+    $unzip_iso       = false
 
     # This adds scripts to deploy to the system after booting into OpenSuse
     # when finished it should reboot.
@@ -381,6 +385,7 @@ define quartermaster::pxelinux (
     $update_repo     = "http://updates.xcp-ng.org/${rel_major}/${release}/updates/${p_arch}"
     $splash_url      = "http://updates.xcp-ng.org/${rel_major}/${release}/base/${p_arch}"
     $logo_url        = 'https://xcp-ng.org/assets/img/smalllogo.png'
+    $unzip_iso       = false
   }
   # Begin tests for dealing with OracleLinux Repos
   if ( $distro == 'oraclelinux' ) {
@@ -489,6 +494,7 @@ define quartermaster::pxelinux (
     $update_repo     = "http://public-yum.oracle.com/repo/oracle/OracleLinux/OL${rel_major}/${rel_minor}/base/${p_arch}"
     $splash_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/${rel_minor}/base/${p_arch}"
     $logo_url        = 'http://public-yum.oracle.com/layout/i/Linux_Logo.jpg'
+    $unzip_iso       = false
   }
   if ( $distro == 'redhat' ) {
     $autofile        = 'kickstart'
@@ -508,6 +514,7 @@ define quartermaster::pxelinux (
     $boot_iso_name   = 'Not Required'
     $ks_option       = 'ks'
     $url_option      = 'url'
+    $unzip_iso       = false
   }
   if ( $distro == 'sles' ) {
     $autofile        = 'autoyast'
@@ -525,6 +532,7 @@ define quartermaster::pxelinux (
     $logo_url        = 'https://www.suse.com/assets/img/fn-suse-ico.png'
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
+    $unzip_iso       = false
   }
   if ( $distro == 'sled' ) {
     $autofile        = 'autoyast'
@@ -543,6 +551,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
   }
   if ( $distro == 'windows' ) {
     $autofile = 'unattend.xml'
@@ -595,6 +604,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'mini.iso'
+    $unzip_iso       = false
   }
   if ( $distro == 'devuan' ) {
     $rel_name = $release ? {
@@ -629,6 +639,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
   }
   if ( $distro == 'debian' ) {
     $rel_name = $release ? {
@@ -682,6 +693,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
   }
   if ( $distro == 'kali' ) {
     $autofile        = 'preseed'
@@ -702,6 +714,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = 'No mini.iso or boot.iso to download'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
   }
   if ( $distro == 'archlinux' ){
     case $release {
@@ -729,6 +742,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "http://mirrors.kernel.org/archlinux/iso/${rel_name}/archlinux-${rel_name}-dual.iso"
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
   }
   if ( $distro == 'flatcar' ) {
     case $release {
@@ -771,6 +785,7 @@ define quartermaster::pxelinux (
     $logo_url        = 'https://www.flatcar-linux.org/media/brand-logo.svg'
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
 
     # This adds scripts to deploy to the system after booting into flatcar
     # when finished it should reboot.
@@ -830,6 +845,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "https://${release}.release.core-os.net/${p_arch}-usr/current/coreos_production_iso_image.iso"
     $boot_iso_name   = 'Not Required'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
     $splash_url      = 'https://coreos.com/assets/images/brand/coreos-wordmark-horiz-color-reverse.svg'
     $logo_url        = 'https://coreos.com/assets/images/brand/coreos-wordmark-horiz-color-reverse.svg'
 
@@ -1164,6 +1180,7 @@ define quartermaster::pxelinux (
     $boot_iso_url    = "https://releases.rancher.com/os/${rancheros_release}/${boot_iso_name}"
     $boot_iso_name   = 'rancheros.iso'
     $mini_iso_name   = 'Not Required'
+    $unzip_iso       = false
     $splash_url      = 'http://cdn.rancher.com/wp-content/uploads/2016/07/25205112/rancheros-logo-01.png'
     $logo_url        = 'http://cdn.rancher.com/wp-content/uploads/2016/07/25205112/rancheros-logo-01.png'
 
