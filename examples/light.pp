@@ -1,7 +1,7 @@
 class{'quartermaster':
   dban_enable          => true,
   matchbox_enable      => true,
-  puppetmaster         => "puppet",
+  puppetmaster         => 'puppet',
   preferred_nameserver => $::dhcp,
 }
 # Archlinux
