@@ -101,7 +101,7 @@ define quartermaster::pxelinux (
         $url_option        = 'url'
         $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
       }
-      '7.0.1406','7.1.1503','7.2.1511','7.3.1611','7.4.1708':{
+      '7.0.1406','7.1.1503','7.2.1511','7.3.1611','7.4.1708','7.5.1804':{
         $centos_url        = "http://vault.centos.org/centos/${release}"
         $_dot_bootsplash   = '.png'
         $vnc_option        = 'inst.vnc'
@@ -110,7 +110,7 @@ define quartermaster::pxelinux (
         $url_option        = 'inst.repo'
         $url             = "${centos_url}/os/${p_arch}/images/pxeboot"
       }
-      '7.5.1804':{
+      '7.6.1810':{
         $centos_url        = "http://mirror.centos.org/centos/${release}"
         $_dot_bootsplash   = '.png'
         $vnc_option        = 'inst.vnc'
@@ -269,7 +269,7 @@ define quartermaster::pxelinux (
         $url_option          = 'url'
         $url                 = "${scientificlinux_url}/images/pxeboot"
       }
-      '7.0','7.1','7.2','7.3','7.4','7.5':{
+      '7.0','7.1','7.2','7.3','7.4','7.5','7.6':{
         $scientificlinux_url = "http://ftp.scientificlinux.org/linux/scientific/${release}/${p_arch}/os"
         $_dot_bootsplash     = '.png'
         $vnc_option          = 'inst.vnc'
