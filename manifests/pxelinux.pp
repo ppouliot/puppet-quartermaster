@@ -40,7 +40,7 @@ define quartermaster::pxelinux (
     notice($distro)
     notice($release)
     notice($p_arch)
-    validate_string($distro, '^(devuan|debian|centos|coreos|flatcar|rancheros|fedora|kali|scientificlinux|opensuse|oraclelinux|ubuntu)$', 'The currently supported values for distro are devuan, debian, centos, coreos, flatcar, rancheros, fedora, kali, oraclelinux, scientificlinux, opensuse',)
+    validate_string($distro, '^(devuan|debian|centos|coreos|flatcar|rancheros|fedora|kali|scientificlinux|openbsd|opensuse|oraclelinux|ubuntu)$', 'The currently supported values for distro are devuan, debian, centos, coreos, flatcar, rancheros, fedora, kali, openbsd, oraclelinux, scientificlinux, opensuse, and ubuntu',)
     validate_string($p_arch, '^(i386|i586|i686|x86_65|amd64)$', 'The currently supported values for pocessor architecture  are i386,i586,i686,x86_64,amd64',)
   } else {
     fail('You must put your entry in format "<Distro>-<Release>-<Processor Arch>" like "centos-7-x86_64" or "ubuntu-14.04-amd64"')
@@ -350,6 +350,38 @@ define quartermaster::pxelinux (
   }
   if ($distro == /(centos|fedora|oraclelinux)/) and ( $release >= '7.0' ) and ( $p_arch == 'i386'){
     fail("${distro} ${release} does not provide support for processor architecture i386")
+  }
+
+  if ( $distro == 'openbsd' ) {
+    case $release {
+      '6.4','6.5':{
+        $boot_iso_name = "install${rel_number}.iso"
+        $boot_iso_url    = "https://cdn.openbsd.org/pub/OpenBSD/${release}/${p_arch}/${boot_iso_name}"
+        $mini_iso_name = "cd${rel_number}.iso"
+        $vnc_option        = undef
+        $vnc_option_passwd = undef
+        $ks_option         = undef
+        $url_option        = undef
+      }
+      default:{
+        warning("${name} isn't currently supprted by this technology!")
+      }
+    }
+    $autofile        = 'install.conf'
+    $linux_installer = 'openbsd'
+    $pxekernel       = 'pxeboot'
+    $initrd          = 'bsd.rd'
+    $src_initrd      = "bsd.rd"
+    $target_kernel   = 'pxeboot.0'
+    $target_initrd   = 'bsd'
+    $_dot_bootsplash = '.png'
+    $url             = 'ISO Required instead of URL'
+    $inst_repo       = "http://cdn.openbsd.org/pub/OpenBSD/${release}/${p_arch}"
+    $update_repo     = "http://cdn.openbsd.org/pub/OpenBSD/${release}/${p_arch}"
+    $splash_url      = "https://www.openbsd.org/images/banner1.gif"
+    $logo_url        = 'https://www.openbsd.org/art/puffy/ppuf100X91.gif'
+    $unzip_iso       = false
+    $rel_name        = $name
   }
 
   if ( $distro == 'xcpng' ) {

@@ -1,0 +1,13 @@
+System hostname = <%= @distro %>
+Password for root = <%= @distro %>
+Network interfaces = run0
+IPv4 address for run0 = dhcp
+Setup a user = ${distro}
+Password for user eradman = <%= distro %>
+Public ssh key for user = ssh-ed25519 XYZ123... eradman@t420s.eradman.com
+Which disk is the root disk = sd0
+What timezone are you in = US/Eastern
+Unable to connect using https. Use http instead = yes
+Location of sets = http
+Server = <%= @ipaddress %>
+Set name(s) = -all bsd* base* etc* man* site* comp*
