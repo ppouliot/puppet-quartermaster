@@ -504,7 +504,7 @@ define quartermaster::pxelinux (
         $url_option        = 'inst.repo'
       }
 
-      '7.5','7.6':{
+      '7.5','7.6','8.0':{
         warning("There are currently no ${p_arch}-boot.iso on mirror so switching to Server ISO for ${name}")
         $boot_iso_name     = "OracleLinux-R${rel_major}-U${rel_minor}-Server-${p_arch}-dvd.iso"
         $boot_iso_url      = "http://mirrors.kernel.org/oracle/OL${rel_major}/u${rel_minor}/${p_arch}/${boot_iso_name}"
