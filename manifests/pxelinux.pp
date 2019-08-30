@@ -198,7 +198,7 @@ define quartermaster::pxelinux (
         $ks_option         = 'inst.ks'
         $url_option        = 'url'
       }
-      '28','29':{
+      '28','29','30':{
         if $p_arch == 'i386' {
           $fedora_url = 'http://download-ib01.fedoraproject.org/pub/fedora-secondary/releases'
         }
